@@ -2177,22 +2177,46 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
     if (victim->GetTypeId() == TYPEID_UNIT && victim->ToCreature()->IsInEvadeMode())
         return MELEE_HIT_EVADE;
 
-    // Temporary RuneScape-style accuracy prototype.
-    // Later: replace these with OSRS Attack, Defence,
-    // equipment bonuses and combat-style modifiers.
-    int32 attackRoll = int32(GetWeaponSkillValue(attType, victim));
-    int32 defenceRoll = int32(victim->GetDefenseSkillValue(this));
+    // Warscape phase 1: OSRS-style melee accuracy for player auto-attacks.
+    // Creature stats currently use level-scaled archetype defaults. Equipment
+    // bonuses and per-family database overrides will be added separately.
+    if (GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT)
+    {
+        Player const* attacker = ToPlayer();
+        uint32 attackLevel = attacker->GetRSSkillLevel(Player::RS_Skill::Attack);
+        uint32 styleBonus = attacker->GetWarscapeAttackStyle() == 0 ? 3 : (attacker->GetWarscapeAttackStyle() == 3 ? 1 : 0);
+        uint32 effectiveAttack = attackLevel + styleBonus + 8;
 
-    attackRoll = std::max(1, attackRoll);
-    defenceRoll = std::max(1, defenceRoll);
+        uint32 creatureLevel = std::max<uint32>(1, victim->GetLevel());
+        // Baseline archetype: 100% Defence per level. Mechanical and elemental
+        // creatures are tougher; beasts are less defensive at the same level.
+        uint32 defencePercent = 100;
+        switch (victim->ToCreature()->GetCreatureType())
+        {
+            case CREATURE_TYPE_MECHANICAL:
+            case CREATURE_TYPE_ELEMENTAL:
+                defencePercent = 150;
+                break;
+            case CREATURE_TYPE_BEAST:
+                defencePercent = 80;
+                break;
+            default:
+                break;
+        }
+        uint32 creatureDefence = std::max<uint32>(1, creatureLevel * defencePercent / 100);
+        uint32 effectiveDefence = creatureDefence + 8;
 
-    float hitChance;
+        // No equipment bonuses yet: OSRS attack/defence rolls use +64.
+        uint64 attackRoll = uint64(effectiveAttack) * 64;
+        uint64 defenceRoll = uint64(effectiveDefence) * 64;
+        double hitChance = attackRoll > defenceRoll
+            ? 1.0 - double(defenceRoll + 2) / (2.0 * double(attackRoll + 1))
+            : double(attackRoll) / (2.0 * double(defenceRoll + 1));
 
-    if (attackRoll > defenceRoll)
-        hitChance = 1.0f - (float(defenceRoll + 2) / (2.0f * float(attackRoll + 1)));
-    else
-        hitChance = float(attackRoll) / (2.0f * float(defenceRoll + 1));
+        return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
+    }
 
+    // Leave non-player combat unchanged until creature attack rolls are implemented.
     return MELEE_HIT_NORMAL;
 }
 
