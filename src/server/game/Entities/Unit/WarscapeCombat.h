@@ -75,5 +75,14 @@ namespace Warscape
             ? 1.0 - (double(defence) + 2.0) / (2.0 * (double(attack) + 1.0))
             : double(attack) / (2.0 * (double(defence) + 1.0));
     }
+
+    // Temporary OSRS melee damage until item bonuses are data-driven. The base
+    // bonus is zero; aggressive style contributes its OSRS +3 Strength levels.
+    inline std::uint32_t MaxHit(std::uint32_t strengthLevel, std::int32_t strengthBonus, std::uint32_t styleBonus = 0)
+    {
+        std::uint64_t const effectiveStrength = std::uint64_t(strengthLevel) + styleBonus + 8;
+        std::uint64_t const bonus = std::uint64_t(std::max<std::int64_t>(0, std::int64_t(strengthBonus) + 64));
+        return std::uint32_t(std::min<std::uint64_t>((effectiveStrength * bonus + 320) / 640, MaxStat));
+    }
 }
 #endif

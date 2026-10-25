@@ -1446,6 +1446,12 @@ void Creature::UpdateLevelDependantStats()
     uint32 basehp = stats->GenerateHealth(cInfo);
     uint32 health = uint32(basehp * healthmod);
 
+    // WARSCAPE: Until monster Hitpoints is fully balanced, live creature
+    // survivability uses the independent monster profile at its base tier.
+    // WoW creature level/rank must not silently multiply the OSRS hitpoints.
+    auto const warscapeStats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+    health = std::max<uint32>(1, warscapeStats[Warscape::Hitpoints]);
+
     SetCreateHealth(health);
     SetMaxHealth(health);
     SetHealth(health);

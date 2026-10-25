@@ -33,31 +33,45 @@ Unknown creature entries and profile references are rejected. Empty tables are s
 All data loads at startup; SQL edits take effect on restart without recompilation.
 No SQL is issued during attacks. Do not call the loader concurrently with map threads.
 
-## Combat integration
+## Stage 1 combat defaults
 
-Player melee auto-attacks use the player's persistent OSRS Attack skill, +3 accurate
-or +1 controlled style, and +8 effective level. Monster Defence and defence bonus
-come from the cached profile. Standard OSRS attack-roll hit probability is used.
-Evade and the earlier physical-immunity checks are preserved. Other melee combat
-uses TrinityCore's normal attack table, recovered from the upstream tracked source.
+The first combat pass replaced player-to-monster hit chance but still passed hits
+through WoW weapon DPS, attack power, armour mitigation and creature health. It
+also used WoW's level-based attack table for monster-to-player attacks. These
+remaining paths explain why raising a WoW level did not make an OSRS level 1
+character fight like a level 10 character, and why WoW monsters could take far too
+long to defeat.
 
-All six monster skills and bonus fields are available to subsequent combat work.
-Only monster Defence and defence bonus affect combat in this stage. Hitpoints is
-an independent OSRS stat, not applied to live WoW health yet. Damage/health x100,
-XP conversion, monster offence, player item bonuses, typed weaknesses, ranged and
-magic are subsequent stages. Existing player skill persistence, XP awards and
-`.rs` commands are unchanged. No server deployment or live DB mutation is included.
+Player-versus-creature and creature-versus-player melee auto-attacks now use OSRS
+Attack/Defence roll probability. Player damage uses the OSRS max-hit formula from
+the persistent Strength level and an explicitly temporary zero equipment Strength
+bonus; damage is rolled uniformly from 0 through max hit. Monster attack and
+Strength rolls use the monster profile. All combat stat lookups use the profile's
+base tier and the API no longer accepts a WoW level. Player live health uses the
+persistent OSRS Hitpoints level; creature live health uses the profile's Hitpoints
+at base tier. A Hitpoints level-up raises live max health by one and heals one.
+
+For this temporary stage, WoW weapon damage/DPS, attack power, hit/avoidance stats,
+glancing/crushing outcomes, armour reduction, WoW stamina and WoW level-based
+creature offence/health are excluded from melee auto-attacks. Equipment bonuses
+are deliberately zero until item bonuses are mapped. WoW weapon attack timers,
+animations, targeting, damage/death events, loot and OSRS XP awards remain on the
+existing paths. Spells and ranged attacks are outside this Stage 1 melee change.
+
+These are testable starter defaults, not final balance. Profiles remain editable
+in SQL; later equipment and combat stages can replace the zero-bonus defaults.
+Existing character XP persistence and `.rs` attack-style commands remain active.
 
 ## Verification
 
-`tests/game/WarscapeCombat.cpp` exercises profile scaling and hit-roll boundaries.
-The four new Catch2 test cases were compiled and run separately against Catch2 v2.13.9, matching the version pinned by this repository (20,118 assertions passed). Build worldserver in Release|x64
+`tests/game/WarscapeCombat.cpp` exercises profile scaling, hit-roll boundaries and
+the temporary OSRS max-hit calculation. Build worldserver in Release|x64
 using the existing `build/TrinityCore.sln`.
 
-In-game follow-up: map reviewed creature entries to Goblin/Golem profiles, restart,
-check loader counts, compare same-level hit frequencies across the four `.rs`
-styles, confirm evade/immunity, and verify skill XP survives logout/login. Check
-unmapped creatures as well. These runtime checks require the game and world data.
+In-game follow-up: use a fresh character and starter equipment against a level 1
+creature and the mapped Golem. Compare representative WoW levels while keeping
+OSRS skills/equipment fixed, observe incoming damage, and verify skill XP survives
+logout/login. These runtime checks require the game and world data.
 The SQL migration was applied twice on a fresh temporary MariaDB 11.7 instance.
 The second application preserved edited profile values and a creature override.
 This validates schema creation, seed mappings and reapplication; live world loading and gameplay

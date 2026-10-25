@@ -977,8 +977,14 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void AddRSSkillXP(RS_Skill skill, uint32 amount)
         {
             RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
+            uint8 const oldLevel = data.Level;
             data.XP = uint32(std::min<uint64>(200000000ULL, uint64(data.XP) + amount));
             data.Level = RS_LevelForXP(data.XP);
+            if (skill == RS_Skill::Hitpoints && data.Level > oldLevel)
+            {
+                UpdateMaxHealth();
+                ModifyHealth(data.Level - oldLevel);
+            }
         }
 
         // Warscape attack styles: 0 Accurate, 1 Aggressive, 2 Defensive, 3 Controlled.

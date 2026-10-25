@@ -1144,7 +1144,7 @@ class TC_GAME_API ObjectMgr
         void LoadCreatureTemplates();
         void LoadWarscapeMonsterStats();
         Warscape::MonsterProfile const& GetWarscapeMonsterProfile(uint32 entry) const;
-        std::array<uint32, Warscape::StatCount> GetWarscapeMonsterStats(uint32 entry, uint32 level) const;
+        std::array<uint32, Warscape::StatCount> GetWarscapeMonsterStats(uint32 entry) const;
         void LoadCreatureTemplateAddons();
         void LoadCreatureTemplate(Field* fields);
         void LoadCreatureTemplateResistances();

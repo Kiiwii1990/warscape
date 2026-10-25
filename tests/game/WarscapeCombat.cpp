@@ -78,3 +78,24 @@ TEST_CASE("Warscape accuracy responds to skills, styles and family defence", "[w
         }
     }
 }
+
+TEST_CASE("Warscape temporary damage uses OSRS Strength and ignores WoW levels", "[warscape]")
+{
+    CHECK(Warscape::MaxHit(1, 0) == 1);
+    CHECK(Warscape::MaxHit(1, 0, 3) == 1);
+    CHECK(Warscape::MaxHit(10, 0) == 2);
+    CHECK(Warscape::MaxHit(20, 0) == 3);
+    CHECK(Warscape::MaxHit(20, 0, 3) == 3);
+    CHECK(Warscape::MaxHit(20, 40) > Warscape::MaxHit(20, 0));
+
+    Warscape::MonsterProfile golem;
+    golem.Base[Warscape::Attack] = 8;
+    golem.Base[Warscape::Strength] = 8;
+    golem.Base[Warscape::Defence] = 10;
+    golem.Base[Warscape::Hitpoints] = 10;
+    Warscape::MonsterDefinition definition;
+    auto const combatStats = definition.Calculate(golem, 1);
+    CHECK(combatStats[Warscape::Defence] == 10);
+    CHECK(combatStats[Warscape::Hitpoints] == 10);
+    CHECK(definition.Calculate(golem, 1) == combatStats);
+}

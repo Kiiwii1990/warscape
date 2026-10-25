@@ -10411,7 +10411,7 @@ void ObjectMgr::LoadWarscapeMonsterStats()
     QueryResult tables = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name IN ('warscape_monster_profile', 'warscape_monster_template')");
     if (!tables || tables->Fetch()[0].GetUInt64() != 2)
     {
-        TC_LOG_INFO("server.loading", "Warscape monster tables are absent; using neutral level-scaled defaults.");
+        TC_LOG_INFO("server.loading", "Warscape monster tables are absent; using neutral base-stat defaults.");
         return;
     }
 
@@ -10483,10 +10483,10 @@ Warscape::MonsterProfile const& ObjectMgr::GetWarscapeMonsterProfile(uint32 entr
     return fallback;
 }
 
-std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry, uint32 level) const
+std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry) const
 {
     auto const& profile = GetWarscapeMonsterProfile(entry);
     if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
-        return itr->second.Calculate(profile, level);
-    return profile.Scale(level);
+        return itr->second.Calculate(profile, 1);
+    return profile.Scale(1);
 }

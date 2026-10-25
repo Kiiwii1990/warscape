@@ -1210,6 +1210,27 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         return;
     }
 
+    bool const warscapePlayerMelee = GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT;
+    bool const warscapeMonsterMelee = GetTypeId() == TYPEID_UNIT && victim->GetTypeId() == TYPEID_PLAYER;
+    bool const warscapeMelee = (attackType == BASE_ATTACK || attackType == OFF_ATTACK) && (warscapePlayerMelee || warscapeMonsterMelee);
+    uint32 warscapeDamage = 0;
+    if (warscapeMelee)
+    {
+        if (warscapePlayerMelee)
+        {
+            Player const* player = ToPlayer();
+            uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
+            warscapeDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus));
+        }
+        else
+        {
+            auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+            auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
+            warscapeDamage = urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
+        }
+    }
+    bool warscapeDamageAssigned = false;
+
     for (uint8 i = 0; i < MAX_ITEM_PROTO_DAMAGES; ++i)
     {
         // only players have secondary weapon damage
@@ -1223,23 +1244,36 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         bool const addPctMods = (schoolMask & SPELL_SCHOOL_MASK_NORMAL);
 
         uint32 damage = 0;
-        uint8 itemDamagesMask = (GetTypeId() == TYPEID_PLAYER) ? (1 << i) : 0;
-        damage += CalculateDamage(damageInfo->AttackType, false, addPctMods, itemDamagesMask);
-        // Add melee damage bonus
-        damage = MeleeDamageBonusDone(damageInfo->Target, damage, damageInfo->AttackType, nullptr, schoolMask);
-        damage = damageInfo->Target->MeleeDamageBonusTaken(this, damage, damageInfo->AttackType, nullptr, schoolMask);
-
-        // Script Hook For CalculateMeleeDamage -- Allow scripts to change the Damage pre class mitigation calculations
-        sScriptMgr->ModifyMeleeDamage(damageInfo->Target, damageInfo->Attacker, damage);
-
-        // Calculate armor reduction
-        if (Unit::IsDamageReducedByArmor(SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask)))
+        if (warscapeMelee)
         {
-            damageInfo->Damages[i].Damage = Unit::CalcArmorReducedDamage(damageInfo->Attacker, damageInfo->Target, damage, nullptr, damageInfo->AttackType);
-            damageInfo->CleanDamage += damage - damageInfo->Damages[i].Damage;
+            // Keep a single OSRS-style damage roll; do not add WoW weapon DPS,
+            // attack power, damage auras or the WoW armour formula.
+            if (!warscapeDamageAssigned)
+            {
+                damageInfo->Damages[i].Damage = warscapeDamage;
+                warscapeDamageAssigned = true;
+            }
         }
         else
-            damageInfo->Damages[i].Damage = damage;
+        {
+            uint8 itemDamagesMask = (GetTypeId() == TYPEID_PLAYER) ? (1 << i) : 0;
+            damage += CalculateDamage(damageInfo->AttackType, false, addPctMods, itemDamagesMask);
+            // Add melee damage bonus
+            damage = MeleeDamageBonusDone(damageInfo->Target, damage, damageInfo->AttackType, nullptr, schoolMask);
+            damage = damageInfo->Target->MeleeDamageBonusTaken(this, damage, damageInfo->AttackType, nullptr, schoolMask);
+
+            // Script Hook For CalculateMeleeDamage -- Allow scripts to change the Damage pre class mitigation calculations
+            sScriptMgr->ModifyMeleeDamage(damageInfo->Target, damageInfo->Attacker, damage);
+
+            // Calculate armor reduction
+            if (Unit::IsDamageReducedByArmor(SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask)))
+            {
+                damageInfo->Damages[i].Damage = Unit::CalcArmorReducedDamage(damageInfo->Attacker, damageInfo->Target, damage, nullptr, damageInfo->AttackType);
+                damageInfo->CleanDamage += damage - damageInfo->Damages[i].Damage;
+            }
+            else
+                damageInfo->Damages[i].Damage = damage;
+        }
     }
 
     damageInfo->HitOutCome = RollMeleeOutcomeAgainst(damageInfo->Target, damageInfo->AttackType);
@@ -2186,13 +2220,24 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         uint32 style = attacker->GetWarscapeAttackStyle();
         uint32 styleBonus = style == 0 ? 3 : (style == 3 ? 1 : 0);
         uint32 effectiveAttack = attacker->GetRSSkillLevel(Player::RS_Skill::Attack) + styleBonus + 8;
-        auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry(), victim->GetLevel());
+        auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry());
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
         // Player item accuracy will be mapped explicitly in the equipment stage;
         // WoW hit rating and item level are not OSRS equipment bonuses.
         uint64 attackRoll = Warscape::CombatRoll(effectiveAttack, 0);
         uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
         double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
+        return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
+    }
+    if (GetTypeId() == TYPEID_UNIT && victim->GetTypeId() == TYPEID_PLAYER
+        && (attType == BASE_ATTACK || attType == OFF_ATTACK))
+    {
+        Player const* defender = victim->ToPlayer();
+        auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+        auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
+        uint64 const attackRoll = Warscape::CombatRoll(stats[Warscape::Attack] + 8, profile.AttackBonus);
+        uint64 const defenceRoll = Warscape::CombatRoll(defender->GetRSSkillLevel(Player::RS_Skill::Defence) + 8, 0);
+        double const hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
     }
     int32 const attackerMaxSkillValueForLevel = GetMaxSkillValueForLevel(victim);
