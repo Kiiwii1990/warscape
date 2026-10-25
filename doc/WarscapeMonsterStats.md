@@ -24,7 +24,7 @@ formula, not a claim to reproduce Pokemon or OSRS monster stat generation.
 `warscape_monster_template.entry` is a creature_template entry. Set `profile_id`
 to the desired family. Override columns are final skill values: zero inherits the
 scaled profile, while a positive value fixes that skill regardless of level.
-Overrides are per template, including bosses, not per spawned GUID.
+Overrides are per template, including bosses, not per spawned GUID. The migration maps Harvest Golem (36) and Rusty Harvest Golem (480) to the defensive Golem profile, and Goblin Engineer (622), Goblin Mercenary (638) and Goblin Woodcarver (641) to the Goblin profile. Reapplying the seed leaves existing creature mappings intact. These entry identities were checked against the world dump shipped with the server.
 
 Profile 0 is the editable fallback for all unmapped creatures. If tables or profile
 0 are absent, neutral built-in defaults apply. Invalid rows are logged and ignored:
@@ -60,9 +60,10 @@ styles, confirm evade/immunity, and verify skill XP survives logout/login. Check
 unmapped creatures as well. These runtime checks require the game and world data.
 The SQL migration was applied twice on a fresh temporary MariaDB 11.7 instance.
 The second application preserved edited profile values and a creature override.
-This validates schema creation and reapplication; live world loading and gameplay
+This validates schema creation, seed mappings and reapplication; live world loading and gameplay
 remain to be checked in-game. Existing source backups are excluded from game
 compilation by CMake while retained on disk.
 
 The complete worldserver Release|x64 build passed, including the final rebuild.
 Build output remains under build/ and was not installed over the running server.
+

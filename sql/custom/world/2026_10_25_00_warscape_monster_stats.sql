@@ -38,5 +38,10 @@ CREATE TABLE IF NOT EXISTS `warscape_monster_template` (
 INSERT INTO `warscape_monster_profile` (`id`, `name`, `base_defence`, `growth_defence`)
 VALUES (0, 'Neutral fallback', 1, 100), (1, 'Goblin', 1, 60), (2, 'Golem', 10, 150)
 ON DUPLICATE KEY UPDATE `id` = VALUES(`id`);
--- Assign actual creature entries explicitly after reviewing their identities.
--- Example: INSERT INTO warscape_monster_template (entry, profile_id) VALUES (<entry>, 2);
+-- Test entries verified against the shipped TDB world dump:
+-- Harvest Golem (36), Rusty Harvest Golem (480), and three Warsong goblins.
+-- Keep existing per-creature tuning if this additive seed is reapplied.
+INSERT INTO `warscape_monster_template` (`entry`, `profile_id`)
+VALUES (36, 2), (480, 2), (622, 1), (638, 1), (641, 1)
+ON DUPLICATE KEY UPDATE `entry` = VALUES(`entry`);
+
