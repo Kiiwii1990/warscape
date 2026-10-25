@@ -17,6 +17,7 @@
 
 #include <catch2/catch.hpp>
 #include "WarscapeCombat.h"
+#include "WarscapeSkills.h"
 
 TEST_CASE("Warscape monster families scale independently", "[warscape]")
 {
@@ -98,4 +99,67 @@ TEST_CASE("Warscape temporary damage uses OSRS Strength and ignores WoW levels",
     CHECK(combatStats[Warscape::Defence] == 10);
     CHECK(combatStats[Warscape::Hitpoints] == 10);
     CHECK(definition.Calculate(golem, 1) == combatStats);
+}
+
+TEST_CASE("Warscape OSRS XP thresholds and level changes are exact", "[warscape]")
+{
+    CHECK(Warscape::XPForLevel(2) == 83);
+    CHECK(Warscape::XPForLevel(3) == 174);
+    CHECK(Warscape::XPForLevel(4) == 276);
+    CHECK(Warscape::XPForLevel(5) == 388);
+    CHECK(Warscape::XPForLevel(99) == 13034431);
+
+    CHECK(Warscape::LevelForXP(82) == 1);
+    CHECK(Warscape::LevelForXP(83) == 2);
+    CHECK(Warscape::LevelForXP(173) == 2);
+    CHECK(Warscape::LevelForXP(174) == 3);
+    CHECK(Warscape::LevelForXP(275) == 3);
+    CHECK(Warscape::LevelForXP(276) == 4);
+    CHECK(Warscape::LevelForXP(387) == 4);
+    CHECK(Warscape::LevelForXP(388) == 5);
+
+    Warscape::SkillProgress attack;
+    CHECK_FALSE(Warscape::AddSkillXP(attack, 82));
+    CHECK(attack.Level == 1);
+    CHECK(Warscape::AddSkillXP(attack, 1));
+    CHECK(attack.Level == 2);
+    CHECK(Warscape::AddSkillXP(attack, 305));
+    CHECK(attack.XP == 388);
+    CHECK(attack.Level == 5);
+}
+
+TEST_CASE("Warscape skill XP persistence restores levels from saved XP", "[warscape]")
+{
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> skills = {};
+    skills[0].XP = 388;
+    skills[0].Level = 5;
+    skills[1].XP = 174;
+    skills[1].Level = 3;
+    skills[3].XP = 1154;
+    skills[3].Level = 10;
+
+    auto const savedXP = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> restored = {};
+    Warscape::RestoreSkillXP(restored, savedXP);
+
+    CHECK(restored[0].XP == 388);
+    CHECK(restored[0].Level == 5);
+    CHECK(restored[1].XP == 174);
+    CHECK(restored[1].Level == 3);
+    CHECK(restored[3].XP == 1154);
+    CHECK(restored[3].Level == 10);
+}
+
+TEST_CASE("Warscape accuracy uses increased OSRS Attack and attack style only", "[warscape]")
+{
+    uint64_t const defenceRoll = Warscape::CombatRoll(9, 0);
+    uint64_t const level1AttackRoll = Warscape::PlayerAttackRoll(1, 0);
+    uint64_t const level5AttackRoll = Warscape::PlayerAttackRoll(5, 0);
+
+    CHECK(level1AttackRoll == Warscape::CombatRoll(12, 0));
+    CHECK(level5AttackRoll == Warscape::CombatRoll(16, 0));
+    CHECK(Warscape::HitChance(level5AttackRoll, defenceRoll) > Warscape::HitChance(level1AttackRoll, defenceRoll));
+    CHECK(Warscape::PlayerAttackRoll(5, 1) == Warscape::CombatRoll(13, 0));
+    CHECK(Warscape::PlayerAttackRoll(5, 2) == Warscape::CombatRoll(13, 0));
+    CHECK(Warscape::PlayerAttackRoll(5, 3) == Warscape::CombatRoll(14, 0));
 }

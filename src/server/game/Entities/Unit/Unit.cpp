@@ -2218,13 +2218,11 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
     {
         Player const* attacker = ToPlayer();
         uint32 style = attacker->GetWarscapeAttackStyle();
-        uint32 styleBonus = style == 0 ? 3 : (style == 3 ? 1 : 0);
-        uint32 effectiveAttack = attacker->GetRSSkillLevel(Player::RS_Skill::Attack) + styleBonus + 8;
         auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry());
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
         // Player item accuracy will be mapped explicitly in the equipment stage;
         // WoW hit rating and item level are not OSRS equipment bonuses.
-        uint64 attackRoll = Warscape::CombatRoll(effectiveAttack, 0);
+        uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style);
         uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
         double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;

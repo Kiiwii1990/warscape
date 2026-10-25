@@ -142,6 +142,27 @@ public:
         else
             style = style.substr(first, style.find_last_not_of(" \\t") - first + 1);
 
+        if (StringEqualI(style, "stats"))
+        {
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
+            for (uint8 i = 0; i < Player::RS_SKILL_COUNT; ++i)
+            {
+                Player::RS_Skill skill = static_cast<Player::RS_Skill>(i);
+                uint8 level = player->GetRSSkillLevel(skill);
+                uint32 xp = player->GetRSSkillXP(skill);
+                if (level >= 99)
+                    handler->PSendSysMessage("%s: level %u, %u XP (maximum level)", skillNames[i], level, xp);
+                else
+                {
+                    uint32 nextLevelXP = Player::RS_XPForLevel(level + 1);
+                    handler->PSendSysMessage("%s: level %u, %u XP, %u XP to level %u", skillNames[i], level, xp,
+                        nextLevelXP - xp, level + 1);
+                }
+            }
+            handler->SendSysMessage("OSRS combat level: not implemented yet.");
+            return true;
+        }
+
         uint8 selected = player->GetWarscapeAttackStyle();
         if (StringEqualI(style, "accurate"))
             selected = 0;
@@ -153,7 +174,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

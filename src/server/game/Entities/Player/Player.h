@@ -20,6 +20,7 @@
 
 #include "GridObject.h"
 #include "Unit.h"
+#include "WarscapeSkills.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
 #include "EquipmentSet.h"
@@ -919,18 +920,14 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             Count
         };
 
-        struct RS_SkillData
-        {
-            uint8 Level = 1;
-            uint32 XP = 0;
-        };
+        using RS_SkillData = Warscape::SkillProgress;
 
 
         static constexpr uint8 RS_SKILL_COUNT = static_cast<uint8>(RS_Skill::Count);
 
         uint8 warscapeAttackStyle = 0;
 
-        RS_SkillData rsSkills[RS_SKILL_COUNT] = {
+        std::array<RS_SkillData, RS_SKILL_COUNT> rsSkills = {{
             {1, 0},       // Attack
             {1, 0},       // Strength
             {1, 0},       // Defence
@@ -938,30 +935,17 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             {1, 0},       // Ranged
             {1, 0},       // Magic
             {1, 0}        // Prayer
-        };
+        }};
 
         // Exact OSRS XP thresholds, calculated with integer rounding.
         static uint32 RS_XPForLevel(uint8 level)
         {
-            if (level <= 1)
-                return 0;
-
-            level = std::min<uint8>(level, 99);
-
-            uint32 points = 0;
-            for (uint32 i = 1; i < level; ++i)
-                points += uint32(std::floor(i + 300.0 * std::pow(2.0, i / 7.0)));
-
-            return points / 4;
+            return Warscape::XPForLevel(level);
         }
 
         static uint8 RS_LevelForXP(uint32 xp)
         {
-            for (int32 level = 99; level >= 2; --level)
-                if (xp >= RS_XPForLevel(uint8(level)))
-                    return uint8(level);
-
-            return 1;
+            return Warscape::LevelForXP(xp);
         }
 
         uint8 GetRSSkillLevel(RS_Skill skill) const
@@ -974,18 +958,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             return rsSkills[static_cast<uint8>(skill)].XP;
         }
 
-        void AddRSSkillXP(RS_Skill skill, uint32 amount)
-        {
-            RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
-            uint8 const oldLevel = data.Level;
-            data.XP = uint32(std::min<uint64>(200000000ULL, uint64(data.XP) + amount));
-            data.Level = RS_LevelForXP(data.XP);
-            if (skill == RS_Skill::Hitpoints && data.Level > oldLevel)
-            {
-                UpdateMaxHealth();
-                ModifyHealth(data.Level - oldLevel);
-            }
-        }
+        void AddRSSkillXP(RS_Skill skill, uint32 amount);
 
         // Warscape attack styles: 0 Accurate, 1 Aggressive, 2 Defensive, 3 Controlled.
         uint8 GetWarscapeAttackStyle() const { return warscapeAttackStyle; }

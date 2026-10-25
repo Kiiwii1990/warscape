@@ -62,6 +62,23 @@ These are testable starter defaults, not final balance. Profiles remain editable
 in SQL; later equipment and combat stages can replace the zero-bonus defaults.
 Existing character XP persistence and `.rs` attack-style commands remain active.
 
+## Stage 1A skill visibility and progression
+
+Use `.rs stats` to display Attack, Strength, Defence, Hitpoints, Ranged, Magic
+and Prayer levels, total XP, and XP remaining to the next level. Level 99 is
+reported as the maximum; OSRS combat level is explicitly marked as not yet
+implemented. The existing `.rs accurate`, `.rs aggressive`, `.rs defensive` and
+`.rs controlled` commands are unchanged.
+
+OSRS XP thresholds use the standard integer-rounded formula (for example,
+83/174/276/388 XP gives levels 2/3/4/5). Level-up messages identify the skill
+and new level. Skill XP is saved to the character database and levels are
+reconstructed from saved XP at login. Player melee accuracy uses the persistent
+OSRS Attack level and the existing attack-style bonus; WoW level is not an input.
+The test suite covers threshold boundaries, level changes, XP serialize/restore,
+and improved accuracy from a higher OSRS Attack level. Runtime persistence and
+combat checks still require in-game playtesting.
+
 ## Verification
 
 `tests/game/WarscapeCombat.cpp` exercises profile scaling, hit-roll boundaries and

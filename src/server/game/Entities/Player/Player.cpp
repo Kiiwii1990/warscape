@@ -16941,12 +16941,10 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         if (PreparedQueryResult rsResult = CharacterDatabase.Query(rsStmt))
         {
             Field* rsFields = rsResult->Fetch();
+            std::array<uint32, RS_SKILL_COUNT> savedXP = {};
             for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
-            {
-                uint32 xp = std::min<uint32>(rsFields[i].GetUInt32(), 200000000U);
-                rsSkills[i].XP = xp;
-                rsSkills[i].Level = RS_LevelForXP(xp);
-            }
+                savedXP[i] = rsFields[i].GetUInt32();
+            Warscape::RestoreSkillXP(rsSkills, savedXP);
             warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 3);
         }
     }
@@ -19022,8 +19020,9 @@ void Player::SaveToDB(bool create /*=false*/)
     // WARSCAPE: Persist skill XP and attack style in the same character save transaction.
     CharacterDatabasePreparedStatement* rsStmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_WARSCAPE_SKILLS);
     rsStmt->setUInt32(0, GetGUID().GetCounter());
+    auto const savedXP = Warscape::SerializeSkillXP(rsSkills);
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
-        rsStmt->setUInt32(i + 1, rsSkills[i].XP);
+        rsStmt->setUInt32(i + 1, savedXP[i]);
     rsStmt->setUInt8(8, warscapeAttackStyle);
     trans->Append(rsStmt);
 
@@ -26526,6 +26525,25 @@ GameClient* Player::GetGameClient() const
 {
     return GetSession()->GetGameClient();
 
+}
+
+// Add OSRS skill XP and notify the player when a level threshold is crossed.
+void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
+{
+    RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
+    uint8 const oldLevel = data.Level;
+    if (!Warscape::AddSkillXP(data, amount))
+        return;
+
+    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
+    ChatHandler chat(GetSession());
+    chat.PSendSysMessage("Your %s level is now %u!", skillNames[static_cast<uint8>(skill)], data.Level);
+
+    if (skill == RS_Skill::Hitpoints)
+    {
+        UpdateMaxHealth();
+        ModifyHealth(data.Level - oldLevel);
+    }
 }
 
 // Warscape: Award RuneScape XP from melee damage.
