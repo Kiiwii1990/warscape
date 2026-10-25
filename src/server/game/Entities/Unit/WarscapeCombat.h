@@ -29,6 +29,7 @@ namespace Warscape
     enum Stat : std::size_t { Attack, Strength, Defence, Ranged, Magic, Hitpoints, StatCount };
     constexpr std::uint32_t MaxStat = 1000000;
     constexpr std::uint32_t HealthDamageScale = 100;
+    constexpr std::uint32_t DamageVariationScale = 100;
     constexpr std::int32_t MaxBonus = 1000000;
 
     struct MonsterProfile
@@ -108,6 +109,20 @@ namespace Warscape
     inline std::uint32_t ScaleHealing(std::uint32_t osrsHealing, std::uint32_t maximumHealth)
     {
         return std::min(ScaleHealthOrDamage(osrsHealing), maximumHealth);
+    }
+
+    inline std::uint32_t VaryScaledDamage(std::uint32_t osrsDamage, std::uint32_t multiplierPercent)
+    {
+        if (!osrsDamage)
+            return 0;
+        std::uint64_t const scaledDamage = std::uint64_t(osrsDamage) * HealthDamageScale;
+        return std::uint32_t((scaledDamage * multiplierPercent + DamageVariationScale / 2) / DamageVariationScale);
+    }
+
+    inline std::uint32_t OSRSDamageForXP(std::uint32_t osrsDamageRoll, std::uint32_t remainingDisplayedHealth)
+    {
+        std::uint32_t const remainingOSRSHealth = (remainingDisplayedHealth + HealthDamageScale - 1) / HealthDamageScale;
+        return std::min(osrsDamageRoll, remainingOSRSHealth);
     }
 }
 #endif

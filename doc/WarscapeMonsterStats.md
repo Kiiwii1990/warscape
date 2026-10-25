@@ -107,6 +107,49 @@ save the character. Internal WoW levels are untouched. The command uses the
 existing `RBAC_PERM_COMMAND_SETSKILL` permission; `.rs stats` remains available
 under the existing `.rs` permission.
 
+## Stage 1C damage variation
+
+Positive OSRS melee damage rolls use a uniform integer multiplier around 100%.
+The default `Warscape.DamageVariationPercent = 20` gives a range of 80% through
+120%; set it to zero for strict 100× damage. Values outside 0..99 are clamped
+when the server loads configuration. The multiplier is rolled only after a hit
+has succeeded and only when the OSRS damage roll is positive. Player and monster
+melee use the same helper. Spell damage, environmental damage and scripted
+encounters are unchanged.
+
+The unscaled OSRS damage roll travels with the melee event and remains the basis
+for combat and Hitpoints XP. Displayed damage variation therefore does not change
+XP awards. Tests cover the min/max boundaries, a million-sample mean, preserved
+zero rolls, OSRS-based XP and existing accuracy/health behavior.
+
+## Legacy WoW weapon and Defence skill investigation
+
+Combat skill-up checks are triggered in `Unit::ProcSkillsAndReactives` for melee
+auto-attack outcomes. That path calls `Player::UpdateCombatSkills`, which calls
+`UpdateWeaponSkill` for weapon proficiencies and `UpdateDefense` for Defence.
+Warscape player-versus-creature and creature-versus-player accuracy returns from
+the OSRS roll branches in `Unit::RollMeleeOutcomeAgainst` before reading WoW
+weapon or Defence skills. Those skills still affect the legacy non-Warscape
+attack table, WoW-derived dodge/parry/crit calculations, and fallback combat.
+
+The item template maps weapon subclasses to skill IDs, and equipped weapon skill
+values are still used for proficiency/equipment compatibility. The same skill
+data is sent to the client and can be visible in its skill UI; hiding it would
+require filtering skill initialization/update packets and could break item
+requirements. Safest future change: suppress `UpdateCombatSkills` progression
+only for Warscape player-versus-creature melee events, while retaining skill
+records, weapon proficiency checks and all unrelated WoW combat progression.
+Do not delete the skills or their client fields. Stage 1C makes no skill system
+changes.
+
+## Long-term attribute replacement objective
+
+Replace WoW combat attributes incrementally with OSRS equipment attack/defence
+bonuses, Strength/Ranged Strength/Magic bonuses, Prayer bonuses and OSRS weapon
+attack speed. Keep engine-required WoW values until each dependency has a tested
+replacement. This objective is tracked for later isolated stages; Stage 1C does
+not change the attribute system.
+
 ## Verification
 
 `tests/game/WarscapeCombat.cpp` exercises profile scaling, hit-roll boundaries and

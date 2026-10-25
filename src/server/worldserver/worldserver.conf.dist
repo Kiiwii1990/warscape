@@ -2410,6 +2410,10 @@ Rate.Rest.Offline.InWilderness   = 1
 
 Rate.Damage.Fall = 1
 
+# Warscape damage variation is applied symmetrically around 100% to positive
+# OSRS melee damage rolls. Set to 0 to disable variation; valid range is 0..99.
+Warscape.DamageVariationPercent = 20
+
 #
 #    Rate.Auction.Time
 #    Rate.Auction.Deposit

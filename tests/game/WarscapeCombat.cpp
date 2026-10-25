@@ -16,6 +16,9 @@
  */
 
 #include <catch2/catch.hpp>
+#include <algorithm>
+#include <limits>
+#include <random>
 #include "WarscapeCombat.h"
 #include "WarscapeSkills.h"
 
@@ -220,4 +223,41 @@ TEST_CASE("Warscape GM skill setters validate permissions, names, levels and XP"
     CHECK(Warscape::SetSkillXP(hitpoints, 1153, true) == Warscape::SkillUpdateResult::InvalidXP);
     CHECK(Warscape::SetSkillLevel(hitpoints, 20, true) == Warscape::SkillUpdateResult::Success);
     CHECK(hitpoints.XP == Warscape::XPForLevel(20));
+}
+
+TEST_CASE("Warscape damage variation is bounded, symmetric and leaves XP on OSRS rolls", "[warscape]")
+{
+    CHECK(Warscape::VaryScaledDamage(0, 80) == 0);
+    CHECK(Warscape::VaryScaledDamage(0, 120) == 0);
+    CHECK(Warscape::VaryScaledDamage(1, 80) == 80);
+    CHECK(Warscape::VaryScaledDamage(1, 120) == 120);
+    CHECK(Warscape::VaryScaledDamage(1, 1) == 1);
+    CHECK(Warscape::VaryScaledDamage(2, 80) == 160);
+    CHECK(Warscape::VaryScaledDamage(2, 120) == 240);
+    CHECK(Warscape::VaryScaledDamage(5, 80) == 400);
+    CHECK(Warscape::VaryScaledDamage(5, 120) == 600);
+    CHECK(Warscape::ScaleHealthOrDamage(10) == 1000);
+
+    std::mt19937 random(0x57525343);
+    std::uniform_int_distribution<uint32_t> multiplier(80, 120);
+    uint64_t total = 0;
+    uint32_t minimum = std::numeric_limits<uint32_t>::max();
+    uint32_t maximum = 0;
+    constexpr uint32_t SampleCount = 1000000;
+    for (uint32_t i = 0; i < SampleCount; ++i)
+    {
+        uint32_t const varied = Warscape::VaryScaledDamage(1, multiplier(random));
+        minimum = std::min(minimum, varied);
+        maximum = std::max(maximum, varied);
+        total += varied;
+    }
+    CHECK(minimum >= 80);
+    CHECK(maximum <= 120);
+    CHECK(total / double(SampleCount) == Approx(100.0).epsilon(0.001));
+
+    // XP uses the unvaried OSRS hit roll, so low and high display rolls award alike.
+    CHECK(Warscape::OSRSDamageForXP(1, 1000) * 4 == 4);
+    CHECK(Warscape::OSRSDamageForXP(1, 117) * 4 == 4);
+    CHECK(Warscape::OSRSDamageForXP(5, 117) * 4 == 8);
+    CHECK(Warscape::OSRSDamageForXP(5, 0) == 0);
 }

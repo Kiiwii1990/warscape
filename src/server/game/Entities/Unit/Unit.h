@@ -433,6 +433,9 @@ struct CleanDamage
     uint32 absorbed_damage;
     uint32 mitigated_damage;
 
+    // Unscaled Warscape hit value, used for XP regardless of displayed variation.
+    uint32 warscapeOSRSDamage = 0;
+
     WeaponAttackType attackType;
     MeleeHitOutcome hitOutCome;
 };
@@ -572,6 +575,8 @@ struct CalcDamageInfo
     uint32 ProcAttacker;
     uint32 ProcVictim;
     uint32 CleanDamage;          // Used only for rage calculation
+    uint32 WarscapeOSRSDamage = 0;
+    bool IsWarscapeMelee = false;
     MeleeHitOutcome HitOutCome;  /// @todo remove this field (need use TargetState)
 };
 

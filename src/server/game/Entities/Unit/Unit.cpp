@@ -997,11 +997,14 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
 
     // WARSCAPE: Award skill XP for actual melee damage to creatures.
     // This is temporary Attack-style training until combat styles are implemented.
-    if (attacker && attacker->ToPlayer() && victim->ToCreature() &&
+    if (damage > 0 && attacker && attacker->ToPlayer() && victim->ToCreature() &&
         damagetype == DIRECT_DAMAGE && cleanDamage &&
         (cleanDamage->attackType == BASE_ATTACK || cleanDamage->attackType == OFF_ATTACK))
     {
-        attacker->ToPlayer()->AwardWarscapeMeleeXP(Warscape::ToOSRSDamage(std::min(damage, health)));
+        uint32 const osrsDamage = cleanDamage->warscapeOSRSDamage
+            ? Warscape::OSRSDamageForXP(cleanDamage->warscapeOSRSDamage, health)
+            : Warscape::ToOSRSDamage(std::min(damage, health));
+        attacker->ToPlayer()->AwardWarscapeMeleeXP(osrsDamage);
     }
 
     // make player victims stand up automatically
@@ -1178,6 +1181,8 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     damageInfo->ProcAttacker     = PROC_FLAG_NONE;
     damageInfo->ProcVictim       = PROC_FLAG_NONE;
     damageInfo->CleanDamage      = 0;
+    damageInfo->WarscapeOSRSDamage = 0;
+    damageInfo->IsWarscapeMelee = false;
     damageInfo->HitOutCome       = MELEE_HIT_EVADE;
 
     if (!victim)
@@ -1222,18 +1227,23 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     uint32 warscapeDamage = 0;
     if (warscapeMelee)
     {
+        uint32 warscapeOSRSDamage = 0;
         if (warscapePlayerMelee)
         {
             Player const* player = ToPlayer();
             uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
-            warscapeDamage = Warscape::ScaleHealthOrDamage(urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus)));
+            warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus));
         }
         else
         {
             auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
             auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
-            warscapeDamage = Warscape::ScaleHealthOrDamage(urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus)));
+            warscapeOSRSDamage = urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
         }
+
+        warscapeDamage = Warscape::ScaleHealthOrDamage(warscapeOSRSDamage);
+        damageInfo->WarscapeOSRSDamage = warscapeOSRSDamage;
+        damageInfo->IsWarscapeMelee = true;
     }
     bool warscapeDamageAssigned = false;
 
@@ -1283,6 +1293,15 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     }
 
     damageInfo->HitOutCome = RollMeleeOutcomeAgainst(damageInfo->Target, damageInfo->AttackType);
+
+    // Randomize only a positive successful Warscape roll; misses and zero hits
+    // consume no variation roll and stay at zero.
+    if (warscapeMelee && damageInfo->WarscapeOSRSDamage && damageInfo->HitOutCome == MELEE_HIT_NORMAL)
+    {
+        uint32 const variation = sWorld->getIntConfig(CONFIG_WARSCAPE_DAMAGE_VARIATION_PERCENT);
+        uint32 const multiplier = urand(100 - variation, 100 + variation);
+        damageInfo->Damages[0].Damage = Warscape::VaryScaledDamage(damageInfo->WarscapeOSRSDamage, multiplier);
+    }
 
     switch (damageInfo->HitOutCome)
     {
@@ -1545,6 +1564,8 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
 
         // Call default DealDamage
         CleanDamage cleanDamage(damageInfo->CleanDamage, damageInfo->Damages[i].Absorb, damageInfo->AttackType, damageInfo->HitOutCome);
+        if (damageInfo->IsWarscapeMelee)
+            cleanDamage.warscapeOSRSDamage = damageInfo->WarscapeOSRSDamage;
         Unit::DealDamage(this, victim, damageInfo->Damages[i].Damage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask), nullptr, durabilityLoss);
     }
 

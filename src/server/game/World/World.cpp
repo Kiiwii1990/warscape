@@ -910,6 +910,14 @@ void World::LoadConfigSettings(bool reload)
         m_int_configs[CONFIG_START_PLAYER_LEVEL] = m_int_configs[CONFIG_MAX_PLAYER_LEVEL];
     }
 
+    int32 warscapeDamageVariation = sConfigMgr->GetIntDefault("Warscape.DamageVariationPercent", 20);
+    if (warscapeDamageVariation < 0 || warscapeDamageVariation > 99)
+    {
+        TC_LOG_ERROR("server.loading", "Warscape.DamageVariationPercent ({}) must be between 0 and 99. Clamping.", warscapeDamageVariation);
+        warscapeDamageVariation = std::clamp(warscapeDamageVariation, 0, 99);
+    }
+    m_int_configs[CONFIG_WARSCAPE_DAMAGE_VARIATION_PERCENT] = uint32(warscapeDamageVariation);
+
     m_int_configs[CONFIG_START_DEATH_KNIGHT_PLAYER_LEVEL] = sConfigMgr->GetIntDefault("StartDeathKnightPlayerLevel", 55);
     if (m_int_configs[CONFIG_START_DEATH_KNIGHT_PLAYER_LEVEL] < 1)
     {
