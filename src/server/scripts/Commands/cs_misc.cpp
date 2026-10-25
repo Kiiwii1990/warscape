@@ -21,6 +21,7 @@
 #include "CellImpl.h"
 #include "CharacterCache.h"
 #include "Chat.h"
+#include "Creature.h"
 #include "DatabaseEnv.h"
 #include "DisableMgr.h"
 #include "GridNotifiers.h"
@@ -133,6 +134,30 @@ public:
         return commandTable;
     }
 
+    static char const* WarscapeArchetypeName(Warscape::WeaponArchetype archetype)
+    {
+        switch (archetype)
+        {
+            case Warscape::WeaponArchetype::Dagger: return "Dagger";
+            case Warscape::WeaponArchetype::Scimitar: return "Scimitar";
+            case Warscape::WeaponArchetype::ShortSword: return "Short sword";
+            case Warscape::WeaponArchetype::Longsword: return "Longsword";
+            case Warscape::WeaponArchetype::TwoHandedSword: return "Two-handed sword";
+            case Warscape::WeaponArchetype::Battleaxe: return "Battleaxe";
+            case Warscape::WeaponArchetype::Warhammer: return "Warhammer";
+            case Warscape::WeaponArchetype::Mace: return "Mace";
+            case Warscape::WeaponArchetype::Spear: return "Spear";
+            case Warscape::WeaponArchetype::Halberd: return "Halberd";
+            case Warscape::WeaponArchetype::Bow: return "Bow";
+            case Warscape::WeaponArchetype::Crossbow: return "Crossbow";
+            case Warscape::WeaponArchetype::Staff: return "Staff";
+            case Warscape::WeaponArchetype::Wand: return "Wand";
+            case Warscape::WeaponArchetype::Auto: return "Auto";
+            case Warscape::WeaponArchetype::Unknown:
+            default: return "Unknown";
+        }
+    }
+
     // WARSCAPE: Temporary attack-style selector. Available to normal players.
     static bool HandleWarscapeStyleCommand(ChatHandler* handler, char const* args)
     {
@@ -182,7 +207,28 @@ public:
             handler->PSendSysMessage("Ranged %d / %d, Magic %d / %d; Melee Strength %d, Ranged Strength %d, Magic Damage %d, Prayer %d",
                 bonuses.AttackRanged, bonuses.DefenceRanged, bonuses.AttackMagic, bonuses.DefenceMagic,
                 bonuses.MeleeStrength, bonuses.RangedStrength, bonuses.MagicDamage, bonuses.Prayer);
-            handler->PSendSysMessage("Selected melee damage type: %s", damageType);
+            uint32 const speedTicks = player->GetWarscapeWeaponAttackSpeedTicks(BASE_ATTACK);
+            float const speedSeconds = float(Warscape::AttackIntervalMilliseconds(speedTicks)) / 1000.0f;
+            handler->PSendSysMessage("Weapon archetype: %s; Selected melee damage type: %s",
+                WarscapeArchetypeName(player->GetWarscapeWeaponArchetype(BASE_ATTACK)), damageType);
+            handler->PSendSysMessage("Attack Speed: %u ticks (%.1f seconds)", speedTicks, speedSeconds);
+            return true;
+        }
+
+        if (StringEqualI(style, "monsterspeed"))
+        {
+            Unit* selected = player->GetSelectedUnit();
+            if (!selected || !selected->ToCreature())
+            {
+                handler->SendSysMessage("Select a creature first, then use .rs monsterspeed.");
+                return true;
+            }
+
+            Creature* creature = selected->ToCreature();
+            uint32 const speedTicks = sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry());
+            float const speedSeconds = float(Warscape::AttackIntervalMilliseconds(speedTicks)) / 1000.0f;
+            handler->PSendSysMessage("Warscape melee speed for %s (entry %u): %u ticks (%.1f seconds)",
+                creature->GetName().c_str(), creature->GetEntry(), speedTicks, speedSeconds);
             return true;
         }
 
@@ -252,7 +298,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

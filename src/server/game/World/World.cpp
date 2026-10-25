@@ -1828,6 +1828,7 @@ void World::SetInitialWorldSettings()
     TC_LOG_INFO("server.loading", "Loading Creature templates...");
     sObjectMgr->LoadCreatureTemplates();
     sObjectMgr->LoadWarscapeMonsterStats();
+    sObjectMgr->LoadWarscapeMonsterAttackSpeeds();
 
     TC_LOG_INFO("server.loading", "Loading Equipment templates...");           // must be after LoadCreatureTemplates
     sObjectMgr->LoadEquipmentTemplates();

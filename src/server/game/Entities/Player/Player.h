@@ -1697,6 +1697,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         Warscape::EquipmentBonuses GetWarscapeEquipmentBonuses() const;
         Warscape::MeleeDamageType GetWarscapeMeleeDamageType(WeaponAttackType attackType = BASE_ATTACK) const;
         int32 GetWarscapeMeleeAttackBonus(WeaponAttackType attackType = BASE_ATTACK) const;
+        Warscape::WeaponArchetype GetWarscapeWeaponArchetype(WeaponAttackType attackType = BASE_ATTACK) const;
+        uint32 GetWarscapeWeaponAttackSpeedTicks(WeaponAttackType attackType = BASE_ATTACK) const;
 
 
         float GetHealthBonusFromStamina();

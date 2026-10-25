@@ -208,3 +208,30 @@ archetype inference/overrides, slot aggregation and recalculation, signed bonus
 lanes, style/type selection, OSRS accuracy and max-hit effects. Live database
 loading and the in-game checks remain part of Stage 1E player testing.
 
+## Stage 1F OSRS weapon and monster attack intervals
+
+Warscape melee swings use integer multiples of the 600ms combat tick. Attack
+intervals are selected from the equipped Warscape weapon profile for players
+and from `warscape_monster_attack_speed` by creature template entry for
+creatures. Missing or invalid speed data resolves to four ticks (2.4 seconds);
+accepted explicit values are 2 through 12 ticks. Stage 1F uses Stiletto 2494:
+3 ticks; Gladius 2488: 4; Two-handed Sword 2489: 7; Wooden Mallet 2493: 5.
+Harvest Golem entry 36 is the monster timing diagnostic sample at 5 ticks;
+other monster entries default to 4.
+
+The timer uses TrinityCore's existing melee attack scheduler. Warscape combat
+resets timers directly from ticks and does not multiply them by WoW haste.
+Weapon changes clamp a pending timer to at least the new interval, so a swap
+cannot bring a swing forward. Warscape autoattacks use one base-hand swing;
+offhand autoattacks are suppressed for both players and creatures while in
+Warscape melee, avoiding a second independent dual-wield attack cadence. Other
+player-versus-player combat, ranged attacks and non-Warscape creature combat
+continue to use the regular WoW timers.
+
+The migration `2026_10_25_01_world.sql` adds `attack_speed_ticks` to item
+profiles and creates the monster-entry speed table. It does not change
+`item_template` or inventory records. `.rs bonuses` now displays weapon
+archetype, selected damage type, ticks and seconds; `.rs monsterspeed` reports
+the selected creature's configured/default interval. The migration and live
+database loading remain to be verified during Stage 1F testing.
+

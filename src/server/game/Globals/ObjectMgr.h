@@ -1149,6 +1149,9 @@ class TC_GAME_API ObjectMgr
         void LoadWarscapeEquipmentBonuses();
         Warscape::WeaponArchetype GetWarscapeWeaponArchetype(uint32 itemId) const;
         Warscape::EquipmentBonuses GetWarscapeItemBonuses(uint32 itemId) const;
+        uint32 GetWarscapeItemAttackSpeedTicks(uint32 itemId) const;
+        void LoadWarscapeMonsterAttackSpeeds();
+        uint32 GetWarscapeMonsterAttackSpeedTicks(uint32 creatureEntry) const;
         void LoadCreatureTemplateAddons();
         void LoadCreatureTemplate(Field* fields);
         void LoadCreatureTemplateResistances();
@@ -1720,6 +1723,7 @@ class TC_GAME_API ObjectMgr
         std::unordered_map<uint8, std::vector<Trainer::Trainer const*>> _classTrainers;
         std::unordered_map<uint32, Trainer::Trainer const*> _creatureDefaultTrainers;
         std::unordered_map<uint32, Warscape::ItemProfile> _warscapeItemProfiles;
+        std::unordered_map<uint32, uint32> _warscapeMonsterAttackSpeeds;
 
         std::set<uint32> _difficultyEntries[MAX_DIFFICULTY - 1]; // already loaded difficulty 1 value in creatures, used in CheckCreatureTemplate
         std::set<uint32> _hasDifficultyEntries[MAX_DIFFICULTY - 1]; // already loaded creatures with difficulty 1 values, used in CheckCreatureTemplate

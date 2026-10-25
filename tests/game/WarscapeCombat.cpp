@@ -280,6 +280,46 @@ TEST_CASE("Warscape equipment bonuses affect OSRS accuracy and melee max hit", "
     CHECK(Warscape::MaxHit(50, -10, 3) < baseMaxHit);
 }
 
+TEST_CASE("Warscape attack speed uses fixed 600ms ticks, defaults and safe limits", "[warscape]")
+{
+    CHECK(Warscape::CombatTickMilliseconds == 600);
+    CHECK(Warscape::AttackIntervalMilliseconds(2) == 1200);
+    CHECK(Warscape::AttackIntervalMilliseconds(3) == 1800);
+    CHECK(Warscape::AttackIntervalMilliseconds(4) == 2400);
+    CHECK(Warscape::AttackIntervalMilliseconds(5) == 3000);
+    CHECK(Warscape::AttackIntervalMilliseconds(6) == 3600);
+    CHECK(Warscape::AttackIntervalMilliseconds(7) == 4200);
+    CHECK(Warscape::AttackIntervalMilliseconds(0) == 2400);
+    CHECK(Warscape::AttackIntervalMilliseconds(1) == 2400);
+    CHECK(Warscape::AttackIntervalMilliseconds(13) == 2400);
+    CHECK(Warscape::DefaultAttackSpeedTicks == 4);
+
+    // These item-ID profiles are permanent definitions; native WoW delay and
+    // haste values are not parameters to the Warscape interval calculation.
+    CHECK(Warscape::AttackTimerAfterReset(3) == 1800); // Stiletto 2494
+    CHECK(Warscape::AttackTimerAfterReset(4) == 2400); // Gladius 2488
+    CHECK(Warscape::AttackTimerAfterReset(7) == 4200); // Two-handed Sword 2489
+    CHECK(Warscape::AttackTimerAfterReset(5) == 3000); // Wooden Mallet 2493
+    CHECK(Warscape::AttackTimerAfterReset(Warscape::DefaultAttackSpeedTicks) == 2400);
+}
+
+TEST_CASE("Warscape weapon switching cannot shorten a pending swing and dual wield does not add attacks", "[warscape]")
+{
+    CHECK(Warscape::AttackTimerAfterWeaponChange(500, 7) == 4200);
+    CHECK(Warscape::AttackTimerAfterWeaponChange(4000, 3) == 4000);
+    CHECK(Warscape::AttackTimerAfterWeaponChange(0, 4) == 2400);
+    CHECK_FALSE(Warscape::AllowsOffhandAutoAttack(true));
+    CHECK(Warscape::AllowsOffhandAutoAttack(false));
+}
+
+TEST_CASE("Warscape monster attack speeds use explicit ticks or the four-tick default", "[warscape]")
+{
+    CHECK(Warscape::AttackIntervalMilliseconds(Warscape::DefaultAttackSpeedTicks) == 2400);
+    CHECK(Warscape::AttackIntervalMilliseconds(5) == 3000); // Harvest Golem entry 36 test override
+    CHECK(Warscape::NormalizeAttackSpeedTicks(0) == Warscape::DefaultAttackSpeedTicks);
+    CHECK(Warscape::NormalizeAttackSpeedTicks(255) == Warscape::DefaultAttackSpeedTicks);
+}
+
 TEST_CASE("Warscape health and melee damage scale by 100 without scaling zero", "[warscape]")
 {
     CHECK(Warscape::ScaleHealthOrDamage(10) == 1000);

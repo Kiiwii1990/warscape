@@ -1005,6 +1005,10 @@ void Player::Update(uint32 p_time)
     {
         if (Unit* victim = GetVictim())
         {
+            bool const warscapeMelee = IsWarscapeMeleeTarget(victim);
+            if (warscapeMelee && haveOffhandWeapon())
+                setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), GetWarscapeMeleeAttackInterval(OFF_ATTACK)));
+
             // default combat reach 10
             /// @todo add weapon, skill check
 
@@ -1043,7 +1047,7 @@ void Player::Update(uint32 p_time)
                     m_swingErrorMsg = 0;                    // reset swing error state
 
                     // prevent base and off attack in same time, delay attack at 0.2 sec
-                    if (haveOffhandWeapon())
+                    if (haveOffhandWeapon() && !warscapeMelee)
                         if (getAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                             setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
 
@@ -1053,7 +1057,7 @@ void Player::Update(uint32 p_time)
                 }
             }
 
-            if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
+            if (Warscape::AllowsOffhandAutoAttack(warscapeMelee) && haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
             {
                 if (!IsWithinMeleeRange(victim))
                     setAttackTimer(OFF_ATTACK, 100);
@@ -5573,17 +5577,28 @@ Warscape::EquipmentBonuses Player::GetWarscapeEquipmentBonuses() const
 
 Warscape::MeleeDamageType Player::GetWarscapeMeleeDamageType(WeaponAttackType attackType) const
 {
-    uint8 const slot = attackType == OFF_ATTACK ? EQUIPMENT_SLOT_OFFHAND : EQUIPMENT_SLOT_MAINHAND;
-    Item const* weapon = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
-    Warscape::WeaponArchetype const archetype = weapon
-        ? sObjectMgr->GetWarscapeWeaponArchetype(weapon->GetEntry())
-        : Warscape::WeaponArchetype::Unknown;
-    return Warscape::SelectMeleeDamageType(archetype, GetWarscapeAttackStyle());
+    return Warscape::SelectMeleeDamageType(GetWarscapeWeaponArchetype(attackType), GetWarscapeAttackStyle());
 }
 
 int32 Player::GetWarscapeMeleeAttackBonus(WeaponAttackType attackType) const
 {
     return GetWarscapeEquipmentBonuses().AttackBonus(GetWarscapeMeleeDamageType(attackType));
+}
+
+Warscape::WeaponArchetype Player::GetWarscapeWeaponArchetype(WeaponAttackType attackType) const
+{
+    Item const* weapon = GetWeaponForAttack(attackType, true);
+    if (!weapon || weapon->IsBroken())
+        return Warscape::WeaponArchetype::Unknown;
+    return sObjectMgr->GetWarscapeWeaponArchetype(weapon->GetEntry());
+}
+
+uint32 Player::GetWarscapeWeaponAttackSpeedTicks(WeaponAttackType attackType) const
+{
+    Item const* weapon = GetWeaponForAttack(attackType, true);
+    if (!weapon || weapon->IsBroken())
+        return Warscape::DefaultAttackSpeedTicks;
+    return sObjectMgr->GetWarscapeItemAttackSpeedTicks(weapon->GetEntry());
 }
 
 bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
@@ -11863,6 +11878,9 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
     if (slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND)
         CheckTitanGripPenalty();
 
+    if ((slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND) && IsWarscapeMeleeCombat() && getAttackTimer(BASE_ATTACK))
+        setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
+
     // only for full equip instead adding to stack
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, slot, pItem->GetEntry());
@@ -12020,6 +12038,9 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
         pItem->SetSlot(NULL_SLOT);
         if (IsInWorld() && update)
             pItem->SendUpdateToPlayer(this);
+
+        if ((slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND) && IsWarscapeMeleeCombat() && getAttackTimer(BASE_ATTACK))
+            setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
     }
 }
 

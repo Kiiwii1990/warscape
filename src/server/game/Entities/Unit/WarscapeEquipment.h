@@ -39,6 +39,35 @@ namespace Warscape
 
     enum class MeleeDamageType : uint8_t { Stab = 0, Slash = 1, Crush = 2 };
     enum class AttackBonusType : uint8_t { Stab = 0, Slash = 1, Crush = 2, Ranged = 3, Magic = 4 };
+    constexpr uint32_t CombatTickMilliseconds = 600;
+    constexpr uint32_t DefaultAttackSpeedTicks = 4;
+    constexpr uint32_t MinimumAttackSpeedTicks = 2;
+    constexpr uint32_t MaximumAttackSpeedTicks = 12;
+
+    inline uint32_t NormalizeAttackSpeedTicks(uint32_t ticks)
+    {
+        return ticks >= MinimumAttackSpeedTicks && ticks <= MaximumAttackSpeedTicks ? ticks : DefaultAttackSpeedTicks;
+    }
+
+    inline uint32_t AttackIntervalMilliseconds(uint32_t ticks)
+    {
+        return NormalizeAttackSpeedTicks(ticks) * CombatTickMilliseconds;
+    }
+
+    inline uint32_t AttackTimerAfterReset(uint32_t ticks)
+    {
+        return AttackIntervalMilliseconds(ticks);
+    }
+
+    inline uint32_t AttackTimerAfterWeaponChange(uint32_t currentTimer, uint32_t newWeaponTicks)
+    {
+        return std::max(currentTimer, AttackIntervalMilliseconds(newWeaponTicks));
+    }
+
+    inline bool AllowsOffhandAutoAttack(bool warscapeMelee)
+    {
+        return !warscapeMelee;
+    }
 
     struct EquipmentBonuses
     {
@@ -100,7 +129,7 @@ namespace Warscape
         WeaponArchetype Archetype = WeaponArchetype::Auto;
         EquipmentBonuses Bonuses;
         uint32_t Tier = 0;
-        uint32_t AttackSpeed = 0;
+        uint32_t AttackSpeedTicks = DefaultAttackSpeedTicks;
         uint32_t GenerationVersion = 0;
         uint64_t GenerationSeed = 0;
         bool HasGenerationSeed = false;

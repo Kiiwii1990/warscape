@@ -611,7 +611,25 @@ void Unit::DisableSpline()
 
 void Unit::resetAttackTimer(WeaponAttackType type)
 {
-    m_attackTimer[type] = uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
+    m_attackTimer[type] = IsWarscapeMeleeCombat() && type != RANGED_ATTACK
+        ? GetWarscapeMeleeAttackInterval(type)
+        : uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
+}
+
+bool Unit::IsWarscapeMeleeTarget(Unit const* target) const
+{
+    return target && ((GetTypeId() == TYPEID_PLAYER && target->GetTypeId() == TYPEID_UNIT)
+        || (GetTypeId() == TYPEID_UNIT && target->GetTypeId() == TYPEID_PLAYER));
+}
+
+uint32 Unit::GetWarscapeMeleeAttackInterval(WeaponAttackType att) const
+{
+    uint32 ticks = Warscape::DefaultAttackSpeedTicks;
+    if (GetTypeId() == TYPEID_PLAYER)
+        ticks = ToPlayer()->GetWarscapeWeaponAttackSpeedTicks(att);
+    else if (GetTypeId() == TYPEID_UNIT)
+        ticks = sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(GetEntry());
+    return Warscape::AttackIntervalMilliseconds(ticks);
 }
 
 bool Unit::IsWithinCombatRange(Unit const* obj, float dist2compare) const
@@ -5621,6 +5639,8 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
                 {
                     AddUnitState(UNIT_STATE_MELEE_ATTACKING);
                     SendMeleeAttackStart(victim);
+                    if (IsWarscapeMeleeTarget(victim) && getAttackTimer(BASE_ATTACK))
+                        setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
                     return true;
                 }
             }
@@ -5648,6 +5668,14 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     // Set our target
     SetTarget(victim->GetGUID());
 
+    if (IsWarscapeMeleeTarget(victim))
+    {
+        if (getAttackTimer(BASE_ATTACK))
+            setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
+        if (haveOffhandWeapon() && getAttackTimer(OFF_ATTACK))
+            setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), GetWarscapeMeleeAttackInterval(OFF_ATTACK)));
+    }
+
     if (meleeAttack)
         AddUnitState(UNIT_STATE_MELEE_ATTACKING);
 
@@ -5667,7 +5695,7 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     }
 
     // delay offhand weapon attack by 50% of the base attack time
-    if (haveOffhandWeapon() && GetTypeId() != TYPEID_PLAYER)
+    if (haveOffhandWeapon() && GetTypeId() != TYPEID_PLAYER && !IsWarscapeMeleeCombat())
         setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), getAttackTimer(BASE_ATTACK) + uint32(CalculatePct(GetFloatValue(UNIT_FIELD_BASEATTACKTIME), 50))));
 
     if (meleeAttack)
@@ -8516,6 +8544,9 @@ int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*
 
 uint32 Unit::GetAttackTime(WeaponAttackType att) const
 {
+    if (att != RANGED_ATTACK && IsWarscapeMeleeCombat())
+        return GetWarscapeMeleeAttackInterval(att);
+
     float f_BaseAttackTime = GetFloatValue(UNIT_FIELD_BASEATTACKTIME + AsUnderlyingType(att)) / m_modAttackSpeedPct[att];
     return (uint32)f_BaseAttackTime;
 }
@@ -10702,7 +10733,8 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
     }
 
     SetFloatValue(UNIT_FIELD_BASEATTACKTIME + AsUnderlyingType(att), amount);
-    m_attackTimer[att] = uint32(GetAttackTime(att) * m_modAttackSpeedPct[att] * remainingTimePct);
+    if (!IsWarscapeMeleeCombat() || att == RANGED_ATTACK)
+        m_attackTimer[att] = uint32(GetAttackTime(att) * m_modAttackSpeedPct[att] * remainingTimePct);
 }
 
 void Unit::ApplyCastTimePercentMod(float val, bool apply)

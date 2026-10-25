@@ -25,6 +25,7 @@
 #include "Timer.h"
 #include "UnitDefines.h"
 #include "Util.h"
+#include "WarscapeEquipment.h"
 #include <map>
 #include <memory>
 #include <stack>
@@ -963,7 +964,15 @@ class TC_GAME_API Unit : public WorldObject
         int32 ModifyPower(Powers power, int32 val, bool withPowerUpdate = true);
 
         uint32 GetAttackTime(WeaponAttackType att) const;
-        void SetAttackTime(WeaponAttackType att, uint32 val) { SetFloatValue(UNIT_FIELD_BASEATTACKTIME + int32(att), val * m_modAttackSpeedPct[att]); }
+        bool IsWarscapeMeleeTarget(Unit const* target) const;
+        bool IsWarscapeMeleeCombat() const { return IsWarscapeMeleeTarget(GetVictim()); }
+        uint32 GetWarscapeMeleeAttackInterval(WeaponAttackType att) const;
+        void SetAttackTime(WeaponAttackType att, uint32 val)
+        {
+            SetFloatValue(UNIT_FIELD_BASEATTACKTIME + int32(att), val * m_modAttackSpeedPct[att]);
+            if (att != RANGED_ATTACK && IsWarscapeMeleeCombat())
+                m_attackTimer[att] = Warscape::AttackTimerAfterWeaponChange(m_attackTimer[att], GetWarscapeMeleeAttackInterval(att) / Warscape::CombatTickMilliseconds);
+        }
         void ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply);
         void ApplyCastTimePercentMod(float val, bool apply);
 

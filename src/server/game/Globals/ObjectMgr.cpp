@@ -10493,7 +10493,7 @@ void ObjectMgr::LoadWarscapeEquipmentBonuses()
         return;
     }
 
-    QueryResult result = WorldDatabase.Query("SELECT item_id, archetype, tier, attack_stab, attack_slash, attack_crush, attack_ranged, attack_magic, defence_stab, defence_slash, defence_crush, defence_ranged, defence_magic, melee_strength, ranged_strength, magic_damage, prayer, attack_speed, generation_version, generation_seed FROM warscape_item_bonus");
+    QueryResult result = WorldDatabase.Query("SELECT item_id, archetype, tier, attack_stab, attack_slash, attack_crush, attack_ranged, attack_magic, defence_stab, defence_slash, defence_crush, defence_ranged, defence_magic, melee_strength, ranged_strength, magic_damage, prayer, attack_speed_ticks, generation_version, generation_seed FROM warscape_item_bonus");
     if (!result)
     {
         TC_LOG_ERROR("sql.sql", "Unable to load Warscape item bonus profiles.");
@@ -10520,16 +10520,22 @@ void ObjectMgr::LoadWarscapeEquipmentBonuses()
             *bonuses[i] = fields[3 + i].GetInt32();
             valid = valid && *bonuses[i] >= -Warscape::MaxBonus && *bonuses[i] <= Warscape::MaxBonus;
         }
-        profile.AttackSpeed = fields[17].GetUInt32();
+        profile.AttackSpeedTicks = fields[17].GetUInt32();
         profile.GenerationVersion = fields[18].GetUInt32();
         profile.HasGenerationSeed = !fields[19].IsNull();
         if (profile.HasGenerationSeed)
             profile.GenerationSeed = fields[19].GetUInt64();
-        valid = valid && profile.AttackSpeed <= 10000;
         if (!valid)
         {
             TC_LOG_ERROR("sql.sql", "Warscape item profile {} has a missing item or out-of-range values; skipped.", itemId);
             continue;
+        }
+        if (profile.AttackSpeedTicks < Warscape::MinimumAttackSpeedTicks
+            || profile.AttackSpeedTicks > Warscape::MaximumAttackSpeedTicks)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape item profile {} has invalid attack speed {} ticks; defaulting to {}.",
+                itemId, profile.AttackSpeedTicks, Warscape::DefaultAttackSpeedTicks);
+            profile.AttackSpeedTicks = Warscape::DefaultAttackSpeedTicks;
         }
         _warscapeItemProfiles.emplace(itemId, profile);
     } while (result->NextRow());
@@ -10551,6 +10557,53 @@ Warscape::EquipmentBonuses ObjectMgr::GetWarscapeItemBonuses(uint32 itemId) cons
     if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
         return profile->second.Bonuses;
     return {};
+}
+
+uint32 ObjectMgr::GetWarscapeItemAttackSpeedTicks(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return Warscape::NormalizeAttackSpeedTicks(profile->second.AttackSpeedTicks);
+    return Warscape::DefaultAttackSpeedTicks;
+}
+
+void ObjectMgr::LoadWarscapeMonsterAttackSpeeds()
+{
+    _warscapeMonsterAttackSpeeds.clear();
+    QueryResult table = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'warscape_monster_attack_speed'");
+    if (!table || table->Fetch()[0].GetUInt64() != 1)
+    {
+        TC_LOG_INFO("server.loading", "Warscape monster attack speed table is absent; using the {}-tick default.", Warscape::DefaultAttackSpeedTicks);
+        return;
+    }
+
+    QueryResult result = WorldDatabase.Query("SELECT creature_entry, attack_speed_ticks FROM warscape_monster_attack_speed");
+    if (!result)
+    {
+        TC_LOG_ERROR("sql.sql", "Unable to load Warscape monster attack speeds.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 const entry = fields[0].GetUInt32();
+        uint32 const ticks = fields[1].GetUInt32();
+        if (!GetCreatureTemplate(entry) || ticks < Warscape::MinimumAttackSpeedTicks || ticks > Warscape::MaximumAttackSpeedTicks)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape monster attack speed for creature {} is invalid; skipped.", entry);
+            continue;
+        }
+        _warscapeMonsterAttackSpeeds.emplace(entry, ticks);
+    } while (result->NextRow());
+
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape monster attack speed overrides.", _warscapeMonsterAttackSpeeds.size());
+}
+
+uint32 ObjectMgr::GetWarscapeMonsterAttackSpeedTicks(uint32 creatureEntry) const
+{
+    if (auto speed = _warscapeMonsterAttackSpeeds.find(creatureEntry); speed != _warscapeMonsterAttackSpeeds.end())
+        return speed->second;
+    return Warscape::DefaultAttackSpeedTicks;
 }
 
 std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry) const
