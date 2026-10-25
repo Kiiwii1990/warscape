@@ -136,11 +136,13 @@ The item template maps weapon subclasses to skill IDs, and equipped weapon skill
 values are still used for proficiency/equipment compatibility. The same skill
 data is sent to the client and can be visible in its skill UI; hiding it would
 require filtering skill initialization/update packets and could break item
-requirements. Safest future change: suppress `UpdateCombatSkills` progression
-only for Warscape player-versus-creature melee events, while retaining skill
-records, weapon proficiency checks and all unrelated WoW combat progression.
-Do not delete the skills or their client fields. Stage 1C makes no skill system
-changes.
+requirements. Stage 1D removes the combat proc callback and player helper methods
+that advanced legacy weapon and Defence skills. It retains skill records,
+weapon proficiency checks, level-based skill setup, client skill fields, and all
+non-combat skill progression. The callback still handles unrelated reactive
+aura behavior. WoW skill-based combat calculations remain in legacy PvP, ranged
+and other non-Warscape attack paths; the implemented Warscape melee paths return
+through OSRS calculations before consulting them.
 
 ## Long-term attribute replacement objective
 

@@ -131,6 +131,26 @@ TEST_CASE("Warscape OSRS XP thresholds and level changes are exact", "[warscape]
     CHECK(attack.Level == 5);
 }
 
+TEST_CASE("Warscape Attack Strength and Defence XP remain independent of legacy combat skills", "[warscape]")
+{
+    Warscape::SkillProgress attack;
+    Warscape::SkillProgress strength;
+    Warscape::SkillProgress defence;
+
+    CHECK_FALSE(Warscape::AddSkillXP(attack, 82));
+    CHECK(Warscape::AddSkillXP(attack, 1));
+    CHECK(attack.Level == 2);
+    CHECK(attack.XP == 83);
+
+    CHECK(Warscape::AddSkillXP(strength, 388));
+    CHECK(strength.Level == 5);
+    CHECK(strength.XP == 388);
+
+    CHECK(Warscape::AddSkillXP(defence, 174));
+    CHECK(defence.Level == 3);
+    CHECK(defence.XP == 174);
+}
+
 TEST_CASE("Warscape skill XP persistence restores levels from saved XP", "[warscape]")
 {
     std::array<Warscape::SkillProgress, Warscape::SkillCount> skills = {};

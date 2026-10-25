@@ -10155,33 +10155,17 @@ uint32 createProcHitMask(SpellNonMeleeDamage* damageInfo, SpellMissInfo missCond
     return hitMask;
 }
 
-void Unit::ProcSkillsAndReactives(bool isVictim, Unit* procTarget, uint32 typeMask, uint32 hitMask, WeaponAttackType attType)
+void Unit::ProcSkillsAndReactives(bool isVictim, Unit* procTarget, uint32 typeMask, uint32 hitMask, WeaponAttackType /*attType*/)
 {
     // Player is loaded now - do not allow passive spell casts to proc
     if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->GetSession()->PlayerLoading())
         return;
 
-    // For melee/ranged based attack need update skills and set some Aura states if victim present
+    // For melee/ranged based attacks update aura states if a victim is present.
     if (typeMask & MELEE_BASED_TRIGGER_MASK && procTarget)
     {
-        // Update skills here for players
-        // only when you are not fighting other players or their pets/totems (pvp)
-        if (GetTypeId() == TYPEID_PLAYER &&
-                procTarget->GetTypeId() != TYPEID_PLAYER &&
-                !(procTarget->IsTotem() && procTarget->ToTotem()->GetOwner()->IsPlayer()) &&
-                !procTarget->IsPet()
-           )
-        {
-            // On melee based hit/miss/resist need update skill (for victim and attacker)
-            if (hitMask & (PROC_HIT_NORMAL | PROC_HIT_MISS | PROC_HIT_FULL_RESIST))
-            {
-                if (procTarget->GetTypeId() != TYPEID_PLAYER && !procTarget->IsCritter())
-                    ToPlayer()->UpdateCombatSkills(procTarget, attType, isVictim);
-            }
-            // Update defense if player is victim and parry/dodge/block
-            else if (isVictim && (hitMask & (PROC_HIT_DODGE | PROC_HIT_PARRY | PROC_HIT_BLOCK)))
-                ToPlayer()->UpdateCombatSkills(procTarget, attType, true);
-        }
+        // WARSCAPE: Legacy weapon and Defence skill progression is disabled.
+        // Skill records remain for equipment and client compatibility.
         // If exist crit/parry/dodge/block need update aura state (for victim and attacker)
         if (hitMask & (PROC_HIT_CRITICAL | PROC_HIT_PARRY | PROC_HIT_DODGE | PROC_HIT_BLOCK))
         {
