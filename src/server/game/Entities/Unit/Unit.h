@@ -499,6 +499,7 @@ class TC_GAME_API HealInfo
         HealInfo(Unit* healer, Unit* target, uint32 heal, SpellInfo const* spellInfo, SpellSchoolMask schoolMask);
 
         void AbsorbHeal(uint32 amount);
+        void ScaleHeal(uint32 maximum);
         void SetEffectiveHeal(uint32 amount) { _effectiveHeal = amount; }
 
         Unit* GetHealer() const { return _healer; }

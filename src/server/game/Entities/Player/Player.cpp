@@ -2036,10 +2036,14 @@ void Player::RegenerateHealth()
         HealthIncreaseRate = sWorld->getRate(RATE_HEALTH) * (2.066f - (GetLevel() * 0.066f));
 
     float addValue = 0.0f;
+    bool scaleFlatRegen = true;
 
     // polymorphed case
     if (IsPolymorphed())
+    {
         addValue = float(GetMaxHealth()) / 3.0f;
+        scaleFlatRegen = false;
+    }
     // normal regen case (maybe partly in combat case)
     else if (!IsInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT))
     {
@@ -2064,10 +2068,14 @@ void Player::RegenerateHealth()
     if (addValue < 0.0f)
         return;
 
+    if (scaleFlatRegen)
+        addValue *= Warscape::HealthDamageScale;
     addValue += m_healthFraction;
     int32 integerValue = int32(addValue);
     if (!integerValue)
         return;
+
+    integerValue = std::min<int32>(integerValue, int32(maxValue - curValue));
 
     if (curValue + integerValue < maxValue)
     {
@@ -16945,6 +16953,11 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
             for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
                 savedXP[i] = rsFields[i].GetUInt32();
             Warscape::RestoreSkillXP(rsSkills, savedXP);
+            // OSRS characters cannot have less than the starting 10 Hitpoints.
+            if (rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level < Warscape::MinHitpointsLevel)
+            {
+                rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level = Warscape::MinHitpointsLevel;
+            }
             warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 3);
         }
     }
@@ -26542,8 +26555,26 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
     if (skill == RS_Skill::Hitpoints)
     {
         UpdateMaxHealth();
-        ModifyHealth(data.Level - oldLevel);
+        ModifyHealth((data.Level - oldLevel) * Warscape::HealthDamageScale);
     }
+}
+
+Warscape::SkillUpdateResult Player::SetRSSkillLevel(RS_Skill skill, uint32 level)
+{
+    bool const hitpoints = skill == RS_Skill::Hitpoints;
+    Warscape::SkillUpdateResult const result = Warscape::SetSkillLevel(rsSkills[static_cast<uint8>(skill)], level, hitpoints);
+    if (result == Warscape::SkillUpdateResult::Success && hitpoints)
+        UpdateMaxHealth();
+    return result;
+}
+
+Warscape::SkillUpdateResult Player::SetRSSkillXP(RS_Skill skill, uint32 xp)
+{
+    bool const hitpoints = skill == RS_Skill::Hitpoints;
+    Warscape::SkillUpdateResult const result = Warscape::SetSkillXP(rsSkills[static_cast<uint8>(skill)], xp, hitpoints);
+    if (result == Warscape::SkillUpdateResult::Success && hitpoints)
+        UpdateMaxHealth();
+    return result;
 }
 
 // Warscape: Award RuneScape XP from melee damage.

@@ -52,6 +52,9 @@
 #include "World.h"
 #include "WorldSession.h"
 
+#include <charconv>
+#include <sstream>
+
 // temporary hack until includes are sorted out (don't want to pull in Windows.h)
 #ifdef GetClassName
 #undef GetClassName
@@ -163,6 +166,61 @@ public:
             return true;
         }
 
+        if (style.rfind("setlevel ", 0) == 0 || style.rfind("setxp ", 0) == 0)
+        {
+            if (!Warscape::CanModifySkills(handler->HasPermission(rbac::RBAC_PERM_COMMAND_SETSKILL)))
+            {
+                handler->SendSysMessage("You do not have permission to change OSRS skills.");
+                return true;
+            }
+
+            std::istringstream input(style);
+            std::string operation, skillName, valueText, extra;
+            input >> operation >> skillName >> valueText;
+            if (skillName.empty() || valueText.empty() || (input >> extra))
+            {
+                handler->SendSysMessage("Usage: .rs setlevel <skill> <1-99> or .rs setxp <skill> <0-200000000>");
+                return true;
+            }
+
+            int const skillIndex = Warscape::SkillIndexFromName(skillName.c_str());
+            if (skillIndex < 0)
+            {
+                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic or prayer.");
+                return true;
+            }
+
+            uint32 value = 0;
+            auto const parsed = std::from_chars(valueText.data(), valueText.data() + valueText.size(), value);
+            if (parsed.ec != std::errc() || parsed.ptr != valueText.data() + valueText.size())
+            {
+                handler->SendSysMessage("The value must be a whole number in the supported range.");
+                return true;
+            }
+
+            Player::RS_Skill const skill = static_cast<Player::RS_Skill>(skillIndex);
+            Warscape::SkillUpdateResult result = operation == "setlevel"
+                ? player->SetRSSkillLevel(skill, value)
+                : player->SetRSSkillXP(skill, value);
+            if (result != Warscape::SkillUpdateResult::Success)
+            {
+                if (result == Warscape::SkillUpdateResult::InvalidLevel)
+                    handler->SendSysMessage(skill == Player::RS_Skill::Hitpoints
+                        ? "Hitpoints level must be between 10 and 99."
+                        : "Skill level must be between 1 and 99.");
+                else
+                    handler->SendSysMessage(skill == Player::RS_Skill::Hitpoints
+                        ? "XP must be at most 200000000 and Hitpoints XP must remain at or above level 10."
+                        : "XP must be between 0 and 200000000.");
+                return true;
+            }
+
+            player->SaveToDB();
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
+            handler->PSendSysMessage("Set %s to level %u (%u XP).", skillNames[skillIndex], player->GetRSSkillLevel(skill), player->GetRSSkillXP(skill));
+            return true;
+        }
+
         uint8 selected = player->GetWarscapeAttackStyle();
         if (StringEqualI(style, "accurate"))
             selected = 0;
@@ -174,7 +232,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

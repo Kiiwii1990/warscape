@@ -47,14 +47,15 @@ Attack/Defence roll probability. Player damage uses the OSRS max-hit formula fro
 the persistent Strength level and an explicitly temporary zero equipment Strength
 bonus; damage is rolled uniformly from 0 through max hit. Monster attack and
 Strength rolls use the monster profile. All combat stat lookups use the profile's
-base tier and the API no longer accepts a WoW level. Player live health uses the
-persistent OSRS Hitpoints level; creature live health uses the profile's Hitpoints
-at base tier. A Hitpoints level-up raises live max health by one and heals one.
+base tier and the API no longer accepts a WoW level. Stage 1B scales player and
+creature live health by 100 from OSRS Hitpoints; HP level-ups increase max health
+by 100 per level.
 
 For this temporary stage, WoW weapon damage/DPS, attack power, hit/avoidance stats,
-glancing/crushing outcomes, armour reduction, WoW stamina and WoW level-based
-creature offence/health are excluded from melee auto-attacks. Equipment bonuses
-are deliberately zero until item bonuses are mapped. WoW weapon attack timers,
+glancing/crushing outcomes, armour reduction, resilience, absorbs/resists, WoW
+stamina and WoW level-based creature offence/health are excluded from melee
+auto-attacks. Equipment bonuses are deliberately zero until item bonuses are
+mapped. WoW weapon attack timers,
 animations, targeting, damage/death events, loot and OSRS XP awards remain on the
 existing paths. Spells and ranged attacks are outside this Stage 1 melee change.
 
@@ -78,6 +79,33 @@ OSRS Attack level and the existing attack-style bonus; WoW level is not an input
 The test suite covers threshold boundaries, level changes, XP serialize/restore,
 and improved accuracy from a higher OSRS Attack level. Runtime persistence and
 combat checks still require in-game playtesting.
+
+## Stage 1B health scaling and GM test commands
+
+Player maximum health is OSRS Hitpoints level × 100 (fresh characters start at
+level 10 with 1,000 health). Saved OSRS XP remains the source of skill levels;
+older saved Hitpoints below level 10 retain their XP while using the mandatory
+level-10 health floor. Creature Hitpoints use the configured Warscape profile
+or per-creature `hitpoints_override`, then scale by 100. The fallback profile
+remains safe at 10 OSRS HP (1,000 displayed HP). Increasing a Hitpoints level
+updates player max health and grants the scaled level-up heal; reducing it safely
+clamps current health. WoW level and stamina are not used for these values.
+
+Warscape melee positive damage rolls are multiplied by 100 for both player and
+monster auto-attacks; misses and zero rolls remain zero. WoW resilience and
+absorb/resist modifiers do not change the OSRS damage result. Flat player and
+controlled-creature health regeneration and spell healing are scaled by 100;
+percentage-based regeneration remains proportional to the scaled maximum health. XP is derived
+from the unscaled OSRS-equivalent damage, preserving the existing attack-style
+split and Hitpoints XP rates. Damage variation is not included.
+
+The GM-only commands `.rs setlevel <skill> <1-99>` and
+`.rs setxp <skill> <0-200000000>` support all seven OSRS skills. Hitpoints
+cannot be set below level 10 or its corresponding XP threshold. Skill names are case-insensitive.
+Successful adjustments update Hitpoints health immediately when relevant and
+save the character. Internal WoW levels are untouched. The command uses the
+existing `RBAC_PERM_COMMAND_SETSKILL` permission; `.rs stats` remains available
+under the existing `.rs` permission.
 
 ## Verification
 

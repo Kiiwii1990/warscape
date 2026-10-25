@@ -83,6 +83,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "WarscapeCombat.h"
 #include <cmath>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
@@ -248,6 +249,11 @@ void HealInfo::AbsorbHeal(uint32 amount)
     amount = std::min(amount, GetEffectiveHeal());
     _effectiveHeal -= amount;
     _hitMask |= PROC_HIT_ABSORB;
+}
+
+void HealInfo::ScaleHeal(uint32 maximum)
+{
+    _heal = Warscape::ScaleHealing(_heal, maximum);
 }
 
 uint32 HealInfo::GetHitMask() const
@@ -995,7 +1001,7 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
         damagetype == DIRECT_DAMAGE && cleanDamage &&
         (cleanDamage->attackType == BASE_ATTACK || cleanDamage->attackType == OFF_ATTACK))
     {
-        attacker->ToPlayer()->AwardWarscapeMeleeXP(std::min(damage, health));
+        attacker->ToPlayer()->AwardWarscapeMeleeXP(Warscape::ToOSRSDamage(std::min(damage, health)));
     }
 
     // make player victims stand up automatically
@@ -1220,13 +1226,13 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         {
             Player const* player = ToPlayer();
             uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
-            warscapeDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus));
+            warscapeDamage = Warscape::ScaleHealthOrDamage(urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus)));
         }
         else
         {
             auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
             auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
-            warscapeDamage = urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
+            warscapeDamage = Warscape::ScaleHealthOrDamage(urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus)));
         }
     }
     bool warscapeDamageAssigned = false;
@@ -1437,7 +1443,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     {
         int32 resilienceReduction = damageInfo->Damages[i].Damage;
         // attackType is checked already for BASE_ATTACK or OFF_ATTACK so it can't be RANGED_ATTACK here
-        if (CanApplyResilience())
+        if (!warscapeMelee && CanApplyResilience())
             Unit::ApplyResilience(victim, nullptr, &resilienceReduction, (damageInfo->HitOutCome == MELEE_HIT_CRIT), CR_CRIT_TAKEN_MELEE);
         resilienceReduction = damageInfo->Damages[i].Damage - resilienceReduction;
         damageInfo->Damages[i].Damage -= resilienceReduction;
@@ -1447,20 +1453,23 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         if (int32(damageInfo->Damages[i].Damage) > 0)
         {
             damageInfo->ProcVictim |= PROC_FLAG_TAKEN_DAMAGE;
-            // Calculate absorb & resists
-            DamageInfo dmgInfo(*damageInfo, i);
-            Unit::CalcAbsorbResist(dmgInfo);
-            damageInfo->Damages[i].Absorb = dmgInfo.GetAbsorb();
-            damageInfo->Damages[i].Resist = dmgInfo.GetResist();
+            if (!warscapeMelee)
+            {
+                // WoW absorbs/resists do not alter Warscape's authoritative OSRS roll.
+                DamageInfo dmgInfo(*damageInfo, i);
+                Unit::CalcAbsorbResist(dmgInfo);
+                damageInfo->Damages[i].Absorb = dmgInfo.GetAbsorb();
+                damageInfo->Damages[i].Resist = dmgInfo.GetResist();
 
-            if (damageInfo->Damages[i].Absorb)
-                tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Absorb == 0 ? HITINFO_FULL_ABSORB : HITINFO_PARTIAL_ABSORB);
+                if (damageInfo->Damages[i].Absorb)
+                    tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Absorb == 0 ? HITINFO_FULL_ABSORB : HITINFO_PARTIAL_ABSORB);
 
-            if (damageInfo->Damages[i].Resist)
-                tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Resist == 0 ? HITINFO_FULL_RESIST : HITINFO_PARTIAL_RESIST);
+                if (damageInfo->Damages[i].Resist)
+                    tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Resist == 0 ? HITINFO_FULL_RESIST : HITINFO_PARTIAL_RESIST);
 
-            damageInfo->CleanDamage += damageInfo->Damages[i].Damage - dmgInfo.GetDamage();
-            damageInfo->Damages[i].Damage = dmgInfo.GetDamage();
+                damageInfo->CleanDamage += damageInfo->Damages[i].Damage - dmgInfo.GetDamage();
+                damageInfo->Damages[i].Damage = dmgInfo.GetDamage();
+            }
         }
         else // Impossible get negative result but....
             damageInfo->Damages[i].Damage = 0;
@@ -6431,6 +6440,10 @@ void Unit::SendHealSpellLog(HealInfo& healInfo, bool critical /*= false*/)
 
 int32 Unit::HealBySpell(HealInfo& healInfo, bool critical /*= false*/)
 {
+    Unit* target = healInfo.GetTarget();
+    if (target && (target->IsPlayer() || target->GetTypeId() == TYPEID_UNIT))
+        healInfo.ScaleHeal(target->GetMaxHealth());
+
     // calculate heal absorb and reduce healing
     Unit::CalcHealAbsorb(healInfo);
     Unit::DealHeal(healInfo);

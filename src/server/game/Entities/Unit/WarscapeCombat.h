@@ -22,11 +22,13 @@
 #include <array>
 #include <cstdint>
 #include <cstddef>
+#include <limits>
 
 namespace Warscape
 {
     enum Stat : std::size_t { Attack, Strength, Defence, Ranged, Magic, Hitpoints, StatCount };
     constexpr std::uint32_t MaxStat = 1000000;
+    constexpr std::uint32_t HealthDamageScale = 100;
     constexpr std::int32_t MaxBonus = 1000000;
 
     struct MonsterProfile
@@ -91,6 +93,21 @@ namespace Warscape
         std::uint64_t const effectiveStrength = std::uint64_t(strengthLevel) + styleBonus + 8;
         std::uint64_t const bonus = std::uint64_t(std::max<std::int64_t>(0, std::int64_t(strengthBonus) + 64));
         return std::uint32_t(std::min<std::uint64_t>((effectiveStrength * bonus + 320) / 640, MaxStat));
+    }
+
+    inline std::uint32_t ScaleHealthOrDamage(std::uint32_t osrsValue)
+    {
+        return std::uint32_t(std::min<std::uint64_t>(std::uint64_t(osrsValue) * HealthDamageScale, std::numeric_limits<std::uint32_t>::max()));
+    }
+
+    inline std::uint32_t ToOSRSDamage(std::uint32_t displayedDamage)
+    {
+        return displayedDamage / HealthDamageScale;
+    }
+
+    inline std::uint32_t ScaleHealing(std::uint32_t osrsHealing, std::uint32_t maximumHealth)
+    {
+        return std::min(ScaleHealthOrDamage(osrsHealing), maximumHealth);
     }
 }
 #endif

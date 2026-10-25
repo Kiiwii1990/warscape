@@ -959,6 +959,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         }
 
         void AddRSSkillXP(RS_Skill skill, uint32 amount);
+        Warscape::SkillUpdateResult SetRSSkillLevel(RS_Skill skill, uint32 level);
+        Warscape::SkillUpdateResult SetRSSkillXP(RS_Skill skill, uint32 xp);
 
         // Warscape attack styles: 0 Accurate, 1 Aggressive, 2 Defensive, 3 Controlled.
         uint8 GetWarscapeAttackStyle() const { return warscapeAttackStyle; }

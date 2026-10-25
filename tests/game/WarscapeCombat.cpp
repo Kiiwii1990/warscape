@@ -148,6 +148,13 @@ TEST_CASE("Warscape skill XP persistence restores levels from saved XP", "[warsc
     CHECK(restored[1].Level == 3);
     CHECK(restored[3].XP == 1154);
     CHECK(restored[3].Level == 10);
+
+    CHECK(Warscape::SetSkillLevel(restored[0], 50, false) == Warscape::SkillUpdateResult::Success);
+    auto const gmSavedXP = Warscape::SerializeSkillXP(restored);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> gmRestored = {};
+    Warscape::RestoreSkillXP(gmRestored, gmSavedXP);
+    CHECK(gmRestored[0].Level == 50);
+    CHECK(gmRestored[0].XP == Warscape::XPForLevel(50));
 }
 
 TEST_CASE("Warscape accuracy uses increased OSRS Attack and attack style only", "[warscape]")
@@ -162,4 +169,55 @@ TEST_CASE("Warscape accuracy uses increased OSRS Attack and attack style only", 
     CHECK(Warscape::PlayerAttackRoll(5, 1) == Warscape::CombatRoll(13, 0));
     CHECK(Warscape::PlayerAttackRoll(5, 2) == Warscape::CombatRoll(13, 0));
     CHECK(Warscape::PlayerAttackRoll(5, 3) == Warscape::CombatRoll(14, 0));
+}
+
+TEST_CASE("Warscape health and melee damage scale by 100 without scaling zero", "[warscape]")
+{
+    CHECK(Warscape::ScaleHealthOrDamage(10) == 1000);
+    CHECK(Warscape::ScaleHealthOrDamage(11) == 1100);
+    CHECK(Warscape::ScaleHealthOrDamage(20) == 2000);
+    CHECK(Warscape::ScaleHealthOrDamage(1) == 100);
+    CHECK(Warscape::ScaleHealthOrDamage(0) == 0);
+    CHECK(Warscape::ToOSRSDamage(200) == 2);
+    CHECK(Warscape::ToOSRSDamage(0) == 0);
+    CHECK(Warscape::ScaleHealing(1, 1000) == 100);
+    CHECK(Warscape::ScaleHealing(20, 1000) == 1000);
+    CHECK(Warscape::ScaleHealing(0, 1000) == 0);
+
+    Warscape::MonsterProfile profile;
+    Warscape::MonsterDefinition creature;
+    creature.Overrides[Warscape::Hitpoints] = 25;
+    auto const stats = creature.Calculate(profile, 1);
+    CHECK(stats[Warscape::Hitpoints] == 25);
+    CHECK(Warscape::ScaleHealthOrDamage(stats[Warscape::Hitpoints]) == 2500);
+}
+
+TEST_CASE("Warscape GM skill setters validate permissions, names, levels and XP", "[warscape]")
+{
+    CHECK_FALSE(Warscape::CanModifySkills(false));
+    CHECK(Warscape::CanModifySkills(true));
+    CHECK(Warscape::SkillIndexFromName("attack") == 0);
+    CHECK(Warscape::SkillIndexFromName("AtTaCk") == 0);
+    CHECK(Warscape::SkillIndexFromName("hitpoints") == 3);
+    CHECK(Warscape::SkillIndexFromName("invalid") == -1);
+
+    Warscape::SkillProgress attack;
+    CHECK(Warscape::SetSkillLevel(attack, 2, false) == Warscape::SkillUpdateResult::Success);
+    CHECK(attack.Level == 2);
+    CHECK(attack.XP == 83);
+    CHECK(Warscape::SetSkillXP(attack, 500, false) == Warscape::SkillUpdateResult::Success);
+    CHECK(attack.Level == 5);
+    CHECK(attack.XP == 500);
+    CHECK(Warscape::SetSkillLevel(attack, 99, false) == Warscape::SkillUpdateResult::Success);
+    CHECK(Warscape::SetSkillLevel(attack, 0, false) == Warscape::SkillUpdateResult::InvalidLevel);
+    CHECK(Warscape::SetSkillLevel(attack, 100, false) == Warscape::SkillUpdateResult::InvalidLevel);
+    CHECK(Warscape::SetSkillXP(attack, Warscape::MaxSkillXP + 1, false) == Warscape::SkillUpdateResult::InvalidXP);
+
+    Warscape::SkillProgress hitpoints;
+    CHECK(Warscape::SetSkillLevel(hitpoints, 10, true) == Warscape::SkillUpdateResult::Success);
+    CHECK(hitpoints.XP == 1154);
+    CHECK(Warscape::SetSkillLevel(hitpoints, 9, true) == Warscape::SkillUpdateResult::InvalidLevel);
+    CHECK(Warscape::SetSkillXP(hitpoints, 1153, true) == Warscape::SkillUpdateResult::InvalidXP);
+    CHECK(Warscape::SetSkillLevel(hitpoints, 20, true) == Warscape::SkillUpdateResult::Success);
+    CHECK(hitpoints.XP == Warscape::XPForLevel(20));
 }

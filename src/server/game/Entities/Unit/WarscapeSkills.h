@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -29,12 +30,42 @@ namespace Warscape
     constexpr std::size_t SkillCount = 7;
     constexpr std::uint32_t MaxSkillXP = 200000000;
     constexpr std::uint8_t MaxSkillLevel = 99;
+    constexpr std::uint8_t MinHitpointsLevel = 10;
+
+    enum class SkillUpdateResult : std::uint8_t
+    {
+        Success,
+        InvalidLevel,
+        InvalidXP
+    };
 
     struct SkillProgress
     {
         std::uint8_t Level = 1;
         std::uint32_t XP = 0;
     };
+
+    inline int SkillIndexFromName(char const* name)
+    {
+        static char const* names[SkillCount] = { "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer" };
+        if (!name)
+            return -1;
+        for (std::size_t i = 0; i < SkillCount; ++i)
+        {
+            std::size_t j = 0;
+            for (; name[j] && names[i][j]; ++j)
+                if (std::tolower(static_cast<unsigned char>(name[j])) != names[i][j])
+                    break;
+            if (!name[j] && !names[i][j])
+                return static_cast<int>(i);
+        }
+        return -1;
+    }
+
+    inline bool CanModifySkills(bool hasPermission)
+    {
+        return hasPermission;
+    }
 
     inline std::uint32_t XPForLevel(std::uint8_t level)
     {
@@ -66,6 +97,25 @@ namespace Warscape
         skill.XP = std::uint32_t(std::min<std::uint64_t>(MaxSkillXP, std::uint64_t(skill.XP) + amount));
         skill.Level = LevelForXP(skill.XP);
         return skill.Level > previousLevel;
+    }
+
+    inline SkillUpdateResult SetSkillLevel(SkillProgress& skill, std::uint32_t level, bool hitpoints)
+    {
+        std::uint32_t const minimumLevel = hitpoints ? MinHitpointsLevel : 1U;
+        if (level < minimumLevel || level > MaxSkillLevel)
+            return SkillUpdateResult::InvalidLevel;
+        skill.Level = static_cast<std::uint8_t>(level);
+        skill.XP = XPForLevel(skill.Level);
+        return SkillUpdateResult::Success;
+    }
+
+    inline SkillUpdateResult SetSkillXP(SkillProgress& skill, std::uint32_t xp, bool hitpoints)
+    {
+        if (xp > MaxSkillXP || (hitpoints && xp < XPForLevel(MinHitpointsLevel)))
+            return SkillUpdateResult::InvalidXP;
+        skill.XP = xp;
+        skill.Level = LevelForXP(xp);
+        return SkillUpdateResult::Success;
     }
 
     template <std::size_t N>
