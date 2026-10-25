@@ -3,10 +3,13 @@
 Profiles are custom monster families, independent of WoW creature type. Multiple
 creature entries can share a Goblin or Golem profile; bosses can use their own.
 
-Apply `sql/custom/world/2026_10_25_00_warscape_monster_stats.sql` to the world
-database before restarting worldserver. The migration only creates two new tables
-and seeds missing profiles. Reapplying it preserves edited balance values. It is
-also eligible for TrinityCore's custom world SQL updater when configured.
+Follow [the database workflow](WarscapeDatabaseWorkflow.md) for all database
+changes: check history, obtain migration approval, and make a fresh verified
+backup before execution. The original custom migration
+`sql/custom/world/2026_10_25_00_warscape_monster_stats.sql` creates two tables and
+seeds missing profiles. It is already recorded in the current database history;
+do not reapply it. It is also eligible for TrinityCore's custom world SQL updater
+when configured.
 The migration was verified against an isolated temporary MariaDB instance. No working database was modified during implementation.
 
 ## Balance data

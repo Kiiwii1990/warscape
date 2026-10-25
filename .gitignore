@@ -23,3 +23,19 @@ nbproject/*
 cmake-build-*/
 .vs
 *.user
+
+# Local server configuration, database exports and backup manifests
+**/worldserver.conf
+**/authserver.conf
+/world*.sql
+/auth*.sql
+/characters*.sql
+**/Backups/
+**/backups/
+*.sql.partial
+*.sql.json
+*.sql.gz
+*.sql.zip
+*.sql.zst
+*.dump
+/contrib/warscape/__pycache__/
