@@ -60,3 +60,15 @@ Status: Discussion notes; proposals are not approved implementations unless mark
   [Stage 1G](WarscapeStage1G.md).
 - Stage 1H randomized item statistics remain future possibilities and are not
   authorized or implemented by this batch. In-game Stage 1G acceptance is pending.
+
+## Development training utility — approved, 25 October 2026
+- Before Stage 1G acceptance, the user requested a permanent reusable testing
+  tool: Warscape Training Dummy, with GM spawn/removal, optional persistent
+  spawns, no retaliation or movement, and damage-path immortality.
+- Preserve real calculated damage, normal hit/miss rolls, equipment bonuses,
+  attack intervals and combat logs. Exclude combat XP, loot, money and quest
+  credit. Configurable Defence is a testing control, not a monster balance change.
+- [Training dummy usage and safeguards](WarscapeTrainingDummy.md) documents the
+  temporary/permanent command modes and session-only Defence setting.
+- This utility is separate from Stage 1G balance. Stage 1H remains unauthorized;
+  live dummy acceptance and Stage 1G testing await the user's confirmation.

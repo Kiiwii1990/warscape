@@ -16,6 +16,7 @@
  */
 
 #include "Player.h"
+#include "WarscapeTrainingDummy.h"
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
 #include "ArenaTeam.h"
@@ -16130,6 +16131,8 @@ void Player::KilledMonster(CreatureTemplate const* cInfo, ObjectGuid guid)
 
 void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid /*= ObjectGuid::Empty*/)
 {
+    if (Warscape::IsTrainingDummyEntry(entry))
+        return;
     uint16 addKillCount = 1;
     uint32 real_entry = entry;
     Creature* killed = nullptr;
@@ -16140,6 +16143,8 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid /*= ObjectGuid::E
             real_entry = killed->GetEntry();
     }
 
+    if (Warscape::IsTrainingDummyEntry(real_entry))
+        return;
     StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_CREATURE, real_entry);   // MUST BE CALLED FIRST
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addKillCount, killed);
 
@@ -23622,6 +23627,8 @@ void Player::RewardPlayerAndGroupAtKill(Unit* victim, bool isBattleGround)
 
 void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
 {
+    if (pRewardSource && pRewardSource->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(pRewardSource->GetEntry()))
+        return;
     if (!pRewardSource)
         return;
 

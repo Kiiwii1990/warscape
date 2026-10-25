@@ -16,6 +16,7 @@
  */
 
 #include "ObjectMgr.h"
+#include "WarscapeTrainingDummy.h"
 #include "AchievementMgr.h"
 #include "ArenaTeamMgr.h"
 #include "Bag.h"
@@ -10645,6 +10646,8 @@ uint32 ObjectMgr::GetWarscapeMonsterAttackSpeedTicks(uint32 creatureEntry) const
 
 std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry) const
 {
+    if (Warscape::IsTrainingDummyEntry(entry))
+        return { 1, 1, 1, 1, 1, Warscape::MaxStat };
     auto const& profile = GetWarscapeMonsterProfile(entry);
     if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
         return itr->second.Calculate(profile, 1);

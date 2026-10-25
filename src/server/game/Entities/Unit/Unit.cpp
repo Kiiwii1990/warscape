@@ -84,6 +84,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "WarscapeCombat.h"
+#include "WarscapeTrainingDummy.h"
 #include <cmath>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
@@ -857,6 +858,16 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
     }
 
     uint32 health = victim->GetHealth();
+
+    // Training targets retain the full post-mitigation damage for combat logs
+    // and spell/proc callers, but never consume health or award progress.
+    // This also handles damage greater than current/max HP without clamping it.
+    if (victim->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+    {
+        if (attacker && attacker != victim)
+            victim->SetInCombatWith(attacker);
+        return damage;
+    }
 
     // duel ends when player has 1 or less hp
     bool duel_hasEnded = false;
@@ -2272,6 +2283,11 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         // WoW hit rating, item level and attributes are not Warscape bonuses.
         uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style, attacker->GetWarscapeMeleeAttackBonus(attType));
         uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
+        if (Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+        {
+            uint32 const defence = victim->GetAI() ? victim->GetAI()->GetData(Warscape::TrainingDummyDefenceData) : 1;
+            defenceRoll = Warscape::CombatRoll(Warscape::NormalizeTrainingDefence(defence) + 8, 0);
+        }
         double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
     }
@@ -5596,6 +5612,8 @@ Unit* Unit::getAttackerForHelper() const                 // If someone wants to 
 
 bool Unit::Attack(Unit* victim, bool meleeAttack)
 {
+    if (GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(GetEntry()))
+        return false;
     if (!victim || victim == this)
         return false;
 
@@ -8459,6 +8477,9 @@ bool Unit::isTargetableForAttack(bool checkFakeDeath) const
 
 int32 Unit::ModifyHealth(int32 dVal)
 {
+    // Some health drains bypass DealDamage. Keep this protection independent of AI.
+    if (dVal < 0 && GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(GetEntry()))
+        return 0;
     int32 gain = 0;
 
     if (dVal == 0)
@@ -11027,6 +11048,9 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
 
 /*static*/ void Unit::Kill(Unit* attacker, Unit* victim, bool durabilityLoss /*= true*/)
 {
+    // Instant-kill effects must not bypass the training target's damage guard.
+    if (victim->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+        return;
     // Prevent killing unit twice (and giving reward from kill twice)
     if (!victim->GetHealth())
         return;

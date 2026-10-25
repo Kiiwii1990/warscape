@@ -22,6 +22,22 @@
 #include "WarscapeCombat.h"
 #include "WarscapeEquipment.h"
 #include "WarscapeSkills.h"
+#include "WarscapeTrainingDummy.h"
+
+TEST_CASE("Warscape training utility is scoped to its reserved entry and bounded Defence", "[warscape]")
+{
+    CHECK(Warscape::IsTrainingDummyEntry(900001));
+    for (uint32_t entry : {0u, 36u, 480u, 31144u, 900000u, 900002u, std::numeric_limits<uint32_t>::max()})
+        CHECK_FALSE(Warscape::IsTrainingDummyEntry(entry));
+    CHECK(Warscape::NormalizeTrainingDefence(0) == 1);
+    CHECK(Warscape::NormalizeTrainingDefence(1) == 1);
+    CHECK(Warscape::NormalizeTrainingDefence(50) == 50);
+    CHECK(Warscape::NormalizeTrainingDefence(99) == 99);
+    CHECK(Warscape::NormalizeTrainingDefence(100) == 99);
+    CHECK(Warscape::NormalizeTrainingDefence(std::numeric_limits<uint32_t>::max()) == 99);
+    CHECK(Warscape::HitChance(Warscape::PlayerAttackRoll(50, 0), Warscape::CombatRoll(1 + 8, 0))
+        > Warscape::HitChance(Warscape::PlayerAttackRoll(50, 0), Warscape::CombatRoll(99 + 8, 0)));
+}
 
 TEST_CASE("Warscape monster families scale independently", "[warscape]")
 {

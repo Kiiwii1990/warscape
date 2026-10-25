@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "WarscapeTrainingDummy.h"
 #include "CellImpl.h"
 #include "CombatAI.h"
 #include "Containers.h"
@@ -1376,6 +1377,73 @@ private:
     GuidVector _revelerGuids;
 };
 
+// Damage remains untouched: the entry-scoped core guard preserves normal logs
+// while rejecting health loss, rewards and instant death independently of AI.
+struct npc_warscape_training_dummy : NullCreatureAI
+{
+    npc_warscape_training_dummy(Creature* creature) : NullCreatureAI(creature) { }
+
+    void InitializeAI() override
+    {
+        me->SetReactState(REACT_PASSIVE);
+        me->SetControlled(true, UNIT_STATE_ROOT);
+        for (auto effect : { SPELL_EFFECT_KNOCK_BACK, SPELL_EFFECT_KNOCK_BACK_DEST,
+                             SPELL_EFFECT_PULL, SPELL_EFFECT_PULL_TOWARDS, SPELL_EFFECT_PULL_TOWARDS_DEST })
+            me->ApplySpellImmune(0, IMMUNITY_EFFECT, effect, true);
+        me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_CHARM, true);
+    }
+
+    uint32 GetData(uint32 id) const override
+    {
+        return id == Warscape::TrainingDummyDefenceData ? _defence : 0;
+    }
+
+    void SetData(uint32 id, uint32 value) override
+    {
+        if (id == Warscape::TrainingDummyDefenceData)
+            _defence = Warscape::NormalizeTrainingDefence(value);
+    }
+
+    void JustEnteredCombat(Unit* who) override { _combatTimer[who->GetGUID()] = 15s; }
+
+    void DamageTaken(Unit* attacker, uint32& /*damage*/, DamageEffectType /*type*/, SpellInfo const* /*spell*/) override
+    {
+        if (attacker)
+            _combatTimer[attacker->GetGUID()] = 15s;
+    }
+
+    void UpdateAI(uint32 diff) override
+    {
+        for (auto it = _combatTimer.begin(); it != _combatTimer.end();)
+        {
+            it->second -= Milliseconds(diff);
+            if (it->second > 0ms)
+            {
+                ++it;
+                continue;
+            }
+            // An accuracy test may miss for a long time. Ongoing auto-attacks
+            // must not end combat simply because no successful hit refreshed us.
+            if (Unit* attacker = ObjectAccessor::GetUnit(*me, it->first))
+                if (attacker->GetVictim() == me && attacker->HasUnitState(UNIT_STATE_MELEE_ATTACKING))
+                {
+                    it->second = 15s;
+                    ++it;
+                    continue;
+                }
+            auto const& refs = me->GetCombatManager().GetPvECombatRefs();
+            auto ref = refs.find(it->first);
+            if (ref != refs.end())
+                ref->second->EndCombat();
+            it = _combatTimer.erase(it);
+        }
+    }
+
+private:
+    uint32 _defence = 1;
+    std::unordered_map<ObjectGuid, Milliseconds> _combatTimer;
+};
+
 struct npc_training_dummy : NullCreatureAI
 {
     npc_training_dummy(Creature* creature) : NullCreatureAI(creature) { }
@@ -2293,6 +2361,7 @@ void AddSC_npcs_special()
     new npc_brewfest_reveler();
     RegisterCreatureAI(npc_brewfest_reveler_2);
     RegisterCreatureAI(npc_training_dummy);
+    RegisterCreatureAI(npc_warscape_training_dummy);
     new npc_wormhole();
     new npc_pet_trainer();
     new npc_experience();
