@@ -173,6 +173,17 @@ public:
         else
             style = style.substr(first, style.find_last_not_of(" \\t") - first + 1);
 
+        if (style == "attacktest" || style.rfind("attacktest ", 0) == 0)
+        {
+            if (!handler->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
+            {
+                handler->SendSysMessage("This combat test requires GM NPC-spawn permission.");
+                return true;
+            }
+            player->HandleWarscapeAttackTestCommand(style.substr(10));
+            return true;
+        }
+
         if (style == "dummy" || style.rfind("dummy ", 0) == 0)
         {
             if (!handler->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
@@ -405,7 +416,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

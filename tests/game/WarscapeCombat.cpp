@@ -23,6 +23,149 @@
 #include "WarscapeEquipment.h"
 #include "WarscapeSkills.h"
 #include "WarscapeTrainingDummy.h"
+#include "WarscapeAttackTest.h"
+
+TEST_CASE("Warscape attack test uses bounded real-time sessions and refuses overlap", "[warscape]")
+{
+    Warscape::AttackTestSession test;
+    Warscape::AttackTestXP xp = {};
+    Warscape::AttackTestSetup setup;
+    CHECK_FALSE(test.Start(1000, 0, xp, setup));
+    CHECK_FALSE(test.Start(1000, 31, xp, setup));
+    REQUIRE(test.Start(1000, 1, xp, setup));
+    CHECK_FALSE(test.Start(2000, 5, xp, setup));
+    CHECK(test.StartMs == 1000);
+    CHECK(test.DeadlineMs == 61000);
+    CHECK(test.RemainingMs(2000) == 59000);
+    CHECK_FALSE(test.Expired(60999));
+    CHECK(test.Expired(61000));
+    CHECK(test.RecordSwing(60999, true, 10));
+    CHECK_FALSE(test.RecordSwing(61000, true, 10));
+    REQUIRE(test.Finish(61025, xp));
+    CHECK(test.ElapsedMs() == 60025);
+    CHECK(test.DPS() == Approx(10.0 / 60.025));
+    CHECK_FALSE(test.RecordSwing(62000, true, 100));
+    CHECK_FALSE(test.Finish(62000, xp));
+    REQUIRE(test.Start(0xFFFFFFF0ULL, 30, xp, setup));
+    CHECK(test.DeadlineMs == 0xFFFFFFF0ULL + 1800000);
+}
+
+TEST_CASE("Warscape attack test counts real zero hits, misses, damage and intervals", "[warscape]")
+{
+    Warscape::AttackTestSession test;
+    Warscape::AttackTestXP xp = { 1, 2, 3, 4, 5, 6, 7 };
+    REQUIRE(test.Start(1000, 5, xp, {}));
+    REQUIRE(test.RecordSwing(1000, true, 0));
+    REQUIRE(test.RecordSwing(3400, false, 0));
+    REQUIRE(test.RecordSwing(5800, true, 20));
+    CHECK_FALSE(test.RecordSwing(5700, true, 200));
+    REQUIRE(test.Finish(7000, xp));
+    CHECK(test.Timestamps == std::vector<std::uint64_t>{1000, 3400, 5800});
+    CHECK(test.Hits == 2);
+    CHECK(test.ZeroHits == 1);
+    CHECK(test.Misses == 1);
+    CHECK(test.Accuracy() == Approx(200.0 / 3));
+    CHECK(test.TotalDamage == 20);
+    CHECK(test.AverageHit() == 10);
+    CHECK(test.MinHit == 0);
+    CHECK(test.MaxHit == 20);
+    CHECK(test.AverageIntervalSeconds() == Approx(2.4));
+    CHECK(test.DPS() == Approx(20.0 / 6));
+    CHECK(test.ChangedSkills == 0);
+    CHECK(test.TotalXPDelta == 0);
+    CHECK(test.StartXP == xp); // Collecting damage never awards or rewrites XP.
+}
+
+TEST_CASE("Warscape attack test measures interruption time without fabricating swings", "[warscape]")
+{
+    Warscape::AttackTestSession test;
+    REQUIRE(test.Start(0, 1, {}, {}));
+    test.ObservePause(0, 0);
+    REQUIRE(test.RecordSwing(1000, true, 10));
+    test.ObservePause(2000, Warscape::AttackTestRange);
+    test.ObservePause(5000, Warscape::AttackTestFacing);
+    test.ObservePause(8000, 0);
+    REQUIRE(test.RecordSwing(10000, true, 10));
+    REQUIRE(test.Finish(12000, {}));
+    CHECK(test.Timestamps.size() == 2);
+    CHECK(test.PauseCount == 1);
+    CHECK(test.PausedMs == 6000);
+    CHECK(test.PauseReasons == (Warscape::AttackTestRange | Warscape::AttackTestFacing));
+    CHECK(test.AverageIntervalSeconds() == Approx(9.0));
+    CHECK(test.DPS() == Approx(20.0 / 12));
+}
+
+TEST_CASE("Warscape attack test cancellation discards samples and permits a fresh session", "[warscape]")
+{
+    Warscape::AttackTestSession test;
+    REQUIRE(test.Start(1000, 1, {}, {}));
+    REQUIRE(test.RecordSwing(1000, true, 100));
+    test.ObservePause(1500, Warscape::AttackTestAutoStopped);
+    test.Cancel();
+    CHECK_FALSE(test.Active);
+    CHECK(test.Timestamps.empty());
+    CHECK(test.TotalDamage == 0);
+    CHECK(test.PauseCount == 0);
+    CHECK(test.RemainingMs(2000) == 0);
+    CHECK_FALSE(test.RecordSwing(2000, true, 100));
+    CHECK_FALSE(test.Finish(2000, {}));
+    REQUIRE(test.Start(3000, 1, {}, {}));
+    REQUIRE(test.Finish(3000, {}));
+    CHECK(test.DPS() == 0);
+    CHECK(test.Accuracy() == 0);
+    CHECK(test.ChangedSkills == 0);
+}
+
+TEST_CASE("Warscape attack test checks every combat skill and detects offsetting XP changes", "[warscape]")
+{
+    Warscape::AttackTestXP initial = {100,100,100,100,100,100,100};
+    for (std::size_t skill = 0; skill < initial.size(); ++skill)
+    {
+        Warscape::AttackTestSession test;
+        REQUIRE(test.Start(0, 1, initial, {}));
+        REQUIRE(test.RecordSwing(100, true, 100));
+        REQUIRE(test.RecordSwing(2500, false, 0));
+        REQUIRE(test.RecordSwing(4900, true, 0));
+        auto end = initial;
+        ++end[skill];
+        REQUIRE(test.Finish(5000, end));
+        CHECK(test.ChangedSkills == 1);
+        CHECK(test.XPDelta[skill] == 1);
+    }
+    Warscape::AttackTestSession test;
+    REQUIRE(test.Start(0, 1, initial, {}));
+    auto end = initial;
+    ++end[0]; --end[6];
+    REQUIRE(test.Finish(5000, end));
+    CHECK(test.TotalXPDelta == 0);
+    CHECK(test.ChangedSkills == 2);
+}
+
+TEST_CASE("Warscape attack test labels mixed setups and bounds timestamp storage", "[warscape]")
+{
+    Warscape::AttackTestSession test;
+    Warscape::AttackTestSetup initial;
+    initial.Weapon = 2488;
+    REQUIRE(test.Start(0, 30, {}, initial));
+    auto changed = initial;
+    changed.Weapon = 2489;
+    changed.Style = 1;
+    changed.Defence = 50;
+    changed.IntervalMs = 4200;
+    test.ObserveSetup(changed);
+    test.ObserveSetup(initial);
+    CHECK(test.MixedSetup);
+    CHECK(test.WeaponChanged);
+    CHECK(test.StyleChanged);
+    CHECK(test.DefenceChanged);
+    CHECK(test.MinExpectedMs == 2400);
+    CHECK(test.MaxExpectedMs == 4200);
+    for (std::size_t i = 0; i < Warscape::AttackTestSession::MaximumSamples; ++i)
+        REQUIRE(test.RecordSwing(i, true, 0));
+    CHECK_FALSE(test.RecordSwing(Warscape::AttackTestSession::MaximumSamples, true, 10));
+    CHECK(test.TotalDamage == 0);
+    CHECK(test.Timestamps.size() == Warscape::AttackTestSession::MaximumSamples);
+}
 
 TEST_CASE("Warscape training utility is scoped to its reserved entry and bounded Defence", "[warscape]")
 {

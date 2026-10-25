@@ -1,5 +1,8 @@
 # Warscape Training Dummy
 
+For timed, real-event melee measurements and compact chat reports, see
+[the automated attack test](WarscapeAttackTest.md): `.rs attacktest <1-30 minutes>`.
+
 This is a reusable development utility, not a gameplay stage or a balance change.
 Creature entry `900001` uses the stock training-dummy model with a separate,
 passive AI script. It is hostile/attackable, rooted, immune to displacement and

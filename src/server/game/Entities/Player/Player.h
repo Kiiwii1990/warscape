@@ -22,6 +22,7 @@
 #include "Unit.h"
 #include "WarscapeSkills.h"
 #include "WarscapeEquipment.h"
+#include "WarscapeAttackTest.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
 #include "EquipmentSet.h"
@@ -1699,6 +1700,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         int32 GetWarscapeMeleeAttackBonus(WeaponAttackType attackType = BASE_ATTACK) const;
         Warscape::WeaponArchetype GetWarscapeWeaponArchetype(WeaponAttackType attackType = BASE_ATTACK) const;
         uint32 GetWarscapeWeaponAttackSpeedTicks(WeaponAttackType attackType = BASE_ATTACK) const;
+        void HandleWarscapeAttackTestCommand(std::string const& args);
+        void RecordWarscapeAttackTestSwing(Unit const* target, CalcDamageInfo const& damage);
 
 
         float GetHealthBonusFromStamina();
@@ -2627,6 +2630,14 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         uint32 manaBeforeDuel;
 
         WorldLocation _corpseLocation;
+
+        void UpdateWarscapeAttackTest();
+        void FinishWarscapeAttackTest(bool report, char const* reason, bool notify = false);
+        Warscape::AttackTestXP GetWarscapeAttackTestXP() const;
+        Warscape::AttackTestSetup GetWarscapeAttackTestSetup(Creature const* dummy) const;
+        Warscape::AttackTestSession _warscapeAttackTest;
+        ObjectGuid _warscapeAttackTestTarget;
+        std::string _warscapeAttackTestWeapon;
 };
 
 TC_GAME_API void AddItemsSetItem(Player* player, Item* item);

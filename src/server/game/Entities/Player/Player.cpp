@@ -17,6 +17,9 @@
 
 #include "Player.h"
 #include "WarscapeTrainingDummy.h"
+#include <charconv>
+#include <chrono>
+#include <sstream>
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
 #include "ArenaTeam.h"
@@ -373,6 +376,7 @@ Player::~Player()
 
 void Player::CleanupsBeforeDelete(bool finalCleanup)
 {
+    FinishWarscapeAttackTest(false, "CLEANUP");
     TradeCancel(false);
     DuelComplete(DUEL_INTERRUPTED);
 
@@ -922,6 +926,8 @@ void Player::Update(uint32 p_time)
 {
     if (!IsInWorld())
         return;
+
+    UpdateWarscapeAttackTest();
 
     // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= GameTime::GetGameTime())
@@ -1847,6 +1853,7 @@ void Player::AddToWorld()
 
 void Player::RemoveFromWorld()
 {
+    FinishWarscapeAttackTest(false, "LOGOUT/TRANSFER");
     // cleanup
     if (IsInWorld())
     {
@@ -4477,6 +4484,7 @@ void Player::RemoveGhoul()
 
 void Player::KillPlayer()
 {
+    FinishWarscapeAttackTest(false, "DEATH", true);
     if (IsFlying() && !GetTransport())
         GetMotionMaster()->MoveFall();
 
@@ -5565,6 +5573,219 @@ bool Player::UpdateFishingSkill()
     }
 
     return false;
+}
+
+namespace
+{
+    uint64 AttackTestNowMs()
+    {
+        return uint64(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
+    }
+}
+
+Warscape::AttackTestXP Player::GetWarscapeAttackTestXP() const
+{
+    static_assert(RS_SKILL_COUNT == 7);
+    Warscape::AttackTestXP xp;
+    for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
+        xp[i] = GetRSSkillXP(static_cast<RS_Skill>(i));
+    return xp;
+}
+
+Warscape::AttackTestSetup Player::GetWarscapeAttackTestSetup(Creature const* dummy) const
+{
+    Warscape::AttackTestSetup setup;
+    if (Item const* weapon = GetWeaponForAttack(BASE_ATTACK, true); weapon && !weapon->IsBroken())
+        setup.Weapon = weapon->GetEntry();
+    setup.Style = GetWarscapeAttackStyle();
+    setup.IntervalMs = Warscape::AttackIntervalMilliseconds(GetWarscapeWeaponAttackSpeedTicks(BASE_ATTACK));
+    setup.AttackBonus = GetWarscapeMeleeAttackBonus(BASE_ATTACK);
+    setup.StrengthBonus = GetWarscapeEquipmentBonuses().MeleeStrength;
+    setup.Defence = Warscape::NormalizeTrainingDefence(dummy && dummy->AI() ? dummy->AI()->GetData(Warscape::TrainingDummyDefenceData) : 1);
+    return setup;
+}
+
+void Player::HandleWarscapeAttackTestCommand(std::string const& args)
+{
+    ChatHandler chat(GetSession());
+    UpdateWarscapeAttackTest();
+    std::istringstream input(args);
+    std::string operation, extra;
+    input >> operation;
+    if (operation.empty() || (input >> extra))
+    {
+        chat.SendSysMessage("Use .rs attacktest <1-30 minutes>, stop, cancel or status.");
+        return;
+    }
+    if (operation == "stop" || operation == "cancel" || operation == "status")
+    {
+        if (!_warscapeAttackTest.Active)
+        {
+            chat.SendSysMessage("No active Warscape attack test.");
+            return;
+        }
+        if (operation == "status")
+        {
+            uint32 const remaining = uint32((_warscapeAttackTest.RemainingMs(AttackTestNowMs()) + 999) / 1000);
+            chat.PSendSysMessage("Attack test: %u:%02u remaining; %llu real swings recorded.", remaining / 60, remaining % 60,
+                static_cast<unsigned long long>(_warscapeAttackTest.Timestamps.size()));
+        }
+        else
+            FinishWarscapeAttackTest(operation == "stop", operation == "stop" ? "STOPPED" : "CANCELLED", true);
+        return;
+    }
+    uint32 minutes = 0;
+    auto const parsed = std::from_chars(operation.data(), operation.data() + operation.size(), minutes);
+    if (parsed.ec != std::errc() || parsed.ptr != operation.data() + operation.size() || minutes < 1 || minutes > 30)
+    {
+        chat.SendSysMessage("Test duration must be a whole number of minutes from 1 to 30.");
+        return;
+    }
+    if (_warscapeAttackTest.Active)
+    {
+        chat.SendSysMessage("An attack test is already active. Use stop or cancel first.");
+        return;
+    }
+    Creature* dummy = GetSelectedUnit() ? GetSelectedUnit()->ToCreature() : nullptr;
+    if (!dummy || !Warscape::IsTrainingDummyEntry(dummy->GetEntry()) || !dummy->IsAlive())
+    {
+        chat.SendSysMessage("Select a Warscape Training Dummy first.");
+        return;
+    }
+    if (!IsAlive() || GetVehicle() || !IsValidAttackTarget(dummy))
+    {
+        chat.SendSysMessage("You must be alive, outside a vehicle, and able to attack this dummy.");
+        return;
+    }
+    auto const setup = GetWarscapeAttackTestSetup(dummy);
+    if (!_warscapeAttackTest.Start(AttackTestNowMs(), minutes, GetWarscapeAttackTestXP(), setup))
+        return;
+    _warscapeAttackTestTarget = dummy->GetGUID();
+    Item const* weapon = GetWeaponForAttack(BASE_ATTACK, true);
+    _warscapeAttackTestWeapon = weapon && !weapon->IsBroken() ? weapon->GetTemplate()->GetDefaultLocaleName() : "Unarmed/broken";
+    if (!(GetVictim() == dummy && HasUnitState(UNIT_STATE_MELEE_ATTACKING)) && !Attack(dummy, true))
+    {
+        FinishWarscapeAttackTest(false, "AUTO-ATTACK COULD NOT START", true);
+        return;
+    }
+    UpdateWarscapeAttackTest();
+    chat.PSendSysMessage("Attack test started: %u minute(s). Real melee swings only; stop/cancel/status are available.", minutes);
+}
+
+void Player::UpdateWarscapeAttackTest()
+{
+    if (!_warscapeAttackTest.Active)
+        return;
+    if (World::IsStopped())
+    {
+        FinishWarscapeAttackTest(false, "SHUTDOWN");
+        return;
+    }
+    if (!GetSession()->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
+    {
+        FinishWarscapeAttackTest(false, "GM PERMISSION REMOVED", true);
+        return;
+    }
+    if (!IsAlive())
+    {
+        FinishWarscapeAttackTest(false, "DEATH", true);
+        return;
+    }
+    Creature* dummy = ObjectAccessor::GetCreature(*this, _warscapeAttackTestTarget);
+    if (!dummy || !dummy->IsAlive() || !dummy->IsInWorld() || !Warscape::IsTrainingDummyEntry(dummy->GetEntry()))
+    {
+        FinishWarscapeAttackTest(false, "DUMMY REMOVED/UNAVAILABLE", true);
+        return;
+    }
+    if (GetVictim() && GetVictim()->GetGUID() != _warscapeAttackTestTarget)
+    {
+        FinishWarscapeAttackTest(false, "ATTACK TARGET CHANGED", true);
+        return;
+    }
+    uint64 const now = AttackTestNowMs();
+    _warscapeAttackTest.ObserveSetup(GetWarscapeAttackTestSetup(dummy));
+    uint32 reason = 0;
+    if (!IsWithinMeleeRange(dummy)) reason |= Warscape::AttackTestRange;
+    if (!HasInArc(2 * float(M_PI) / 3, dummy)) reason |= Warscape::AttackTestFacing;
+    if (!IsWithinLOSInMap(dummy)) reason |= Warscape::AttackTestLOS;
+    if (HasUnitState(UNIT_STATE_CASTING | UNIT_STATE_CHARGING | UNIT_STATE_CANNOT_AUTOATTACK) || HasUnitFlag(UNIT_FLAG_PACIFIED)) reason |= Warscape::AttackTestControl;
+    if (!HasUnitState(UNIT_STATE_MELEE_ATTACKING) || !GetVictim()) reason |= Warscape::AttackTestAutoStopped;
+    if (!IsValidAttackTarget(dummy)) reason |= Warscape::AttackTestInvalidTarget;
+    _warscapeAttackTest.ObservePause(now, reason);
+    if (_warscapeAttackTest.Expired(now))
+        FinishWarscapeAttackTest(true, "COMPLETE");
+    else if (_warscapeAttackTest.Timestamps.size() >= Warscape::AttackTestSession::MaximumSamples)
+        FinishWarscapeAttackTest(true, "SAMPLE LIMIT");
+}
+
+void Player::RecordWarscapeAttackTestSwing(Unit const* target, CalcDamageInfo const& damage)
+{
+    if (!_warscapeAttackTest.Active || !target || target->GetTypeId() != TYPEID_UNIT
+        || target->GetGUID() != _warscapeAttackTestTarget || !Warscape::IsTrainingDummyEntry(target->GetEntry()))
+        return;
+    _warscapeAttackTest.ObserveSetup(GetWarscapeAttackTestSetup(target->ToCreature()));
+    bool const connected = damage.HitOutCome == MELEE_HIT_NORMAL || damage.HitOutCome == MELEE_HIT_CRIT
+        || damage.HitOutCome == MELEE_HIT_BLOCK || damage.HitOutCome == MELEE_HIT_GLANCING || damage.HitOutCome == MELEE_HIT_CRUSHING;
+    uint64 amount = 0;
+    for (auto const& part : damage.Damages)
+        amount += part.Damage;
+    _warscapeAttackTest.RecordSwing(AttackTestNowMs(), connected, amount);
+}
+
+void Player::FinishWarscapeAttackTest(bool report, char const* reason, bool notify)
+{
+    if (!_warscapeAttackTest.Active)
+        return;
+    _warscapeAttackTest.Finish(AttackTestNowMs(), GetWarscapeAttackTestXP());
+    if (GetVictim() && GetVictim()->GetGUID() == _warscapeAttackTestTarget)
+        AttackStop();
+    ChatHandler chat(GetSession());
+    if (report)
+    {
+        auto const& test = _warscapeAttackTest;
+        constexpr char const* Styles[] = { "Accurate", "Aggressive", "Defensive", "Controlled" };
+        uint32 const elapsed = uint32(test.ElapsedMs() / 1000);
+        std::string pauses;
+        for (auto const& entry : { std::pair<uint32, char const*>{Warscape::AttackTestRange, "range"},
+            {Warscape::AttackTestFacing, "facing"}, {Warscape::AttackTestLOS, "LOS"}, {Warscape::AttackTestControl, "cast/control"},
+            {Warscape::AttackTestAutoStopped, "auto-stop"}, {Warscape::AttackTestInvalidTarget, "invalid"} })
+            if (test.PauseReasons & entry.first)
+                pauses += (pauses.empty() ? "" : "/") + std::string(entry.second);
+        std::string defence = std::to_string(test.InitialSetup.Defence);
+        if (test.DefenceChanged)
+            defence += "->" + std::to_string(test.LatestSetup.Defence) + " (mixed)";
+        chat.SendSysMessage("===== WARSCAPE ATTACK TEST =====");
+        chat.PSendSysMessage("Weapon: %s%s | Style: %s%s", _warscapeAttackTestWeapon.c_str(), test.WeaponChanged ? " [changed]" : "",
+            Styles[std::min<uint32>(test.InitialSetup.Style, 3)], test.StyleChanged ? " [changed]" : "");
+        chat.PSendSysMessage("Duration: %u:%02u | Swings: %llu", elapsed / 60, elapsed % 60, static_cast<unsigned long long>(test.Timestamps.size()));
+        chat.PSendSysMessage("Hits: %llu (zero: %llu) | Misses: %llu | Accuracy: %.1f%%", static_cast<unsigned long long>(test.Hits),
+            static_cast<unsigned long long>(test.ZeroHits), static_cast<unsigned long long>(test.Misses), test.Accuracy());
+        if (test.Hits)
+            chat.PSendSysMessage("Avg Hit: %.2f | Min/Max: %llu/%llu", test.AverageHit(), static_cast<unsigned long long>(test.MinHit), static_cast<unsigned long long>(test.MaxHit));
+        else
+            chat.SendSysMessage("Avg Hit: n/a | Min/Max: n/a");
+        chat.PSendSysMessage("Damage: %llu | DPS: %.2f | Dummy Defence: %s", static_cast<unsigned long long>(test.TotalDamage), test.DPS(), defence.c_str());
+        std::ostringstream interval;
+        interval.precision(2);
+        if (test.Timestamps.size() > 1)
+            interval << std::fixed << test.AverageIntervalSeconds();
+        else
+            interval << "n/a";
+        std::string const actual = interval.str();
+        if (test.MinExpectedMs == test.MaxExpectedMs)
+            chat.PSendSysMessage("Avg Swing: %s s | Expected: %.2f s", actual.c_str(), test.MinExpectedMs / 1000.0);
+        else
+            chat.PSendSysMessage("Avg Swing: %s s | Expected: %.2f-%.2f s (mixed)", actual.c_str(), test.MinExpectedMs / 1000.0, test.MaxExpectedMs / 1000.0);
+        chat.PSendSysMessage("Pauses: %u / %.2fs (%s) | XP delta: %+lld (%u/7 changed)", test.PauseCount, test.PausedMs / 1000.0,
+            pauses.empty() ? "none" : pauses.c_str(), static_cast<long long>(test.TotalXPDelta), test.ChangedSkills);
+        chat.PSendSysMessage("Result: %s%s%s", reason, test.ChangedSkills ? " [XP CHANGED]" : "", test.MixedSetup ? " [MIXED SETUP]" : "");
+        chat.SendSysMessage("================================");
+    }
+    else if (notify)
+        chat.PSendSysMessage("Attack test cancelled: %s. No results retained.", reason);
+    _warscapeAttackTest.Cancel();
+    _warscapeAttackTestTarget.Clear();
+    _warscapeAttackTestWeapon.clear();
 }
 
 Warscape::EquipmentBonuses Player::GetWarscapeEquipmentBonuses() const

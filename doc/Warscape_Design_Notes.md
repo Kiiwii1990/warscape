@@ -72,3 +72,16 @@ Status: Discussion notes; proposals are not approved implementations unless mark
   temporary/permanent command modes and session-only Defence setting.
 - This utility is separate from Stage 1G balance. Stage 1H remains unauthorized;
   live dummy acceptance and Stage 1G testing await the user's confirmation.
+
+## Automated combat testing utility — approved, 25 October 2026
+- The user requested GM-only `.rs attacktest <1-30 minutes>`, with stop, cancel
+  and status controls, against a selected Warscape Training Dummy.
+- Observe real melee auto-attack events, count successful zero-damage rolls
+  consistently, use actual elapsed time for DPS, report interruptions, and check
+  XP changes across all seven combat skills. Do not simulate swings or modify
+  attack timing, combat balance, dummy reward suppression or Stage 1G formulas.
+- Keep at most one session per player; cancel safely on lifecycle changes and
+  retain no stale target pointers or background timer work. Live acceptance
+  awaits the user's confirmation. [Usage and measurement definitions](WarscapeAttackTest.md).
+- This remains a testing utility. Stage 1H and other gameplay work are not
+  authorized by this request.

@@ -2227,6 +2227,8 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
 
         for (uint8 i = 0; i < MAX_ITEM_PROTO_DAMAGES; ++i)
             Unit::DealDamageMods(victim, damageInfo.Damages[i].Damage, &damageInfo.Damages[i].Absorb);
+        if (Player* player = ToPlayer(); player && attType == BASE_ATTACK)
+            player->RecordWarscapeAttackTestSwing(victim, damageInfo);
         SendAttackStateUpdate(&damageInfo);
 
         _lastDamagedTargetGuid = victim->GetGUID();
