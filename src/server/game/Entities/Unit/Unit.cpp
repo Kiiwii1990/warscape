@@ -2177,46 +2177,144 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
     if (victim->GetTypeId() == TYPEID_UNIT && victim->ToCreature()->IsInEvadeMode())
         return MELEE_HIT_EVADE;
 
-    // Warscape phase 1: OSRS-style melee accuracy for player auto-attacks.
-    // Creature stats currently use level-scaled archetype defaults. Equipment
-    // bonuses and per-family database overrides will be added separately.
-    if (GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT)
+    // OSRS accuracy applies only to player melee auto-attacks against creatures.
+    // Physical immunity is handled by CalculateMeleeDamage before this roll.
+    if (GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT
+        && (attType == BASE_ATTACK || attType == OFF_ATTACK))
     {
         Player const* attacker = ToPlayer();
-        uint32 attackLevel = attacker->GetRSSkillLevel(Player::RS_Skill::Attack);
-        uint32 styleBonus = attacker->GetWarscapeAttackStyle() == 0 ? 3 : (attacker->GetWarscapeAttackStyle() == 3 ? 1 : 0);
-        uint32 effectiveAttack = attackLevel + styleBonus + 8;
-
-        uint32 creatureLevel = std::max<uint32>(1, victim->GetLevel());
-        // Baseline archetype: 100% Defence per level. Mechanical and elemental
-        // creatures are tougher; beasts are less defensive at the same level.
-        uint32 defencePercent = 100;
-        switch (victim->ToCreature()->GetCreatureType())
-        {
-            case CREATURE_TYPE_MECHANICAL:
-            case CREATURE_TYPE_ELEMENTAL:
-                defencePercent = 150;
-                break;
-            case CREATURE_TYPE_BEAST:
-                defencePercent = 80;
-                break;
-            default:
-                break;
-        }
-        uint32 creatureDefence = std::max<uint32>(1, creatureLevel * defencePercent / 100);
-        uint32 effectiveDefence = creatureDefence + 8;
-
-        // No equipment bonuses yet: OSRS attack/defence rolls use +64.
-        uint64 attackRoll = uint64(effectiveAttack) * 64;
-        uint64 defenceRoll = uint64(effectiveDefence) * 64;
-        double hitChance = attackRoll > defenceRoll
-            ? 1.0 - double(defenceRoll + 2) / (2.0 * double(attackRoll + 1))
-            : double(attackRoll) / (2.0 * double(defenceRoll + 1));
-
+        uint32 style = attacker->GetWarscapeAttackStyle();
+        uint32 styleBonus = style == 0 ? 3 : (style == 3 ? 1 : 0);
+        uint32 effectiveAttack = attacker->GetRSSkillLevel(Player::RS_Skill::Attack) + styleBonus + 8;
+        auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry(), victim->GetLevel());
+        auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
+        // Player item accuracy will be mapped explicitly in the equipment stage;
+        // WoW hit rating and item level are not OSRS equipment bonuses.
+        uint64 attackRoll = Warscape::CombatRoll(effectiveAttack, 0);
+        uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
+        double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
     }
+    int32 const attackerMaxSkillValueForLevel = GetMaxSkillValueForLevel(victim);
+    int32 const victimMaxSkillValueForLevel = victim->GetMaxSkillValueForLevel(this);
 
-    // Leave non-player combat unchanged until creature attack rolls are implemented.
+    int32 const attackerWeaponSkill = GetWeaponSkillValue(attType, victim);
+    int32 const victimDefenseSkill = victim->GetDefenseSkillValue(this);
+
+    // Miss chance based on melee
+    int32 miss_chance = int32(MeleeSpellMissChance(victim, attType, attackerWeaponSkill - victimMaxSkillValueForLevel, 0) * 100.0f);
+
+    // Critical hit chance
+    int32 crit_chance = int32(GetUnitCriticalChanceAgainst(attType, victim) * 100.0f);
+
+    int32 dodge_chance = int32(GetUnitDodgeChance(attType, victim) * 100.0f);
+    int32 block_chance = int32(GetUnitBlockChance(attType, victim) * 100.0f);
+    int32 parry_chance = int32(GetUnitParryChance(attType, victim) * 100.0f);
+
+    // melee attack table implementation
+    // outcome priority:
+    //   1. >    2. >    3. >       4. >    5. >   6. >       7. >  8.
+    // MISS > DODGE > PARRY > GLANCING > BLOCK > CRIT > CRUSHING > HIT
+
+    int32    sum = 0, tmp = 0;
+    int32    roll = urand(0, 9999);
+
+    // check if attack comes from behind, nobody can parry or block if attacker is behind
+    bool canParryOrBlock = victim->HasInArc(float(M_PI), this) || victim->HasAuraType(SPELL_AURA_IGNORE_HIT_DIRECTION);
+
+    // only creatures can dodge if attacker is behind
+    bool canDodge = victim->GetTypeId() != TYPEID_PLAYER || canParryOrBlock;
+
+    // if victim is casting or cc'd it can't avoid attacks
+    if (victim->IsNonMeleeSpellCast(false, false, true) || victim->HasUnitState(UNIT_STATE_CONTROLLED))
+    {
+        canDodge = false;
+        canParryOrBlock = false;
+    }
+
+    // 1. MISS
+    tmp = miss_chance;
+    if (tmp > 0 && roll < (sum += tmp))
+        return MELEE_HIT_MISS;
+
+    // always crit against a sitting target (except 0 crit chance)
+    if (victim->GetTypeId() == TYPEID_PLAYER && crit_chance > 0 && !victim->IsStandState())
+        return MELEE_HIT_CRIT;
+
+    // 2. DODGE
+    if (canDodge)
+    {
+        tmp = dodge_chance;
+        if (tmp > 0                                         // check if unit _can_ dodge
+            && roll < (sum += tmp))
+            return MELEE_HIT_DODGE;
+    }
+
+    // 3. PARRY
+    if (canParryOrBlock)
+    {
+        tmp = parry_chance;
+        if (tmp > 0                                         // check if unit _can_ parry
+            && roll < (sum += tmp))
+            return MELEE_HIT_PARRY;
+    }
+
+    // 4. GLANCING
+    // Max 40% chance to score a glancing blow against mobs of the same or higher level (only players and pets, not for ranged weapons).
+    if ((GetTypeId() == TYPEID_PLAYER || IsPet()) &&
+        victim->GetTypeId() != TYPEID_PLAYER && !victim->IsPet() &&
+        GetLevel() <= victim->GetLevelForTarget(this))
+    {
+        // cap possible value (with bonuses > max skill)
+        int32 skill = attackerWeaponSkill;
+        int32 maxskill = attackerMaxSkillValueForLevel;
+        skill = (skill > maxskill) ? maxskill : skill;
+
+        // against boss-level targets - 24% chance of 25% average damage reduction (damage reduction range : 20-30%)
+        // against level 82 elites - 18% chance of 15% average damage reduction (damage reduction range : 10-20%)
+        tmp = 600 + (victimDefenseSkill - skill) * 120;
+        tmp = std::min(tmp, 4000);
+        if (tmp > 0 && roll < (sum += tmp))
+            return MELEE_HIT_GLANCING;
+    }
+
+    // 5. BLOCK
+    if (canParryOrBlock)
+    {
+        tmp = block_chance;
+        if (tmp > 0                                          // check if unit _can_ block
+            && roll < (sum += tmp))
+            return MELEE_HIT_BLOCK;
+    }
+
+    // 6.CRIT
+    tmp = crit_chance;
+    if (tmp > 0 && roll < (sum += tmp))
+        return MELEE_HIT_CRIT;
+
+    // 7. CRUSHING
+    // mobs can score crushing blows if they're 4 or more levels above victim
+    if (GetLevelForTarget(victim) >= victim->GetLevelForTarget(this) + 4 &&
+        // can be from by creature (if can) or from controlled player that considered as creature
+        !IsControlledByPlayer() &&
+        !(GetTypeId() == TYPEID_UNIT && ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_CRUSHING_BLOWS))
+    {
+        // when their weapon skill is 15 or more above victim's defense skill
+        tmp = victimDefenseSkill;
+        // having defense above your maximum (from items, talents etc.) has no effect
+        tmp = std::min(tmp, victimMaxSkillValueForLevel);
+        // tmp = mob's level * 5 - player's current defense skill
+        tmp = attackerMaxSkillValueForLevel - tmp;
+        // minimum of 20 points diff (4 levels difference)
+        tmp = std::max(tmp, 20);
+
+        // add 2% chance per lacking skill point
+        tmp = tmp * 200 - 1500;
+        if (tmp > 0 && roll < (sum += tmp))
+            return MELEE_HIT_CRUSHING;
+    }
+
+    // 8. HIT
     return MELEE_HIT_NORMAL;
 }
 

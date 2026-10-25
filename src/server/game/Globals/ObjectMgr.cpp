@@ -10402,3 +10402,91 @@ ByteBuffer QuestPOIWrapper::BuildQueryData() const
 
     return tempBuffer;
 }
+
+// Loaded once during world startup; combat performs only cached lookups.
+void ObjectMgr::LoadWarscapeMonsterStats()
+{
+    _warscapeMonsterProfiles.clear();
+    _warscapeMonsterDefinitions.clear();
+    QueryResult tables = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name IN ('warscape_monster_profile', 'warscape_monster_template')");
+    if (!tables || tables->Fetch()[0].GetUInt64() != 2)
+    {
+        TC_LOG_INFO("server.loading", "Warscape monster tables are absent; using neutral level-scaled defaults.");
+        return;
+    }
+
+    QueryResult profiles = WorldDatabase.Query("SELECT id, base_attack, base_strength, base_defence, base_ranged, base_magic, base_hitpoints, growth_attack, growth_strength, growth_defence, growth_ranged, growth_magic, growth_hitpoints, attack_bonus, strength_bonus, defence_bonus FROM warscape_monster_profile");
+    if (profiles)
+    {
+        do
+        {
+            Field* fields = profiles->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            Warscape::MonsterProfile profile;
+            bool valid = true;
+            for (std::size_t i = 0; i < Warscape::StatCount; ++i)
+            {
+                profile.Base[i] = fields[1 + i].GetUInt32();
+                profile.Growth[i] = fields[7 + i].GetUInt32();
+                valid = valid && profile.Base[i] >= 1 && profile.Base[i] <= Warscape::MaxStat
+                    && profile.Growth[i] <= Warscape::MaxStat;
+            }
+            profile.AttackBonus = fields[13].GetInt32();
+            profile.StrengthBonus = fields[14].GetInt32();
+            profile.DefenceBonus = fields[15].GetInt32();
+            for (int32 bonus : { profile.AttackBonus, profile.StrengthBonus, profile.DefenceBonus })
+                valid = valid && bonus >= -64 && bonus <= Warscape::MaxBonus;
+            if (!valid)
+            {
+                TC_LOG_ERROR("sql.sql", "Warscape monster profile {} has out-of-range stats or bonuses; skipped.", id);
+                continue;
+            }
+            _warscapeMonsterProfiles.emplace(id, profile);
+        } while (profiles->NextRow());
+    }
+
+    QueryResult definitions = WorldDatabase.Query("SELECT entry, profile_id, attack_override, strength_override, defence_override, ranged_override, magic_override, hitpoints_override FROM warscape_monster_template");
+    if (definitions)
+    {
+        do
+        {
+            Field* fields = definitions->Fetch();
+            uint32 entry = fields[0].GetUInt32();
+            Warscape::MonsterDefinition definition;
+            definition.Profile = fields[1].GetUInt32();
+            bool valid = GetCreatureTemplate(entry) && _warscapeMonsterProfiles.contains(definition.Profile);
+            for (std::size_t i = 0; i < Warscape::StatCount; ++i)
+            {
+                definition.Overrides[i] = fields[2 + i].GetUInt32();
+                valid = valid && definition.Overrides[i] <= Warscape::MaxStat;
+            }
+            if (!valid)
+            {
+                TC_LOG_ERROR("sql.sql", "Warscape monster entry {} has an unknown creature/profile or invalid override; skipped.", entry);
+                continue;
+            }
+            _warscapeMonsterDefinitions.emplace(entry, definition);
+        } while (definitions->NextRow());
+    }
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape monster profiles and {} creature definitions.",
+        _warscapeMonsterProfiles.size(), _warscapeMonsterDefinitions.size());
+}
+
+Warscape::MonsterProfile const& ObjectMgr::GetWarscapeMonsterProfile(uint32 entry) const
+{
+    uint32 profileId = 0;
+    if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
+        profileId = itr->second.Profile;
+    if (auto itr = _warscapeMonsterProfiles.find(profileId); itr != _warscapeMonsterProfiles.end())
+        return itr->second;
+    static Warscape::MonsterProfile const fallback;
+    return fallback;
+}
+
+std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry, uint32 level) const
+{
+    auto const& profile = GetWarscapeMonsterProfile(entry);
+    if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
+        return itr->second.Calculate(profile, level);
+    return profile.Scale(level);
+}

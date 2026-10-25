@@ -19,6 +19,7 @@
 #define _OBJECTMGR_H
 
 #include "Common.h"
+#include "WarscapeCombat.h"
 #include "ConditionMgr.h"
 #include "CreatureData.h"
 #include "DatabaseEnvFwd.h"
@@ -1141,6 +1142,9 @@ class TC_GAME_API ObjectMgr
         void LoadCreatureClassLevelStats();
         void LoadCreatureLocales();
         void LoadCreatureTemplates();
+        void LoadWarscapeMonsterStats();
+        Warscape::MonsterProfile const& GetWarscapeMonsterProfile(uint32 entry) const;
+        std::array<uint32, Warscape::StatCount> GetWarscapeMonsterStats(uint32 entry, uint32 level) const;
         void LoadCreatureTemplateAddons();
         void LoadCreatureTemplate(Field* fields);
         void LoadCreatureTemplateResistances();
@@ -1668,6 +1672,8 @@ class TC_GAME_API ObjectMgr
         MapObjectGuids _mapObjectGuidsStore;
         CreatureDataContainer _creatureDataStore;
         CreatureTemplateContainer _creatureTemplateStore;
+        std::unordered_map<uint32, Warscape::MonsterProfile> _warscapeMonsterProfiles;
+        std::unordered_map<uint32, Warscape::MonsterDefinition> _warscapeMonsterDefinitions;
         CreatureModelContainer _creatureModelStore;
         CreatureAddonContainer _creatureAddonStore;
         CreatureTemplateAddonContainer _creatureTemplateAddonStore;
