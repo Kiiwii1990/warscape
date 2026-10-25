@@ -1232,7 +1232,8 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         {
             Player const* player = ToPlayer();
             uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
-            warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), 0, styleBonus));
+            Warscape::EquipmentBonuses const equipment = player->GetWarscapeEquipmentBonuses();
+            warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), equipment.MeleeStrength, styleBonus));
         }
         else
         {
@@ -2250,9 +2251,8 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         uint32 style = attacker->GetWarscapeAttackStyle();
         auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry());
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
-        // Player item accuracy will be mapped explicitly in the equipment stage;
-        // WoW hit rating and item level are not OSRS equipment bonuses.
-        uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style);
+        // WoW hit rating, item level and attributes are not Warscape bonuses.
+        uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style, attacker->GetWarscapeMeleeAttackBonus(attType));
         uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
         double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;

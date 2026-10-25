@@ -21,6 +21,7 @@
 #include "GridObject.h"
 #include "Unit.h"
 #include "WarscapeSkills.h"
+#include "WarscapeEquipment.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
 #include "EquipmentSet.h"
@@ -1692,6 +1693,10 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool UpdateCraftSkill(uint32 spellid);
         bool UpdateGatherSkill(uint32 SkillId, uint32 SkillValue, uint32 RedLevel, uint32 Multiplicator = 1);
         bool UpdateFishingSkill();
+
+        Warscape::EquipmentBonuses GetWarscapeEquipmentBonuses() const;
+        Warscape::MeleeDamageType GetWarscapeMeleeDamageType(WeaponAttackType attackType = BASE_ATTACK) const;
+        int32 GetWarscapeMeleeAttackBonus(WeaponAttackType attackType = BASE_ATTACK) const;
 
 
         float GetHealthBonusFromStamina();

@@ -1817,6 +1817,7 @@ void World::SetInitialWorldSettings()
 
     TC_LOG_INFO("server.loading", "Loading Items...");                         // must be after LoadRandomEnchantmentsTable and LoadPageTexts
     sObjectMgr->LoadItemTemplates();
+    sObjectMgr->LoadWarscapeEquipmentBonuses();
 
     TC_LOG_INFO("server.loading", "Loading Item set names...");                // must be after LoadItemPrototypes
     sObjectMgr->LoadItemSetNames();

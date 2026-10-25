@@ -20,6 +20,7 @@
 #include <limits>
 #include <random>
 #include "WarscapeCombat.h"
+#include "WarscapeEquipment.h"
 #include "WarscapeSkills.h"
 
 TEST_CASE("Warscape monster families scale independently", "[warscape]")
@@ -192,6 +193,91 @@ TEST_CASE("Warscape accuracy uses increased OSRS Attack and attack style only", 
     CHECK(Warscape::PlayerAttackRoll(5, 1) == Warscape::CombatRoll(13, 0));
     CHECK(Warscape::PlayerAttackRoll(5, 2) == Warscape::CombatRoll(13, 0));
     CHECK(Warscape::PlayerAttackRoll(5, 3) == Warscape::CombatRoll(14, 0));
+}
+
+TEST_CASE("Warscape weapon archetypes infer WoW categories and allow explicit overrides", "[warscape]")
+{
+    using Warscape::WeaponArchetype;
+    CHECK(Warscape::InferWeaponArchetype(2, 15) == WeaponArchetype::Dagger);
+    CHECK(Warscape::InferWeaponArchetype(2, 7) == WeaponArchetype::Longsword);
+    CHECK(Warscape::InferWeaponArchetype(2, 8) == WeaponArchetype::TwoHandedSword);
+    CHECK(Warscape::InferWeaponArchetype(2, 5) == WeaponArchetype::Warhammer);
+    CHECK(Warscape::InferWeaponArchetype(2, 2) == WeaponArchetype::Bow);
+    CHECK(Warscape::InferWeaponArchetype(4, 7) == WeaponArchetype::Unknown);
+    CHECK(Warscape::ResolveWeaponArchetype(2, 7, WeaponArchetype::Auto) == WeaponArchetype::Longsword);
+    CHECK(Warscape::ResolveWeaponArchetype(2, 7, WeaponArchetype::Scimitar) == WeaponArchetype::Scimitar);
+    CHECK(Warscape::ResolveWeaponArchetype(2, 7, WeaponArchetype::ShortSword) == WeaponArchetype::ShortSword);
+}
+
+TEST_CASE("Warscape equipment bonuses add across slots and recalculate on removal or switching", "[warscape]")
+{
+    Warscape::EquipmentBonuses dagger;
+    dagger.AttackStab = 8;
+    dagger.AttackSlash = -2;
+    dagger.MeleeStrength = 2;
+
+    Warscape::EquipmentBonuses armour;
+    armour.DefenceStab = 5;
+    armour.DefenceMagic = -1;
+    armour.Prayer = 3;
+
+    std::vector<Warscape::EquipmentBonuses> equipped = { dagger, armour };
+    auto total = Warscape::SumEquipmentBonuses(equipped);
+    CHECK(total.AttackStab == 8);
+    CHECK(total.AttackSlash == -2);
+    CHECK(total.DefenceStab == 5);
+    CHECK(total.DefenceMagic == -1);
+    CHECK(total.MeleeStrength == 2);
+    CHECK(total.Prayer == 3);
+
+    equipped.erase(equipped.begin()); // unequip weapon; no cached value can accumulate
+    total = Warscape::SumEquipmentBonuses(equipped);
+    CHECK(total.AttackStab == 0);
+    CHECK(total.MeleeStrength == 0);
+    CHECK(total.DefenceStab == 5);
+
+    Warscape::EquipmentBonuses sword;
+    sword.AttackSlash = 12;
+    sword.MeleeStrength = 9;
+    equipped.push_back(sword); // switch weapon
+    total = Warscape::SumEquipmentBonuses(equipped);
+    CHECK(total.AttackSlash == 12);
+    CHECK(total.MeleeStrength == 9);
+
+    CHECK(Warscape::SumEquipmentBonuses({}).AttackStab == 0); // unknown items contribute zero
+}
+
+TEST_CASE("Warscape weapon archetypes and styles select distinct melee attack bonuses", "[warscape]")
+{
+    using Warscape::MeleeDamageType;
+    using Warscape::WeaponArchetype;
+    CHECK(Warscape::SelectMeleeDamageType(WeaponArchetype::Dagger, 0) == MeleeDamageType::Stab);
+    CHECK(Warscape::SelectMeleeDamageType(WeaponArchetype::Scimitar, 0) == MeleeDamageType::Slash);
+    CHECK(Warscape::SelectMeleeDamageType(WeaponArchetype::Warhammer, 0) == MeleeDamageType::Crush);
+    CHECK(Warscape::SelectMeleeDamageType(WeaponArchetype::Longsword, 2) == MeleeDamageType::Stab);
+    CHECK(Warscape::SelectMeleeDamageType(WeaponArchetype::Mace, 1) == MeleeDamageType::Crush);
+
+    Warscape::EquipmentBonuses bonuses;
+    bonuses.AttackStab = 5;
+    bonuses.AttackSlash = 15;
+    bonuses.AttackCrush = 25;
+    CHECK(bonuses.AttackBonus(MeleeDamageType::Stab) == 5);
+    CHECK(bonuses.AttackBonus(MeleeDamageType::Slash) == 15);
+    CHECK(bonuses.AttackBonus(MeleeDamageType::Crush) == 25);
+}
+
+TEST_CASE("Warscape equipment bonuses affect OSRS accuracy and melee max hit", "[warscape]")
+{
+    uint64_t const baselineAttack = Warscape::PlayerAttackRoll(50, 0, 0);
+    uint64_t const betterStabAttack = Warscape::PlayerAttackRoll(50, 0, 12);
+    uint64_t const worseStabAttack = Warscape::PlayerAttackRoll(50, 0, -12);
+    CHECK(betterStabAttack > baselineAttack);
+    CHECK(worseStabAttack < baselineAttack);
+    CHECK(Warscape::HitChance(betterStabAttack, 1000) > Warscape::HitChance(baselineAttack, 1000));
+
+    uint32_t const baseMaxHit = Warscape::MaxHit(50, 0, 3);
+    CHECK(Warscape::MaxHit(50, 10, 3) > baseMaxHit);
+    CHECK(Warscape::MaxHit(50, -10, 3) < baseMaxHit);
 }
 
 TEST_CASE("Warscape health and melee damage scale by 100 without scaling zero", "[warscape]")

@@ -5562,6 +5562,30 @@ bool Player::UpdateFishingSkill()
     return false;
 }
 
+Warscape::EquipmentBonuses Player::GetWarscapeEquipmentBonuses() const
+{
+    Warscape::EquipmentBonuses total;
+    for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
+        if (Item const* item = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
+            total += sObjectMgr->GetWarscapeItemBonuses(item->GetEntry());
+    return total;
+}
+
+Warscape::MeleeDamageType Player::GetWarscapeMeleeDamageType(WeaponAttackType attackType) const
+{
+    uint8 const slot = attackType == OFF_ATTACK ? EQUIPMENT_SLOT_OFFHAND : EQUIPMENT_SLOT_MAINHAND;
+    Item const* weapon = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+    Warscape::WeaponArchetype const archetype = weapon
+        ? sObjectMgr->GetWarscapeWeaponArchetype(weapon->GetEntry())
+        : Warscape::WeaponArchetype::Unknown;
+    return Warscape::SelectMeleeDamageType(archetype, GetWarscapeAttackStyle());
+}
+
+int32 Player::GetWarscapeMeleeAttackBonus(WeaponAttackType attackType) const
+{
+    return GetWarscapeEquipmentBonuses().AttackBonus(GetWarscapeMeleeDamageType(attackType));
+}
+
 bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
 {
     // levels sync. with spell requirement for skill levels to learn

@@ -171,3 +171,40 @@ compilation by CMake while retained on disk.
 The complete worldserver Release|x64 build passed, including the final rebuild.
 Build output remains under build/ and was not installed over the running server.
 
+## Stage 1E weapon archetypes and equipment bonuses
+
+`WarscapeEquipment.h` defines OSRS-style weapon archetypes and signed attack,
+defence, Strength, Ranged Strength, Magic Damage and Prayer bonuses. WoW
+subclasses infer broad categories; sword items default to Longsword, two-handed
+swords to TwoHandedSword, and polearms to Spear. Item IDs in
+`warscape_item_bonus` can override those categories, which is required to
+distinguish scimitars, short swords and halberds. Additional ranged archetypes
+are represented now for later use.
+
+The repeatable world migration `2026_10_25_00_world.sql` creates one row per
+item template, including future tier, attack speed and generation metadata.
+Its four initial fixed QA profiles are item 2494 Stiletto (Dagger), 2488
+Gladius (Longsword), 2489 Two-handed Sword, and 2493 Wooden Mallet (Warhammer).
+The values are deliberately distinct test values, not balance targets. No
+random rolls or per-instance records are created. `INSERT IGNORE` preserves
+existing server-side custom profiles if the migration is replayed.
+
+ObjectMgr loads the table once after item templates. Missing rows contribute
+zero bonuses; invalid rows are skipped. Player equipment totals are recalculated
+from all equipped slots on demand, so equip, removal and weapon switching do
+not depend on mutable accumulated state. Current styles still provide the same
+OSRS level bonuses. Damage type is selected from the weapon archetype: Accurate,
+Aggressive and Controlled use its archetype default; Defensive prefers stab
+except for blunt weapons, which use crush. The current style buttons do not
+otherwise encode OSRS attack types. Melee accuracy uses
+the selected attack bonus; melee max hit uses the summed melee Strength bonus.
+WoW Strength, Attack Power, item level and WoW item combat modifiers remain
+outside these OSRS calculations. Other WoW stat infrastructure and ranged/magic
+combat remain intact.
+
+The `.rs bonuses` diagnostic prints the total of all fourteen bonus channels
+and the selected melee damage type. It is read-only. Automated coverage includes
+archetype inference/overrides, slot aggregation and recalculation, signed bonus
+lanes, style/type selection, OSRS accuracy and max-hit effects. Live database
+loading and the in-game checks remain part of Stage 1E player testing.
+

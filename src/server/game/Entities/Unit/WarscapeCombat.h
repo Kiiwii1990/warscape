@@ -81,14 +81,13 @@ namespace Warscape
 
     // Effective Attack level for the existing OSRS melee styles:
     // accurate grants +3, controlled grants +1, other styles grant +0.
-    inline std::uint64_t PlayerAttackRoll(std::uint32_t attackLevel, std::uint32_t style)
+    inline std::uint64_t PlayerAttackRoll(std::uint32_t attackLevel, std::uint32_t style, std::int32_t equipmentBonus = 0)
     {
         std::uint32_t const styleBonus = style == 0 ? 3 : (style == 3 ? 1 : 0);
-        return CombatRoll(attackLevel + styleBonus + 8, 0);
+        return CombatRoll(attackLevel + styleBonus + 8, equipmentBonus);
     }
 
-    // Temporary OSRS melee damage until item bonuses are data-driven. The base
-    // bonus is zero; aggressive style contributes its OSRS +3 Strength levels.
+    // OSRS melee damage roll; aggressive style contributes its OSRS +3 levels.
     inline std::uint32_t MaxHit(std::uint32_t strengthLevel, std::int32_t strengthBonus, std::uint32_t styleBonus = 0)
     {
         std::uint64_t const effectiveStrength = std::uint64_t(strengthLevel) + styleBonus + 8;

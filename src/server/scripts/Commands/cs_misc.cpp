@@ -166,6 +166,26 @@ public:
             return true;
         }
 
+        if (StringEqualI(style, "bonuses"))
+        {
+            Warscape::EquipmentBonuses const bonuses = player->GetWarscapeEquipmentBonuses();
+            char const* damageType = "Stab";
+            switch (player->GetWarscapeMeleeDamageType(BASE_ATTACK))
+            {
+                case Warscape::MeleeDamageType::Slash: damageType = "Slash"; break;
+                case Warscape::MeleeDamageType::Crush: damageType = "Crush"; break;
+                case Warscape::MeleeDamageType::Stab:
+                default: break;
+            }
+            handler->PSendSysMessage("Warscape equipment bonuses (Attack / Defence): Stab %d / %d, Slash %d / %d, Crush %d / %d",
+                bonuses.AttackStab, bonuses.DefenceStab, bonuses.AttackSlash, bonuses.DefenceSlash, bonuses.AttackCrush, bonuses.DefenceCrush);
+            handler->PSendSysMessage("Ranged %d / %d, Magic %d / %d; Melee Strength %d, Ranged Strength %d, Magic Damage %d, Prayer %d",
+                bonuses.AttackRanged, bonuses.DefenceRanged, bonuses.AttackMagic, bonuses.DefenceMagic,
+                bonuses.MeleeStrength, bonuses.RangedStrength, bonuses.MagicDamage, bonuses.Prayer);
+            handler->PSendSysMessage("Selected melee damage type: %s", damageType);
+            return true;
+        }
+
         if (style.rfind("setlevel ", 0) == 0 || style.rfind("setxp ", 0) == 0)
         {
             if (!Warscape::CanModifySkills(handler->HasPermission(rbac::RBAC_PERM_COMMAND_SETSKILL)))
@@ -232,7 +252,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

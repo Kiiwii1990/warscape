@@ -10483,6 +10483,76 @@ Warscape::MonsterProfile const& ObjectMgr::GetWarscapeMonsterProfile(uint32 entr
     return fallback;
 }
 
+void ObjectMgr::LoadWarscapeEquipmentBonuses()
+{
+    _warscapeItemProfiles.clear();
+    QueryResult table = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'warscape_item_bonus'");
+    if (!table || table->Fetch()[0].GetUInt64() != 1)
+    {
+        TC_LOG_INFO("server.loading", "Warscape item bonus table is absent; items use zero bonuses.");
+        return;
+    }
+
+    QueryResult result = WorldDatabase.Query("SELECT item_id, archetype, tier, attack_stab, attack_slash, attack_crush, attack_ranged, attack_magic, defence_stab, defence_slash, defence_crush, defence_ranged, defence_magic, melee_strength, ranged_strength, magic_damage, prayer, attack_speed, generation_version, generation_seed FROM warscape_item_bonus");
+    if (!result)
+    {
+        TC_LOG_ERROR("sql.sql", "Unable to load Warscape item bonus profiles.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 const itemId = fields[0].GetUInt32();
+        ItemTemplate const* item = GetItemTemplate(itemId);
+        Warscape::WeaponArchetype const overrideArchetype = Warscape::WeaponArchetype(fields[1].GetUInt8());
+        Warscape::ItemProfile profile;
+        profile.Archetype = item ? Warscape::ResolveWeaponArchetype(item->GetClass(), item->GetSubClass(), overrideArchetype) : Warscape::WeaponArchetype::Unknown;
+        profile.Tier = fields[2].GetUInt32();
+        int32* bonuses[] = {
+            &profile.Bonuses.AttackStab, &profile.Bonuses.AttackSlash, &profile.Bonuses.AttackCrush, &profile.Bonuses.AttackRanged, &profile.Bonuses.AttackMagic,
+            &profile.Bonuses.DefenceStab, &profile.Bonuses.DefenceSlash, &profile.Bonuses.DefenceCrush, &profile.Bonuses.DefenceRanged, &profile.Bonuses.DefenceMagic,
+            &profile.Bonuses.MeleeStrength, &profile.Bonuses.RangedStrength, &profile.Bonuses.MagicDamage, &profile.Bonuses.Prayer
+        };
+        bool valid = item && profile.Tier <= Warscape::MaxStat && uint8(overrideArchetype) <= uint8(Warscape::WeaponArchetype::Wand);
+        for (uint8 i = 0; i < std::size(bonuses); ++i)
+        {
+            *bonuses[i] = fields[3 + i].GetInt32();
+            valid = valid && *bonuses[i] >= -Warscape::MaxBonus && *bonuses[i] <= Warscape::MaxBonus;
+        }
+        profile.AttackSpeed = fields[17].GetUInt32();
+        profile.GenerationVersion = fields[18].GetUInt32();
+        profile.HasGenerationSeed = !fields[19].IsNull();
+        if (profile.HasGenerationSeed)
+            profile.GenerationSeed = fields[19].GetUInt64();
+        valid = valid && profile.AttackSpeed <= 10000;
+        if (!valid)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape item profile {} has a missing item or out-of-range values; skipped.", itemId);
+            continue;
+        }
+        _warscapeItemProfiles.emplace(itemId, profile);
+    } while (result->NextRow());
+
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape item bonus profiles.", _warscapeItemProfiles.size());
+}
+
+Warscape::WeaponArchetype ObjectMgr::GetWarscapeWeaponArchetype(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return profile->second.Archetype;
+    if (ItemTemplate const* item = GetItemTemplate(itemId))
+        return Warscape::InferWeaponArchetype(item->GetClass(), item->GetSubClass());
+    return Warscape::WeaponArchetype::Unknown;
+}
+
+Warscape::EquipmentBonuses ObjectMgr::GetWarscapeItemBonuses(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return profile->second.Bonuses;
+    return {};
+}
+
 std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry) const
 {
     auto const& profile = GetWarscapeMonsterProfile(entry);
