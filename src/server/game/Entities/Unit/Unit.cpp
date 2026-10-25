@@ -6490,7 +6490,12 @@ void Unit::SendHealSpellLog(HealInfo& healInfo, bool critical /*= false*/)
 int32 Unit::HealBySpell(HealInfo& healInfo, bool critical /*= false*/)
 {
     Unit* target = healInfo.GetTarget();
-    if (target && (target->IsPlayer() || target->GetTypeId() == TYPEID_UNIT))
+    // Percentage heals and leech already use displayed health/damage units.
+    SpellInfo const* healSpell = healInfo.GetSpellInfo();
+    bool const displayedUnits = healSpell && (healSpell->HasEffect(SPELL_EFFECT_HEAL_PCT) || healSpell->HasEffect(SPELL_EFFECT_HEAL_MAX_HEALTH)
+        || healSpell->HasEffect(SPELL_EFFECT_HEALTH_LEECH) || healSpell->HasAura(SPELL_AURA_PERIODIC_LEECH)
+        || healSpell->HasAura(SPELL_AURA_PERIODIC_HEALTH_FUNNEL));
+    if (!displayedUnits && target && (target->IsPlayer() || target->GetTypeId() == TYPEID_UNIT))
         healInfo.ScaleHeal(target->GetMaxHealth());
 
     // calculate heal absorb and reduce healing

@@ -1,5 +1,10 @@
 # Warscape monster stat foundation
 
+Current Stage 1G behavior and testing instructions are documented in
+[WarscapeStage1G.md](WarscapeStage1G.md). Its ×10 health/damage scale supersedes
+the historical ×100 descriptions below; existing custom profiles and Stage 1F
+speeds remain authoritative.
+
 Profiles are custom monster families, independent of WoW creature type. Multiple
 creature entries can share a Goblin or Golem profile; bosses can use their own.
 

@@ -968,7 +968,10 @@ void Creature::RegenerateHealth()
     // Apply modifiers (if any).
     addvalue *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
 
-    addvalue += GetTotalAuraModifier(SPELL_AURA_MOD_REGEN) * CREATURE_REGEN_INTERVAL  / (5 * IN_MILLISECONDS);
+    int64 flatRegen = int64(GetTotalAuraModifier(SPELL_AURA_MOD_REGEN)) * CREATURE_REGEN_INTERVAL / (5 * IN_MILLISECONDS);
+    if (!scaleFlatRegen)
+        flatRegen *= Warscape::HealthDamageScale;
+    addvalue = uint32(std::max<int64>(0, int64(addvalue) + flatRegen));
 
     if (scaleFlatRegen)
         addvalue = Warscape::ScaleHealthOrDamage(addvalue);

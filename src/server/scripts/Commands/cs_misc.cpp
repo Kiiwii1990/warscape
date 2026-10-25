@@ -212,6 +212,12 @@ public:
             handler->PSendSysMessage("Weapon archetype: %s; Selected melee damage type: %s",
                 WarscapeArchetypeName(player->GetWarscapeWeaponArchetype(BASE_ATTACK)), damageType);
             handler->PSendSysMessage("Attack Speed: %u ticks (%.1f seconds)", speedTicks, speedSeconds);
+            if (Item const* weapon = player->GetWeaponForAttack(BASE_ATTACK, true))
+            {
+                uint32 const tier = sObjectMgr->GetWarscapeItemTier(weapon->GetEntry());
+                handler->PSendSysMessage("Weapon tier: %u (%s); stats source: %s", tier, Warscape::EquipmentTierName(tier),
+                    sObjectMgr->HasWarscapeItemProfile(weapon->GetEntry()) ? "preserved custom profile" : "OSRS baseline / explicit tier rule");
+            }
             return true;
         }
 

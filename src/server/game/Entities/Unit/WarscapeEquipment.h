@@ -11,6 +11,7 @@
 #define WARSCAPE_EQUIPMENT_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <limits>
 #include <vector>
@@ -134,6 +135,58 @@ namespace Warscape
         uint64_t GenerationSeed = 0;
         bool HasGenerationSeed = false;
     };
+
+    // Explicit OSRS material tiers, never inferred from WoW item level/quality.
+    constexpr uint32_t DefaultEquipmentTier = 1;
+    constexpr uint32_t MaximumEquipmentTier = 6;
+
+    struct WeaponRule
+    {
+        uint32_t Tier = DefaultEquipmentTier;
+        WeaponArchetype Archetype = WeaponArchetype::Auto;
+    };
+
+    inline char const* EquipmentTierName(uint32_t tier)
+    {
+        constexpr char const* Names[] = { "Unspecified", "Bronze", "Iron", "Steel", "Mithril", "Adamant", "Rune" };
+        return tier <= MaximumEquipmentTier ? Names[tier] : "Custom";
+    }
+
+    inline EquipmentBonuses BaselineWeaponBonuses(WeaponArchetype archetype, uint32_t tier)
+    {
+        // OSRS Wiki metal equipment tables: stab, slash, crush, melee strength.
+        // See doc/WarscapeStage1G.md for sources and the deliberate scope.
+        struct Stats { int32_t Stab, Slash, Crush, Strength; };
+        constexpr Stats Table[][6] = {
+            {}, // Auto is resolved from the WoW subclass before lookup.
+            { {4,2,-4,3}, {5,3,-4,4}, {8,4,-4,7}, {11,5,-4,10}, {15,8,-4,14}, {25,12,-4,24} }, // Dagger
+            { {1,7,-2,6}, {2,10,-2,9}, {3,15,-2,14}, {5,21,-2,20}, {6,29,-2,28}, {7,45,-2,44} }, // Scimitar
+            { {4,3,-2,5}, {6,4,-2,7}, {11,8,-2,12}, {16,11,-2,17}, {23,18,-2,24}, {38,26,-2,39} }, // Short sword
+            { {4,5,-2,7}, {6,8,-2,10}, {9,14,-2,16}, {15,20,-2,22}, {20,29,-2,31}, {38,47,-2,49} }, // Longsword
+            { {-4,9,8,10}, {-4,13,10,14}, {-4,21,16,22}, {-4,30,24,31}, {-4,43,30,44}, {-4,69,50,70} }, // 2h sword
+            { {-2,6,3,9}, {-2,8,5,13}, {-2,16,11,20}, {-2,22,17,29}, {-2,31,26,41}, {-2,48,43,64} }, // Battleaxe
+            { {-4,-4,10,8}, {-4,-4,11,11}, {-4,-4,18,18}, {-4,-4,25,27}, {-4,-4,35,39}, {-4,-4,53,62} }, // Warhammer
+            { {1,-2,6,5}, {4,-2,9,7}, {7,-2,13,11}, {11,-2,18,16}, {13,-2,25,23}, {20,-2,39,36} }, // Mace
+            { {5,5,5,6}, {8,8,8,10}, {12,12,12,12}, {17,17,17,18}, {24,24,24,28}, {36,36,36,42} }, // Spear
+            { {7,8,0,8}, {9,12,0,12}, {14,19,0,20}, {22,28,0,29}, {28,41,0,42}, {48,67,0,68} } // Halberd
+        };
+        EquipmentBonuses bonuses;
+        auto const index = static_cast<uint32_t>(archetype);
+        if (!index || index >= std::size(Table))
+            return bonuses; // No automatic stats for armour, ranged, caster or unknown weapons.
+        tier = tier >= DefaultEquipmentTier && tier <= MaximumEquipmentTier ? tier : DefaultEquipmentTier;
+        Stats const& stats = Table[index][tier - 1];
+        bonuses.AttackStab = stats.Stab;
+        bonuses.AttackSlash = stats.Slash;
+        bonuses.AttackCrush = stats.Crush;
+        bonuses.MeleeStrength = stats.Strength;
+        return bonuses;
+    }
+
+    inline EquipmentBonuses ResolveEquipmentBonuses(WeaponArchetype archetype, uint32_t tier, EquipmentBonuses const* custom)
+    {
+        return custom ? *custom : BaselineWeaponBonuses(archetype, tier);
+    }
 
     inline EquipmentBonuses SumEquipmentBonuses(std::vector<EquipmentBonuses> const& equipped)
     {

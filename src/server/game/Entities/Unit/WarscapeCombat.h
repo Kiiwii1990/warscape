@@ -28,7 +28,7 @@ namespace Warscape
 {
     enum Stat : std::size_t { Attack, Strength, Defence, Ranged, Magic, Hitpoints, StatCount };
     constexpr std::uint32_t MaxStat = 1000000;
-    constexpr std::uint32_t HealthDamageScale = 100;
+    constexpr std::uint32_t HealthDamageScale = 10;
     constexpr std::uint32_t DamageVariationScale = 100;
     constexpr std::int32_t MaxBonus = 1000000;
 
@@ -115,12 +115,20 @@ namespace Warscape
         if (!osrsDamage)
             return 0;
         std::uint64_t const scaledDamage = std::uint64_t(osrsDamage) * HealthDamageScale;
-        return std::uint32_t((scaledDamage * multiplierPercent + DamageVariationScale / 2) / DamageVariationScale);
+        if (!multiplierPercent)
+            return 0;
+        std::uint64_t const numerator = scaledDamage * multiplierPercent;
+        std::uint64_t rounded = numerator / DamageVariationScale;
+        auto const remainder = numerator % DamageVariationScale;
+        // Round ties to even so the smaller display scale keeps symmetric variation.
+        if (remainder > DamageVariationScale / 2 || (remainder == DamageVariationScale / 2 && rounded % 2))
+            ++rounded;
+        return std::uint32_t(std::clamp<std::uint64_t>(rounded, 1, std::numeric_limits<std::uint32_t>::max()));
     }
 
     inline std::uint32_t OSRSDamageForXP(std::uint32_t osrsDamageRoll, std::uint32_t remainingDisplayedHealth)
     {
-        std::uint32_t const remainingOSRSHealth = (remainingDisplayedHealth + HealthDamageScale - 1) / HealthDamageScale;
+        std::uint32_t const remainingOSRSHealth = std::uint32_t((std::uint64_t(remainingDisplayedHealth) + HealthDamageScale - 1) / HealthDamageScale);
         return std::min(osrsDamageRoll, remainingOSRSHealth);
     }
 }

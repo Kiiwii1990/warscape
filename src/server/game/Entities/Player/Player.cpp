@@ -2066,8 +2066,8 @@ void Player::RegenerateHealth()
     }
 
     // always regeneration bonus (including combat)
-    addValue += GetTotalAuraModifier(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT);
-    addValue += m_baseHealthRegen / 2.5f;
+    float const flatBonus = GetTotalAuraModifier(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT) + m_baseHealthRegen / 2.5f;
+    addValue += scaleFlatRegen ? flatBonus : flatBonus * Warscape::HealthDamageScale;
 
     if (addValue < 0.0f)
         return;

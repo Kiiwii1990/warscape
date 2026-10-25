@@ -280,6 +280,70 @@ TEST_CASE("Warscape equipment bonuses affect OSRS accuracy and melee max hit", "
     CHECK(Warscape::MaxHit(50, -10, 3) < baseMaxHit);
 }
 
+TEST_CASE("Warscape baseline tiers retain archetype identity and preserve full custom profiles", "[warscape]")
+{
+    using namespace Warscape;
+    auto const dagger = BaselineWeaponBonuses(WeaponArchetype::Dagger, 1);
+    CHECK(dagger.AttackStab == 4);
+    CHECK(dagger.AttackSlash == 2);
+    CHECK(dagger.MeleeStrength == 3);
+    auto const sword = BaselineWeaponBonuses(WeaponArchetype::Longsword, 1);
+    CHECK(sword.AttackSlash == 5);
+    CHECK(sword.MeleeStrength == 7);
+    auto const mace = BaselineWeaponBonuses(WeaponArchetype::Mace, 1);
+    CHECK(mace.AttackCrush == 6);
+    CHECK(mace.MeleeStrength == 5);
+    auto const hammer = BaselineWeaponBonuses(WeaponArchetype::Warhammer, 1);
+    CHECK(hammer.AttackCrush == 10);
+    CHECK(hammer.MeleeStrength == 8);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Longsword, 4).AttackSlash == 20);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Longsword, 4).MeleeStrength == 22);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::TwoHandedSword, 3).AttackSlash == 21);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Spear, 3).MeleeStrength == 12);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Halberd, 3).AttackStab == 14);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Halberd, 3).MeleeStrength == 20);
+    for (uint32_t type = 1; type <= 10; ++type)
+    {
+        auto const archetype = static_cast<WeaponArchetype>(type);
+        auto previous = BaselineWeaponBonuses(archetype, 1);
+        for (uint32_t tier = 2; tier <= MaximumEquipmentTier; ++tier)
+        {
+            auto const next = BaselineWeaponBonuses(archetype, tier);
+            CHECK(next.AttackBonus(DefaultMeleeDamageType(archetype)) > previous.AttackBonus(DefaultMeleeDamageType(archetype)));
+            CHECK(next.MeleeStrength > previous.MeleeStrength);
+            previous = next;
+        }
+    }
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Dagger, 0).AttackStab == dagger.AttackStab);
+    CHECK(BaselineWeaponBonuses(WeaponArchetype::Dagger, 999).AttackStab == dagger.AttackStab);
+    for (auto archetype : {WeaponArchetype::Auto, WeaponArchetype::Bow, WeaponArchetype::Staff, WeaponArchetype::Unknown})
+        CHECK(BaselineWeaponBonuses(archetype, 6).MeleeStrength == 0);
+    EquipmentBonuses custom;
+    custom.AttackStab = -12;
+    custom.MeleeStrength = 9;
+    custom.Prayer = 7;
+    auto const preserved = ResolveEquipmentBonuses(WeaponArchetype::Dagger, 6, &custom);
+    CHECK(preserved.AttackStab == -12);
+    CHECK(preserved.MeleeStrength == 9);
+    CHECK(preserved.Prayer == 7);
+    EquipmentBonuses zero;
+    CHECK(ResolveEquipmentBonuses(WeaponArchetype::Dagger, 6, &zero).MeleeStrength == 0);
+    CHECK(ResolveEquipmentBonuses(WeaponArchetype::Longsword, 4, nullptr).MeleeStrength == 22);
+}
+
+TEST_CASE("Warscape tenfold display scale preserves ratios, minimum damage and XP", "[warscape]")
+{
+    CHECK(Warscape::HealthDamageScale == 10);
+    CHECK(Warscape::ScaleHealthOrDamage(7) == 70);
+    CHECK(Warscape::ScaleHealthOrDamage(7) / Warscape::ScaleHealthOrDamage(1) == 7);
+    CHECK(Warscape::VaryScaledDamage(1, 85) == 8);
+    CHECK(Warscape::VaryScaledDamage(1, 115) == 12);
+    CHECK(Warscape::VaryScaledDamage(1, 1) == 1);
+    CHECK(Warscape::VaryScaledDamage(1, 0) == 0);
+    CHECK(Warscape::OSRSDamageForXP(5, std::numeric_limits<uint32_t>::max()) == 5);
+    CHECK(Warscape::OSRSDamageForXP(5, 1) == 1);
+}
+
 TEST_CASE("Warscape attack speed uses fixed 600ms ticks, defaults and safe limits", "[warscape]")
 {
     CHECK(Warscape::CombatTickMilliseconds == 600);
@@ -320,25 +384,25 @@ TEST_CASE("Warscape monster attack speeds use explicit ticks or the four-tick de
     CHECK(Warscape::NormalizeAttackSpeedTicks(255) == Warscape::DefaultAttackSpeedTicks);
 }
 
-TEST_CASE("Warscape health and melee damage scale by 100 without scaling zero", "[warscape]")
+TEST_CASE("Warscape health and melee damage scale by 10 without scaling zero", "[warscape]")
 {
-    CHECK(Warscape::ScaleHealthOrDamage(10) == 1000);
-    CHECK(Warscape::ScaleHealthOrDamage(11) == 1100);
-    CHECK(Warscape::ScaleHealthOrDamage(20) == 2000);
-    CHECK(Warscape::ScaleHealthOrDamage(1) == 100);
+    CHECK(Warscape::ScaleHealthOrDamage(10) == 100);
+    CHECK(Warscape::ScaleHealthOrDamage(11) == 110);
+    CHECK(Warscape::ScaleHealthOrDamage(20) == 200);
+    CHECK(Warscape::ScaleHealthOrDamage(1) == 10);
     CHECK(Warscape::ScaleHealthOrDamage(0) == 0);
-    CHECK(Warscape::ToOSRSDamage(200) == 2);
+    CHECK(Warscape::ToOSRSDamage(20) == 2);
     CHECK(Warscape::ToOSRSDamage(0) == 0);
-    CHECK(Warscape::ScaleHealing(1, 1000) == 100);
-    CHECK(Warscape::ScaleHealing(20, 1000) == 1000);
-    CHECK(Warscape::ScaleHealing(0, 1000) == 0);
+    CHECK(Warscape::ScaleHealing(1, 100) == 10);
+    CHECK(Warscape::ScaleHealing(20, 100) == 100);
+    CHECK(Warscape::ScaleHealing(0, 100) == 0);
 
     Warscape::MonsterProfile profile;
     Warscape::MonsterDefinition creature;
     creature.Overrides[Warscape::Hitpoints] = 25;
     auto const stats = creature.Calculate(profile, 1);
     CHECK(stats[Warscape::Hitpoints] == 25);
-    CHECK(Warscape::ScaleHealthOrDamage(stats[Warscape::Hitpoints]) == 2500);
+    CHECK(Warscape::ScaleHealthOrDamage(stats[Warscape::Hitpoints]) == 250);
 }
 
 TEST_CASE("Warscape GM skill setters validate permissions, names, levels and XP", "[warscape]")
@@ -375,14 +439,14 @@ TEST_CASE("Warscape damage variation is bounded, symmetric and leaves XP on OSRS
 {
     CHECK(Warscape::VaryScaledDamage(0, 80) == 0);
     CHECK(Warscape::VaryScaledDamage(0, 120) == 0);
-    CHECK(Warscape::VaryScaledDamage(1, 80) == 80);
-    CHECK(Warscape::VaryScaledDamage(1, 120) == 120);
+    CHECK(Warscape::VaryScaledDamage(1, 80) == 8);
+    CHECK(Warscape::VaryScaledDamage(1, 120) == 12);
     CHECK(Warscape::VaryScaledDamage(1, 1) == 1);
-    CHECK(Warscape::VaryScaledDamage(2, 80) == 160);
-    CHECK(Warscape::VaryScaledDamage(2, 120) == 240);
-    CHECK(Warscape::VaryScaledDamage(5, 80) == 400);
-    CHECK(Warscape::VaryScaledDamage(5, 120) == 600);
-    CHECK(Warscape::ScaleHealthOrDamage(10) == 1000);
+    CHECK(Warscape::VaryScaledDamage(2, 80) == 16);
+    CHECK(Warscape::VaryScaledDamage(2, 120) == 24);
+    CHECK(Warscape::VaryScaledDamage(5, 80) == 40);
+    CHECK(Warscape::VaryScaledDamage(5, 120) == 60);
+    CHECK(Warscape::ScaleHealthOrDamage(10) == 100);
 
     std::mt19937 random(0x57525343);
     std::uniform_int_distribution<uint32_t> multiplier(80, 120);
@@ -397,13 +461,13 @@ TEST_CASE("Warscape damage variation is bounded, symmetric and leaves XP on OSRS
         maximum = std::max(maximum, varied);
         total += varied;
     }
-    CHECK(minimum >= 80);
-    CHECK(maximum <= 120);
-    CHECK(total / double(SampleCount) == Approx(100.0).epsilon(0.001));
+    CHECK(minimum >= 8);
+    CHECK(maximum <= 12);
+    CHECK(total / double(SampleCount) == Approx(10.0).epsilon(0.001));
 
     // XP uses the unvaried OSRS hit roll, so low and high display rolls award alike.
     CHECK(Warscape::OSRSDamageForXP(1, 1000) * 4 == 4);
-    CHECK(Warscape::OSRSDamageForXP(1, 117) * 4 == 4);
-    CHECK(Warscape::OSRSDamageForXP(5, 117) * 4 == 8);
+    CHECK(Warscape::OSRSDamageForXP(1, 12) * 4 == 4);
+    CHECK(Warscape::OSRSDamageForXP(5, 12) * 4 == 8);
     CHECK(Warscape::OSRSDamageForXP(5, 0) == 0);
 }

@@ -10486,10 +10486,34 @@ Warscape::MonsterProfile const& ObjectMgr::GetWarscapeMonsterProfile(uint32 entr
 void ObjectMgr::LoadWarscapeEquipmentBonuses()
 {
     _warscapeItemProfiles.clear();
+    _warscapeWeaponRules.clear();
+    QueryResult rulesTable = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='warscape_weapon_rule'");
+    if (rulesTable && rulesTable->Fetch()[0].GetUInt64() == 1)
+    {
+        if (QueryResult rules = WorldDatabase.Query("SELECT item_id, tier, archetype FROM warscape_weapon_rule"))
+        {
+            do
+            {
+                Field* fields = rules->Fetch();
+                uint32 const itemId = fields[0].GetUInt32();
+                Warscape::WeaponRule rule;
+                rule.Tier = fields[1].GetUInt32();
+                rule.Archetype = Warscape::WeaponArchetype(fields[2].GetUInt8());
+                ItemTemplate const* item = GetItemTemplate(itemId);
+                if (!item || item->GetClass() != ITEM_CLASS_WEAPON || rule.Tier < Warscape::DefaultEquipmentTier
+                    || rule.Tier > Warscape::MaximumEquipmentTier || uint8(rule.Archetype) > uint8(Warscape::WeaponArchetype::Halberd))
+                {
+                    TC_LOG_ERROR("sql.sql", "Invalid Warscape weapon rule for item {}; using conservative defaults.", itemId);
+                    continue;
+                }
+                _warscapeWeaponRules.emplace(itemId, rule);
+            } while (rules->NextRow());
+        }
+    }
     QueryResult table = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'warscape_item_bonus'");
     if (!table || table->Fetch()[0].GetUInt64() != 1)
     {
-        TC_LOG_INFO("server.loading", "Warscape item bonus table is absent; items use zero bonuses.");
+        TC_LOG_INFO("server.loading", "Warscape item bonus table is absent; melee weapons use bronze baseline bonuses.");
         return;
     }
 
@@ -10548,15 +10572,28 @@ Warscape::WeaponArchetype ObjectMgr::GetWarscapeWeaponArchetype(uint32 itemId) c
     if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
         return profile->second.Archetype;
     if (ItemTemplate const* item = GetItemTemplate(itemId))
-        return Warscape::InferWeaponArchetype(item->GetClass(), item->GetSubClass());
+    {
+        auto const rule = _warscapeWeaponRules.find(itemId);
+        return Warscape::ResolveWeaponArchetype(item->GetClass(), item->GetSubClass(),
+            rule != _warscapeWeaponRules.end() ? rule->second.Archetype : Warscape::WeaponArchetype::Auto);
+    }
     return Warscape::WeaponArchetype::Unknown;
 }
 
 Warscape::EquipmentBonuses ObjectMgr::GetWarscapeItemBonuses(uint32 itemId) const
 {
     if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
-        return profile->second.Bonuses;
-    return {};
+        return Warscape::ResolveEquipmentBonuses(profile->second.Archetype, profile->second.Tier, &profile->second.Bonuses);
+    return Warscape::ResolveEquipmentBonuses(GetWarscapeWeaponArchetype(itemId), GetWarscapeItemTier(itemId), nullptr);
+}
+
+uint32 ObjectMgr::GetWarscapeItemTier(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return profile->second.Tier;
+    if (auto rule = _warscapeWeaponRules.find(itemId); rule != _warscapeWeaponRules.end())
+        return rule->second.Tier;
+    return Warscape::DefaultEquipmentTier;
 }
 
 uint32 ObjectMgr::GetWarscapeItemAttackSpeedTicks(uint32 itemId) const

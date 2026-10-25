@@ -42,3 +42,21 @@ Status: Discussion notes; proposals are not approved implementations unless mark
 - Maintain a version-controlled, append-or-update design journal in the TrinityCore repository after substantive design conversations.
 - Distinguish decided rules from ideas and open questions; do not treat brainstorming as authorisation to implement.
 - Preserve previous notes and avoid committing credentials, backups or server data.
+
+## Stage 1G authorization and decisions — 25 October 2026
+- The user approved Stage 1G as a combined batch: deterministic weapon archetype
+  statistics, conservative equipment-tier progression, and health/damage display
+  scaling from ×100 to ×10. This supersedes the earlier checkpoint stating that
+  Stage 1G had not been approved; that checkpoint remains historical context.
+- Use established OSRS equipment statistics as the baseline. Prefer existing WoW
+  item classification and explicit exceptions; do not equate WoW item level with
+  OSRS tier or overwrite existing custom Warscape profiles.
+- Preserve Stage 1E bonus aggregation and Stage 1F attack speeds, existing OSRS
+  combat/accuracy calculations, and unrelated XP progression. Preserve approximate
+  damage-to-health ratios when changing the display scale.
+- When tier evidence is unreliable, use a conservative default with configurable
+  overrides. The implementation uses Bronze fallback, explicit metal tiers and a
+  small reviewed QA mapping; details and references are in
+  [Stage 1G](WarscapeStage1G.md).
+- Stage 1H randomized item statistics remain future possibilities and are not
+  authorized or implemented by this batch. In-game Stage 1G acceptance is pending.

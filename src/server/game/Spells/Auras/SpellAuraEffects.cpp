@@ -16,6 +16,7 @@
  */
 
 #include "SpellAuraEffects.h"
+#include "WarscapeCombat.h"
 #include "Battlefield.h"
 #include "BattlefieldMgr.h"
 #include "Battleground.h"
@@ -5327,6 +5328,9 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
     TC_LOG_DEBUG("spells.aura.effect", "PeriodicTick: {} heal of {} for {} health inflicted by {}",
         GetCasterGUID().ToString(), target->GetGUID().ToString(), damage, GetId());
 
+    // Flat HoTs bypass HealBySpell; percentage regeneration is already scaled.
+    if (GetAuraType() == SPELL_AURA_PERIODIC_HEAL && (target->IsPlayer() || target->GetTypeId() == TYPEID_UNIT))
+        damage = Warscape::ScaleHealing(damage, target->GetMaxHealth());
     uint32 heal = damage;
 
     HealInfo healInfo(caster, target, damage, GetSpellInfo(), GetSpellInfo()->GetSchoolMask());
