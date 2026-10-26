@@ -22,8 +22,24 @@
 #include "WarscapeCombat.h"
 #include "WarscapeEquipment.h"
 #include "WarscapeSkills.h"
+#include "WarscapeSkillsAddon.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeAttackTest.h"
+
+TEST_CASE("Warscape skills addon accepts only bounded read-only subscriptions", "[warscape]")
+{
+    CHECK(Warscape::ParseSkillsSubscription("WCSkills\tHELLO|1|abc123") == "abc123");
+    for (char const* invalid : { "WCSkills\tHELLO|2|abc", "WCSkills\tHELLO|1|", "WCSkills\tHELLO|1|abcdefghijklmnopq",
+        "WCSkills\tHELLO|1|a|b", "WCSkills\tSET|1|attack|99", "WCSkills\tHELLO|1|a\n" })
+        CHECK(Warscape::ParseSkillsSubscription(invalid).empty());
+    CHECK(Warscape::IsSkillsAddonMessage("WCSkills\tmalformed"));
+    CHECK_FALSE(Warscape::IsSkillsAddonMessage("Other\tHELLO|1|abc"));
+    CHECK_FALSE(Warscape::IsSkillsAddonMessage("WCSkillsX\tHELLO|1|abc"));
+    CHECK(Warscape::SkillsRow("1|abc|2", "attack", {1, 0}) == "S|1|abc|2|attack|1|-|0|0|83");
+    CHECK(Warscape::SkillsRow("1|abc|3", "prayer", {99, 200000000}) == "S|1|abc|3|prayer|99|-|200000000|13034431|-");
+    for (auto id : Warscape::SkillIds)
+        CHECK(Warscape::SkillsRow("1|abcdefghijklmnop|4294967295", id, {99, 200000000}).size() + 9 <= 255);
+}
 
 TEST_CASE("Warscape attack test uses bounded real-time sessions and refuses overlap", "[warscape]")
 {

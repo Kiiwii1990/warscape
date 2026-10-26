@@ -1,0 +1,8 @@
+## Interface: 30300
+## Title: Warscape Skills
+## Notes: Live Warscape skill levels and XP
+## Author: Warscape
+## Version: 1.0.0
+## SavedVariablesPerCharacter: WarscapeSkillsPosition
+Protocol.lua
+WarscapeSkills.lua

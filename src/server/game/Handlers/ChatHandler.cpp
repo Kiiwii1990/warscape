@@ -163,6 +163,10 @@ void WorldSession::HandleChatMessage(ChatMsg type, Language lang, std::string ms
         }
     }
 
+    // Read-only UI subscription; reserve this prefix on every addon distribution.
+    if (lang == LANG_ADDON && sender->HandleWarscapeSkillsAddon(msg, target, type == CHAT_MSG_WHISPER))
+        return;
+
     if (!CanSpeak())
     {
         std::string timeStr = secsToTimeString(m_muteTime - GameTime::GetGameTime());

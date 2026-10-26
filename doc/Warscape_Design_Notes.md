@@ -1,5 +1,5 @@
 # Warscape — Design Conversation Notes
-Updated: 25 October 2026
+Updated: 26 October 2026
 Status: Discussion notes; proposals are not approved implementations unless marked decided.
 
 ## Core direction — decided
@@ -85,3 +85,19 @@ Status: Discussion notes; proposals are not approved implementations unless mark
   awaits the user's confirmation. [Usage and measurement definitions](WarscapeAttackTest.md).
 - This remains a testing utility. Stage 1H and other gameplay work are not
   authorized by this request.
+
+## Stage 2A skills interface — approved, 25–26 October 2026
+- The user approved a standalone 3.3.5a `WarscapeSkills` addon for the seven
+  existing combat skills, with actual server values, XP bars/tooltips, a movable
+  saved-position panel and `/wskills` toggle.
+- Preserve the approved ornate frame, two dragons, compact grid, gold labels and
+  green bars. Use native WoW icons and UI assets; a close native dragon ornament
+  equivalent is permitted when the exact illustrated dragons are unavailable.
+- Use structured read-only addon communication, ordinary-player access and
+  automatic login/XP/level updates. Do not invent temporary boosts.
+- On 26 October the user authorized restarting from this specification in the
+  Windows checkout if the interrupted Linux draft could not be recovered. That
+  draft is not a dependency of the Windows implementation.
+- Build, test, safely deploy, commit and push Stage 2A, then await the user's
+  in-game acceptance. Stage 2B, Stage 1H, Mining and Smithing remain outside scope.
+- [Implementation and acceptance checklist](WarscapeStage2A.md).

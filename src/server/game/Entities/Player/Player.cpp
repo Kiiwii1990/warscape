@@ -17,6 +17,7 @@
 
 #include "Player.h"
 #include "WarscapeTrainingDummy.h"
+#include "WarscapeSkillsAddon.h"
 #include <charconv>
 #include <chrono>
 #include <sstream>
@@ -928,6 +929,7 @@ void Player::Update(uint32 p_time)
         return;
 
     UpdateWarscapeAttackTest();
+    UpdateWarscapeSkillsAddon(p_time);
 
     // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= GameTime::GetGameTime())
@@ -26728,7 +26730,11 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
 {
     RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
     uint8 const oldLevel = data.Level;
-    if (!Warscape::AddSkillXP(data, amount))
+    uint32 const oldXP = data.XP;
+    bool const leveled = Warscape::AddSkillXP(data, amount);
+    if (data.XP != oldXP)
+        _warscapeSkillsDirty = true;
+    if (!leveled)
         return;
 
     static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
@@ -26746,8 +26752,12 @@ Warscape::SkillUpdateResult Player::SetRSSkillLevel(RS_Skill skill, uint32 level
 {
     bool const hitpoints = skill == RS_Skill::Hitpoints;
     Warscape::SkillUpdateResult const result = Warscape::SetSkillLevel(rsSkills[static_cast<uint8>(skill)], level, hitpoints);
-    if (result == Warscape::SkillUpdateResult::Success && hitpoints)
-        UpdateMaxHealth();
+    if (result == Warscape::SkillUpdateResult::Success)
+    {
+        _warscapeSkillsDirty = true;
+        if (hitpoints)
+            UpdateMaxHealth();
+    }
     return result;
 }
 
@@ -26755,8 +26765,12 @@ Warscape::SkillUpdateResult Player::SetRSSkillXP(RS_Skill skill, uint32 xp)
 {
     bool const hitpoints = skill == RS_Skill::Hitpoints;
     Warscape::SkillUpdateResult const result = Warscape::SetSkillXP(rsSkills[static_cast<uint8>(skill)], xp, hitpoints);
-    if (result == Warscape::SkillUpdateResult::Success && hitpoints)
-        UpdateMaxHealth();
+    if (result == Warscape::SkillUpdateResult::Success)
+    {
+        _warscapeSkillsDirty = true;
+        if (hitpoints)
+            UpdateMaxHealth();
+    }
     return result;
 }
 
@@ -26801,4 +26815,46 @@ void Player::AwardWarscapeMeleeXP(uint32 damage)
                 combatXP, GetRSSkillXP(RS_Skill::Attack), hitpointsXP, GetRSSkillXP(RS_Skill::Hitpoints));
             break;
     }
+}
+
+// Reserved traffic never reaches player chat or the addon GM command dispatcher.
+bool Player::HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper)
+{
+    if (!Warscape::IsSkillsAddonMessage(message))
+        return false;
+    if (!whisper || target != GetName() || !IsInWorld() || _warscapeSkillsRequestCooldown)
+        return true;
+    std::string subscription = Warscape::ParseSkillsSubscription(message);
+    if (subscription.empty())
+        return true;
+    _warscapeSkillsToken = std::move(subscription);
+    _warscapeSkillsRequestCooldown = 1000;
+    _warscapeSkillsDirty = true;
+    return true;
+}
+
+void Player::UpdateWarscapeSkillsAddon(uint32 diff)
+{
+    _warscapeSkillsRequestCooldown -= std::min(diff, _warscapeSkillsRequestCooldown);
+    _warscapeSkillsSendCooldown -= std::min(diff, _warscapeSkillsSendCooldown);
+    if (!_warscapeSkillsToken.empty() && _warscapeSkillsDirty && !_warscapeSkillsSendCooldown)
+        SendWarscapeSkillsSnapshot();
+}
+
+void Player::SendWarscapeSkillsSnapshot()
+{
+    auto send = [this](std::string const& message)
+    {
+        WorldPackets::Chat::Chat packet;
+        packet.Initialize(CHAT_MSG_WHISPER, LANG_ADDON, this, this, message, 0, "", LOCALE_enUS, Warscape::SkillsAddonPrefix);
+        SendDirectMessage(packet.Write());
+    };
+    std::string const header = "1|" + _warscapeSkillsToken + "|" + std::to_string(++_warscapeSkillsRevision);
+    send("B|" + header + "|" + std::to_string(RS_SKILL_COUNT));
+    static_assert(RS_SKILL_COUNT == Warscape::SkillIds.size(), "Persisted skills require wire IDs");
+    for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
+        send(Warscape::SkillsRow(header, Warscape::SkillIds[i], rsSkills[i]));
+    send("E|" + header);
+    _warscapeSkillsDirty = false;
+    _warscapeSkillsSendCooldown = 250;
 }

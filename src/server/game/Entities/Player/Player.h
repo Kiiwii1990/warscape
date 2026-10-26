@@ -960,6 +960,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             return rsSkills[static_cast<uint8>(skill)].XP;
         }
 
+        bool HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper);
         void AddRSSkillXP(RS_Skill skill, uint32 amount);
         Warscape::SkillUpdateResult SetRSSkillLevel(RS_Skill skill, uint32 level);
         Warscape::SkillUpdateResult SetRSSkillXP(RS_Skill skill, uint32 xp);
@@ -2631,6 +2632,13 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         WorldLocation _corpseLocation;
 
+        void UpdateWarscapeSkillsAddon(uint32 diff);
+        void SendWarscapeSkillsSnapshot();
+        bool _warscapeSkillsDirty = false;
+        std::string _warscapeSkillsToken;
+        uint32 _warscapeSkillsRevision = 0;
+        uint32 _warscapeSkillsRequestCooldown = 0;
+        uint32 _warscapeSkillsSendCooldown = 0;
         void UpdateWarscapeAttackTest();
         void FinishWarscapeAttackTest(bool report, char const* reason, bool notify = false);
         Warscape::AttackTestXP GetWarscapeAttackTestXP() const;
