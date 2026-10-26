@@ -59,22 +59,36 @@ local methods = {}
 function methods:SetScript(k,v) self.scripts[k] = v end
 function methods:SetText(t) self.text = t end
 function methods:SetValue(v) self.value = v end
+function methods:SetSize(w,h) self.width=w; self.height=h end
 function methods:SetHeight(v) self.height = v end
+function methods:SetTexture(...) self.texture = {...} end
+function methods:SetTexCoord(...) self.uv = {...} end
+function methods:SetFont(path,size,flags) self.font=path; self.fontSize=size end
+function methods:SetTextColor(...) self.color = {...} end
+function methods:SetStatusBarColor(...) self.barColor = {...} end
+function methods:SetBackdrop(v) self.backdrop = v end
+function methods:SetBackdropColor(...) self.backdropColor = {...} end
 function methods:SetPoint(...) self.point = {...} end
 function methods:GetPoint() return unpack(self.point) end
 function methods:Show() self.shown = true end
 function methods:Hide() self.shown = false end
 function methods:IsShown() return self.shown end
 function MouseIsOver() return false end
-function methods:CreateTexture() return CreateFrame("Texture") end
-function methods:CreateFontString() return CreateFrame("FontString") end
+function methods:CreateTexture(name,layer) local t=CreateFrame("Texture",name,self); t.layer=layer; return t end
+function methods:CreateFontString(name,layer,template)
+    local t=CreateFrame("FontString",name,self); t.layer=layer; t.fontSize=10; return t
+end
 function methods:AddDoubleLine(...) self.lines[#self.lines+1] = {...} end
 function methods:AddLine(...) self.lines[#self.lines+1] = {...} end
-for _, name in ipairs({"SetSize","SetFrameStrata","SetClampedToScreen","SetMovable","EnableMouse","RegisterForDrag",
-    "SetBackdrop","StartMoving","StopMovingOrSizing","SetTexCoord","SetTexture","SetBackdropColor","SetBackdropBorderColor",
-    "SetStatusBarTexture","SetStatusBarColor","SetMinMaxValues","SetAllPoints","SetOwner","RegisterEvent","ClearAllPoints"}) do
+function methods:SetPushedTexture() self.pushedTexture = self:CreateTexture() end
+function methods:GetPushedTexture() return self.pushedTexture end
+for _, name in ipairs({"SetFrameStrata","SetClampedToScreen","SetMovable","EnableMouse","RegisterForDrag",
+    "StartMoving","StopMovingOrSizing","SetBackdropBorderColor",
+    "SetStatusBarTexture","SetMinMaxValues","SetAllPoints","SetOwner","RegisterEvent","ClearAllPoints",
+    "SetShadowColor","SetShadowOffset","SetHighlightTexture","SetVertexColor"}) do
     methods[name] = function() end
 end
+function methods:SetNormalTexture(path) self.normalTexture=path end
 local meta = {__index=methods}
 function CreateFrame(kind, name, parent)
     local w = setmetatable({kind=kind,name=name,parent=parent,scripts={},lines={},shown=true},meta)
@@ -85,6 +99,7 @@ end
 UIParent = CreateFrame("Frame")
 GameTooltip = CreateFrame("Tooltip")
 ''')
+lua.execute((root / 'Skin.lua').read_text())
 lua.execute((root / 'WarscapeSkills.lua').read_text())
 lua.execute(r'''
 local events
@@ -107,13 +122,28 @@ receive("E|1|"..token.."|1")
 local cells = {}
 for _, w in ipairs(widgets) do if w.data then cells[#cells+1] = w end end
 assert(#cells == 7)
-assert(cells[1].label == "Attack" and cells[1].level.text == 1 and cells[1].bar.value == 0)
+assert(cells[1].label == "Attack" and cells[1].level.text == "1 |cffddd6c6/ 1|r" and cells[1].bar.value == 0)
+assert(cells[2].label == "Hitpoints" and cells[3].label == "Strength")
+assert(WarscapeSkillsTotal.value.text == "Total level: 7")
+assert(panel.width == 500 and panel.height == 514)
+assert(cells[1].width == 206 and cells[1].height == 76)
 cells[1].scripts.OnEnter(cells[1])
 assert(GameTooltip.text == "Attack" and #GameTooltip.lines == 5)
 SlashCmdList.WARSCAPESKILLS()
 assert(panel:IsShown())
 SlashCmdList.WARSCAPESKILLS()
 assert(not panel:IsShown())
+WarscapeSkills_Toggle()
+WarscapeSkillsCloseButton.scripts.OnClick()
+assert(not panel:IsShown())
+-- Data updates preserve the complete UI and sum BASE levels, never boosts.
+receive("B|1|"..token.."|2|1")
+receive("S|1|"..token.."|2|attack|12|15|1585|1584|1833")
+receive("E|1|"..token.."|2")
+assert(cells[1].level.text == "15 |cffddd6c6/ 12|r")
+assert(WarscapeSkillsTotal.value.text == "Total level: 12")
+assert(cells[1].bar.value > 0 and cells[1].bar.value < 1)
+assert(not cells[2]:IsShown())
 panel:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 123, -234)
 panel.scripts.OnDragStop(panel)
 assert(WarscapeSkillsPosition.x == 123 and WarscapeSkillsPosition.y == -234)

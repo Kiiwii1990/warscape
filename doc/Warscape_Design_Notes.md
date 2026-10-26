@@ -101,3 +101,25 @@ Status: Discussion notes; proposals are not approved implementations unless mark
 - Build, test, safely deploy, commit and push Stage 2A, then await the user's
   in-game acceptance. Stage 2B, Stage 1H, Mining and Smithing remain outside scope.
 - [Implementation and acceptance checklist](WarscapeStage2A.md).
+
+## Stage 2A UI correction — approved, 26 October 2026
+- The user reports that the functional first panel differs significantly from
+  the approved reference. This is a correction within Stage 2A, not a new stage.
+- The earlier permission to use native dragon ornaments did not establish visual
+  acceptance. The user now requires the approved ornate dragon-frame appearance:
+  nearly opaque dark stone, thick metal/gold frame, integrated corner dragons,
+  compact two-column recessed gold-trimmed cells, larger gold labels, green XP
+  bars, `current / base` levels, an integrated close button and a total-level panel.
+- Native textures remain preferred where suitable; separate custom addon textures
+  are authorized when needed for visual fidelity. Interactive elements stay live.
+- Replace the default N/Talents shortcut through supported addon bindings while
+  respecting custom bindings and preserving the underlying talent system,
+  `/wskills`, Escape, drag position, live values, tooltips and automatic updates.
+- Work and deployment remain exclusively on local Windows. Preserve combat,
+  progression and persistence; rebuild the server only if server code changes.
+  Commit/push the correction, verify the remote, then await user acceptance.
+- Stage 2B and Stage 1H remain outside scope.
+- The user subsequently supplied both screenshots and explicitly retained the
+  original addon icons and clean layout while requiring the reference's borders,
+  backgrounds and dragons. The correction uses local reference-derived texture
+  pieces; sample tab buttons and Slayer remain unimplemented.

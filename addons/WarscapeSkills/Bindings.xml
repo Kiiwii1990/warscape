@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="WARSCAPE_TOGGLE_SKILLS" header="WARSCAPE_SKILLS">
+        WarscapeSkills_Toggle();
+    </Binding>
+</Bindings>

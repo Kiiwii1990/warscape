@@ -2,7 +2,9 @@
 ## Title: Warscape Skills
 ## Notes: Live Warscape skill levels and XP
 ## Author: Warscape
-## Version: 1.0.0
+## Version: 1.1.0
 ## SavedVariablesPerCharacter: WarscapeSkillsPosition
 Protocol.lua
+Skin.lua
 WarscapeSkills.lua
+Bindings.lua
