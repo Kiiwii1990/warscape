@@ -1,0 +1,17 @@
+{
+  "map_id": 904,
+  "directory": "WarscapeDevSandbox",
+  "display_name": "Warscape Development Sandbox",
+  "tiles": [[32, 32]],
+  "height": 30.0,
+  "texture": "Tileset\\Elwynn\\ElwynnGrassBase.blp",
+  "spawn": {
+    "x": -266.666667,
+    "y": -266.666667,
+    "z": 32.0,
+    "orientation": 0.0
+  },
+  "stage": "permanent flat gameplay development sandbox",
+  "osrs_scale": null,
+  "placements": []
+}
