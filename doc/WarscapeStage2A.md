@@ -3,6 +3,45 @@
 Source: `addons/WarscapeSkills`. Original client interface version: 30300
 (WoW 3.3.5a, build 12340). No executable patch or database migration is needed.
 
+## Primary client — corrected 26 October 2026
+
+The user's primary Warscape client is **wowdecomp**, rooted at
+`C:\WoWDev\wowdecomp`. This supersedes the earlier ChromieCraft deployment
+assumption. Do not modify or deploy to ChromieCraft unless explicitly requested.
+All implementation, asset preparation, validation and deployment run on Windows.
+
+The identified executable is `C:\WoWDev\wowdecomp\bin\Win\WowClient64.exe`.
+Before deployment, inspect the actual running process and any `-datadir` argument.
+With no override, the effective game directory is `C:\WoWDev\wowdecomp\bin\Win`,
+and WarscapeSkills belongs at
+`C:\WoWDev\wowdecomp\bin\Win\Interface\AddOns\WarscapeSkills`.
+`WoW/Source/Client.cpp::SetPaths` sets both the working directory and SFile base
+path from `datadir`, falling back to the executable directory. The addon loader
+uses `Interface\AddOns` relative to that game directory. The verified directories
+are ordinary local folders, not junctions to another client installation.
+
+No WowClient64 process was running during the initial corrected-target inspection.
+Use the verified default launch path when starting it; recheck a running process
+before subsequent deployments. Never infer the primary client from a realmlist.
+Read-only source inspection confirms wowdecomp implements `GetBindingKey`,
+`GetBindingAction`, `SetOverrideBinding` and `ClearOverrideBindings`.
+
+The corrected 18-file addon deployment was SHA-256 checked against the source.
+Lua 5.1, binding and texture tests pass, and the local layout preview reads the
+fonts/icons from wowdecomp's own Data archives. The executable was then launched
+and its running process path rechecked; startup reached the login screen.
+Panel rendering, live updates and N-key behaviour in-game still require the
+user's logged-in QA session; reaching the login screen is not panel acceptance.
+
+For a local preview using the primary client, run:
+
+```
+python addons/WarscapeSkills/tools/preview_skin.py --output build/stage2a-ui/wowdecomp-preview.png
+```
+
+The default preview client is the verified `bin\Win` directory. An explicit
+`--client` override must name a separately verified effective game directory.
+
 ## Use and appearance
 
 Enable **Warscape Skills** in the character selection AddOns list. **N** toggles

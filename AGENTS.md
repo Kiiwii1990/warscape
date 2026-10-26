@@ -1,3 +1,25 @@
+# Warscape primary development client
+
+Warscape's primary game client is the custom-built wowdecomp client under
+`C:\WoWDev\wowdecomp`, not ChromieCraft. Use local Windows execution only.
+Do not modify or deploy to ChromieCraft unless the user explicitly requests it.
+
+Before every addon deployment, identify the running `WowClient64.exe`, its full
+executable path and effective game directory. Check any `-datadir` override;
+do not infer the target from the repository root or another client's realmlist.
+The currently identified executable is
+`C:\WoWDev\wowdecomp\bin\Win\WowClient64.exe`. With no data-directory override,
+its game directory is `C:\WoWDev\wowdecomp\bin\Win`, and addons belong under
+`C:\WoWDev\wowdecomp\bin\Win\Interface\AddOns`.
+
+If the client is stopped, state that and verify its launch path and directory
+using the client source/launcher before deployment. Preserve existing addon work
+and back up any previous deployment outside Git. Validate against wowdecomp's
+assets and APIs; do not treat a stock-client preview as in-game verification.
+Keep addon source in this TrinityCore checkout, and deploy only runtime files to
+the verified client directory. Do not modify the client's executable, unrelated
+client source, local settings or saved variables to install an addon.
+
 # Warscape database changes
 
 For every future Warscape database change, follow `doc/WarscapeDatabaseWorkflow.md`

@@ -123,3 +123,19 @@ Status: Discussion notes; proposals are not approved implementations unless mark
   original addon icons and clean layout while requiring the reference's borders,
   backgrounds and dragons. The correction uses local reference-derived texture
   pieces; sample tab buttons and Slayer remain unimplemented.
+
+## Primary development client — user correction, 26 October 2026
+- The custom-built wowdecomp client under `C:\WoWDev\wowdecomp` is the primary
+  Warscape client. This explicitly supersedes the earlier ChromieCraft target
+  assumption; the previous deployment remains historical context, not permission
+  to change ChromieCraft again.
+- Locate the real `WowClient64.exe` process and effective game/interface directory
+  before deploying addons, including any `datadir` override. Initial inspection
+  found the executable at `bin\Win\WowClient64.exe` and no running client.
+  Source verification establishes `bin\Win` as its default game directory and
+  `bin\Win\Interface\AddOns` as its default addon directory.
+- Deploy and validate Stage 2A's approved visual correction and N binding against
+  wowdecomp. Keep source in TrinityCore, use Windows only, preserve existing work
+  and do not modify ChromieCraft unless explicitly requested.
+- This changes the client configuration, not stage scope, combat or persistence.
+  Stage 2B and Stage 1H remain outside scope.

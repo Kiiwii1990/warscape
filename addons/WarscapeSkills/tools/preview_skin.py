@@ -12,7 +12,8 @@ from PIL import Image, ImageDraw, ImageFont
 import mpyq
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--client', required=True, type=Path)
+parser.add_argument('--client', type=Path, default=Path(r'C:\WoWDev\wowdecomp\bin\Win'),
+                    help='Verified effective game directory; defaults to the primary wowdecomp client')
 parser.add_argument('--output', required=True, type=Path)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
