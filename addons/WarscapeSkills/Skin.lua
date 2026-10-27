@@ -48,7 +48,8 @@ function S.NineSlice(parent, file, sw, sh, tw, th, inset, edge, layer)
     end
 end
 
-function S.Panel(panel)
+function S.Panel(panel, options)
+    options = options or {}
     panel:SetSize(S.width, 514)
     -- Unlike the old native dialog backdrop, this stone texture has full alpha.
     panel:SetBackdrop({bgFile=art.."Stone", tile=true, tileSize=100,
@@ -63,9 +64,9 @@ function S.Panel(panel)
     texture(panel, "Foot", "OVERLAY", 112, 111, "BOTTOMLEFT", 5, -1)
     texture(panel, "Foot", "OVERLAY", 112, 111, "BOTTOMRIGHT", -5, -1, true)
     texture(panel, "BottomRail", "BORDER", 330, 32, "BOTTOM", 0, 0)
-    S.Font(panel, 28, "TOP", 0, -38):SetText("Skills")
+    S.Font(panel, 28, "TOP", 0, -38):SetText(options.title or "Skills")
 
-    local close = CreateFrame("Button", "WarscapeSkillsCloseButton", panel)
+    local close = CreateFrame("Button", options.closeName or "WarscapeSkillsCloseButton", panel)
     close:SetSize(30, 34)
     close:SetPoint("TOPRIGHT", -20, -33)
     close:SetNormalTexture(art.."Close")
@@ -74,7 +75,7 @@ function S.Panel(panel)
     close:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
     close:SetScript("OnClick", function() panel:Hide() end)
 
-    local total = CreateFrame("Frame", "WarscapeSkillsTotal", panel)
+    local total = CreateFrame("Frame", options.totalName or "WarscapeSkillsTotal", panel)
     total:SetSize(420, 48)
     total:SetPoint("BOTTOM", 0, 38)
     S.NineSlice(total, "Total", 831, 102, 1024, 128, 20, 10)(420, 48)

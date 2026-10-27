@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeSkillsAddon.h"
+#include "WarscapeInventory.h"
 #include <charconv>
 #include <chrono>
 #include <sstream>
@@ -930,6 +931,7 @@ void Player::Update(uint32 p_time)
 
     UpdateWarscapeAttackTest();
     UpdateWarscapeSkillsAddon(p_time);
+    UpdateWarscapeInventoryAddon(p_time);
 
     // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= GameTime::GetGameTime())
@@ -10226,6 +10228,12 @@ bool Player::HasItemTotemCategory(uint32 TotemCategory) const
 
 InventoryResult Player::CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec &dest, ItemTemplate const* pProto, uint32& count, bool swap, Item* pSrcItem) const
 {
+    // A native container may expose fewer slots than its item template. Check
+    // its current server capacity even for direct packets and occupied targets.
+    if (bag != INVENTORY_SLOT_BAG_0)
+        if (Bag* container = GetBagByPos(bag))
+            if (slot >= container->GetBagSize())
+                return EQUIP_ERR_WRONG_BAG_TYPE;
     Item* pItem2 = GetItemByPos(bag, slot);
 
     // ignore move item (this slot will be empty at move)
@@ -11235,6 +11243,9 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
             if (eslot == NULL_SLOT)
                 return EQUIP_ERR_NOT_EQUIPPABLE;
 
+            if (not_loading && HasWarscapeInventory() && eslot >= INVENTORY_SLOT_BAG_START && eslot < INVENTORY_SLOT_BAG_END)
+                return EQUIP_ERR_NOT_EQUIPPABLE;
+
             res = CanUseItem(pItem, not_loading);
             if (res != EQUIP_ERR_OK)
                 return res;
@@ -11333,6 +11344,8 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
 
 InventoryResult Player::CanUnequipItem(uint16 pos, bool swap) const
 {
+    if (IsWarscapeInventoryContainer(pos >> 8, pos & 255))
+        return EQUIP_ERR_CLIENT_LOCKED_OUT;
     // Applied only to equipped items and bank bags
     if (!IsEquipmentPos(pos) && !IsBagPos(pos))
         return EQUIP_ERR_OK;
@@ -12316,6 +12329,8 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
 
 void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
 {
+    if (IsWarscapeInventoryContainer(bag, slot))
+        return;
     Item* pItem = GetItemByPos(bag, slot);
     if (pItem)
     {
@@ -17605,6 +17620,9 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         TC_LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player ({}) has invalid taximask ({}) in DB. Forced partial load.", GetGUID().ToString(), fields[22].GetString());
 
     uint32 extraflags = fields[36].GetUInt16();
+    // Preserve only the two normal per-character inventory flags; GM flags
+    // continue through the existing permission/config restoration below.
+    m_ExtraFlags |= extraflags & (Warscape::Inventory::ManagedFlag | Warscape::Inventory::UnlockedFlag);
 
     _LoadPetStable(fields[37].GetUInt8(), holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS));
 
@@ -17715,6 +17733,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     m_reputationMgr->LoadFromDB(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_REPUTATION));
 
     _LoadInventory(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_INVENTORY), time_diff);
+    InitializeWarscapeInventory();
 
     // update items with duration and realtime
     UpdateItemDuration(time_diff, true);

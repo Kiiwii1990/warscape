@@ -1,0 +1,41 @@
+[
+  {
+    "asset": "Interface\\MainMenuBar\\UI-MainMenuBar-EndCap-Dwarf.blp",
+    "archive": "locale-enUS.MPQ",
+    "sha256": "3d5c6d5706d6bdba5b2ab6b879b50e9ed82475297d91fa73061eaa3f5a74dead",
+    "source_size": [
+      128,
+      128
+    ],
+    "crop": null,
+    "visible_bounds": [
+      0,
+      52,
+      128,
+      128
+    ],
+    "runtime": "WarscapeGryphonWarscape.tga"
+  },
+  {
+    "asset": "Interface\\MainMenuBar\\UI-MainMenuBar-Dwarf.blp",
+    "archive": "locale-enUS.MPQ",
+    "sha256": "e5b65d2252b35b50a75714e118130a672b9714becc8bf251777e18e0a826cb16",
+    "source_size": [
+      256,
+      256
+    ],
+    "crop": [
+      64,
+      85,
+      256,
+      128
+    ],
+    "visible_bounds": [
+      0,
+      0,
+      192,
+      43
+    ],
+    "runtime": "WarscapeRail.tga"
+  }
+]

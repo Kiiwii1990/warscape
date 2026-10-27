@@ -1,3 +1,36 @@
+# Warscape development efficiency rules
+
+Our priority is completing Warscape efficiently while preserving correctness
+and existing functionality.
+
+For all future development:
+
+- Begin by reading `AGENTS.md` and the relevant Warscape documentation.
+- Work from the existing project at `C:\WoWDev\TrinityCore`, custom client at
+  `C:\WoWDev\wowdecomp`, and server at `C:\WoWDev\TrinityServer`.
+- Continue existing implementations where present. Create new systems only when
+  explicitly requested or genuinely necessary.
+- Keep changes focused on the requested feature.
+- Reuse existing TrinityCore, WoW client and Warscape functionality wherever
+  practical.
+- Avoid exhaustive repository searches when relevant files are already known.
+- Run targeted tests during development.
+- Perform full builds and deployment only when necessary for a meaningful
+  testing milestone.
+- Do not launch the game for manual visual testing; the user handles this.
+- Avoid repeated speculative fixes when the underlying problem is unknown.
+- If a blocker requires substantial additional investigation, stop and report
+  the problem and available options.
+- Use concise completion reports rather than lengthy technical explanations.
+- Preserve backups, uncommitted work and unrelated project changes.
+- Do not reduce essential validation, data integrity or deployment safety to
+  save time.
+
+**Aim to deliver one independently testable improvement per development session.**
+
+If a request is too large, divide it into practical milestones and implement
+only the first one unless the user explicitly authorises the rest.
+
 # Warscape primary development client
 
 Warscape's primary game client is the custom-built wowdecomp client under
@@ -49,3 +82,7 @@ requests documentation updates. Preserve previously agreed decisions and their
 history; never silently change them. Record a user-approved revision explicitly
 when it supersedes an earlier decision. Do not promote proposals or future
 possibilities to confirmed decisions without the user's agreement.
+
+# Warscape testing workflow
+
+For Warscape world-generation and client/server tests, use local Windows execution only. The user performs in-game visual inspection and manual gameplay tests; Codex handles development, automated validation, builds, deployment and technical troubleshooting. Do not launch or operate WoW for manual QA unless the user explicitly requests it or approves direct diagnosis of a specific technical issue. Never claim a manual visual or gameplay test passed until the user confirms it. After successful automated checks and safe deployment, provide exact teleport instructions and a short checklist, then stop for user feedback before further checkpoint work. See `doc/Warscape_Design_Notes.md` for the approved workflow history.

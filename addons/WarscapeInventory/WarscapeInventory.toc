@@ -1,0 +1,9 @@
+## Interface: 30300
+## Title: Warscape Inventory
+## Notes: Native server-backed 24-slot inventory with four tutorial-locked slots
+## Author: Warscape
+## Version: 1.0.0
+## Dependencies: WarscapePanels, WarscapeSkills
+## SavedVariablesPerCharacter: WarscapeInventoryPosition
+Inventory.lua
+Bindings.lua

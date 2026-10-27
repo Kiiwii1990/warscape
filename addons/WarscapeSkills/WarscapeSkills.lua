@@ -8,7 +8,11 @@ local metadata = {
 local panel = CreateFrame("Frame", "WarscapeSkillsFrame", UIParent)
 local skin = WarscapeSkillsSkin
 local total, status, resize = skin.Panel(panel)
-panel:SetPoint("CENTER")
+if WarscapeHUDFrame then
+    panel:SetPoint("BOTTOM", WarscapeHUDFrame, "TOP", 0, 8)
+else
+    panel:SetPoint("CENTER")
+end
 panel:SetFrameStrata("DIALOG")
 panel:SetClampedToScreen(true)
 panel:SetMovable(true)
@@ -83,10 +87,11 @@ local function request()
 end
 SLASH_WARSCAPESKILLS1 = "/wskills"
 function WarscapeSkills_Toggle()
-    if panel:IsShown() then panel:Hide() else panel:Show(); request() end
+    WarscapePanels:Toggle("skills")
 end
 SlashCmdList.WARSCAPESKILLS = WarscapeSkills_Toggle
 panel:Hide()
+WarscapePanels:Register("skills", panel, {onShow = request})
 local events = CreateFrame("Frame")
 events:RegisterEvent("PLAYER_LOGIN")
 events:RegisterEvent("PLAYER_ENTERING_WORLD")

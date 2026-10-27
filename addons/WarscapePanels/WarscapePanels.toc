@@ -1,0 +1,7 @@
+## Interface: 30300
+## Title: Warscape Panels
+## Notes: Shared main-menu visibility, HUD state and independent panel scales
+## Author: Warscape
+## Version: 1.0.0
+## SavedVariablesPerCharacter: WarscapePanelScales
+Panels.lua

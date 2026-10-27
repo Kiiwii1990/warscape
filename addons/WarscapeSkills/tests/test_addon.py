@@ -57,6 +57,7 @@ function UnitName() return "Tester" end
 function SendAddonMessage(p, m, d, t) messages[#messages+1] = {p,m,d,t} end
 local methods = {}
 function methods:SetScript(k,v) self.scripts[k] = v end
+function methods:HookScript(k,v) self.hooks = self.hooks or {}; self.hooks[k] = v end
 function methods:SetText(t) self.text = t end
 function methods:SetValue(v) self.value = v end
 function methods:SetSize(w,h) self.width=w; self.height=h end
@@ -70,8 +71,16 @@ function methods:SetBackdrop(v) self.backdrop = v end
 function methods:SetBackdropColor(...) self.backdropColor = {...} end
 function methods:SetPoint(...) self.point = {...} end
 function methods:GetPoint() return unpack(self.point) end
-function methods:Show() self.shown = true end
-function methods:Hide() self.shown = false end
+function methods:Show()
+    local changed = not self.shown
+    self.shown = true
+    if changed and self.hooks and self.hooks.OnShow then self.hooks.OnShow(self) end
+end
+function methods:Hide()
+    local changed = self.shown
+    self.shown = false
+    if changed and self.hooks and self.hooks.OnHide then self.hooks.OnHide(self) end
+end
 function methods:IsShown() return self.shown end
 function MouseIsOver() return false end
 function methods:CreateTexture(name,layer) local t=CreateFrame("Texture",name,self); t.layer=layer; return t end
@@ -100,6 +109,7 @@ UIParent = CreateFrame("Frame")
 GameTooltip = CreateFrame("Tooltip")
 ''')
 lua.execute((root / 'Skin.lua').read_text())
+lua.execute((root.parent / 'WarscapePanels' / 'Panels.lua').read_text())
 lua.execute((root / 'WarscapeSkills.lua').read_text())
 lua.execute(r'''
 local events

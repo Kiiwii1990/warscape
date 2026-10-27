@@ -961,6 +961,12 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         }
 
         bool HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper);
+        bool HandleWarscapeInventoryAddon(std::string_view message, std::string const& target, bool whisper);
+        bool HasWarscapeInventory() const;
+        bool IsWarscapeInventoryUnlocked() const;
+        bool IsWarscapeInventoryContainer(uint8 bag, uint8 slot) const;
+        bool InitializeWarscapeInventory();
+        bool UnlockWarscapeInventory();
         void AddRSSkillXP(RS_Skill skill, uint32 amount);
         Warscape::SkillUpdateResult SetRSSkillLevel(RS_Skill skill, uint32 level);
         Warscape::SkillUpdateResult SetRSSkillXP(RS_Skill skill, uint32 xp);
@@ -2633,6 +2639,13 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         WorldLocation _corpseLocation;
 
         void UpdateWarscapeSkillsAddon(uint32 diff);
+        void UpdateWarscapeInventoryAddon(uint32 diff);
+        void SendWarscapeInventoryState();
+        bool _warscapeInventoryReady = false;
+        bool _warscapeInventoryNeedsSave = false;
+        std::string _warscapeInventoryToken;
+        uint32 _warscapeInventoryRevision = 0;
+        uint32 _warscapeInventoryRequestCooldown = 0;
         void SendWarscapeSkillsSnapshot();
         bool _warscapeSkillsDirty = false;
         std::string _warscapeSkillsToken;
