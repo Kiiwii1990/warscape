@@ -282,9 +282,15 @@ public:
             return true;
         }
 
+        if (style == "smelt bronze")
+        {
+            player->StartWarscapeBronzeSmelting();
+            return true;
+        }
+
         if (StringEqualI(style, "stats"))
         {
-            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
             for (uint8 i = 0; i < Player::RS_SKILL_COUNT; ++i)
             {
                 Player::RS_Skill skill = static_cast<Player::RS_Skill>(i);
@@ -300,6 +306,7 @@ public:
                 }
             }
             handler->SendSysMessage("OSRS combat level: not implemented yet.");
+            handler->PSendSysMessage("Smithing fractional carry: %u tenths of an XP.", player->warscapeSmithingTenthXP);
             return true;
         }
 
@@ -350,7 +357,7 @@ public:
             return true;
         }
 
-        if (style.rfind("setlevel ", 0) == 0 || style.rfind("setxp ", 0) == 0)
+        if (style.rfind("setlevel ", 0) == 0 || style.rfind("setxp ", 0) == 0 || style.rfind("addxp ", 0) == 0 || style.rfind("addhalfxp ", 0) == 0)
         {
             if (!Warscape::CanModifySkills(handler->HasPermission(rbac::RBAC_PERM_COMMAND_SETSKILL)))
             {
@@ -363,14 +370,14 @@ public:
             input >> operation >> skillName >> valueText;
             if (skillName.empty() || valueText.empty() || (input >> extra))
             {
-                handler->SendSysMessage("Usage: .rs setlevel <skill> <1-99> or .rs setxp <skill> <0-200000000>");
+                handler->SendSysMessage("Usage: .rs setlevel <skill> <1-99> or .rs setxp/addxp/addhalfxp <skill> <0-200000000>");
                 return true;
             }
 
             int const skillIndex = Warscape::SkillIndexFromName(skillName.c_str());
             if (skillIndex < 0)
             {
-                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic or prayer.");
+                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic, prayer, mining or smithing.");
                 return true;
             }
 
@@ -383,7 +390,22 @@ public:
             }
 
             Player::RS_Skill const skill = static_cast<Player::RS_Skill>(skillIndex);
-            Warscape::SkillUpdateResult result = operation == "setlevel"
+            if ((operation == "addxp" || operation == "addhalfxp") && value > Warscape::MaxSkillXP)
+            {
+                handler->SendSysMessage("XP award must be between 0 and 200000000.");
+                return true;
+            }
+            if (operation == "addhalfxp" && skill != Player::RS_Skill::Mining && skill != Player::RS_Skill::Smithing)
+            {
+                handler->SendSysMessage("Fractional XP is supported for Mining and Smithing only.");
+                return true;
+            }
+            if (operation == "addxp")
+                player->AddRSSkillXP(skill, value);
+            else if (operation == "addhalfxp")
+                player->AddRSSkillHalfXP(skill, value);
+            Warscape::SkillUpdateResult result = (operation == "addxp" || operation == "addhalfxp")
+                ? Warscape::SkillUpdateResult::Success : operation == "setlevel"
                 ? player->SetRSSkillLevel(skill, value)
                 : player->SetRSSkillXP(skill, value);
             if (result != Warscape::SkillUpdateResult::Success)
@@ -400,8 +422,8 @@ public:
             }
 
             player->SaveToDB();
-            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
-            handler->PSendSysMessage("Set %s to level %u (%u XP).", skillNames[skillIndex], player->GetRSSkillLevel(skill), player->GetRSSkillXP(skill));
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+            handler->PSendSysMessage("%s is level %u (%u XP).", skillNames[skillIndex], player->GetRSSkillLevel(skill), player->GetRSSkillXP(skill));
             return true;
         }
 
@@ -416,7 +438,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs addxp, .rs addhalfxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

@@ -3,80 +3,120 @@ local metadata = {
     attack = {"Attack", "INV_Sword_04"}, strength = {"Strength", "Ability_Warrior_InnerRage"},
     defence = {"Defence", "Ability_Warrior_DefensiveStance"}, hitpoints = {"Hitpoints", "Spell_Holy_LayOnHands"},
     ranged = {"Ranged", "Ability_Hunter_RunningShot"}, magic = {"Magic", "Spell_Holy_MagicalSentry"},
-    prayer = {"Prayer", "Spell_Holy_PrayerOfHealing02"}
+    prayer = {"Prayer", "Spell_Holy_PrayerOfHealing02"}, mining = {"Mining", "INV_Pick_02"},
+    smithing = {"Smithing", "Trade_BlackSmithing"}
 }
 local panel = CreateFrame("Frame", "WarscapeSkillsFrame", UIParent)
 local skin = WarscapeSkillsSkin
-local total, status, resize = skin.Panel(panel)
-if WarscapeHUDFrame then
-    panel:SetPoint("BOTTOM", WarscapeHUDFrame, "TOP", 0, 8)
-else
-    panel:SetPoint("CENTER")
-end
+local total, status = skin.Panel(panel)
 panel:SetFrameStrata("DIALOG")
-panel:SetClampedToScreen(true)
-panel:SetMovable(true)
 panel:EnableMouse(true)
-panel:RegisterForDrag("LeftButton")
-panel:SetScript("OnDragStart", function(self) self:StartMoving() end)
-panel:SetScript("OnDragStop", function(self)
-    self:StopMovingOrSizing()
-    local point, _, relative, x, y = self:GetPoint()
-    WarscapeSkillsPosition = {point = point, relative = relative, x = x, y = y}
-end)
 table.insert(UISpecialFrames, "WarscapeSkillsFrame")
 local cells, protocol, snapshot, lastRequest = {}, nil, nil, -10
-local function number(n) return string.format("%.0f", n) end
+local columns, viewportHeight = 3, skin.viewportHeight
+local gridWidth, gridLeft = skin.gridWidth, skin.gridLeft
+local list = CreateFrame("ScrollFrame", "WarscapeSkillsList", panel)
+list:SetPoint("TOPLEFT", panel, "TOPLEFT", gridLeft, -skin.gridTop)
+list:SetSize(gridWidth, viewportHeight)
+list:EnableMouseWheel(true)
+local content = CreateFrame("Frame", nil, list)
+content:SetSize(gridWidth, 1)
+list:SetScrollChild(content)
+local scrollbar = CreateFrame("Slider", "WarscapeSkillsScrollBar", panel, "UIPanelScrollBarTemplate")
+scrollbar:SetPoint("TOPRIGHT", panel, "TOPRIGHT", -25, -skin.gridTop)
+scrollbar:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -25, skin.height - skin.gridTop - viewportHeight)
+scrollbar:SetMinMaxValues(0, 0)
+scrollbar:SetValueStep(skin.rowPitch)
+scrollbar:SetScript("OnValueChanged", function(_, value) list:SetVerticalScroll(value) end)
+list:SetScript("OnMouseWheel", function(_, delta)
+    if IsControlKeyDown() then
+        -- ScrollFrame receives wheel input before the HUD's full-screen scaler.
+        -- Route Ctrl-wheel through the same saved panel scale manager directly.
+        WarscapePanels:AdjustScale("skills", delta)
+    else
+        local _, maxScroll = scrollbar:GetMinMaxValues()
+        scrollbar:SetValue(math.max(0, math.min(scrollbar:GetValue() - delta * skin.rowPitch, maxScroll)))
+    end
+end)
+local function number(n) return string.format(n == math.floor(n) and "%.0f" or "%.1f", n) end
 local function details(cell)
     local d = cell.data
     if not d then return end
     GameTooltip:SetOwner(cell, "ANCHOR_RIGHT")
     GameTooltip:SetText(cell.label, 1, 0.82, 0)
-    GameTooltip:AddDoubleLine("Base level", number(d.base), 1, 1, 1, 1, 1, 1)
-    if d.effective then GameTooltip:AddDoubleLine("Current level", number(d.effective), 1, 1, 1, 1, 1, 1) end
+    local currentLevel = d.effective or d.base
+    GameTooltip:AddDoubleLine("Current level", number(currentLevel), 1, 1, 1, 1, 1, 1)
+    GameTooltip:AddDoubleLine("Attained level", number(d.base), 1, 1, 1, 1, 1, 1)
     GameTooltip:AddDoubleLine("Total XP", number(d.xp), 1, 1, 1, 1, 1, 1)
     if d.nextXP then
-        GameTooltip:AddDoubleLine("Next level at", number(d.nextXP) .. " XP", 1, 1, 1, 1, 1, 1)
+        GameTooltip:AddDoubleLine("XP to next level", number(d.nextXP) .. " XP", 1, 1, 1, 1, 1, 1)
         GameTooltip:AddDoubleLine("XP remaining", number(d.nextXP - d.xp), 1, 1, 1, 1, 1, 1)
         GameTooltip:AddDoubleLine("Progress", string.format("%.1f%%", 100 * (d.xp - d.floor) / (d.nextXP - d.floor)), 1, 1, 1, 0.3, 1, 0.3)
     else
-        GameTooltip:AddDoubleLine("Next level at", "Maximum level", 1, 1, 1, 1, 1, 1)
+        GameTooltip:AddDoubleLine("XP to next level", "Maximum level", 1, 1, 1, 1, 1, 1)
         GameTooltip:AddDoubleLine("XP remaining", "0", 1, 1, 1, 1, 1, 1)
         GameTooltip:AddLine("Maximum level reached (100%)", 0.3, 1, 0.3)
     end
+    if d.id == "smithing" then GameTooltip:AddLine("Use a forge for smelting", .3, 1, .3) end
     GameTooltip:Show()
 end
 local function cellAt(i)
     if cells[i] then return cells[i] end
-    local c = skin.Cell(panel, i)
+    local c = skin.Cell(content, i)
     c:SetScript("OnEnter", details)
     c:SetScript("OnLeave", function() GameTooltip:Hide() end)
     cells[i] = c
     return c
 end
+local function xpProgress(d)
+    if not d.nextXP then return 1 end
+    local span = d.nextXP - d.floor
+    if span <= 0 then return 0 end
+    return math.max(0, math.min(1, (d.xp - d.floor) / span))
+end
 local function render(data)
     -- Match the reference's combat columns; append future stable IDs dynamically.
     local order, included = {}, {}
-    for _, id in ipairs({"attack", "hitpoints", "strength", "ranged", "defence", "magic", "prayer"}) do
+    for _, id in ipairs({"attack", "hitpoints", "strength", "ranged", "defence", "magic", "prayer", "mining", "smithing"}) do
         if data.rows[id] then order[#order+1] = id; included[id] = true end
     end
     for _, id in ipairs(data.order) do
         if not included[id] then order[#order+1] = id end
     end
-    resize(math.ceil(#order / 2))
+    local hasPlaceholder = #order > 0 and #order % columns ~= 0
+    local tileCount = #order + (hasPlaceholder and 1 or 0)
+    local rows = math.ceil(tileCount / columns)
+    local contentHeight = math.max(viewportHeight, (rows - 1) * skin.rowPitch + skin.cellHeight)
+    content:SetSize(gridWidth, contentHeight)
+    local maxScroll = math.max(0, contentHeight - list:GetHeight())
+    scrollbar:SetMinMaxValues(0, maxScroll)
+    scrollbar:SetValue(math.min(scrollbar:GetValue(), maxScroll))
+    if maxScroll > 0 then scrollbar:Show() else scrollbar:Hide() end
+    list:SetVerticalScroll(math.min(list:GetVerticalScroll(), maxScroll))
     local totalLevel = 0
     for i, id in ipairs(order) do
         local c, m, d = cellAt(i), metadata[id], data.rows[id]
         c.data, c.label = d, m and m[1] or id
-        c.name:SetText(c.label)
+        c.placeholder = false
         c.icon:SetTexture("Interface\\Icons\\" .. (m and m[2] or "INV_Misc_QuestionMark"))
-        c.level:SetText(number(d.effective or d.base) .. " |cffddd6c6/ " .. number(d.base) .. "|r")
+        c.level:SetText(number(d.effective or d.base) .. "/" .. number(d.base))
         totalLevel = totalLevel + d.base
-        c.bar:SetValue(d.nextXP and (d.xp - d.floor) / (d.nextXP - d.floor) or 1)
+        c.bar:SetValue(xpProgress(d))
+        c:ClearAllPoints();c:SetPoint("TOPLEFT",content,"TOPLEFT",((i-1)%columns)*(skin.cellWidth+skin.columnGap),-math.floor((i-1)/columns)*skin.rowPitch)
         c:Show()
         if MouseIsOver(c) then details(c) end
     end
-    for i = #order + 1, #cells do cells[i]:Hide() end
+    if hasPlaceholder then
+        local c = cellAt(#order + 1)
+        c.data, c.label, c.placeholder = nil, "Next skill", true
+        c.icon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+        c.level:SetText("-")
+        c.bar:SetValue(0)
+        local i=#order+1
+        c:ClearAllPoints();c:SetPoint("TOPLEFT",content,"TOPLEFT",((i-1)%columns)*(skin.cellWidth+skin.columnGap),-math.floor((i-1)/columns)*skin.rowPitch)
+        c:Show()
+    end
+    for i = tileCount + 1, #cells do cells[i]:Hide() end
     total.value:SetText("Total level: " .. number(totalLevel))
     status:SetText("")
 end
@@ -91,18 +131,25 @@ function WarscapeSkills_Toggle()
 end
 SlashCmdList.WARSCAPESKILLS = WarscapeSkills_Toggle
 panel:Hide()
-WarscapePanels:Register("skills", panel, {onShow = request})
+local function layout(orientation)
+    panel.warscapeChrome.resize(orientation)
+    columns=orientation=="portrait" and 3 or 6
+    gridWidth=columns*skin.cellWidth+(columns-1)*skin.columnGap
+    gridLeft=(panel:GetWidth()-gridWidth)/2
+    viewportHeight=panel:GetHeight()-skin.gridTop-84
+    list:ClearAllPoints();list:SetPoint("TOPLEFT",panel,"TOPLEFT",gridLeft,-skin.gridTop)
+    list:SetSize(gridWidth,viewportHeight)
+    scrollbar:ClearAllPoints();scrollbar:SetPoint("TOPRIGHT",panel,"TOPRIGHT",-25,-skin.gridTop)
+    scrollbar:SetPoint("BOTTOMRIGHT",panel,"BOTTOMRIGHT",-25,84)
+    if snapshot then render(snapshot) else content:SetSize(gridWidth,viewportHeight) end
+end
+WarscapePanels:Register("skills", panel, {group = "right", onShow = request, layout=layout})
 local events = CreateFrame("Frame")
 events:RegisterEvent("PLAYER_LOGIN")
 events:RegisterEvent("PLAYER_ENTERING_WORLD")
 events:RegisterEvent("CHAT_MSG_ADDON")
 events:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_LOGIN" then
-        local pos = WarscapeSkillsPosition
-        if type(pos) == "table" and type(pos.point) == "string" and type(pos.relative) == "string" and type(pos.x) == "number" and type(pos.y) == "number" then
-            local valid = {CENTER=true,TOP=true,BOTTOM=true,LEFT=true,RIGHT=true,TOPLEFT=true,TOPRIGHT=true,BOTTOMLEFT=true,BOTTOMRIGHT=true}
-            if valid[pos.point] and valid[pos.relative] then panel:ClearAllPoints(); panel:SetPoint(pos.point, UIParent, pos.relative, pos.x, pos.y) end
-        end
         protocol = WarscapeSkillsProtocol.New(tostring(math.floor(GetTime() * 1000) % 1000000000) .. tostring(math.random(100000, 999999)))
         request()
     elseif event == "PLAYER_ENTERING_WORLD" then

@@ -16,9 +16,11 @@
  */
 
 #include "GameObject.h"
+#include "WarscapeSmelting.h"
 #include "Battleground.h"
 #include "CellImpl.h"
 #include "Containers.h"
+#include "Config.h"
 #include "CreatureAISelector.h"
 #include "DatabaseEnv.h"
 #include "GameObjectAI.h"
@@ -1626,6 +1628,12 @@ void GameObject::Use(Unit* user)
         if (!m_goInfo->IsUsableMounted())
             playerUser->RemoveAurasByType(SPELL_AURA_MOUNTED);
 
+        // The tested forge keeps its native spell-focus template and behaviour.
+        if (GetEntry() == 173063)
+        {
+            playerUser->OpenWarscapeSmelting(this);
+            return;
+        }
         playerUser->PlayerTalkClass->ClearMenus();
         if (AI()->OnGossipHello(playerUser))
             return;
@@ -2897,6 +2905,33 @@ bool GameObject::IsAtInteractDistance(Player const* player, SpellInfo const* spe
 
 bool GameObject::IsAtInteractDistance(Position const& pos, float radius) const
 {
+    // Warscape forge interaction is measured from the midpoint of the model's
+    // ground footprint, rather than dilating its whole display box. Deriving
+    // the point from DBC bounds keeps it tied to the model and world rotation.
+    // Spell-focus candidate search retains its native template radius.
+    if (GetEntry() == 173063 && GetGoType() == GAMEOBJECT_TYPE_SPELL_FOCUS)
+    {
+        radius = std::min(radius, Warscape::DefaultFurnaceInteractionDistance);
+        if (GameObjectDisplayInfoEntry const* displayInfo = sGameObjectDisplayInfoStore.LookupEntry(GetGOInfo()->displayId))
+        {
+            float const scale = GetObjectScale();
+            G3D::Vector3 const localCenter {
+                (displayInfo->GeoBoxMin.X + displayInfo->GeoBoxMax.X) * 0.5f * scale,
+                (displayInfo->GeoBoxMin.Y + displayInfo->GeoBoxMax.Y) * 0.5f * scale,
+                0.0f
+            };
+            QuaternionData worldRotation = GetWorldRotation();
+            G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
+            G3D::Point3 const worldCenter = G3D::CoordinateFrame { { worldRotationQuat }, { GetPositionX(), GetPositionY(), GetPositionZ() } }
+                .pointToWorldSpace(localCenter);
+            return pos.GetExactDist(worldCenter.x, worldCenter.y, worldCenter.z) <= radius;
+        }
+
+        // The client also disables the forge when its display bounds are not
+        // available; do not fall back to a different origin-based boundary.
+        return false;
+    }
+
     if (GameObjectDisplayInfoEntry const* displayInfo = sGameObjectDisplayInfoStore.LookupEntry(GetGOInfo()->displayId))
     {
         float scale = GetObjectScale();

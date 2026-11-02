@@ -1,0 +1,5 @@
+{
+  "sha1": "0E1ACCC8515BDCD588E193833A72571146CA0F97",
+  "precondition_sql": "SELECT (SELECT COUNT(*) FROM item_template WHERE entry=2841 AND displayid=7390)=1 AND (SELECT COUNT(*) FROM item_template WHERE entry BETWEEN 900500 AND 900699)=0 AND (SELECT COUNT(*) FROM item_template WHERE entry IN (2770,900201))=2 AND (SELECT COUNT(*) FROM item_template WHERE entry=2841 AND class=7 AND InventoryType=0 AND spellid_1=0 AND spellid_2=0 AND spellid_3=0 AND spellid_4=0 AND spellid_5=0 AND ScriptName='')=1",
+  "verify_sql": "SELECT COUNT(*)=1 FROM item_template WHERE entry=900500 AND name='Bronze Bar' AND displayid=7390 AND stackable=1 AND maxcount=0 AND RequiredSkill=0 AND RequiredSkillRank=0 AND requiredspell=0 AND RequiredLevel=0 AND BuyPrice=0 AND SellPrice=0 AND bonding=0"
+}

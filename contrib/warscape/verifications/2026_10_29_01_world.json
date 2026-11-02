@@ -1,0 +1,5 @@
+{
+  "sha1": "6EF0FDC7B9DF13C177C0B93603257F1AB0E33CB5",
+  "precondition_sql": "SELECT (SELECT COUNT(*) FROM gameobject_template WHERE entry=900103)=0 AND (SELECT COUNT(*) FROM gameobject_template_addon WHERE entry=900103)=0 AND (SELECT COUNT(*) FROM gameobject WHERE id=900103)=0 AND (SELECT COUNT(*) FROM gameobject_template WHERE entry=900101 AND type=3 AND displayId=310 AND ScriptName='go_warscape_copper_rock')=1",
+  "verify_sql": "SELECT (SELECT COUNT(*) FROM gameobject_template WHERE entry=900103 AND type=5 AND displayId=900102 AND name='Warscape Grayscale Copper Rock' AND size=1 AND AIName='' AND ScriptName='' AND VerifiedBuild=12340)=1 AND (SELECT COUNT(*) FROM gameobject_template_addon WHERE entry=900103 AND faction=0 AND flags=16 AND mingold=0 AND maxgold=0)=1 AND (SELECT COUNT(*) FROM gameobject WHERE id=900103)=0"
+}

@@ -28,12 +28,13 @@ for folder, files in [
     ('WarscapePanels', ['Panels.lua']),
     ('WarscapeSkills', ['Protocol.lua', 'Skin.lua', 'WarscapeSkills.lua', 'Bindings.lua']),
     ('WarscapeInventory', ['Inventory.lua', 'Bindings.lua']),
+    ('WarscapeMenuPanels', ['MainPanels.lua', 'NativePanels.lua', 'Bindings.lua']),
     ('WarscapeHUD', ['WarscapeHUD.lua']),
 ]:
     for file in files:
         lua.execute((ADDONS / folder / file).read_text(encoding='utf-8'))
 actions = lua.table()
-for folder in ['WarscapeInventory', 'WarscapeSkills']:
+for folder in ['WarscapeInventory', 'WarscapeSkills', 'WarscapeMenuPanels']:
     for binding in ET.parse(ADDONS / folder / 'Bindings.xml').getroot():
         actions[binding.attrib['name']] = lua.eval('function() ' + binding.text + ' end')
 lua.globals().bindingActions = actions
@@ -46,10 +47,21 @@ function press(key)
 end
 WarscapeHUDScales={hud=1,skills=0.9}
 dispatch("PLAYER_LOGIN")
-assert(WarscapePanelScales.skills==0.9 and WarscapePanelScales.inventory==1)
+assert(WarscapeWindowLayouts.left.scale==0.9 and WarscapeWindowLayouts.right.scale==0.9)
 assert(WarscapeSkillsFrame.width==WarscapeInventoryFrame.width and WarscapeSkillsFrame.height==WarscapeInventoryFrame.height)
 assert(WarscapeSkillsTotal~=WarscapeInventoryTotal, "shared artwork must not duplicate named panel regions")
 assert(not WarscapeInventoryFrame:IsShown() and not WarscapeSkillsFrame:IsShown())
+press("O")
+assert(FriendsFrame:IsShown() and WarscapeHUDMenuButton2.highlight)
+press("L")
+assert(QuestLogFrame:IsShown() and not FriendsFrame:IsShown() and WarscapeHUDMenuButton4.highlight)
+press("B")
+assert(WarscapeInventoryFrame:IsShown() and not QuestLogFrame:IsShown())
+press("C")
+assert(CharacterFrame:IsShown() and WarscapeHUDMenuButton7.highlight and WarscapeHUDMenuButton5.highlight)
+press("N")
+assert(WarscapeSkillsFrame:IsShown() and not CharacterFrame:IsShown() and WarscapeInventoryFrame:IsShown())
+press("N");press("B")
 local token
 for _,m in ipairs(messages) do if m[1]=="WCInventory" then token=m[2]:match("HELLO|1|(.+)") end end
 assert(token)
@@ -61,7 +73,7 @@ assert(WarscapeInventorySlot1.warscapeLocked)
 state(1,24)
 for i=1,28 do
     local b=_G["WarscapeInventorySlot"..i]
-    assert(b.logical==i and b.point[4]==78+((i-1)%4)*100 and b.point[5]==-102-math.floor((i-1)/4)*46)
+    assert(b.logical==i and b.point[4]==66+((i-1)%7)*82 and b.point[5]==-84-math.floor((i-1)/7)*82)
     assert(b:GetParent():GetID()==(i<=16 and 0 or 1))
     assert(b:GetID()==(i<=16 and i or i-16))
     assert(b.warscapeLocked==(i>24))
@@ -81,28 +93,43 @@ cursorItem=false
 press("B")
 assert(WarscapeInventoryFrame:IsShown() and WarscapeHUDMenuButton5.highlight and not WarscapeHUDMenuButton6.highlight)
 press("N")
-assert(WarscapeSkillsFrame:IsShown() and not WarscapeInventoryFrame:IsShown())
-assert(WarscapeHUDMenuButton6.highlight and not WarscapeHUDMenuButton5.highlight)
+assert(WarscapeSkillsFrame:IsShown() and WarscapeInventoryFrame:IsShown())
+assert(WarscapeHUDMenuButton6.highlight and WarscapeHUDMenuButton5.highlight)
+press("K")
+assert(WarscapeAttackStylesFrame:IsShown() and not WarscapeSkillsFrame:IsShown() and WarscapeInventoryFrame:IsShown())
+assert(WarscapeHUDMenuButton8.highlight and WarscapeHUDMenuButton5.highlight)
+press("I")
+assert(WarscapePrayerFrame:IsShown() and not WarscapeAttackStylesFrame:IsShown() and WarscapeInventoryFrame:IsShown())
+assert(WarscapeHUDMenuButton9.highlight)
+press("I")
+assert(not WarscapePrayerFrame:IsShown() and not WarscapeHUDMenuButton9.highlight and WarscapeInventoryFrame:IsShown())
+press("I")
+assert(WarscapePrayerFrame:IsShown() and WarscapeHUDMenuButton9.highlight)
+press("P")
+assert(WarscapeSpellbookFrame:IsShown() and not WarscapePrayerFrame:IsShown() and WarscapeInventoryFrame:IsShown())
+WarscapeHUDMenuButton8.scripts.OnClick()
+assert(WarscapeAttackStylesFrame:IsShown() and not WarscapeSpellbookFrame:IsShown())
+press("N");assert(WarscapeSkillsFrame:IsShown() and not WarscapeAttackStylesFrame:IsShown())
 press("N");assert(not WarscapeSkillsFrame:IsShown() and not WarscapeHUDMenuButton6.highlight)
-press("N");press("B")
-assert(WarscapeInventoryFrame:IsShown() and not WarscapeSkillsFrame:IsShown())
-press("B");assert(not WarscapeInventoryFrame:IsShown() and not WarscapeHUDMenuButton5.highlight)
+press("N")
+assert(WarscapeInventoryFrame:IsShown() and WarscapeSkillsFrame:IsShown())
+press("B");assert(not WarscapeInventoryFrame:IsShown() and WarscapeSkillsFrame:IsShown())
 WarscapeHUDMenuButton5.scripts.OnClick();WarscapeHUDMenuButton6.scripts.OnClick()
-assert(WarscapeSkillsFrame:IsShown() and not WarscapeInventoryFrame:IsShown())
-WarscapeHUDMenuButton5.scripts.OnClick();WarscapeInventoryCloseButton.scripts.OnClick()
+assert(WarscapeInventoryFrame:IsShown() and not WarscapeSkillsFrame:IsShown())
+WarscapeHUDMenuButton6.scripts.OnClick();WarscapeInventoryCloseButton.scripts.OnClick()
 assert(not WarscapeInventoryFrame:IsShown() and not WarscapeHUDMenuButton5.highlight)
 -- Direct Show/Hide and Escape-style dismissal still enforce exclusivity/state.
 WarscapeSkillsFrame:Show();WarscapeInventoryFrame:Show()
-assert(not WarscapeSkillsFrame:IsShown() and WarscapeHUDMenuButton5.highlight)
+assert(WarscapeSkillsFrame:IsShown() and WarscapeInventoryFrame:IsShown() and WarscapeHUDMenuButton5.highlight)
 WarscapeInventoryFrame:Hide();assert(not WarscapeHUDMenuButton5.highlight)
 assert(LootFrame:IsShown() and Confirmation:IsShown(), "temporary interfaces are outside the manager")
-local future=CreateFrame("Frame","FuturePrayer",UIParent);future:SetSize(500,514);future:Hide()
-WarscapePanels:Register("prayer",future)
-press("B");WarscapePanels:Open("prayer")
-assert(future:IsShown() and not WarscapeInventoryFrame:IsShown() and not WarscapeHUDMenuButton5.highlight)
-WarscapePanels:Close("prayer")
+local future=CreateFrame("Frame","FuturePanel",UIParent);future:SetSize(350,514);future:Hide()
+WarscapePanels:Register("testFuture",future,{group="right"})
+press("B");WarscapePanels:Open("testFuture")
+assert(future:IsShown() and WarscapeInventoryFrame:IsShown() and WarscapeHUDMenuButton5.highlight)
+WarscapePanels:Close("testFuture")
 press("N");ContainerFrame1:Show()
-assert(not ContainerFrame1:IsShown() and WarscapeInventoryFrame:IsShown() and not WarscapeSkillsFrame:IsShown())
+assert(not ContainerFrame1:IsShown() and WarscapeInventoryFrame:IsShown() and WarscapeSkillsFrame:IsShown())
 ContainerFrame2:Show();assert(ContainerFrame2:IsShown(), "bank bag windows remain native")
 -- Native callbacks, rather than replacement item behavior, handle interactions.
 local b=WarscapeInventorySlot1
@@ -135,33 +162,31 @@ end
 assert(not WarscapeInventorySlot28.warscapeLocked and not WarscapeInventorySlot28.padlock:IsShown())
 WarscapeInventorySlot28.scripts.OnClick(WarscapeInventorySlot28,"RightButton")
 assert(calls[#calls][1]=="use" and calls[#calls][2]==1 and calls[#calls][3]==12)
--- Each scale changes independently and switching panels never resets it.
+-- Each side owns its scale; the HUD stays independent.
 local scaler
 for _,w in ipairs(widgets) do if w.scripts.OnMouseWheel then scaler=w end end
 ctrl=true;WarscapeHUDFrame.over=true;scaler.scripts.OnUpdate(scaler,0)
-scaler.scripts.OnMouseWheel(scaler,-1);local h=WarscapeHUDFrame.scale
+scaler.scripts.OnMouseWheel(scaler,-1);local h=WarscapeHUDFrame.scale;local rightBefore=WarscapeSkillsFrame.scale
 WarscapeHUDFrame.over=false;WarscapeInventoryFrame.over=true;scaler.scripts.OnUpdate(scaler,0)
 scaler.scripts.OnMouseWheel(scaler,-1);local inv=WarscapeInventoryFrame.scale
-assert(inv<1 and WarscapeSkillsFrame.scale==0.9 and WarscapeHUDFrame.scale==h)
+assert(WarscapePanels:GetScale("inventory")<0.9 and WarscapeSkillsFrame.scale==rightBefore and WarscapeHUDFrame.scale==h)
 WarscapeHUDFrame.over=true
 scaler.scripts.OnUpdate(scaler,0);scaler.scripts.OnMouseWheel(scaler,-1)
 assert(WarscapeHUDFrame.scale==h and WarscapeInventoryFrame.scale<inv, "front panel owns scaling when it overlaps the HUD")
 inv=WarscapeInventoryFrame.scale
 WarscapeHUDFrame.over=false
-press("N");WarscapeInventoryFrame.over=false;WarscapeSkillsFrame.over=true
+WarscapeInventoryFrame.over=false;WarscapeSkillsFrame.over=true
 scaler.scripts.OnUpdate(scaler,0);scaler.scripts.OnMouseWheel(scaler,-1)
-local sk=WarscapeSkillsFrame.scale
-assert(sk<0.9 and WarscapeInventoryFrame.scale==inv and WarscapeHUDFrame.scale==h)
+local shared=WarscapeSkillsFrame.scale
+assert(shared<rightBefore and WarscapeInventoryFrame.scale==inv and WarscapeHUDFrame.scale==h)
 press("B");assert(WarscapeInventoryFrame.scale==inv)
-assert(WarscapePanelScales.inventory==inv and WarscapePanelScales.skills==sk and WarscapeHUDScales.hud==h)
-for _,id in ipairs({"inventory","skills"}) do
-    for i=1,50 do WarscapePanels:AdjustScale(id,-1) end
-    assert(WarscapePanels:GetScale(id)==0.5)
-    for i=1,80 do WarscapePanels:AdjustScale(id,1) end
-    assert(WarscapePanels:GetScale(id)==1.5)
-end
+assert(WarscapeWindowLayouts.left.scale==WarscapePanels:GetScale("inventory") and WarscapeHUDScales.hud==h)
+for i=1,50 do WarscapePanels:AdjustScale("inventory",-1) end
+assert(WarscapePanels:GetScale("inventory")==0.5 and WarscapeSkillsFrame.scale==shared)
+for i=1,80 do WarscapePanels:AdjustScale("skills",1) end
+assert(WarscapePanels:GetScale("skills")==1.5 and WarscapePanels:GetScale("inventory")==0.5)
 dispatch("PLAYER_LOGIN")
-assert(WarscapeInventoryFrame.scale==1.5 and WarscapeSkillsFrame.scale==1.5)
+assert(WarscapePanels:GetScale("inventory")==0.5 and WarscapePanels:GetScale("skills")==1.5)
 assert(LootFrame:IsShown() and Confirmation:IsShown())
 ''')
-print('PASS: B/N/HUD exclusivity and highlight, future registration, native item/split/drag/tooltip callbacks, 28 slots/24 active, locked interactions, server-state validation, transient windows and independent saved scales')
+print('PASS: left/right panel groups and highlights, future registration, native item/split/drag/tooltip callbacks, 28 slots/24 active, locked interactions, server-state validation, transient windows and independent side/HUD saved scales')

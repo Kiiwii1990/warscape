@@ -9,7 +9,7 @@ namespace Warscape
 {
     inline constexpr char SkillsAddonPrefix[] = "WCSkills";
     inline constexpr std::array<char const*, SkillCount> SkillIds = {
-        "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer"
+        "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing"
     };
 
     inline bool IsSkillsAddonMessage(std::string_view message)
@@ -32,11 +32,13 @@ namespace Warscape
         return std::string(token);
     }
 
-    inline std::string SkillsRow(std::string const& header, char const* id, SkillProgress const& skill)
+    inline std::string SkillsRow(std::string const& header, char const* id, SkillProgress const& skill, std::uint8_t tenths = 0)
     {
+        if (skill.XP >= MaxSkillXP)
+            tenths = 0;
         // '-' reserves effective level for future boosts; none exist today.
         return "S|" + header + "|" + id + "|" + std::to_string(skill.Level) + "|-|"
-            + std::to_string(skill.XP) + "|" + std::to_string(XPForLevel(skill.Level)) + "|"
+            + std::to_string(skill.XP) + (tenths ? "." + std::to_string(tenths) : "") + "|" + std::to_string(XPForLevel(skill.Level)) + "|"
             + (skill.Level >= MaxSkillLevel ? "-" : std::to_string(XPForLevel(skill.Level + 1)));
     }
 }

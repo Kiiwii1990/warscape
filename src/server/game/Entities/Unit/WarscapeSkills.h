@@ -27,7 +27,7 @@
 
 namespace Warscape
 {
-    constexpr std::size_t SkillCount = 7;
+    constexpr std::size_t SkillCount = 9;
     constexpr std::uint32_t MaxSkillXP = 200000000;
     constexpr std::uint8_t MaxSkillLevel = 99;
     constexpr std::uint8_t MinHitpointsLevel = 10;
@@ -45,9 +45,35 @@ namespace Warscape
         std::uint32_t XP = 0;
     };
 
+    inline std::uint32_t AccumulateTenthXP(std::uint8_t& remainder, std::uint32_t tenths)
+    {
+        std::uint64_t const total = std::uint64_t(remainder) + tenths;
+        remainder = static_cast<std::uint8_t>(total % 10);
+        return static_cast<std::uint32_t>(total / 10);
+    }
+
+    // Add XP expressed in half-points without changing the persisted integer XP
+    // model. The remainder (0 or 1 half-point) must be saved per character.
+    inline std::uint32_t AccumulateHalfXP(std::uint8_t& remainder, std::uint32_t halfPoints)
+    {
+        std::uint64_t const total = std::uint64_t(remainder) + halfPoints;
+        remainder = static_cast<std::uint8_t>(total % 2);
+        return static_cast<std::uint32_t>(total / 2);
+    }
+
+    // OSRS stat_random interpolation. The caller supplies the rock's verified
+    // level-1 and level-99 parameters; no ore-specific values are assumed here.
+    inline std::uint16_t MiningSuccessOutOf256(std::uint8_t level, std::uint16_t low, std::uint16_t high)
+    {
+        level = std::clamp<std::uint8_t>(level, 1, MaxSkillLevel);
+        std::uint32_t const weighted = std::uint32_t(low) * (99 - level) + std::uint32_t(high) * (level - 1);
+        std::uint32_t const interpolated = (weighted + 49) / 98; // floor(weighted / 98 + 0.5)
+        return static_cast<std::uint16_t>(std::min<std::uint32_t>(256, interpolated + 1));
+    }
+
     inline int SkillIndexFromName(char const* name)
     {
-        static char const* names[SkillCount] = { "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer" };
+        static char const* names[SkillCount] = { "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing" };
         if (!name)
             return -1;
         for (std::size_t i = 0; i < SkillCount; ++i)

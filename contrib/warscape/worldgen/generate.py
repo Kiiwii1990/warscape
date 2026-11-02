@@ -11,6 +11,7 @@ from pathlib import Path
 import struct
 
 import mpyq
+import terrain_detail
 
 U32 = 0xFFFFFFFF
 TILE = 1600 / 3
@@ -20,7 +21,15 @@ def chunk(tag, payload):
     return tag.encode("ascii")[::-1] + struct.pack("<I", len(payload)) + payload
 
 
-def adt(tx, ty, height, texture):
+def adt(tx, ty, height, texture, *, flat=False, ground_detail=None, protection=None):
+    settings = ground_detail if isinstance(ground_detail, terrain_detail.Settings) else terrain_detail.Settings.from_config(
+        {'ground_detail': {} if ground_detail is None else ground_detail, 'flat_terrain': flat})
+    if flat:
+        settings = terrain_detail.Settings(**{**settings.__dict__, 'flat': True})
+    if protection is None and isinstance(ground_detail, dict):
+        protection = terrain_detail.config_protection({'ground_detail': ground_detail})
+    sampler = terrain_detail.prepare(lambda x, y: height, settings=settings, protection=protection)
+    detailed = settings.enabled and not settings.flat
     data = bytearray(chunk("MVER", struct.pack("<I", 18)) + chunk("MHDR", bytes(64)))
     offsets = {}
     for tag, body in [("MCIN", bytes(4096)), ("MTEX", texture.encode() + b"\0"),
@@ -38,10 +47,35 @@ def adt(tx, ty, height, texture):
                              (32 - tx) * TILE - cx * TILE / 16,
                              (32 - ty) * TILE - cy * TILE / 16, height)
             body = bytearray(header)
+            values, normals = bytes(145 * 4), bytes([0, 0, 127]) * 145 + bytes(13)
+            if detailed:
+                step = TILE / 128
+                coords = [((32-ty)*TILE-cy*TILE/16-row*step/2,
+                           (32-tx)*TILE-cx*TILE/16-(col+(.5 if row%2 else 0))*step)
+                          for row in range(17) for col in range(8 if row%2 else 9)]
+                if terrain_detail.np is not None:
+                    np = terrain_detail.np
+                    xx, yy = np.asarray(coords).T
+                    zz = sampler(xx, yy)
+                    dx = (sampler(xx+.2, yy)-sampler(xx-.2, yy))/.4
+                    dy = (sampler(xx, yy+.2)-sampler(xx, yy-.2))/.4
+                    length = np.sqrt(dx*dx+dy*dy+1)
+                    values = (zz-height).astype('<f4').tobytes()
+                    normals = np.rint(np.column_stack([-dx/length*127,-dy/length*127,127/length])).astype('i1').tobytes()+bytes(13)
+                else:
+                    import math
+                    zvalues, normal = [], bytearray()
+                    for x, y in coords:
+                        zvalues.append(sampler(x,y)-height)
+                        dx=(sampler(x+.2,y)-sampler(x-.2,y))/.4
+                        dy=(sampler(x,y+.2)-sampler(x,y-.2))/.4
+                        length=math.sqrt(dx*dx+dy*dy+1)
+                        normal+=struct.pack('<3b',round(-dx/length*127),round(-dy/length*127),round(127/length))
+                    values=struct.pack('<145f',*zvalues);normals=bytes(normal)+bytes(13)
             # MCNK offsets include its eight-byte chunk header.
             for tag, field, payload in [
-                ("MCVT", 20, bytes(145 * 4)),
-                ("MCNR", 24, bytes([0, 0, 127]) * 145 + bytes(13)),
+                ("MCVT", 20, values),
+                ("MCNR", 24, normals),
                 ("MCLY", 28, struct.pack("<4I", 0, 0, 0, 0)),
                 ("MCRF", 32, b""), ("MCAL", 36, b""), ("MCSE", 88, b"")
             ]:
@@ -214,7 +248,9 @@ def main():
     prefix = "World\\Maps\\" + cfg["directory"] + "\\" + cfg["directory"]
     files = {prefix + ".wdt": wdt(cfg["tiles"])}
     for x, y in cfg["tiles"]:
-        files[f"{prefix}_{x}_{y}.adt"] = adt(x, y, cfg["height"], cfg["texture"])
+        files[f"{prefix}_{x}_{y}.adt"] = adt(x, y, cfg["height"], cfg["texture"],
+            ground_detail=terrain_detail.Settings.from_config(cfg),
+            protection=terrain_detail.config_protection(cfg))
     output.mkdir(parents=True)
     archive(output / "runtime/patch-Z.MPQ", files)
     archive(output / "runtime/patch-enUS-Z.MPQ", {"DBFilesClient\\Map.dbc": full_dbc})

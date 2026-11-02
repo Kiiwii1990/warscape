@@ -1,0 +1,5 @@
+{
+  "sha1": "85B4B7E737F7A29FB91EAB2B871EBD3A1DBB609C",
+  "precondition_sql": "SELECT COUNT(*)=1 FROM item_template WHERE entry=2770 AND stackable=20 AND maxcount=0",
+  "verify_sql": "SELECT COUNT(*)=1 FROM item_template WHERE entry=2770 AND stackable=1 AND maxcount=0"
+}

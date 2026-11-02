@@ -27,11 +27,12 @@ local token=string.match(messages[#messages][2], "HELLO|1|(.+)")
 local function recv(m)
     events.scripts.OnEvent(events,"CHAT_MSG_ADDON","WCSkills",m,"WHISPER","Tester")
 end
-recv("B|1|"..token.."|1|7")
+recv("B|1|"..token.."|1|8")
 local skills={
     {"attack",50,105000,101333,111945}, {"strength",99,13034431,13034431,"-"},
     {"defence",50,105000,101333,111945}, {"hitpoints",12,1700,1584,1833},
-    {"ranged",1,0,0,83}, {"magic",1,0,0,83}, {"prayer",1,0,0,83}
+    {"ranged",1,0,0,83}, {"magic",1,0,0,83}, {"prayer",1,0,0,83},
+    {"mining",5,400,388,445}
 }
 for _, s in ipairs(skills) do
     recv("S|1|"..token.."|1|"..s[1].."|"..s[2].."|-|"..s[3].."|"..s[4].."|"..s[5])

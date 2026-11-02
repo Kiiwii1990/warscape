@@ -49,7 +49,7 @@ routine-definition access is insufficient. Mixed storage engines require a
 separately reviewed locked backup with appropriate privileges. Role-derived or
 table-specific grants are conservatively unverified by this grant parser.
 
-## Review migrations before approval
+## Review and apply migrations under standing authorization
 
 TrinityCore uses `updates_include` to locate SQL and `updates` to record filename,
 SHA-1, state and application time. The tool reads those tables without modifying
@@ -71,9 +71,26 @@ indexes and table engines, plus targeted assertions for intended data changes.
 Preconditions must detect partial/manual application. Both queries are executed
 in read-only transactions. The current specification covers Stage 1F.
 
-**Stop and obtain explicit user approval for the exact migration and its expected
-changes. Do not apply any SQL before approval.** These commands alone do not
-authorize a migration. After approval, stop servers and all other updaters, then:
+The user's standing authorization in `AGENTS.md` covers routine additive
+migrations, builds, and client/server installation required by a requested or
+approved Warscape feature. It includes new custom items in reserved,
+collision-checked ID ranges. Do not request separate approval for every migration
+or deployment step within that scope. Before applying, inspect the exact SQL and
+hash, review its precondition and postcondition specification, and confirm its
+changes are additive and within the request. Stop and ask first for destructive
+changes, possible player-progress loss, overwriting Blizzard entries, breaking
+schema changes, or material work outside scope. Stop and report unexpected ID
+collisions or any failed validation. If a higher-priority instruction blocks an
+authorized action, identify that specific restriction rather than relying on the
+superseded per-migration approval rule.
+
+The user explicitly included migration `2026_11_01_00_world.sql` (SHA-1
+`37214478DF0AFA8A5FDA90344B889F30DA719FFF`) and the associated Bronze, Iron,
+and Steel Pickaxe deployment in this authorization. Both were applied and
+verified on 1 November 2026; this is a completion record, not pending work.
+
+Once the migration is confirmed to be within the user's standing authorization,
+stop servers and all other updaters, then apply it through `db.py`:
 
 ```powershell
 py contrib/warscape/db.py apply --database world --migration 2026_10_25_01_world.sql --approved --servers-stopped
@@ -91,9 +108,10 @@ The lock coordinates this workflow on this machine and backup directory only;
 it cannot stop a different host, a manual SQL client, or TrinityCore's updater.
 Keep those stopped. The inspected local configuration enables automatic updates
 (`Updates.EnableDatabases = 7`, `Updates.AutoSetup = 1`), so **do not start servers
-while pending migrations await approval**. No configuration was changed during
-workflow setup. A permanent change to automatic updater policy should be reviewed
-separately before restarting servers.
+while an authorized migration is pending application or a failed migration is
+under investigation**. No configuration was changed during workflow setup. A
+permanent change to automatic updater policy should be reviewed separately before
+restarting servers.
 
 ## Recovery and verification limits
 

@@ -410,6 +410,9 @@ void WorldSession::HandleMovementOpcode(OpcodeClient opcode, MovementInfo& movem
         return;
 
     Player* plrMover = mover->ToPlayer();
+    if (plrMover && (movementInfo.HasMovementFlag(MOVEMENTFLAG_MASK_MOVING) ||
+        movementInfo.pos.GetExactDist(plrMover) > 0.0f))
+        plrMover->CancelWarscapeSmelting();
 
     // ignore, waiting processing in WorldSession::HandleMoveWorldportAckOpcode and WorldSession::HandleMoveTeleportAck
     if (plrMover && plrMover->IsBeingTeleported())

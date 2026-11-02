@@ -1,0 +1,5 @@
+{
+  "sha1": "8B5DF2D2D7562D662A6744F8F269CB1644BD9050",
+  "precondition_sql": "SELECT COUNT(*)=0 FROM gameobject_template WHERE entry=900101",
+  "verify_sql": "SELECT COUNT(*)=1 FROM gameobject_template WHERE entry=900101 AND type=3 AND displayId=310 AND name='Warscape Copper Rock' AND size=1 AND AIName='' AND ScriptName='go_warscape_copper_rock' AND (VerifiedBuild=12340 OR VerifiedBuild IS NULL)"
+}

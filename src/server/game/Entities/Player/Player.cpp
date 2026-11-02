@@ -16,6 +16,8 @@
  */
 
 #include "Player.h"
+#include "Config.h"
+#include "WarscapeSmelting.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeSkillsAddon.h"
 #include "WarscapeInventory.h"
@@ -1280,6 +1282,8 @@ void Player::Heartbeat()
 
 void Player::setDeathState(DeathState s)
 {
+    if (s != ALIVE)
+        CancelWarscapeSmelting();
     uint32 ressSpellId = 0;
 
     bool cur = IsAlive();
@@ -5589,9 +5593,9 @@ namespace
 
 Warscape::AttackTestXP Player::GetWarscapeAttackTestXP() const
 {
-    static_assert(RS_SKILL_COUNT == 7);
+    static_assert(RS_SKILL_COUNT >= 7);
     Warscape::AttackTestXP xp;
-    for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
+    for (uint8 i = 0; i < xp.size(); ++i)
         xp[i] = GetRSSkillXP(static_cast<RS_Skill>(i));
     return xp;
 }
@@ -17164,12 +17168,14 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
             for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
                 savedXP[i] = rsFields[i].GetUInt32();
             Warscape::RestoreSkillXP(rsSkills, savedXP);
+            warscapeMiningHalfXP = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 1);
             // OSRS characters cannot have less than the starting 10 Hitpoints.
             if (rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level < Warscape::MinHitpointsLevel)
             {
                 rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level = Warscape::MinHitpointsLevel;
             }
-            warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 3);
+            warscapeSmithingTenthXP = std::min<uint8>(rsFields[RS_SKILL_COUNT + 1].GetUInt8(), 9);
+            warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT + 2].GetUInt8(), 3);
         }
     }
 
@@ -19251,7 +19257,9 @@ void Player::SaveToDB(bool create /*=false*/)
     auto const savedXP = Warscape::SerializeSkillXP(rsSkills);
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
         rsStmt->setUInt32(i + 1, savedXP[i]);
-    rsStmt->setUInt8(8, warscapeAttackStyle);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 1, warscapeMiningHalfXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 2, warscapeSmithingTenthXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 3, warscapeAttackStyle);
     trans->Append(rsStmt);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -26756,7 +26764,7 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
     if (!leveled)
         return;
 
-    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer" };
+    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
     ChatHandler chat(GetSession());
     chat.PSendSysMessage("Your %s level is now %u!", skillNames[static_cast<uint8>(skill)], data.Level);
 
@@ -26765,6 +26773,23 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
         UpdateMaxHealth();
         ModifyHealth((data.Level - oldLevel) * Warscape::HealthDamageScale);
     }
+}
+
+void Player::AddRSSkillHalfXP(RS_Skill skill, uint32 halfPoints)
+{
+    // Only gathering skills currently persist fractional carry. Reject unsupported callers.
+    if (skill != RS_Skill::Mining && skill != RS_Skill::Smithing)
+        return;
+    if (skill == RS_Skill::Smithing)
+    {
+        // Split multiplication to keep even maximum uint32 half-point awards safe.
+        AddRSSkillXP(skill, halfPoints / 2);
+        AddRSSkillTenthXP(skill, (halfPoints % 2) * 5);
+        return;
+    }
+    uint32 const wholeXP = Warscape::AccumulateHalfXP(warscapeMiningHalfXP, halfPoints);
+    if (wholeXP)
+        AddRSSkillXP(skill, wholeXP);
 }
 
 Warscape::SkillUpdateResult Player::SetRSSkillLevel(RS_Skill skill, uint32 level)
@@ -26839,6 +26864,8 @@ void Player::AwardWarscapeMeleeXP(uint32 damage)
 // Reserved traffic never reaches player chat or the addon GM command dispatcher.
 bool Player::HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper)
 {
+    if (message.substr(0, 8) == "WCSmelt\t")
+        return HandleWarscapeSmelting(message.substr(8), target, whisper);
     if (!Warscape::IsSkillsAddonMessage(message))
         return false;
     if (!whisper || target != GetName() || !IsInWorld() || _warscapeSkillsRequestCooldown)
@@ -26854,6 +26881,8 @@ bool Player::HandleWarscapeSkillsAddon(std::string_view message, std::string con
 
 void Player::UpdateWarscapeSkillsAddon(uint32 diff)
 {
+    RefreshWarscapeSmelting(diff);
+    UpdateWarscapeSmelting(diff);
     _warscapeSkillsRequestCooldown -= std::min(diff, _warscapeSkillsRequestCooldown);
     _warscapeSkillsSendCooldown -= std::min(diff, _warscapeSkillsSendCooldown);
     if (!_warscapeSkillsToken.empty() && _warscapeSkillsDirty && !_warscapeSkillsSendCooldown)
@@ -26872,8 +26901,302 @@ void Player::SendWarscapeSkillsSnapshot()
     send("B|" + header + "|" + std::to_string(RS_SKILL_COUNT));
     static_assert(RS_SKILL_COUNT == Warscape::SkillIds.size(), "Persisted skills require wire IDs");
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
-        send(Warscape::SkillsRow(header, Warscape::SkillIds[i], rsSkills[i]));
+        send(Warscape::SkillsRow(header, Warscape::SkillIds[i], rsSkills[i],
+            i == static_cast<uint8>(RS_Skill::Smithing) ? warscapeSmithingTenthXP : 0));
     send("E|" + header);
     _warscapeSkillsDirty = false;
     _warscapeSkillsSendCooldown = 250;
+}
+
+// The same focus predicate and visibility search envelope used by Spell::SearchSpellFocus.
+bool Player::HasWarscapeCraftingFocus(uint32 focusId) const
+{
+    GameObject* focus = nullptr;
+    Trinity::GameObjectFocusCheck check(this, focusId);
+    Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck> searcher(this, focus, check);
+    Cell::VisitGridObjects(this, searcher, GetVisibilityRange());
+    return focus != nullptr;
+}
+
+void Player::AddRSSkillTenthXP(RS_Skill skill, uint32 tenths)
+{
+    if (skill != RS_Skill::Smithing)
+        return;
+    uint32 const wholeXP = Warscape::AccumulateTenthXP(warscapeSmithingTenthXP, tenths);
+    AddRSSkillXP(skill, wholeXP);
+    _warscapeSkillsDirty = true;
+}
+
+void Player::CancelWarscapeSmelting()
+{
+    warscapeBatch = 0;
+    if (!IsWarscapeSmelting())
+        return;
+    SetEmoteState(EMOTE_STATE_NONE);
+    warscapeSmeltRemaining = 0;
+    GetSession()->SendNotification("Smelting cancelled. No materials consumed.");
+}
+
+bool Player::PrepareWarscapeBronze(Item*& copper, Item*& tin, ItemPosCountVec& dest) const
+{
+    copper = tin = nullptr;
+    ItemTemplate const* output = sObjectMgr->GetItemTemplate(Warscape::BronzeBar);
+    if (!output || output->GetMaxStackSize() != 1)
+        return false;
+    // Only real carried inventory slots; never equipment, bank, keyring or trade.
+    auto inspect = [&](uint8 bag, uint8 slot)
+    {
+        Item* item = GetItemByPos(bag, slot);
+        if (!item || item->IsInTrade() || item->GetGUID() == GetLootGUID())
+            return;
+        Item*& ingredient = item->GetEntry() == Warscape::BronzeCopperOre ? copper : tin;
+        if (item->GetEntry() != Warscape::BronzeCopperOre && item->GetEntry() != Warscape::BronzeTinOre)
+            return;
+        // Prefer singleton stacks, so a full inventory can use the released slot.
+        if (!ingredient || item->GetCount() == 1)
+            ingredient = item;
+    };
+    for (uint8 slot = INVENTORY_SLOT_ITEM_START; slot < INVENTORY_SLOT_ITEM_END; ++slot)
+        inspect(INVENTORY_SLOT_BAG_0, slot);
+    for (uint8 bag = INVENTORY_SLOT_BAG_START; bag < INVENTORY_SLOT_BAG_END; ++bag)
+        if (Bag* container = GetBagByPos(bag))
+            for (uint32 slot = 0; slot < container->GetBagSize(); ++slot)
+                inspect(bag, uint8(slot));
+    if (!copper || !tin)
+        return false;
+
+    dest.clear();
+    if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, Warscape::BronzeBar, 1) == EQUIP_ERR_OK)
+        return dest.size() == 1 && dest.front().count == 1;
+    // Native swap validation checks the output's bag family and real slot capacity.
+    // It is only a capacity plan: no swap is performed and no items move here.
+    for (Item* item : {copper, tin})
+    {
+        dest.clear();
+        if (item->GetCount() == 1 && CanStoreItem(item->GetBagSlot(), item->GetSlot(), dest,
+            Warscape::BronzeBar, 1, nullptr, true) == EQUIP_ERR_OK)
+            return dest.size() == 1 && dest.front().count == 1;
+    }
+    return false;
+}
+
+void Player::StartWarscapeBronzeSmelting()
+{
+    if (!HasWarscapeForge())
+        return;
+    if (IsWarscapeSmelting() || warscapeSmeltRequestCooldown)
+    {
+        GetSession()->SendNotification("A crafting request is already active.");
+        return;
+    }
+    warscapeSmeltRequestCooldown = 500;
+    if (!IsInWorld() || !IsAlive() || IsInCombat() || isMoving() || IsBeingTeleported() ||
+        GetSession()->isLogingOut() || GetSession()->PlayerDisconnected() || GetTradeData() ||
+        IsNonMeleeSpellCast(true) || GetEmoteState() == EMOTE_STATE_WORK_MINING)
+    {
+        GetSession()->SendNotification("Stand still and finish other actions before smelting.");
+        return;
+    }
+    if (GetRSSkillLevel(RS_Skill::Smithing) < 1 || !HasWarscapeCraftingFocus(Warscape::FurnaceFocus))
+    {
+        GetSession()->SendNotification("Bronze requires Smithing 1 and a nearby furnace (not an anvil).");
+        return;
+    }
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    if (!PrepareWarscapeBronze(copper, tin, dest))
+    {
+        GetSession()->SendNotification("You need 1 Copper Ore, 1 Tin Ore and room for a Bronze Bar.");
+        return;
+    }
+    if (!warscapeBatch) warscapeBatch = 1;
+    SetEmoteState(EMOTE_STATE_USE_STANDING);
+    warscapeSmeltMap = GetMapId();
+    warscapeSmeltStart.Relocate(this);
+    warscapeSmeltRemaining = std::clamp(sConfigMgr->GetIntDefault("Warscape.Smelting.DurationMs", Warscape::SmeltingRecipes[0].DurationMs, true), 1, 60000);
+    GetSession()->SendNotification("Smelting one Bronze Bar (%.1f seconds).", warscapeSmeltRemaining / 1000.0f);
+}
+
+void Player::UpdateWarscapeSmelting(uint32 diff)
+{
+    warscapeSmeltRequestCooldown -= std::min(diff, warscapeSmeltRequestCooldown);
+    if (!IsWarscapeSmelting())
+        return;
+    if (!IsInWorld() || !IsAlive() || IsInCombat() || isMoving() || IsBeingTeleported() ||
+        GetSession()->isLogingOut() || GetSession()->PlayerDisconnected() || GetTradeData() ||
+        IsNonMeleeSpellCast(true) || GetEmoteState() == EMOTE_STATE_WORK_MINING ||
+        GetMapId() != warscapeSmeltMap || GetExactDist(&warscapeSmeltStart) > 0.0f ||
+        !HasWarscapeForge())
+    {
+        CancelWarscapeSmelting();
+        return;
+    }
+    if (diff < warscapeSmeltRemaining)
+    {
+        warscapeSmeltRemaining -= diff;
+        return;
+    }
+    SetEmoteState(EMOTE_STATE_NONE);
+    // Clear before any reward or callback: the action can complete only once.
+    warscapeSmeltRemaining = 0;
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    if (GetRSSkillLevel(RS_Skill::Smithing) < 1 || !PrepareWarscapeBronze(copper, tin, dest))
+    {
+        warscapeBatch = 0;
+        GetSession()->SendNotification("Smelting cancelled: materials or output space changed.");
+        return;
+    }
+    // Allocate BEFORE consuming anything. Single map-thread execution does not
+    // yield between revalidation, consumption and storage. Nonstackable output
+    // has exactly one prevalidated destination; StoreItem's non-cloning empty-slot
+    // path performs no item allocation and cannot fail after this point.
+    Item* bar = Item::CreateItem(Warscape::BronzeBar, 1, this);
+    if (!bar)
+    {
+        warscapeBatch = 0;
+        GetSession()->SendNotification("Unable to create Bronze Bar. No materials consumed.");
+        return;
+    }
+    uint32 count = 1;
+    DestroyItemCount(copper, count, true);
+    count = 1;
+    DestroyItemCount(tin, count, true);
+    ASSERT(!GetItemByPos(dest.front().pos));
+    Item* stored = StoreItem(dest, bar, true);
+    ASSERT(stored == bar);
+    ItemAddedQuestCheck(Warscape::BronzeBar, 1);
+    SendNewItem(stored, 1, true, false);
+    AddRSSkillTenthXP(RS_Skill::Smithing, Warscape::SmeltingRecipes[0].XPTenths);
+    // Inventory and skill XP enter the same existing character save transaction.
+    SaveToDB();
+    GetSession()->SendNotification("Created Bronze Bar. +6.2 Smithing XP.");
+    if (warscapeBatch && --warscapeBatch)
+    {
+        warscapeSmeltRequestCooldown = 0;
+        StartWarscapeBronzeSmelting();
+        if (!IsWarscapeSmelting()) warscapeBatch = 0;
+    }
+    warscapeForgeRefresh = 0;
+}
+
+// Forge interaction session. No client supplies item IDs, XP, timing or costs.
+bool Player::HasWarscapeForge() const
+{
+    GameObject* forge = ObjectAccessor::GetGameObject(*this, warscapeForge);
+    if (!forge || forge->GetEntry() != 173063 || !InSamePhase(forge)) return false;
+    return forge->GetGoType() == GAMEOBJECT_TYPE_SPELL_FOCUS &&
+        forge->GetGOInfo()->spellFocus.focusId == Warscape::FurnaceFocus && forge->isSpawned() &&
+        forge->IsAtInteractDistance(*this, Warscape::DefaultFurnaceInteractionDistance);
+}
+
+void Player::SendWarscapeSmelting(std::string const& message)
+{
+    WorldPackets::Chat::Chat packet;
+    packet.Initialize(CHAT_MSG_WHISPER, LANG_ADDON, this, this, message, 0, "", LOCALE_enUS, "WCSmelt");
+    SendDirectMessage(packet.Write());
+}
+
+void Player::OpenWarscapeSmelting(GameObject* forge)
+{
+    if (!forge || !IsAlive() || IsInCombat() || GetSession()->isLogingOut()) return;
+    if (forge->GetEntry() != 173063 || !InSamePhase(forge) ||
+        forge->GetGoType() != GAMEOBJECT_TYPE_SPELL_FOCUS ||
+        forge->GetGOInfo()->spellFocus.focusId != Warscape::FurnaceFocus || !forge->isSpawned() ||
+        !forge->IsAtInteractDistance(*this, Warscape::DefaultFurnaceInteractionDistance)) return;
+    if (IsWarscapeSmelting())
+    {
+        warscapeForge = forge->GetGUID();
+        if (!++warscapeForgeSerial) ++warscapeForgeSerial;
+        warscapeForgeSequence = 0;
+        warscapeSmeltingMenuOpen = true;
+        SendWarscapeSmelting("OPEN|" + std::to_string(warscapeForgeSerial));
+        warscapeForgeRefresh = 0;
+        RefreshWarscapeSmelting(0);
+        return;
+    }
+    CancelWarscapeSmelting();
+    warscapeForge = forge->GetGUID();
+    if (!++warscapeForgeSerial) ++warscapeForgeSerial;
+    warscapeForgeSequence = 0;
+    warscapeSmeltingMenuOpen = true;
+    SendWarscapeSmelting("OPEN|" + std::to_string(warscapeForgeSerial));
+    warscapeForgeRefresh = 0;
+    RefreshWarscapeSmelting(0);
+}
+
+void Player::CloseWarscapeSmelting()
+{
+    CancelWarscapeSmelting();
+    if (!warscapeForge.IsEmpty()) SendWarscapeSmelting("CLOSE|" + std::to_string(warscapeForgeSerial));
+    warscapeSmeltingMenuOpen = false;
+    if (!IsWarscapeSmelting()) warscapeForge.Clear();
+}
+
+void Player::RefreshWarscapeSmelting(uint32 diff)
+{
+    if (warscapeForge.IsEmpty()) return;
+    if (!HasWarscapeForge() || !IsAlive() || GetSession()->isLogingOut() || GetSession()->PlayerDisconnected())
+    { CloseWarscapeSmelting(); return; }
+    if (!warscapeSmeltingMenuOpen && !IsWarscapeSmelting())
+    {
+        warscapeForge.Clear();
+        return;
+    }
+    warscapeForgeRefresh -= std::min(diff, warscapeForgeRefresh);
+    if (warscapeForgeRefresh) return;
+    warscapeForgeRefresh = 250;
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    bool capacity = PrepareWarscapeBronze(copper, tin, dest);
+    if (!warscapeSmeltingMenuOpen) return;
+    SendWarscapeSmelting("STATE|" + std::to_string(warscapeForgeSerial) + "|" +
+        std::to_string(GetRSSkillLevel(RS_Skill::Smithing)) + "|" +
+        std::to_string(GetItemCount(Warscape::BronzeCopperOre)) + "|" +
+        std::to_string(GetItemCount(Warscape::BronzeTinOre)) + "|" +
+        (capacity ? "1" : "0") + "|" + (IsWarscapeSmelting() ? "1" : "0"));
+}
+
+bool Player::HandleWarscapeSmelting(std::string_view message, std::string const& target, bool whisper)
+{
+    if (!whisper || target != GetName() || !IsInWorld() || message.size() > 80 || message.find_first_of(" \t\r\n") != std::string_view::npos || warscapeForge.IsEmpty()) return true;
+    // Exact bounded grammar; strictly increasing sequences prevent replay.
+    std::string input(message); std::replace(input.begin(), input.end(), '|', ' ');
+    std::istringstream stream(input);
+    std::string operation, tokenText, seqText, recipe, quantity, extra;
+    stream >> operation >> tokenText >> seqText;
+    if (std::count(message.begin(), message.end(), '|') != (operation == "START" ? 4 : 2)) return true;
+    auto number = [](std::string const& text, uint32& value)
+    {
+        auto r = std::from_chars(text.data(), text.data()+text.size(), value);
+        return !text.empty() && r.ec == std::errc() && r.ptr == text.data()+text.size();
+    };
+    uint32 token=0, seq=0;
+    if (!number(tokenText, token) || !number(seqText, seq) || token != warscapeForgeSerial ||
+        seq != warscapeForgeSequence + 1 || !warscapeSmeltingMenuOpen) return true;
+    if (operation == "CLOSE")
+    {
+        if (stream >> extra) return true;
+        ++warscapeForgeSequence; CloseWarscapeSmelting(); return true;
+    }
+    if (operation != "START" || !(stream >> recipe >> quantity) || (stream >> extra)) return true;
+    uint32 count=0;
+    if (recipe != Warscape::SmeltingRecipes[0].Id || !number(quantity,count) ||
+        (count!=1 && count!=5 && count!=10 && count!=0)) return true;
+    ++warscapeForgeSequence;
+    if (!HasWarscapeForge())
+    {
+        SendWarscapeSmelting("REJECT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+        return true;
+    }
+    if (IsWarscapeSmelting()) return true;
+    warscapeBatch = count ? count : UINT32_MAX;
+    StartWarscapeBronzeSmelting();
+    if (!IsWarscapeSmelting())
+    {
+        warscapeBatch=0;
+        SendWarscapeSmelting("REJECT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+        return true;
+    }
+    warscapeSmeltingMenuOpen = false;
+    SendWarscapeSmelting("ACCEPT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+    warscapeForgeRefresh=0;
+    return true;
 }

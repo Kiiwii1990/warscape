@@ -1,9 +1,11 @@
 """Extract and validate an already-generated probe in its external staging folder."""
 import argparse
 import json
+import math
 from pathlib import Path
 import struct
 import subprocess
+import terrain_detail
 
 
 def validate_navigation_tile(path, require_full_flat_tile=False):
@@ -38,6 +40,8 @@ def main():
     args = parser.parse_args()
     output = args.output.resolve()
     cfg = json.loads((output / "manifest.json").read_text())["configuration"]
+    detail = terrain_detail.Settings.from_config(cfg)
+    require_flat = detail.flat or not detail.enabled
     extracted = output / "extracted"
     with (output / "extractor.log").open("wb") as log:
         subprocess.run([str(args.tools / "mapextractor.exe"), "-i", str(output / "extract-input"),
@@ -51,7 +55,9 @@ def main():
         header = list(struct.unpack_from("<4s10I", data))
         offset = header[5]
         magic, flags, low, high = struct.unpack_from("<4sIff", data, offset)
-        if header[:2] != [b"MAPS", 10] or magic != b"MHGT" or (low, high) != (cfg["height"], cfg["height"]):
+        if (header[:2] != [b"MAPS", 10] or magic != b"MHGT" or
+                not (math.isfinite(low) and math.isfinite(high) and low <= high) or
+                (require_flat and (low, high) != (cfg["height"], cfg["height"]))):
             raise ValueError("Unexpected extracted terrain")
         # Trinity TerrainBuilder ignores MAP_HEIGHT_NO_HEIGHT entirely. Keep the
         # identical flat surface but store explicit float vertices for navmesh.
@@ -75,7 +81,7 @@ def main():
     if len(nav) != len(expected) or any(p.stat().st_size <= 20 for p in nav):
         raise ValueError("Navigation generator did not produce all configured tiles")
     for tile in nav:
-        validate_navigation_tile(tile, require_full_flat_tile=True)
+        validate_navigation_tile(tile, require_full_flat_tile=require_flat)
     print(f"Validated {len(expected)} extracted terrain tiles and {len(nav)} navigation tiles; live loading remains untested")
 
 

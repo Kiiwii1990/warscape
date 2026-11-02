@@ -1,0 +1,512 @@
+WARSCAPE SMITHING PLAN
+1 November 2026 — framework implemented
+
+Implemented
+- Independent Smithing enum slot 8 and snapshot ID smithing, appended after
+  Mining. Existing identifiers remain stable. No Blizzard profession is learned
+  or modified. No DBC/world entity allocations are needed.
+- Shared server-authoritative XPForLevel/LevelForXP, levels 1–99, default 1/0,
+  maximum 200,000,000 XP. Both absent skill rows and migrated existing rows
+  default safely. Levels are recomputed from persisted XP on reload.
+- smithing_xp and smithing_half_xp persist in the existing character save
+  transaction and prepared select/upsert. Shared half-point accumulator uses
+  a separate Smithing carry (0/1), preserving Mining carry independently.
+  Integer XP snapshots retain the established Mining behaviour: half-points
+  carry privately until a whole point accrues. Set commands retain fractional
+  carry consistently with Mining. No XP is client writable.
+- Existing Skills menu metadata uses Trade_BlackSmithing (verified in primary
+  client's MPQs). Shared tiles, tooltip, total level, maximum-level bar and
+  snapshot assembly handle Smithing; dimensions/layout/scroll behaviour intact.
+- Generic GM name tables now include Mining as well as Smithing. Commands use
+  the existing self target and RBAC_PERM_COMMAND_SETSKILL mutation permission.
+  Added generic additive awards because previously only setlevel/setxp existed.
+
+Exact in-game commands (affect the executing character)
+.rs stats                         Inspect all skills, including Smithing
+.rs setlevel smithing 1            Reset whole XP to 0, level 1
+.rs setlevel smithing 50           Set any chosen level 1–99
+.rs setlevel smithing 99           Set XP to 13,034,431, level 99
+.rs setxp smithing 0               Set total whole XP
+.rs addxp smithing 83              Award 83 whole XP (level 2 from zero)
+.rs addhalfxp smithing 35           Award 17.5 XP, carrying fractional half
+
+Validation completed
+- Release worldserver build succeeded with MSVC, existing configured build.
+- 70,827 Warscape C++ assertions passed in a standalone Windows runner executing
+  tests/game/WarscapeCombat.cpp with CHECK/REQUIRE assertion adapters (the full
+  Catch2 CMake test target is disabled in the existing build). Covers shared
+  thresholds, invalid levels/XP, 1 and 99, serialize/restore, independent half
+  carry, existing combat and Mining/pickaxe behaviour and snapshot row bounds.
+- Lua 5.1 protocol and UI event tests passed including nine-skill default and
+  Smithing level-99 snapshots, tile and tooltip. Offline harness only.
+- Character DB permissions/status inspected. Additive migration
+  2026_11_01_00_characters.sql reviewed, applied via db.py with fresh verified
+  backup and verified/recorded; no pending character migrations remain.
+  Initial specification hash mismatch was refused before execution; corrected
+  to the workflow's normalized-text hash before the successful application.
+- No custom-client executable/object/mirror-layout code changed. Server-side
+  Player storage grows using normal C++ allocation, not client mirror fields.
+  No mirror-layout regression is applicable to this addon-only client change.
+
+Deferred and user in-game checks
+- No recipes, items, objects, interactions or crafting systems implemented.
+- Start the server normally, fully restart client or reload addon, open Skills.
+  Confirm Smithing icon/tooltip, default 1/1 and empty progress on new and
+  existing characters. Check portrait/landscape, scrolling and side settings.
+- Set 1, award 83, confirm level 2 and menu refresh; set 99, confirm full bar
+  and maximum tooltip. Reject levels 0/100, negative/non-numeric/extra inputs.
+- From level 1 award 35 half-points, logout/login, award 35 again: total 35 XP.
+  Repeat after server restart; verify Mining and combat progress unchanged.
+- Actual client/gameplay, live save/logout/restart checks are pending user QA;
+  automated serialize/restore checks do not claim those manual tests passed.
+- Deployment status and backup path are recorded below on installation.
+
+Deployment completed: Release worldserver.exe and runtime WarscapeSkills.lua installed with SHA-256 comparison. Previous files backed up at C:/WoWDev/Backups/WarscapeSmithing-20261101T223442. Both server and client were stopped. Client path verified as C:/WoWDev/wowdecomp/bin/Win/WowClient64.exe; Client.cpp SetPaths uses the executable directory without -datadir. No game/server launched. Start server and client normally to test.
+
+Files changed for Smithing (pre-existing unrelated edits preserved)
+- src/server/game/Entities/Unit/WarscapeSkills.h
+- src/server/game/Entities/Unit/WarscapeSkillsAddon.h
+- src/server/game/Entities/Player/Player.h
+- src/server/game/Entities/Player/Player.cpp
+- src/server/database/Database/Implementation/CharacterDatabase.cpp
+- src/server/scripts/Commands/cs_misc.cpp
+- addons/WarscapeSkills/WarscapeSkills.lua
+- addons/WarscapeSkills/tests/test_addon.py
+- tests/game/WarscapeCombat.cpp
+- sql/updates/characters/3.3.5/2026_11_01_00_characters.sql
+- contrib/warscape/verifications/2026_11_01_00_characters.json
+- doc/WarscapeSkillIdAllocations.md
+- doc/Warscape_Design_Notes.md
+- doc/Warscape Smithing Plan.txt
+
+FIRST BRONZE SMELTING LOOP - 1 November 2026
+This user-approved milestone supersedes the earlier framework-only deferral
+for one Bronze recipe. Other recipes/bars/equipment/anvil crafting remain deferred.
+
+Recipe and entry
+- 1 Copper Ore (2770) + 1 Warscape Tin Ore (900201) -> 1 Bronze Bar (900500).
+  Ore IDs come from warscape_copper_mining.cpp's active recipe table, checked
+  against installed world entries. Output is a NEW custom entry, stackable=1,
+  with no profession/level/learning requirement. Existing item 2841 is intact.
+- Smithing content block 900500-900699 allocated after collision checks. The new
+  Item.dbc row reuses original Bronze Bar display 7390 and its existing icon.
+- Guaranteed success, Warscape Smithing 1. XP is exactly 62 tenths (6.2).
+- Character migration adds smithing_tenth_xp and sets it to old half carry * 5.
+  Old smithing_half_xp is retained as historical storage and is no longer read
+  or written by runtime. Existing integer XP and Mining half carry are intact.
+  New/absent rows start at 0. Smithing half-XP GM awards convert to tenths.
+- Snapshots and tooltips now accept/show one decimal XP. Level thresholds and
+  level calculation remain the existing integer OSRS curve. Fractional XP at
+  the 200m cap is hidden consistently with the maximum total XP limit.
+
+Interaction and server validation
+- Open existing Skills (/wskills), click the Smithing tile, then Smelt one bar.
+  The small child recipe card shows ingredients, level, guaranteed success,
+  furnace requirement and 6.2 XP; it uses the existing Skills parent and scale.
+- Equivalent direct player command: .rs smelt bronze (no new GM permission).
+  This reuses the existing .rs command path and applies to the executing player.
+- Output testing: .additem 900500 1
+  Ingredients: .additem 2770 1 and .additem 900201 1
+  Progress: .rs stats (includes fractional carry), .rs setlevel smithing 1
+- Default duration 3000ms is temporary prototype timing. Optional server config
+  Warscape.Smelting.DurationMs accepts 1..60000ms, read when each bar starts;
+  its documented default is in worldserver.conf.dist. Local config untouched.
+- Trinity Spell::SearchSpellFocus uses GameObjectFocusCheck; focus 3 = Forge,
+  focus 1 = Anvil, confirmed from installed SpellFocusObject.dbc (Bronze smelt
+  spell 2659 requires focus 3). Smelting reuses the exact native predicate and
+  visibility search envelope. Recognition requires a spawned spell-focus object
+  with matching focus ID; distance is template spellFocus.dist passed to native
+  IsWithinDistInMap, with native map/phase search handling. No arbitrary radius,
+  aura, custom furnace or template alteration. Anvil alone fails.
+- Start validates level, focus, live/stationary/noncombat state, logout state,
+  no active smelt, Mining, trade or spell cast, materials and output capacity.
+  Each update rechecks interruption/focus; completion rechecks recipe/space.
+  Movement packets and combat entry also cancel immediately, and death cancels.
+- Materials are chosen from real carried slots only, excluding trade/loot items.
+  Prefer singleton ingredient stacks. Native CanStoreNewItem plans output;
+  native CanStoreItem with swap validation accepts a singleton reagent slot
+  only if the output fits that bag. Actual swapping is never performed.
+- Completion clears the action before reward, allocates the bar before reagent
+  destruction, then consumes exact selected items and uses StoreItem's single,
+  non-cloning empty-slot path. No allocation is needed after consumption.
+  Inventory and skill XP are persisted in the same SaveToDB transaction.
+  Duplicate active requests cannot reset the timer or award twice. Cancelled
+  actions have no inventory or XP changes. No timer survives logout/reload.
+
+Automated verification
+- Release worldserver MSVC build passed after final runtime changes.
+- 60 assertions exercise extracted production smelting methods and native focus
+  predicate using controlled engine-service mocks: success/timing, duplicate
+  requests/updates, missing ore, anvil-only/wrong type/unspawned/distant focus,
+  full stacks with no capacity, singleton slots released by consumption, changed
+  materials/capacity, allocation failure, movement/combat/death/logout/disconnect,
+  trade/casting/Mining conflicts, lost focus, level requirement, half-to-tenth
+  conversion, fractional roundtrip model and five bars = 31 XP.
+  Command: py contrib/warscape/smithing/test_smelting.py
+- 70,827 shared Warscape C++ assertions passed via the existing standalone runner,
+  covering Mining/pickaxes/combat/skills and shared snapshot/XP behaviour.
+- Lua 5.1 protocol/UI tests passed: decimal XP display, Smithing tile recipe card,
+  one-bar command click/throttling and card closure with parent; existing menu
+  layout/scaling/orientation/level-99 regression checks still pass.
+  Command: py addons/WarscapeSkills/tests/test_addon.py
+- SQL select/upsert ordering and 13 bindings checked. Both additive migrations
+  applied through db.py, each with a fresh verified backup and immediate
+  postcondition/ledger verification. No pending world/character migrations.
+- Asset staging verifies original DBC rows/strings and unrelated locale MPQ
+  payloads preserved, plus the real primary-client bar icon dependency.
+- No custom client source/executable or object/mirror field layout changed.
+  Server Player members are allocated normally by C++; no client mirror layout
+  checks apply. Offline tests do not constitute actual gameplay testing.
+
+Remaining in-game checks (user)
+- Start server and fully restart custom client to load the new Item.dbc.
+- Near any ordinary WoW furnace, use the recipe card or .rs smelt bronze.
+  Confirm one bar after about 3 seconds, one of each ore consumed and +6.2 XP.
+- Try missing ore, away from furnace and beside an anvil with no furnace nearby.
+- Try a full bag: singleton ores may free a usable slot; full ore stacks with no
+  usable released slot must fail. Test interruption and repeated Smelt clicks.
+- Move, enter combat, die, logout or leave valid furnace range during the action;
+  confirm no costs/rewards. After five successful bars from zero expect 31 XP.
+- Logout/login and restart server between awards; confirm fractional progress
+  persists, Mining/combat stay unchanged and custom bar has the correct icon.
+- Live client appearance, live gameplay and actual restart/reload QA remain
+  pending user inspection. No game or server was launched by Codex.
+
+Additional source files for this milestone
+- src/server/game/Entities/Unit/WarscapeSmelting.h
+- src/server/game/Combat/CombatManager.cpp
+- src/server/game/Handlers/MovementHandler.cpp
+- src/server/scripts/Custom/warscape_copper_mining.cpp (smelting conflict guard)
+- src/server/worldserver/worldserver.conf.dist
+- addons/WarscapeSkills/Protocol.lua
+- contrib/warscape/smithing/build_bronze_assets.py
+- contrib/warscape/smithing/test_smelting.py
+- contrib/warscape/smithing/smelting_harness.cpp
+- sql/updates/characters/3.3.5/2026_11_01_01_characters.sql
+- sql/updates/world/3.3.5/2026_11_01_01_world.sql
+- matching contrib/warscape/verifications JSON specifications
+- Shared Player/skill/database/GM/menu files listed in the first milestone above.
+
+Bronze deployment completed: five runtime files installed and SHA-256 verified (worldserver.exe, server Item.dbc, client locale patch-enUS-Z.MPQ, WarscapeSkills.lua, Protocol.lua). Previous files backed up outside Git at C:/WoWDev/Backups/WarscapeBronze-20261101T225115. Server/auth/client were stopped and were not launched or stopped by Codex. Primary executable C:/WoWDev/wowdecomp/bin/Win/WowClient64.exe; source SetPaths confirms executable directory as the game directory without -datadir. Start server and fully restart client before user testing. Local configuration, saved variables, original item/display rows and unrelated patch payloads preserved.
+
+SMELTING INTERFACE STAGE A - AUDIT AND PREPARATION, 1 November 2026
+Scope: first milestone under AGENTS.md's large-request rule. Later stages are
+not implemented or deployed by this milestone. The approved attached reference
+and pasted request are the visual/behaviour specification for the later work.
+
+Confirmed audit
+- Live gameobject template 173063 is type 8 (SPELL_FOCUS), focus ID 3 (Forge),
+  with no existing ScriptName/AIName. No template was altered or spawned.
+- Custom client CGGameObject_C_Type_SpellFocus::CanUse() returns false.
+  CGGameObject_C::OnRightClick exits on that result, so no use packet reaches
+  the server. A server-only AI script or SQL ScriptName cannot fix this.
+- Base Use() already sends CMSG_GAME_OBJ_USE. The planned narrow client change
+  permits only entry 173063 through CanUse; no field/mirror/allocator/layout or
+  lifecycle change is needed. Preserve all other spell-focus objects unchanged.
+- The server use path calls GameObject::Use and AI()->OnGossipHello. Proposed
+  entry-specific server handling opens a server-owned interaction bound to the
+  exact forge GUID/map/phase, with native focus/proximity validation. Do not
+  accept a nearby different furnace as continuation of a vanished interaction.
+- Existing Smithing level/XP/tenths persistence and custom Bronze 900500 already
+  exist. No new storage, profession, items or bar migrations are needed.
+- Existing panel registry always assigns a left/right group and closes peers.
+  Registering Smelting normally would violate the user's HUD-side requirement.
+  Add an interaction-panel path to the existing framework for scale/clamping/
+  Escape without a HUD group, preserving all current side records and limits.
+
+Prepared initial recipe registry
+- src/server/game/Entities/Unit/WarscapeSmelting.h now contains the stable,
+  ordered eight-entry data table and retains the Bronze engine's old constants
+  as aliases. No parallel XP/inventory/processing system was introduced.
+- Bronze: enabled; output 900500; Copper 2770 x1 + Tin 900201 x1;
+  attained Smithing 1; guaranteed; 62 XP tenths; default 3000ms prototype.
+- Iron, Steel, Silver, Gold, Mithril, Adamant, Rune: disabled, no item IDs,
+  ingredients, level, XP or timing assigned. The UI may reserve their positions
+  but must never substitute vanilla item entries or initiate these recipes.
+- Existing client icon dependencies verified for Bronze (INV_Ingot_Bronze),
+  Iron (INV_Ingot_Iron), Steel (INV_Ingot_Steel), Silver (INV_Ingot_01),
+  Gold (INV_Ingot_03), Mithril (INV_Ingot_06), Adamant (INV_Ingot_10).
+  These are visual candidates only; they grant no recipe/item approval.
+- A guessed Rune visual source (12360) resolved to a stone-tablet icon, so it
+  was rejected. Choose an actual bar-shaped visual or extract the reference's
+  disabled Rune illustration during asset work; no Rune recipe is inferred.
+
+Remaining implementation checkpoints
+B1: entry-specific native click support and authenticated forge interaction;
+    bounded session token/request sequence, self-only addon channel, cancellation
+    on close/logout/map/phase/range loss; no client-writable XP or item IDs.
+B2: reuse current per-bar inventory preallocation/validation/save transaction;
+    batch 1/5/10/All, one validated timed bar per completion (no catch-up burst),
+    working animation cleanup, data-table defaults and per-recipe config values.
+B3: approved ornate Smelting frame, hammer corners, heated stone, gold text,
+    fixed two rows of four, grayscale disabled reasons, quantity highlight;
+    server-authoritative availability updates plus inventory/level refresh.
+C: native client MirrorLayoutSafetyCheck, Release build with matching PDB,
+   server build, quantity/interruption/replay/inventory/tenths regression checks,
+   Lua 5.1 hitbox/scale/Escape/HUD-side isolation and runtime asset checks.
+D: backed-up coordinated installation after passing checks. If any database
+   migration becomes necessary, prepare its exact SQL/spec and request explicit
+   approval BEFORE applying, as required by the user's new Stage D instruction.
+
+Stage A checks and status
+- Read-only database audit validated 173063 type/focus/no existing scripts,
+  installed custom Bronze non-stackability and world/character migration status.
+- Recipe registry assertions and prior production-method smelting regression
+  checks run through contrib/warscape/smithing/test_smelting.py (see result below).
+- No database operations beyond read-only audit/status. No native client source,
+  runtime addon, client assets or installed files changed. No game/server launch.
+- Stage A does not claim that forge-click UI, quantities, new artwork or the
+  native click fix are implemented. In-game Bronze testing still uses the prior
+  deployed one-bar card/command. No new in-game testing is needed for Stage A.
+
+Stage A result: 93 smelting assertions passed on Windows, including registry order/disabled entries and the existing production-method smelting cases with mocked engine services. No full build or deployment performed for this preparatory milestone.
+
+STAGE B - FORGE INTERACTION AND FUNCTIONAL BRONZE UI, 1 November 2026
+Implemented under the user's explicit Stage B authorization. This supersedes
+Stage A's outstanding B1/B2/B3 checkpoints and the earlier one-bar recipe card.
+
+Interaction and safety
+- Only client spell-focus entry 173063 now returns CanUse=true, with owner and
+  descriptor null checks. The existing UseObject/Use path sends the normal
+  CMSG_GAME_OBJ_USE packet; no new client object fields or network object layout.
+- Server GameObject::Use handles only 173063, validates the native focus and
+  proximity through Player::OpenWarscapeSmelting and opens the custom UI.
+  Forge spell-focus templates/functionality are preserved. No SQL changes.
+- Session binds the exact forge GUID. Every action validates map-local lookup,
+  phase, spawned state, Forge focus ID 3 and native template proximity. A nearby
+  replacement forge cannot continue the old interaction. Lost forge, map, phase,
+  logout/disconnect/death closes the session. Closing UI cancels current batch.
+- Self-only WCSmelt addon whispers have bounded grammar, token and strictly
+  increasing request sequence. Unknown recipe IDs, invalid quantities, malformed
+  input, stale tokens, replay and overlapping actions cannot grant rewards.
+- Movement/combat/death hooks continue cancelling through the existing helpers.
+  Native working animation EMOTE_STATE_USE_STANDING is cleared on cancellation
+  or completion. Mining actions and their animation remain unchanged.
+
+UI and assets
+- Smelting.lua reuses the same WarscapeSkillsSkin.Panel used by Inventory:
+  700x460 dimensions, nine-slice borders, Friz Quadrata gold typography, close
+  button and controls. Two rows of four 128x128 tiles; no filters/categories.
+- Only artwork differs: mirrored blacksmith hammer ornaments replace dragons,
+  and dark heated brick replaces the interior Stone backdrop. Imagegen derived
+  both assets from the user-approved reference; original source PNGs retained
+  in addon art, runtime files are 256x256 uncompressed RGBA TGA. Provenance:
+  addons/WarscapeSkills/art/smelting_sources.json.
+- Original WoW bar icons validated in the primary client's MPQs. Rune uses a
+  bar-shaped native icon INV_Ingot_07 for its disabled visual only (no item or
+  recipe assignment). Other seven slots stay darkened and unimplemented.
+- RegisterInteraction extends the existing panel framework without joining
+  either HUD group, changing active side menus or side layouts. Independent
+  Ctrl-wheel scale uses the same 0.5..1.5 range and 1.05 step and is persisted
+  separately inside WarscapePanelScales.interactions. Escape/close notifies server.
+- Server availability snapshots every 250ms refresh ingredients, attained level,
+  output capacity and busy state. Tooltips distinguish unimplemented recipe,
+  low level, missing ingredients, unusable capacity/materials and active smelting.
+- Quantity buttons 1/5/10/All have mutually exclusive persistent selection for
+  the open UI. Click an available Bronze tile to submit the chosen quantity.
+- Prior Skills-card opening was removed; Smithing tooltip now directs to a forge.
+
+Production and persistence
+- Registry unchanged: Bronze 900500 from 2770 x1 + 900201 x1, Smithing 1,
+  guaranteed, 62 tenths XP, default 3000ms. Existing DurationMs config retained.
+- Batch processes one timer/completion per update, never catches up multiple bars
+  instantly after a slow update. Each completed bar reuses preallocated output,
+  exact reagent pointers and native storage validation, including singleton ore
+  slots released by consumption. Saves inventory and XP in one transaction.
+- All stops when requirements/capacity fail. No ingredients are reserved/consumed
+  up front. Completion starts the next timer only when the batch still permits.
+- Smithing integer XP and tenth carry persist through the existing schema. No
+  profession learning, new storage, recipes, items or database migrations.
+
+Checks completed
+- Server Release build passed (MSVC).
+- Custom client Release WowClient build passed and produced matching PDB.
+  MirrorLayoutSafetyCheck passed, as did GameObjectMirrorLayout via CTest.
+  Existing compiler warnings remain; no client layout/allocator/lifetime changes.
+  The sole native edit reads existing CGObjectData::m_entryID (offset 12, width 4
+  within its existing descriptor allocation); no field-index/mirror lookup added.
+- 388 C++ production-method assertions with engine fakes cover old smelting,
+  1/5/10/All, full-capacity stopping, sequential timing, ingredients changing,
+  interruption, allocation failure, malformed/replayed requests, wrong recipient,
+  stale tokens, disabled recipes, interface closure and XP/tenths persistence model.
+- 70,827 shared Warscape C++ regression assertions passed (standalone runner).
+- Lua 5.1 Smelting tests passed: authentic sender/channel/token, quantities,
+  disabled states, missing ores/level/capacity/busy tooltips, independent scaling,
+  closure and old server messages. Existing Skills tests passed.
+- Side-window/layout/symmetry tests passed, including saved-state restoration,
+  native menu switching, 40 menu pairs and 216 viewport/scale configurations.
+- 14 runtime TGA texture checks passed. Offline Lua preview inspected and quantity
+  highlight layering corrected so selection cannot cover quantity text.
+- Preview: C:/WoWDev/Artifacts/SmeltingStageB/offline-smelting.png.
+  It is an offline layout rendering, NOT an in-game capture or visual acceptance.
+
+Stage B files
+- Native client: WoW/Source/Object/ObjectClient/CGGameObject_C_Type_SpellFocus.cpp
+- Server: Player.h/Player.cpp, GameObject.cpp (existing recipe registry untouched)
+- Addon: WarscapePanels/Panels.lua; WarscapeSkills/Skin.lua, WarscapeSkills.lua,
+  Smelting.lua, WarscapeSkills.toc, two runtime TGAs and their source/provenance
+- Tests: smelting_harness.cpp, test_smelting_ui.py, test_addon.py, test_skin.py,
+  shared ui_harness.lua (texture blend-mode stub); preview_smelting.py
+
+User test sequence after coordinated deployment
+1. Start server and fully restart C:/WoWDev/wowdecomp/bin/Win/WowClient64.exe.
+2. At a safe location: .gobject add 173063 (or use the existing test forge).
+3. Give materials: .additem 2770 10 and .additem 900201 10
+4. Right-click the forge. The Smelting interface should open automatically.
+5. Select 1 and click Bronze: one bar after about 3 seconds, +6.2 XP.
+6. Test 5, 10 and All with enough free slots; nonstackable bars limit capacity.
+   Five completed bars yield exactly 31 XP. Inspect with .rs stats and Skills.
+7. Check grey slots/tooltips; consume/remove ores and check availability refresh.
+8. Test full inventory, movement, combat, close/Escape, distance and logout during
+   a bar. No unfinished bar should cost ingredients or grant output/XP.
+9. Check Ctrl-wheel, both existing HUD-side windows and their saved layout.
+10. Logout/login and server restart: check completed inventory/XP/tenth carry.
+No in-game appearance, interaction or gameplay pass is claimed until user QA.
+
+Stage B deployment completed: 8 server/addon runtime files installed and SHA-256 verified. Previous files: C:/WoWDev/Backups/SmeltingStageB-runtime-20261101T234751. Native client executable/PDB were backed up before the Release build at C:/WoWDev/Backups/SmeltingStageB-native-20261101T233804; the build wrote the matching new executable/PDB directly to the verified primary game directory. All server/client processes were stopped and none were launched or stopped by Codex. Start server and fully restart the custom client. No database migration, local settings/SavedVariables, source PNGs, tests, or logs were deployed.
+
+STAGE C - INTERACTION DISTANCE AND ACCEPTED-BATCH UI CLOSURE, 2 November 2026
+
+Implemented
+- Forge entry 173063 interaction range is now 2.5 yards center-to-center,
+  matching the native 3.3.5a spell-focus client metric. The server applies the
+  same range to GameObject use, the bound Smelting session, accepted batches,
+  and focus discovery. Only entry 173063 is affected. A 250ms server refresh
+  closes the interface after range loss and cancels a running bar before any
+  materials, output or XP are awarded.
+- `Warscape.Smelting.InteractionDistance` is configurable in worldserver.conf,
+  defaults to 2.5 yards and is clamped to 0.1..2.5 so it cannot exceed the
+  client-side interaction limit without a coordinated client rebuild. The
+  existing client spell-focus limit was 5 yards; the forge template's focus
+  distance is 10 yards, but native spell-focus interaction was the stricter
+  client limit and server session tracking previously used the looser template
+  value.
+- A successful START now receives `ACCEPT|session|sequence` only after server
+  validation and action start. The addon then hides without sending CLOSE. The
+  accepted job keeps its forge GUID and animation while the menu is hidden.
+  Rejected requests keep the menu open and show an explanation. A manual close
+  of an open interaction still sends CLOSE and cancels any active batch.
+- Server animation remains `EMOTE_STATE_USE_STANDING` throughout sequential
+  production, including immediate transition between bars; cancellation and
+  completion still clear it.
+
+Object size audit
+- Live template 173063 (display 305, Tradeskill_Forge_03) has size 1.08;
+  its stock template data is verified build 12340. Same-display stock Forge
+  templates include 1.0 sizes. Live template 173065 (display 273,
+  Tradeskill_Anvil_01) has size 1.85, verified build 12340; the 3.3.5a
+  TrinityDB record independently reports size 1.85. Spawn rows have no scale
+  column/override, display mappings were not Warscape-modified, and GameObject
+  creation applies the template size directly.
+- These are original 3.3.5a dimensions, not a Warscape doubling. No template,
+  spawn, display mapping or collision data was changed. A speculative scale
+  reduction would alter collision and depart from the verified source values.
+  No database migration or approval is pending.
+
+Checks and installation
+- Production-method smelting harness: 406 assertions passed, including
+  configured range edge, successful accepted action despite later CLOSE,
+  existing interruption, ingredients, inventory, XP/tenths and batch tests.
+- Lua 5.1 Smelting interaction tests passed, including automatic hide only on
+  ACCEPT, rejected-request visibility, manual CLOSE, quantity and token cases.
+  Existing addon and panel layout/symmetry regressions passed.
+- Server Release worldserver build passed. Custom-client Release WowClient build
+  passed; GameObjectMirrorLayout target and CTest passed. No client object
+  layout, allocation, field map, object lifecycle or display mapping changed.
+- Runtime deployment is complete. Server executable installed at
+  C:/WoWDev/TrinityServer/worldserver.exe; updated Smelting.lua installed in
+  the verified primary game directory
+  C:/WoWDev/wowdecomp/bin/Win/Interface/AddOns/WarscapeSkills. Client exe/PDB
+  were rebuilt directly to the verified exe directory. SHA-256 checks passed
+  for the installed server executable and addon. Previous runtime files and
+  client exe/PDB backed up outside Git at
+  C:/WoWDev/Backups/SmeltingRange-20261102T.
+- All related server/client processes were stopped at deployment checks; Codex
+  did not stop or start them. Restart the worldserver and fully restart the
+  custom WowClient64.exe before testing. Visual appearance, object dimensions
+  in-world, range feel, automatic closure, animation and manual gameplay remain
+  user-side checks; no game was launched.
+- Manual checks: right-click forge 173063; verify open within 2.5 yards and
+  automatic close beyond it; start Bronze 1/5/10/All and verify ACCEPT closes
+  the panel but production continues, while rejected requests leave it open;
+  verify 3-second animation, 6.2 XP/bar, inventory contents and cancellation
+  after movement, combat, death, disconnect or lost range. Confirm forge 173063
+  and anvil 173065 look stock-sized in the current custom client.
+
+STAGE D - MODEL-AWARE FORGE RANGE AND BELLows ACCESS, 2 November 2026
+
+This update supersedes Stage C's 2.5-yard origin-centered interaction setting.
+
+Interaction model
+- Restore the native client spell-focus margin to 5 yards for forge 173063.
+  Native server GameObjectFocusCheck continues to use the template's 10-yard
+  spell-focus search distance. Actual right-click authorization and the bound
+  Smelting menu/batch use the shared 5-yard model-boundary margin on both sides.
+  The 10-yard focus search is a candidate/search radius; it does not bypass the
+  existing server GameObject interaction check.
+- Display 305 (Tradeskill_Forge_03) has local DBC bounds min
+  (-2.676028, -1.684117, 0.0), max (2.162074, 5.829827, 6.007134). The server
+  uses these bounds scaled by template size 1.08, expands them by the shared
+  5-yard margin, rotates the resulting box by the forge world rotation and tests
+  the player's position. The client now routes only entry 173063 around the
+  spell-focus center-distance shortcut and through its existing display-bounds
+  path: expand the same scaled local bounds, inverse-transform player position
+  through the gameobject matrix, then test the local box. The asymmetric +Y
+  extent spans from firebox through the bellows; no synthetic center offset is
+  needed. Both firebox and bellows sides remain inside the same finite box.
+- Interaction tuning is paired at 5.0 in server `Warscape::DefaultFurnace...`
+  and the native client branch. A runtime server-only override was rejected
+  because it would make the client affordance and server validation disagree.
+  Future balancing changes must update the paired client/server values together.
+- No model, display mapping, spawn position, collision, object scale, focus ID,
+  template data or anvil behaviour changed. Existing 1.08 forge / 1.85 anvil
+  verified sizes are preserved.
+
+Checks and deployment
+- `test_forge_bounds.py` passed using the installed DBC record 305. Firebox,
+  between-sections and bellows points passed at five world rotations; points just
+  beyond the expanded X/Y boundary failed. The test also checks the client and
+  server production code selects the same local-box logic and that the focus
+  search still reads template `spellFocus.dist`.
+- Smelting production harness passed 408 assertions; Lua Smelting, Skills,
+  Inventory and the panel layout/symmetry regressions passed.
+- Server Release worldserver build passed. Client Release WowClient build,
+  MirrorLayoutSafetyCheck target and GameObjectMirrorLayout CTest passed.
+  Client changes only alter the existing type-8 CheckRange decision for entry
+  173063; no object structure, field map, allocation, or lifecycle code changed.
+- Server worldserver.exe was installed and SHA-256 verified. Client build wrote
+  WowClient64.exe and matching PDB in C:/WoWDev/wowdecomp/bin/Win. No addon or
+  database migration was needed. Pre-update runtime files were backed up at
+  C:/WoWDev/Backups/SmeltingRangeCentre-20261102T. All related processes were
+  stopped during deployment checks; Codex did not stop or start them. Restart
+  the worldserver and fully restart the custom client before gameplay checks.
+- No live WoW interaction or screenshot testing was run. In-game verification
+  remains: click beside firebox, bellows, and between them at several rotations;
+  confirm accepted batches close the UI and continue; reject a request and check
+  that the UI remains open; walk beyond the 5-yard expanded model boundary and
+  confirm menu closure and active-batch cancellation; verify just-inside/just-
+  outside edges and that the 10-yard native focus search does not make smelting
+  usable outside the actual 5-yard interaction box.
+
+STAGE E - CENTERED, COMPACT FORGE BOUNDARY, 2 November 2026
+
+- Stage D did not create a logical centre offset. It expanded the complete
+  asymmetric DBC display box by 5 yards. Rotation was handled correctly, but
+  this left interaction possible several yards beyond the furnace footprint.
+- Entry 173063 now measures from the midpoint of display 305's local ground
+  footprint: local DBC midpoint (-0.256977, 2.072855, 0), multiplied by its
+  unchanged template scale 1.08, giving approximately (-0.277535, 2.238683, 0)
+  from the gameobject origin. The point is transformed with the forge's world
+  rotation on the server and the client object's inverse matrix on the client.
+- A single 4.0-yard radius from this point now governs client right-click range,
+  server interaction authorization, the bound Smelting menu refresh/closure and
+  active batch continuation/cancellation. The separate native 10-yard spell-
+  focus candidate search remains unchanged. No model, placement, scale, anvil,
+  template or database data changed.
+- Focused tests passed: display 305 firebox/bellows/front/rear/side points,
+  inside/outside radius edges and five rotations; 415 production smelting
+  assertions including menu closure and batch cancellation on leaving range;
+  client GameObjectMirrorLayout CTest passed. Release builds passed after the
+  server transform was corrected to use CoordinateFrame::pointToWorldSpace.
+- The chosen 4-yard radius is a geometry-based tuning value pending the user's
+  screenshot-based in-game acceptance. No visual or gameplay test was performed.

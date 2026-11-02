@@ -63,6 +63,20 @@ the server sends an unavailable marker, and both sides display the base level
 sums base levels from the complete server snapshot, never temporary boosts.
 The reference's unimplemented tabs and Slayer skill are deliberately absent.
 
+### Three-column grid refinement — approved, 29 October 2026
+
+The internal layout now uses three columns while retaining the 350 x 514 frame
+and its existing artwork. The starting order is Attack, Hitpoints, Strength;
+Ranged, Defence, Magic; Prayer, Mining, then future snapshot skills. Each compact
+tile contains its native icon, gold name, current level and a thin green XP bar.
+Bar progress is `(xp - floor) / (nextXP - floor)`, clamped to 0–100%; the level
+99 bar is full. Hover details show total XP, next-level XP, remaining XP and
+base level only when it differs from current level. New stable skill IDs append
+to the grid automatically. The grid scrolls independently; title and Total Level
+footer stay fixed, with Total Level continuing to sum base levels. This approved
+refinement supersedes the earlier two-column arrangement without changing the
+server snapshot or progression system.
+
 The supported addon action **Toggle Warscape Skills** appears under **Warscape**
 in Key Bindings. A session-local override replaces the default N/Talents binding
 without changing saved bindings, modifying Blizzard talent functions or disabling
@@ -70,6 +84,21 @@ the talent system. A custom action on N, an unbound N, or an explicit key assign
 to the addon takes precedence over the automatic default. Changes reapply after
 login, UI reload or binding changes; protected binding changes defer until combat
 ends. If N is custom-bound, use `/wskills` or assign the addon action yourself.
+
+### Icon, level and scaling refinement — approved, 29 October 2026
+
+The three-column grid keeps its order, scrolling and fixed Total Level footer.
+Tiles omit visible skill names and instead show a larger icon, `current/attained`
+level and the thin XP bar. Names remain in tooltips alongside current level,
+attained level, total XP, the next-level XP threshold and remaining XP. Total
+Level continues to sum attained levels. Ctrl-wheel over the scroll grid routes
+to `WarscapePanels:AdjustScale`; ordinary wheel input scrolls one row. The shared
+saved panel scale remains independent from HUD scale.
+
+The snapshot supports an optional effective-level field, but the server's current
+`SkillProgress` contains only attained level and XP and sends `-` for effective
+level. The client therefore renders equal current/attained levels when there is
+no supplied modifier. No buff/drain gameplay or database change is included.
 
 ## Data channel and safeguards
 

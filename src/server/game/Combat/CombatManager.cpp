@@ -387,6 +387,8 @@ bool CombatManager::UpdateOwnerCombatState() const
 
     if (combatState)
     {
+        if (Player* player = _owner->ToPlayer())
+            player->CancelWarscapeSmelting();
         _owner->SetUnitFlag(UNIT_FLAG_IN_COMBAT);
         _owner->AtEnterCombat();
         if (_owner->GetTypeId() != TYPEID_UNIT)

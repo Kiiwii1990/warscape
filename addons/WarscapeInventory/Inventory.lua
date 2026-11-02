@@ -1,18 +1,8 @@
 local prefix = "WCInventory"
 local panel = CreateFrame("Frame", "WarscapeInventoryFrame", UIParent)
 local total, status = WarscapeSkillsSkin.Panel(panel, {title = "Inventory", closeName = "WarscapeInventoryCloseButton", totalName = "WarscapeInventoryTotal"})
-panel:SetPoint("CENTER")
 panel:SetFrameStrata("DIALOG")
-panel:SetClampedToScreen(true)
-panel:SetMovable(true)
 panel:EnableMouse(true)
-panel:RegisterForDrag("LeftButton")
-panel:SetScript("OnDragStart", function(self) self:StartMoving() end)
-panel:SetScript("OnDragStop", function(self)
-    self:StopMovingOrSizing()
-    local point, _, relative, x, y = self:GetPoint()
-    WarscapeInventoryPosition = {point = point, relative = relative, x = x, y = y}
-end)
 table.insert(UISpecialFrames, "WarscapeInventoryFrame")
 
 local slots, containers = {}, {}
@@ -47,17 +37,17 @@ for i = 1, 28 do
     button:SetID(slot)
     button.logical = i
     button:ClearAllPoints()
-    button:SetSize(44, 44)
-    button:SetPoint("TOPLEFT", panel, "TOPLEFT", 78 + ((i - 1) % 4) * 100, -102 - math.floor((i - 1) / 4) * 46)
+    button:SetSize(48, 48)
+    button:SetPoint("TOPLEFT", panel, "TOPLEFT", 67 + ((i - 1) % 4) * 56, -92 - math.floor((i - 1) / 4) * 49)
     local icon = _G[button:GetName() .. "IconTexture"]
     icon:ClearAllPoints()
     icon:SetPoint("CENTER", button, "CENTER", 0, 0)
-    icon:SetSize(40, 40)
+    icon:SetSize(44, 44)
     icon:SetTexCoord(0.06, 0.94, 0.06, 0.94)
     local normal = button:GetNormalTexture()
     normal:ClearAllPoints()
     normal:SetPoint("CENTER", button, "CENTER", 0, -1)
-    normal:SetSize(44 * 64 / 37, 44 * 64 / 37)
+    normal:SetSize(48 * 64 / 37, 48 * 64 / 37)
     _G[button:GetName() .. "Cooldown"]:SetAllPoints(button)
     button.padlock = button:CreateTexture(nil, "OVERLAY")
     button.padlock:SetTexture("Interface\\LFGFrame\\UI-LFG-ICON-LOCK")
@@ -125,8 +115,25 @@ local function request()
     SendAddonMessage(prefix, "HELLO|1|" .. token, "WHISPER", UnitName("player"))
 end
 
+local function layout(orientation)
+    panel.warscapeChrome.resize(orientation)
+    local landscape = orientation == "landscape"
+    local columns = landscape and 7 or 4
+    local size = WarscapeSkillsSkin.metrics.inventorySlot
+    local pitchX = size + WarscapeSkillsSkin.metrics.inventoryGap
+    local pitchY = pitchX
+    local left = (panel:GetWidth() - (columns*size+(columns-1)*WarscapeSkillsSkin.metrics.inventoryGap))/2
+    local top = landscape and 84 or 92
+    for i, button in ipairs(slots) do
+        button:ClearAllPoints();button:SetSize(size,size)
+        button:SetPoint("TOPLEFT",panel,"TOPLEFT",left+((i-1)%columns)*pitchX,-top-math.floor((i-1)/columns)*pitchY)
+        local icon=_G[button:GetName().."IconTexture"]
+        icon:SetSize(size-4,size-4)
+        button:GetNormalTexture():SetSize(size*64/37,size*64/37)
+    end
+end
 panel:Hide()
-WarscapePanels:Register("inventory", panel, {onShow = function() refresh(); request() end})
+WarscapePanels:Register("inventory", panel, {group = "left", onShow = function() refresh(); request() end, layout=layout})
 function WarscapeInventory_Toggle() WarscapePanels:Toggle("inventory") end
 SLASH_WARSCAPEINVENTORY1 = "/winventory"
 SlashCmdList.WARSCAPEINVENTORY = WarscapeInventory_Toggle
@@ -159,11 +166,6 @@ end
 events:SetScript("OnEvent", function(_, event, ...)
     if event == "PLAYER_LOGIN" then
         token = tostring(math.floor(GetTime() * 1000) % 1000000000) .. tostring(math.random(100000, 999999))
-        local p = WarscapeInventoryPosition
-        local anchors = {CENTER=true,TOP=true,BOTTOM=true,LEFT=true,RIGHT=true,TOPLEFT=true,TOPRIGHT=true,BOTTOMLEFT=true,BOTTOMRIGHT=true}
-        if type(p) == "table" and anchors[p.point] and anchors[p.relative] and type(p.x) == "number" and type(p.y) == "number" then
-            panel:ClearAllPoints(); panel:SetPoint(p.point, UIParent, p.relative, p.x, p.y)
-        end
         suppressNativeBags()
         request()
     elseif event == "CHAT_MSG_ADDON" then

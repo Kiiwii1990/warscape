@@ -62,7 +62,7 @@ class DevelopmentSandboxTests(unittest.TestCase):
 
     def test_adt_has_only_level_ground_grass_and_no_liquid_or_objects(self):
         texture = self.cfg['texture']
-        data = generate.adt(32, 32, self.cfg['height'], texture)
+        data = generate.adt(32, 32, self.cfg['height'], texture, flat=True)
         top = {tag: (offset, size) for tag, offset, size in chunks(data)}
         self.assertEqual(data[top['MTEX'][0] + 8:top['MTEX'][0] + 8 + top['MTEX'][1]],
                          texture.encode() + b'\0')

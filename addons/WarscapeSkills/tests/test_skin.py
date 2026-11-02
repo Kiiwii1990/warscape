@@ -4,7 +4,7 @@ from PIL import Image
 
 art = Path(__file__).resolve().parents[1] / 'art'
 files = sorted(art.glob('*.tga'))
-assert len(files) == 12
+assert len(files) == 14
 for path in files:
     header = path.read_bytes()[:18]
     assert header[2] == 2, f'{path.name}: must be uncompressed true-color TGA'
@@ -18,4 +18,4 @@ for name in ('Dragon', 'Foot', 'Icon'):
     assert Image.open(art / (name+'.tga')).getchannel('A').getextrema() == (0, 255)
 assert Image.open(art / 'Cell.tga').getpixel((200, 70))[3] == 255
 assert Image.open(art / 'Total.tga').getpixel((400, 60))[3] == 255
-print('PASS: 12 WoW-compatible RGBA TGA textures, opaque stone/cells, transparent ornament mattes')
+print('PASS: 14 WoW-compatible RGBA TGA textures, opaque stone/cells, transparent ornament mattes')

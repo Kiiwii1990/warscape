@@ -26,7 +26,8 @@ function P.Receive(state, message, now)
         if not string.match(id, "^[a-z][a-z0-9_]*$") or #id > 32 or p.rows[id] or #p.order >= p.count then return end
         local base = integer(f[6], 1, 99)
         local effective = f[7] ~= "-" and integer(f[7], 0, 255) or nil
-        local xp = integer(f[8], 0, 200000000)
+        local xp = tonumber(f[8])
+        if not xp or xp < 0 or xp > 200000000 or tonumber(string.format("%.1f", xp)) ~= xp then return end
         local floor = integer(f[9], 0, 200000000)
         local nextXP = f[10] ~= "-" and integer(f[10], 1, 200000000) or nil
         if not base or not xp or not floor or xp < floor then return end

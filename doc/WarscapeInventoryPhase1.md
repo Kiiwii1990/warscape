@@ -164,3 +164,15 @@ No offline character rewrite, schema migration, privilege change or automatic
 updater was executed. Client settings/SavedVariables and native executable were
 not edited. The client and both servers remain stopped; no manual game test,
 commit or push was performed.
+
+## Universal UI framework revision, 27 October 2026
+
+The Phase 1 framework revision supersedes earlier references here to a single
+exclusive panel group, independent Skills/Inventory scales, and a 500 x 514
+exterior. The manager now allows one left and one right panel, and all custom
+panels use a shared 350 x 514 exterior and persisted universal scale. Inventory
+continues to use native server-backed storage, 28 visible positions, 24 usable
+slots and four locked positions. See
+[WarscapeUIFrameworkPhase1.md](WarscapeUIFrameworkPhase1.md) for assignments,
+new empty panels and validation. This revision adds no gameplay or database
+changes.

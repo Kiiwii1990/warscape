@@ -4,6 +4,7 @@
   "display_name": "Warscape Development Sandbox",
   "tiles": [[32, 32]],
   "height": 30.0,
+  "ground_detail": {"flat": true},
   "texture": "Tileset\\Elwynn\\ElwynnGrassBase.blp",
   "spawn": {
     "x": -266.666667,

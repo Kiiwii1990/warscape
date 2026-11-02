@@ -919,6 +919,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             Ranged,
             Magic,
             Prayer,
+            Mining,
+            Smithing,
             Count
         };
 
@@ -936,8 +938,35 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             {10, 1154},   // Hitpoints
             {1, 0},       // Ranged
             {1, 0},       // Magic
-            {1, 0}        // Prayer
+            {1, 0},       // Prayer
+            {1, 0},       // Mining
+            {1, 0}        // Smithing
         }};
+
+        // Fractional XP carry for Mining; persisted as half-point parity.
+        uint8 warscapeMiningHalfXP = 0;
+        uint8 warscapeSmithingTenthXP = 0;
+        uint32 warscapeSmeltRemaining = 0;
+        uint32 warscapeSmeltMap = 0;
+        Position warscapeSmeltStart;
+        uint32 warscapeSmeltRequestCooldown = 0;
+        bool IsWarscapeSmelting() const { return warscapeSmeltRemaining != 0; }
+        void CancelWarscapeSmelting();
+        void StartWarscapeBronzeSmelting();
+        ObjectGuid warscapeForge;
+        uint32 warscapeForgeSerial = 0, warscapeForgeSequence = 0;
+        uint32 warscapeBatch = 0, warscapeForgeRefresh = 0;
+        bool warscapeSmeltingMenuOpen = false;
+        void OpenWarscapeSmelting(GameObject* forge);
+        bool HasWarscapeForge() const;
+        void SendWarscapeSmelting(std::string const& message);
+        bool HandleWarscapeSmelting(std::string_view message, std::string const& target, bool whisper);
+        void CloseWarscapeSmelting();
+        void RefreshWarscapeSmelting(uint32 diff);
+        void UpdateWarscapeSmelting(uint32 diff);
+        bool HasWarscapeCraftingFocus(uint32 focusId) const;
+        bool PrepareWarscapeBronze(Item*& copper, Item*& tin, ItemPosCountVec& dest) const;
+        void AddRSSkillTenthXP(RS_Skill skill, uint32 tenths);
 
         // Exact OSRS XP thresholds, calculated with integer rounding.
         static uint32 RS_XPForLevel(uint8 level)
@@ -968,6 +997,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool InitializeWarscapeInventory();
         bool UnlockWarscapeInventory();
         void AddRSSkillXP(RS_Skill skill, uint32 amount);
+        void AddRSSkillHalfXP(RS_Skill skill, uint32 halfPoints);
         Warscape::SkillUpdateResult SetRSSkillLevel(RS_Skill skill, uint32 level);
         Warscape::SkillUpdateResult SetRSSkillXP(RS_Skill skill, uint32 xp);
 

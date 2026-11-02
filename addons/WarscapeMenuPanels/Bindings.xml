@@ -1,0 +1,8 @@
+<Bindings>
+  <Binding name="WARSCAPE_TOGGLE_FRIENDS">WarscapePanels:Toggle("friends")</Binding>
+  <Binding name="WARSCAPE_TOGGLE_QUESTS">WarscapePanels:Toggle("quests")</Binding>
+  <Binding name="WARSCAPE_TOGGLE_EQUIPMENT">WarscapePanels:Toggle("equipment")</Binding>
+  <Binding name="WARSCAPE_TOGGLE_ATTACK_STYLES">WarscapeMenuPanels_Toggle("attackStyles")</Binding>
+  <Binding name="WARSCAPE_TOGGLE_PRAYER">WarscapeMenuPanels_Toggle("prayer")</Binding>
+  <Binding name="WARSCAPE_TOGGLE_SPELLBOOK">WarscapeMenuPanels_Toggle("spellbook")</Binding>
+</Bindings>

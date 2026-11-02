@@ -4177,3 +4177,6 @@ Metric.OverallStatusInterval = 1
 
 #
 ###################################################################################################
+
+# Warscape first smelting prototype; temporary duration, milliseconds (1..60000).
+Warscape.Smelting.DurationMs = 3000

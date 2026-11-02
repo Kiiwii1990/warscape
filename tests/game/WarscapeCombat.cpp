@@ -22,6 +22,7 @@
 #include "WarscapeCombat.h"
 #include "WarscapeEquipment.h"
 #include "WarscapeSkills.h"
+#include "WarscapeMiningTools.h"
 #include "WarscapeSkillsAddon.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeAttackTest.h"
@@ -287,6 +288,18 @@ TEST_CASE("Warscape OSRS XP thresholds and level changes are exact", "[warscape]
     CHECK(Warscape::XPForLevel(4) == 276);
     CHECK(Warscape::XPForLevel(5) == 388);
     CHECK(Warscape::XPForLevel(99) == 13034431);
+    CHECK(Warscape::MiningSuccessOutOf256(1, 48, 90) == 49);
+    CHECK(Warscape::MiningSuccessOutOf256(74, 48, 90) == 80);
+    CHECK(Warscape::MiningSuccessOutOf256(99, 48, 90) == 91);
+    CHECK(Warscape::MiningSuccessOutOf256(1, 100, 350) == 101);
+    CHECK(Warscape::MiningSuccessOutOf256(50, 100, 350) == 226);
+    CHECK(Warscape::MiningSuccessOutOf256(99, 100, 350) == 256);
+    uint8_t miningHalfXP = 0;
+    CHECK(Warscape::AccumulateHalfXP(miningHalfXP, 35) == 17);
+    CHECK(miningHalfXP == 1);
+    CHECK(Warscape::AccumulateHalfXP(miningHalfXP, 35) == 18);
+    CHECK(miningHalfXP == 0);
+    CHECK(Warscape::AccumulateHalfXP(miningHalfXP, 35) == 17);
 
     CHECK(Warscape::LevelForXP(82) == 1);
     CHECK(Warscape::LevelForXP(83) == 2);
@@ -645,4 +658,68 @@ TEST_CASE("Warscape damage variation is bounded, symmetric and leaves XP on OSRS
     CHECK(Warscape::OSRSDamageForXP(1, 12) * 4 == 4);
     CHECK(Warscape::OSRSDamageForXP(5, 12) * 4 == 8);
     CHECK(Warscape::OSRSDamageForXP(5, 0) == 0);
+}
+
+
+TEST_CASE("Warscape pickaxe tiers select speed from attained Mining, not Attack", "[warscape][mining][pickaxes]")
+{
+    auto choose = [](uint8_t level, std::initializer_list<uint32_t> entries)
+    {
+        return Warscape::SelectMiningPickaxe(level, [&](uint32_t entry)
+            { return std::find(entries.begin(), entries.end(), entry) != entries.end(); });
+    };
+    CHECK_FALSE(choose(99, {}));
+    CHECK_FALSE(choose(5, {900222}));
+    CHECK(choose(1, {2901})->IntervalMs() == 4800);
+    CHECK(choose(1, {2901,900220})->ItemEntry == 900220);
+    CHECK(choose(1, {900220,900221,900222})->ItemEntry == 900221);
+    CHECK(choose(5, {900220,900221,900222})->IntervalMs() == 4200);
+    CHECK(choose(6, {900220,900221,900222})->ItemEntry == 900222);
+    CHECK(choose(6, {900222})->IntervalMs() == 3600);
+    CHECK(choose(1, {900220})->IntervalMs() == 4800);
+    CHECK(choose(99, {2901,900220,900221,900222})->ItemEntry == 900222);
+    CHECK(choose(6, {900222})->FutureAttackToWield == 5); // no Attack argument/gate
+    for (auto const& tool : Warscape::MiningPickaxes)
+    {
+        CHECK(choose(tool.MiningLevel, {tool.ItemEntry}) == &tool);
+        CHECK(Warscape::ShouldRestoreMiningTool(tool.ItemEntry, tool.ItemEntry));
+        CHECK_FALSE(Warscape::ShouldRestoreMiningTool(1234, tool.ItemEntry));
+    }
+    CHECK_FALSE(Warscape::ShouldRestoreMiningTool(0, 0));
+}
+
+TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape][smithing]")
+{
+    REQUIRE(Warscape::SkillCount == 9);
+    REQUIRE(Warscape::SkillIndexFromName("smithing") == 8);
+    REQUIRE(Warscape::SkillIndexFromName("mining") == 7);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
+    auto& smithing = skills[8];
+    CHECK(smithing.Level == 1);
+    CHECK(smithing.XP == 0);
+    for (uint8_t level = 2; level <= 99; ++level)
+    {
+        auto threshold = Warscape::XPForLevel(level);
+        CHECK(Warscape::LevelForXP(threshold - 1) == level - 1);
+        CHECK(Warscape::LevelForXP(threshold) == level);
+    }
+    uint8_t miningCarry = 1, smithingCarry = 0;
+    Warscape::AddSkillXP(smithing, Warscape::AccumulateHalfXP(smithingCarry, 35));
+    CHECK(smithing.XP == 17);
+    CHECK(smithingCarry == 1);
+    auto saved = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> restored{};
+    Warscape::RestoreSkillXP(restored, saved);
+    Warscape::AddSkillXP(restored[8], Warscape::AccumulateHalfXP(smithingCarry, 35));
+    CHECK(restored[8].XP == 35);
+    CHECK(smithingCarry == 0);
+    CHECK(miningCarry == 1);
+    CHECK(restored[7].XP == 0);
+    CHECK(Warscape::SetSkillLevel(smithing, 0, false) == Warscape::SkillUpdateResult::InvalidLevel);
+    CHECK(Warscape::SetSkillLevel(smithing, 100, false) == Warscape::SkillUpdateResult::InvalidLevel);
+    CHECK(Warscape::SetSkillXP(smithing, 200000001, false) == Warscape::SkillUpdateResult::InvalidXP);
+    CHECK(Warscape::SetSkillLevel(smithing, 99, false) == Warscape::SkillUpdateResult::Success);
+    CHECK(smithing.XP == 13034431);
+    CHECK(Warscape::SetSkillLevel(smithing, 1, false) == Warscape::SkillUpdateResult::Success);
+    CHECK(smithing.XP == 0);
 }

@@ -1,0 +1,11 @@
+## Interface: 30300
+## Title: Warscape Menu Panels
+## Notes: Empty main panels for Attack Styles, Prayer and Spellbook
+## Author: Warscape
+## Version: 1.1.1
+## Dependencies: WarscapePanels, WarscapeSkills
+## SavedVariablesPerCharacter: WarscapeMenuPanelPositions
+MainPanels.lua
+NativePanels.lua
+Bindings.xml
+Bindings.lua
