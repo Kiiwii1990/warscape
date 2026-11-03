@@ -272,7 +272,18 @@ rightDock:SetSize(1,1);rightDock:SetPoint("BOTTOMLEFT",backing,"TOP",rightInner,
 WarscapePanels:SetDocks(leftDock,rightDock,nose-menuGap, WarscapeSkillsSkin.profiles.landscape.width)
 
 local nativeMenus = {
-    {id="settings", name="GameMenuFrame", group="left", toggle=function() ToggleGameMenu() end},
+    {
+        id = "settings",
+        name = "GameMenuFrame",
+        group = "left",
+        toggle = function()
+            if GameMenuFrame:IsShown() then
+                GameMenuFrame:Hide()
+            else
+                GameMenuFrame:Show()
+            end
+        end
+    },
     {id="friends", name="FriendsFrame", group="left", toggle=function() ToggleFriendsFrame() end},
     {id="quests", name="QuestLogFrame", group="left", toggle=function() ToggleFrame(QuestLogFrame) end},
     {id="equipment", name="CharacterFrame", group="right", toggle=function() ToggleCharacter("PaperDollFrame") end},
