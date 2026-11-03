@@ -24,19 +24,18 @@ not been applied.
 
 ### Rollback plan
 
-Do not run a rollback after characters have earned Agility XP: dropping the
-column would permanently delete that progress. If rollback is required before
-Agility XP has been awarded, stop the server, take and verify a fresh character
-database backup, then run:
+The character updater records applied migration names and hashes. Do not remove
+`agility_xp` with an ad hoc `DROP COLUMN`: that would leave the migration marked
+applied while making the schema disagree with its verification specification.
+For a code rollback, stop the server and restore the prior worldserver/addon
+files while leaving this additive column in place. The previous prepared
+statements omit `agility_xp`, so the default keeps old code compatible. This
+preserves any Agility XP already earned and keeps migration history consistent.
 
-```sql
-ALTER TABLE `warscape_skills` DROP COLUMN `agility_xp`;
-```
-
-Rollback also requires reverting the server code that reads/writes the column.
-After any Agility XP has been earned, preserve the column and XP data; rollback
-must instead retain compatible persistence or first export and separately
-preserve every value. Never use a database restore as a routine rollback.
+If the column ever must be removed, treat that as a new, separately reviewed
+schema migration with explicit progress-preservation handling. Do not rewrite
+or unapply the recorded migration, restore a database as routine rollback, or
+discard earned Agility XP.
 
 ## Acceptance steps after migration and deployment are separately approved
 
