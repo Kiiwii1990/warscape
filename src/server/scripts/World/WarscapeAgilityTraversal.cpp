@@ -9,6 +9,7 @@
 
 #include "WarscapeAgilityTraversal.h"
 #include "Map.h"
+#include "MapManager.h"
 #include "MoveSpline.h"
 #include "MoveSplineInit.h"
 #include "MotionMaster.h"
@@ -16,7 +17,11 @@
 #include "ScriptMgr.h"
 #include "WorldSession.h"
 
+#include <array>
+#include <algorithm>
+#include <cmath>
 #include <unordered_map>
+#include <vector>
 
 namespace
 {
@@ -30,11 +35,30 @@ namespace
     constexpr uint32 MAX_TRAVERSAL_MS = 12000;
     constexpr uint32 TRAVERSAL_MOTION_ID = 0xA61001;
 
+    struct RoutePoint
+    {
+        float x;
+        float y;
+        float z;
+    };
+
+    // Measured by the user in-game with .gps while standing on the edited log.
+    constexpr std::array<RoutePoint, 7> NORTHSHIRE_LOG_ROUTE = {{
+        { -9074.780273f, -195.128021f, 71.909966f }, // approach
+        { -9075.851562f, -197.076318f, 70.528038f }, // takeoff
+        { -9076.198242f, -199.217316f, 71.087822f }, // near log
+        { -9077.499023f, -203.898041f, 71.180267f }, // log midpoint
+        { -9078.817383f, -209.583771f, 71.663506f }, // far log
+        { -9079.299805f, -211.528687f, 70.387108f }, // step-off
+        { -9079.845703f, -213.721573f, 70.746696f }  // landing
+    }};
+
     struct TraversalSession
     {
         ObjectGuid playerGuid;
         uint32 splineId;
         uint32 elapsedMs;
+        uint32 timeoutMs;
     };
 
     using SessionMap = std::unordered_map<Map*, TraversalSession>;
@@ -47,6 +71,15 @@ namespace
     bool IsOwner(Player const* player, TraversalSession const& session)
     {
         return player && player->GetGUID() == session.playerGuid && player->GetSession();
+    }
+
+    bool IsValidRoute(std::vector<G3D::Vector3> const& path)
+    {
+        return path.size() > 1 && std::all_of(path.begin(), path.end(), [](G3D::Vector3 const& point)
+        {
+            return std::isfinite(point.x) && std::isfinite(point.y) && std::isfinite(point.z) &&
+                MapManager::IsValidMapCoord(TEST_MAP_ID, point.x, point.y, point.z);
+        });
     }
 
     void StopSpline(Player* player, TraversalSession const& session)
@@ -79,7 +112,7 @@ namespace
         if (!IsOwner(player, itr->second))
         {
             itr->second.elapsedMs += diff;
-            if (itr->second.elapsedMs >= MAX_TRAVERSAL_MS)
+            if (itr->second.elapsedMs >= itr->second.timeoutMs)
             {
                 if (player)
                     StopSpline(player, itr->second);
@@ -103,7 +136,7 @@ namespace
         }
 
         itr->second.elapsedMs += diff;
-        if (itr->second.elapsedMs >= MAX_TRAVERSAL_MS)
+        if (itr->second.elapsedMs >= itr->second.timeoutMs)
         {
             StopSpline(player, itr->second);
             Sessions().erase(itr);
@@ -143,16 +176,42 @@ namespace
     };
 }
 
-bool WarscapeAgilityTraversal::Start(Player* player)
+bool WarscapeAgilityTraversal::Start(Player* player, Route route)
 {
     if (!player || !player->GetSession() || !player->IsInWorld() || !player->IsAlive() ||
         player->GetMapId() != TEST_MAP_ID || player->GetMap()->GetInstanceId() != 0 ||
         player->IsInCombat() || player->IsInFlight() || player->GetVehicle() || player->IsMounted())
         return false;
 
-    float dx = player->GetPositionX() - START_X;
-    float dy = player->GetPositionY() - START_Y;
-    if (dx * dx + dy * dy > MAX_START_DISTANCE * MAX_START_DISTANCE)
+    std::vector<G3D::Vector3> path;
+    float startX = START_X;
+    float startY = START_Y;
+    float startDistance = MAX_START_DISTANCE;
+    bool walk = false;
+    float speed = 4.5f;
+    if (route == Route::NorthshireLog)
+    {
+        path.reserve(NORTHSHIRE_LOG_ROUTE.size());
+        for (RoutePoint const& point : NORTHSHIRE_LOG_ROUTE)
+            path.emplace_back(point.x, point.y, point.z);
+        startX = NORTHSHIRE_LOG_ROUTE.front().x;
+        startY = NORTHSHIRE_LOG_ROUTE.front().y;
+        startDistance = 3.0f;
+        walk = true;
+        speed = 2.5f;
+    }
+    else
+    {
+        path.emplace_back(START_X, START_Y, 0.0f);
+        path.emplace_back(END_X, END_Y, END_Z);
+    }
+
+    if (!IsValidRoute(path))
+        return false;
+
+    float dx = player->GetPositionX() - startX;
+    float dy = player->GetPositionY() - startY;
+    if (dx * dx + dy * dy > startDistance * startDistance)
         return false;
 
     SessionMap& sessions = Sessions();
@@ -167,11 +226,12 @@ bool WarscapeAgilityTraversal::Start(Player* player)
         sessions.erase(existing);
     }
 
-    std::function<void(Movement::MoveSplineInit&)> initializer = [](Movement::MoveSplineInit& init)
+    uint32 const timeoutMs = route == Route::NorthshireLog ? 30000 : MAX_TRAVERSAL_MS;
+    std::function<void(Movement::MoveSplineInit&)> initializer = [path = std::move(path), walk, speed](Movement::MoveSplineInit& init)
     {
-        init.Path().emplace_back(START_X, START_Y, 0.0f);
-        init.Path().emplace_back(END_X, END_Y, END_Z);
-        init.SetWalk(false);
+        init.Path() = path;
+        init.SetWalk(walk);
+        init.SetVelocity(speed);
     };
     player->GetMotionMaster()->LaunchMoveSpline(std::move(initializer), TRAVERSAL_MOTION_ID,
         MOTION_PRIORITY_HIGHEST, POINT_MOTION_TYPE);
@@ -179,7 +239,7 @@ bool WarscapeAgilityTraversal::Start(Player* player)
     if (player->movespline->Finalized())
         return false;
 
-    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0 });
+    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs });
     return true;
 }
 

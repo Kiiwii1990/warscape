@@ -16,7 +16,13 @@ class Player;
 
 namespace WarscapeAgilityTraversal
 {
-    bool Start(Player* player);
+    enum class Route
+    {
+        StreamPrototype,
+        NorthshireLog
+    };
+
+    bool Start(Player* player, Route route = Route::StreamPrototype);
     bool Stop(Player* player, bool interrupted);
 }
 

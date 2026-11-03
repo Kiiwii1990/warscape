@@ -31,15 +31,30 @@ namespace
         }
 
     private:
-        static bool HandleAgilityCommand(ChatHandler* handler, Optional<std::string_view> action)
+        static bool HandleAgilityCommand(ChatHandler* handler, Optional<std::string_view> action, Optional<std::string_view> route)
         {
             Player* player = handler->GetSession()->GetPlayer();
             if (!action || *action == "start")
             {
-                if (!WarscapeAgilityTraversal::Start(player))
-                    handler->SendSysMessage("AGI-001B: stand at the Northshire Abbey test start on map 0; the route is GM-only and unavailable while dead, mounted, in combat, or already active.");
+                WarscapeAgilityTraversal::Route selectedRoute = WarscapeAgilityTraversal::Route::StreamPrototype;
+                if (route)
+                {
+                    if (*route != "log")
+                    {
+                        handler->SendSysMessage("Usage: .agi start [log] | .agi stop");
+                        return false;
+                    }
+                    selectedRoute = WarscapeAgilityTraversal::Route::NorthshireLog;
+                }
+
+                if (!WarscapeAgilityTraversal::Start(player, selectedRoute))
+                    handler->SendSysMessage(selectedRoute == WarscapeAgilityTraversal::Route::NorthshireLog
+                        ? "AGI-003A: stand within 3 yards of the measured Northshire approach on map 0; the route requires a living GM outside combat, flight, mount, or vehicle states, with no route active in this map instance."
+                        : "AGI-001B: stand at the Northshire Abbey test start on map 0; the route is GM-only and unavailable while dead, mounted, in combat, or already active.");
                 else
-                    handler->SendSysMessage("AGI-001B: automatic player spline started. Use .agi stop to interrupt.");
+                    handler->SendSysMessage(selectedRoute == WarscapeAgilityTraversal::Route::NorthshireLog
+                        ? "AGI-003A: measured Northshire log route started. Watch the descent and collision; use .agi stop to interrupt."
+                        : "AGI-001B: automatic player spline started. Use .agi stop to interrupt.");
                 return true;
             }
 
@@ -52,7 +67,7 @@ namespace
                 return true;
             }
 
-            handler->SendSysMessage("Usage: .agi start | .agi stop");
+            handler->SendSysMessage("Usage: .agi start [log] | .agi stop");
             return false;
         }
     };
