@@ -1,5 +1,6 @@
 """Real Lua 5.1 addons + native item scripts; mock geometry, not live rendering."""
 from pathlib import Path
+import os
 import sys
 import xml.etree.ElementTree as ET
 from lupa.lua51 import LuaRuntime
@@ -8,7 +9,25 @@ ADDONS = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ADDONS / 'WarscapeHUD/tools'))
 from client_assets import ClientAssets
 
-assets = ClientAssets(Path(r'C:\WoWDev\wowdecomp\bin\Win'))
+def client_assets():
+    """Read original UI templates directly from a locally installed client."""
+    configured = os.environ.get('WARSCAPE_WOW_CLIENT')
+    candidates = [Path(configured)] if configured else []
+    candidates.extend([
+        Path(r'C:\Wrath of the Lich King'),
+        Path(r'C:\WoWDev\wowdecomp\bin\Win'),  # legacy extracted fixture
+    ])
+    for game in candidates:
+        if game.is_dir() and (game / 'Data').is_dir():
+            return ClientAssets(game)
+        # Retain compatibility with the earlier extracted asset directory.
+        if game.is_dir() and any(game.rglob('ItemButtonTemplate.lua')):
+            return ClientAssets(game.parent)
+    raise FileNotFoundError(
+        'WoW 3.3.5a client not found; set WARSCAPE_WOW_CLIENT to its install directory')
+
+
+assets = client_assets()
 
 
 def load(saved=None):

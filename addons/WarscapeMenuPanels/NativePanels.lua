@@ -114,6 +114,23 @@ function WarscapeMenuPanels_RegisterNative(definition, native)
         updateContent()
     end
     local changing = false
+    local function syncSettingsMenu()
+        if id ~= "settings" or changing then return end
+        changing = true
+        -- IsVisible() includes ancestor visibility. GameMenuFrame is parented
+        -- inside this shell, so IsShown() is the logical menu state even while
+        -- a parent is hidden; using IsVisible() here can deadlock the reopen.
+        if native:IsShown() then
+            if not shell:IsShown() then
+                shell:Show()
+                manager:Open(id)
+            end
+            updateContent()
+        elseif shell:IsShown() then
+            shell:Hide()
+        end
+        changing = false
+    end
     native:HookScript("OnShow",function()
         if changing then return end
         changing=true
@@ -121,11 +138,24 @@ function WarscapeMenuPanels_RegisterNative(definition, native)
         changing=false
     end)
     native:HookScript("OnHide",function()
-        if not changing then shell:Hide() end
+        if not changing then
+            if id == "settings" then syncSettingsMenu() else shell:Hide() end
+        end
     end)
     shell:HookScript("OnHide",function()
-        if native:IsShown() then native:Hide() end
+        if id ~= "settings" then
+            if native:IsShown() then native:Hide() end
+            return
+        end
+        if changing or not native:IsShown() then return end
+        changing=true
+        native:Hide()
+        changing=false
     end)
+    if id == "settings" and type(hooksecurefunc) == "function"
+        and type(ToggleGameMenu) == "function" then
+        hooksecurefunc("ToggleGameMenu",syncSettingsMenu)
+    end
     manager:Register(id,shell,{group=definition.group,layout=layout,
         combatSensitive=native.IsProtected and native:IsProtected(),
         show=function()

@@ -39,3 +39,7 @@ cmake-build-*/
 *.sql.zst
 *.dump
 /contrib/warscape/__pycache__/
+
+# Local Python virtual environments
+.venv/
+__pycache__/

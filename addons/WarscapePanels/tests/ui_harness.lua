@@ -105,6 +105,9 @@ function methods:Hide()
     for _,f in ipairs(self.hooks.OnHide or {}) do f(self) end
 end
 function methods:IsShown() return self.shown end
+function methods:IsVisible()
+    return self.shown and (not self.parent or self.parent:IsVisible())
+end
 function methods:CreateTexture(name,layer) local w=CreateFrame("Texture",name,self); w.layer=layer; return w end
 function methods:CreateFontString(name,layer) local w=self:CreateTexture(name,layer);w.kind="FontString";return w end
 function methods:SetNormalTexture(path) self.normal=self:CreateTexture(); self.normal:SetTexture(path) end
@@ -199,7 +202,21 @@ for _,suffix in ipairs({"Options","SoundOptions","UIOptions","MacOptions","Keybi
 FriendsFrame=CreateFrame("Frame","FriendsFrame",UIParent);FriendsFrame:SetSize(384,512);FriendsFrame:Hide()
 QuestLogFrame=CreateFrame("Frame","QuestLogFrame",UIParent);QuestLogFrame:SetSize(682,447);QuestLogFrame:Hide()
 CharacterFrame=CreateFrame("Frame","CharacterFrame",UIParent);CharacterFrame:SetSize(384,512);CharacterFrame:Hide()
-function ToggleGameMenu() if GameMenuFrame:IsShown() then GameMenuFrame:Hide() else GameMenuFrame:Show() end end
+function ToggleGameMenu()
+    menuToggleCount=(menuToggleCount or 0)+1
+    if GameMenuFrame:IsShown() then GameMenuFrame:Hide() else GameMenuFrame:Show() end
+end
+secureHooks={}
+function hooksecurefunc(name, callback)
+    local original=_G[name]
+    assert(type(original)=="function", "missing function for secure hook: "..name)
+    secureHooks[name]=(secureHooks[name] or 0)+1
+    _G[name]=function(...)
+        local results={original(...)}
+        callback(...)
+        return unpack(results)
+    end
+end
 function ToggleFriendsFrame() if FriendsFrame:IsShown() then FriendsFrame:Hide() else FriendsFrame:Show() end end
 function ToggleFrame(frame) if frame:IsShown() then frame:Hide() else frame:Show() end end
 function ToggleCharacter() if CharacterFrame:IsShown() then CharacterFrame:Hide() else CharacterFrame:Show() end end

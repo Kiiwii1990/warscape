@@ -61,6 +61,35 @@ for _,id in ipairs(ids) do
     P:Close(id);P:Open(id);assert(P:State(id).orientation=="portrait");docked(e)
     chrome.rotate.scripts.OnClick();P:Close(id)
 end
+-- Settings follows Blizzard's post-toggle state without treating ancestor
+-- visibility as the menu's logical open/closed state or recursing into toggle.
+local settings=P.entries.settings.frame
+menuToggleCount=menuToggleCount or 0
+assert(secureHooks.ToggleGameMenu==1, "Settings installs one secure post-hook")
+P:Open("skills")
+WarscapeHUDMenuButton1.scripts.OnClick(WarscapeHUDMenuButton1)
+assert(GameMenuFrame:IsShown() and settings:IsShown(),
+    "HUD Settings button opens Blizzard and Warscape together")
+WarscapeHUDMenuButton1.scripts.OnClick(WarscapeHUDMenuButton1)
+assert(not GameMenuFrame:IsShown() and not settings:IsShown(), "HUD Settings button closes both together")
+for pass=1,8 do
+    local toggles=menuToggleCount
+    ToggleGameMenu()
+    assert(menuToggleCount==toggles+1, "post-hook must not recursively toggle Blizzard's menu")
+    assert(GameMenuFrame:IsShown() and settings:IsShown() and GameMenuFrame:IsVisible() and settings:IsVisible())
+    assert(WarscapeSkillsFrame:IsShown(), "Settings must preserve the other panel group")
+    ToggleGameMenu()
+    assert(not GameMenuFrame:IsShown() and not settings:IsShown())
+end
+ToggleGameMenu()
+assert(GameMenuFrame:IsShown() and settings:IsShown())
+UIParent:Hide()
+assert(GameMenuFrame:IsShown() and settings:IsShown() and not GameMenuFrame:IsVisible()
+    and not settings:IsVisible(), "IsShown remains authoritative under a hidden ancestor")
+ToggleGameMenu()
+assert(not GameMenuFrame:IsShown() and not settings:IsShown(), "Escape closes despite IsShown/IsVisible divergence")
+UIParent:Show()
+P:Close("settings")
 -- Orientation is independent; detached same-side windows still replace one another.
 P:Open("inventory");P:Open("skills");P:SetLocked("inventory",false)
 P:ToggleOrientation("inventory")
