@@ -20,8 +20,12 @@
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
 void AddSC_warscape_copper_mining();
+void AddSC_warscape_agility_commandscript();
+void AddSC_WarscapeAgilityTraversal();
 
 void AddCustomScripts()
 {
     AddSC_warscape_copper_mining();
+    AddSC_warscape_agility_commandscript();
+    AddSC_WarscapeAgilityTraversal();
 }
