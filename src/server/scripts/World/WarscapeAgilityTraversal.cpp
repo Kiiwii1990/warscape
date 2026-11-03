@@ -71,7 +71,7 @@ namespace
 
     // Keep obstacle data independent from the shared spline/session runner.
     constexpr std::array<ObstacleDefinition, 1> OBSTACLES = {{
-        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1, 8, 50 }
+        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 30.0f, 2.5f, 30000, 1, 8, 50 }
     }};
 
     struct TraversalSession

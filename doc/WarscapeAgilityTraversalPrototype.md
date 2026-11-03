@@ -26,7 +26,7 @@ The first and second readings differ in height by about 1.38 game units, and the
 
 1. Build the `RelWithDebInfo` `worldserver` target and start the local Warscape server normally.
 2. Log in as a GM and visually check the crossing is clear of hazards and nearby players. The client `patch-4.MPQ` only changes client terrain data; it does **not** prove that server VMAP collision includes the log. Do not treat this waypoint route as a collision-safe gameplay path until server collision is independently verified.
-3. Stand within 3 yards horizontally of the measured approach point on map 0:
+3. Stand within 30 yards horizontally of the measured approach point on map 0:
 
    ```text
    .go xyz -9074.780273 -195.128021 71.909966 0
@@ -58,7 +58,7 @@ the tooltip's `Total XP` line to confirm earned XP.
 
 ## Acceptance checks
 
-- Confirm `.gps` reports map 0 and the player starts within 3 horizontal yards of point 1.
+- Confirm `.gps` reports map 0 and the player starts within 30 horizontal yards of point 1.
 - Observe whether the character descends toward point 2, stays on/near points 3–5, steps off near point 6, and reaches point 7. Record where client/server position diverges, if it does.
 - Check whether movement input is ignored while the spline is active and whether ordinary control returns after arrival. **User-confirmed for the tested traversal, including spamming movement buttons.**
 - Interrupt with `.agi stop`, ordinary movement, combat, death, map leave, and logout/relogin where practical; verify the route ends and a later attempt can start.
