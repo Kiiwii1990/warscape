@@ -26,7 +26,7 @@
 #include "WarscapeSkillsAddon.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeAttackTest.h"
-#include "WarscapeAgilityReward.h"
+#include "WarscapeAgilityAttempt.h"
 #include "WarscapeSkillStatements.h"
 
 TEST_CASE("Warscape skills addon accepts only bounded read-only subscriptions", "[warscape]")
@@ -742,18 +742,32 @@ TEST_CASE("Smithing and Agility share progression, persistence and stable IDs", 
     CHECK(smithing.XP == 0);
 }
 
-TEST_CASE("Agility traversal reward requires successful landing and is one-shot", "[warscape][agility]")
+TEST_CASE("Agility attempt reward is accepted once before traversal", "[warscape][agility]")
 {
-    bool rewardPending = true;
-    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, false, true, true, 0.0f, 2.0f));
-    CHECK(rewardPending);
-    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, false, true, 0.0f, 2.0f));
-    CHECK(rewardPending);
-    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, false, 0.0f, 2.0f));
-    CHECK(rewardPending);
-    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 4.01f, 2.0f));
-    CHECK(rewardPending);
-    CHECK(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 4.0f, 2.0f));
-    CHECK_FALSE(rewardPending);
-    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 0.0f, 2.0f));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(false, false, 100, 0));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, true, 100, 0));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 100, 100));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 0, 0));
+    CHECK(Warscape::ShouldAcceptAgilityAttempt(true, false, 100, 99));
+    CHECK(Warscape::ShouldAcceptAgilityAttempt(true, false, 25, 24));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 25, 25));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 101, 0));
+
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
+    skills[9].Level = 1;
+    bool traversalActive = false;
+    REQUIRE(Warscape::ShouldAcceptAgilityAttempt(true, traversalActive, 100, 0));
+    Warscape::AddSkillXP(skills[9], 8);
+    traversalActive = true;
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, traversalActive, 100, 0));
+    CHECK(skills[9].XP == 8);
+
+    // An interruption ends the session but does not reverse the accepted-attempt XP.
+    traversalActive = false;
+    CHECK(skills[9].XP == 8);
+    auto const saved = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> restored{};
+    Warscape::RestoreSkillXP(restored, saved);
+    CHECK(restored[9].Level == 1);
+    CHECK(restored[9].XP == 8);
 }

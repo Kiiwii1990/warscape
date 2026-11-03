@@ -2,11 +2,15 @@
 
 ## Approved behavior
 
-The Northshire log obstacle requires Agility level 1 and awards exactly 8 Agility
-XP after a successful crossing. It uses the existing skill XP curve, character
-save/load path, and `WCSkills` UI update. No reward is given when starting or
-when a traversal is interrupted, replaced, times out, or ends outside the final
-landing tolerance. Each active session is removed before its reward is applied.
+The Northshire log obstacle requires Agility level 1. After validating the
+player, route, start location and active-session state, the server performs the
+obstacle's success roll. The prototype is configured at 100%, so every eligible
+accepted attempt succeeds. It awards exactly 8 Agility XP immediately before
+movement begins, then starts the existing seven-point spline. Completion only
+restores normal movement and clears the session. An interruption after an
+accepted attempt does not revoke XP; rejected starts and repeated active-session
+commands award none. XP uses the existing curve, character save/load path, and
+`WCSkills` UI update.
 
 The seven measured route points and the `.agi start log` command are retained.
 Obstacle configuration is separated from the shared traversal/session runner.
@@ -40,15 +44,16 @@ discard earned Agility XP.
 ## Acceptance steps after migration and deployment are separately approved
 
 1. Record Agility XP and confirm level 1; travel to the measured approach point
-   and run `.agi start log`.
-2. Confirm there is no XP award at start. Complete the seven-point crossing and
-   confirm the XP total increased by exactly 8 and the skills UI refreshes.
-3. Complete another legitimate crossing and confirm another exact 8 XP.
-4. Separately test `.agi stop`, ordinary movement/replaced spline, timeout,
-   combat/death, logout, teleport, and map/instance departure where practical;
-   confirm each failed attempt gives 0 XP and a later run can start.
-5. Relog and confirm Agility XP and level persist and the UI shows the same
-   values. Existing Mining fractional XP and Smithing XP/carry should be
-   unchanged.
+   and run `.agi start log`. Confirm +8 XP and the UI update immediately, before
+   the character steps onto the log.
+2. While traversal is active, run `.agi start log` again. Confirm it is rejected
+   with no additional XP. Finish the crossing and confirm completion adds none.
+3. Run another legitimate attempt and confirm another exact +8 XP.
+4. Start an accepted attempt, then use `.agi stop`, ordinary movement/replaced
+   spline, or logout. Confirm the already-awarded +8 remains, no second reward is
+   added, and a later run can start. Also confirm invalid location, combat/death,
+   teleport and map/instance-rejected starts give no XP.
+5. Relog and confirm XP and level persist and the UI shows the same values.
+   Existing Mining fractional XP and Smithing XP/carry should be unchanged.
 
 These are user-run in-game checks. A successful build does not verify them.

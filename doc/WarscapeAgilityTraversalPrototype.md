@@ -44,15 +44,15 @@ The user confirmed that the seven-waypoint Northshire log traversal worked in-ga
 
 ## AGI-004A obstacle reward
 
-The Northshire log is registered as a reusable obstacle definition, separate from
-the shared traversal/session runner. It requires Agility level 1 and awards
-exactly 8 Agility XP only when the owned spline finalizes and the eligible
-player remains on map 0, instance 0, within 2 yards of the measured landing
-point. The session is erased before XP is applied, so one run can award at most
-once. Start, interruption, replacement spline, timeout, death/combat, logout,
-teleport and map/instance departure do not award XP. Those failure paths still
-need in-game verification. See [WarscapeAgilityAGI004A.md](WarscapeAgilityAGI004A.md)
-for the pending migration, rollback limits and exact acceptance steps.
+The Northshire log is registered as a reusable obstacle definition, separate
+from the shared traversal/session runner. It requires Agility level 1 and has a
+100% success chance for the prototype. Each eligible accepted attempt awards
+exactly 8 Agility XP immediately before starting the existing spline. Traversal
+completion only clears the session; interruption after acceptance does not
+remove XP, and repeated commands while active are rejected without another
+reward. These attempt/reward timings need in-game verification. See
+[WarscapeAgilityAGI004A.md](WarscapeAgilityAGI004A.md) for migration, rollback
+limits and acceptance steps.
 
 ## Acceptance checks
 

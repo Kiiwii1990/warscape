@@ -16,7 +16,8 @@
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "WorldSession.h"
-#include "WarscapeAgilityReward.h"
+#include "Random.h"
+#include "WarscapeAgilityAttempt.h"
 
 #include <array>
 #include <algorithm>
@@ -27,7 +28,6 @@
 namespace
 {
     constexpr uint32 TEST_MAP_ID = 0;
-    constexpr uint32 AGILITY_XP_PER_LOG_CROSSING = 8;
     constexpr float START_X = -9066.463867f;
     constexpr float START_Y = -199.568985f;
     constexpr float END_X = -9072.518555f;
@@ -66,13 +66,12 @@ namespace
         uint32 timeoutMs;
         uint8 requiredAgility;
         uint32 rewardXP;
-        float landingRadius;
+        uint8 successChancePercent;
     };
 
     // Keep obstacle data independent from the shared spline/session runner.
     constexpr std::array<ObstacleDefinition, 1> OBSTACLES = {{
-        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1,
-            AGILITY_XP_PER_LOG_CROSSING, 2.0f }
+        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1, 8, 100 }
     }};
 
     struct TraversalSession
@@ -81,12 +80,6 @@ namespace
         uint32 splineId;
         uint32 elapsedMs;
         uint32 timeoutMs;
-        uint32 mapId;
-        uint32 instanceId;
-        RoutePoint landing;
-        float landingRadius;
-        uint32 rewardXP;
-        bool rewardPending;
     };
 
     using SessionMap = std::unordered_map<Map*, TraversalSession>;
@@ -99,14 +92,6 @@ namespace
     bool IsOwner(Player const* player, TraversalSession const& session)
     {
         return player && player->GetGUID() == session.playerGuid && player->GetSession();
-    }
-
-    bool IsEligible(Player const* player, Map* map, uint32 mapId, uint32 instanceId)
-    {
-        return player && player->GetSession() && player->IsInWorld() && player->IsAlive() &&
-            !player->IsBeingTeleported() && !player->IsInCombat() && !player->IsInFlight() &&
-            !player->GetVehicle() && !player->IsMounted() && player->GetMap() == map &&
-            map->GetId() == mapId && map->GetInstanceId() == instanceId;
     }
 
     bool IsValidRoute(std::vector<G3D::Vector3> const& path)
@@ -173,17 +158,7 @@ namespace
 
         if (player->movespline->Finalized())
         {
-            TraversalSession const session = itr->second;
-            float const dx = player->GetPositionX() - session.landing.x;
-            float const dy = player->GetPositionY() - session.landing.y;
-            float const dz = player->GetPositionZ() - session.landing.z;
-            bool const completed = Warscape::TryClaimAgilityTraversalReward(itr->second.rewardPending,
-                player->movespline->GetId() == session.splineId, player->movespline->Finalized(),
-                IsEligible(player, map, session.mapId, session.instanceId), dx * dx + dy * dy + dz * dz,
-                session.landingRadius);
             Sessions().erase(itr);
-            if (completed)
-                player->AddRSSkillXP(Player::RS_Skill::Agility, session.rewardXP);
             return;
         }
 
@@ -283,6 +258,11 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
         sessions.erase(existing);
     }
 
+    // Roll only after every eligibility, route and duplicate-session check has passed.
+    uint32 const roll = urand(0, 99);
+    if (obstacle && !Warscape::ShouldAcceptAgilityAttempt(true, false, obstacle->successChancePercent, roll))
+        return false;
+
     uint32 const timeoutMs = obstacle ? obstacle->timeoutMs : MAX_TRAVERSAL_MS;
     std::function<void(Movement::MoveSplineInit&)> initializer = [path = std::move(path), walk, speed](Movement::MoveSplineInit& init)
     {
@@ -296,12 +276,10 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
     if (player->movespline->Finalized())
         return false;
 
-    RoutePoint landing{ END_X, END_Y, END_Z };
+    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs });
+    // The accepted attempt earns XP before the next movement update; interruption never revokes it.
     if (obstacle)
-        landing = obstacle->route->back();
-    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs,
-        map->GetId(), map->GetInstanceId(), landing, obstacle ? obstacle->landingRadius : 0.0f,
-        obstacle ? obstacle->rewardXP : 0, obstacle != nullptr });
+        player->AddRSSkillXP(Player::RS_Skill::Agility, obstacle->rewardXP);
     return true;
 }
 
