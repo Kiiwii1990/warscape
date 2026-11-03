@@ -26,6 +26,8 @@
 #include "WarscapeSkillsAddon.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeAttackTest.h"
+#include "WarscapeAgilityReward.h"
+#include "WarscapeSkillStatements.h"
 
 TEST_CASE("Warscape skills addon accepts only bounded read-only subscriptions", "[warscape]")
 {
@@ -694,6 +696,12 @@ TEST_CASE("Smithing and Agility share progression, persistence and stable IDs", 
     REQUIRE(Warscape::SkillIndexFromName("smithing") == 8);
     REQUIRE(Warscape::SkillIndexFromName("mining") == 7);
     REQUIRE(Warscape::SkillIndexFromName("agility") == 9);
+    CHECK(Warscape::SkillStatements::CountParameters(Warscape::SkillStatements::SelectSql) == 1);
+    CHECK(Warscape::SkillStatements::CountParameters(Warscape::SkillStatements::SaveSql) == 14);
+    CHECK(Warscape::SkillStatements::SaveParameterCount == 14);
+    CHECK(Warscape::SkillStatements::MiningHalfXPParameter == 11);
+    CHECK(Warscape::SkillStatements::SmithingTenthXPParameter == 12);
+    CHECK(Warscape::SkillStatements::AttackStyleParameter == 13);
     std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
     auto& smithing = skills[8];
     CHECK(smithing.Level == 1);
@@ -732,4 +740,20 @@ TEST_CASE("Smithing and Agility share progression, persistence and stable IDs", 
     CHECK(smithing.XP == 13034431);
     CHECK(Warscape::SetSkillLevel(smithing, 1, false) == Warscape::SkillUpdateResult::Success);
     CHECK(smithing.XP == 0);
+}
+
+TEST_CASE("Agility traversal reward requires successful landing and is one-shot", "[warscape][agility]")
+{
+    bool rewardPending = true;
+    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, false, true, true, 0.0f, 2.0f));
+    CHECK(rewardPending);
+    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, false, true, 0.0f, 2.0f));
+    CHECK(rewardPending);
+    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, false, 0.0f, 2.0f));
+    CHECK(rewardPending);
+    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 4.01f, 2.0f));
+    CHECK(rewardPending);
+    CHECK(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 4.0f, 2.0f));
+    CHECK_FALSE(rewardPending);
+    CHECK_FALSE(Warscape::TryClaimAgilityTraversalReward(rewardPending, true, true, true, 0.0f, 2.0f));
 }

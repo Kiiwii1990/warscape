@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "WorldSession.h"
+#include "WarscapeAgilityReward.h"
 
 #include <array>
 #include <algorithm>
@@ -85,7 +86,7 @@ namespace
         RoutePoint landing;
         float landingRadius;
         uint32 rewardXP;
-        bool rewardsAgility;
+        bool rewardPending;
     };
 
     using SessionMap = std::unordered_map<Map*, TraversalSession>;
@@ -176,9 +177,10 @@ namespace
             float const dx = player->GetPositionX() - session.landing.x;
             float const dy = player->GetPositionY() - session.landing.y;
             float const dz = player->GetPositionZ() - session.landing.z;
-            bool const completed = session.rewardsAgility &&
-                IsEligible(player, map, session.mapId, session.instanceId) &&
-                dx * dx + dy * dy + dz * dz <= session.landingRadius * session.landingRadius;
+            bool const completed = Warscape::TryClaimAgilityTraversalReward(itr->second.rewardPending,
+                player->movespline->GetId() == session.splineId, player->movespline->Finalized(),
+                IsEligible(player, map, session.mapId, session.instanceId), dx * dx + dy * dy + dz * dz,
+                session.landingRadius);
             Sessions().erase(itr);
             if (completed)
                 player->AddRSSkillXP(Player::RS_Skill::Agility, session.rewardXP);

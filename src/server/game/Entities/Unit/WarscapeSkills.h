@@ -24,10 +24,12 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include "WarscapeSkillStatements.h"
 
 namespace Warscape
 {
     constexpr std::size_t SkillCount = 10;
+    static_assert(SkillCount == SkillStatements::PersistedSkillCount);
     constexpr std::uint32_t MaxSkillXP = 200000000;
     constexpr std::uint8_t MaxSkillLevel = 99;
     constexpr std::uint8_t MinHitpointsLevel = 10;
