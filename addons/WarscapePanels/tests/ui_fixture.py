@@ -43,5 +43,3 @@ def load(saved=None):
             lua.execute((ADDONS / folder / name).read_text())
     lua.execute('dispatch("PLAYER_LOGIN")')
     return lua
-
-\n
