@@ -21,6 +21,19 @@ namespace Warscape
         return eligible && !traversalActive && successChancePercent <= 100 && roll < 100 &&
             roll < successChancePercent;
     }
+
+    template <typename AwardReward, typename BeginTraversal>
+    inline bool ExecuteAgilityAttempt(bool eligible, bool traversalActive,
+        std::uint8_t successChancePercent, std::uint32_t roll,
+        AwardReward awardReward, BeginTraversal beginTraversal)
+    {
+        if (!ShouldAcceptAgilityAttempt(eligible, traversalActive, successChancePercent, roll))
+            return false;
+
+        awardReward();
+        beginTraversal();
+        return true;
+    }
 }
 
 #endif

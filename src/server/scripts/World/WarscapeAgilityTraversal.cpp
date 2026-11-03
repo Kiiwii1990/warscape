@@ -260,8 +260,6 @@ WarscapeAgilityTraversal::StartResult WarscapeAgilityTraversal::Start(Player* pl
 
     // Roll only after every eligibility, route and duplicate-session check has passed.
     uint32 const roll = urand(0, 99);
-    if (obstacle && !Warscape::ShouldAcceptAgilityAttempt(true, false, obstacle->successChancePercent, roll))
-        return { StartStatus::RollFailed, 0 };
 
     uint32 const timeoutMs = obstacle ? obstacle->timeoutMs : MAX_TRAVERSAL_MS;
     std::function<void(Movement::MoveSplineInit&)> initializer = [path = std::move(path), walk, speed](Movement::MoveSplineInit& init)
@@ -270,16 +268,23 @@ WarscapeAgilityTraversal::StartResult WarscapeAgilityTraversal::Start(Player* pl
         init.SetWalk(walk);
         init.SetVelocity(speed);
     };
-    player->GetMotionMaster()->LaunchMoveSpline(std::move(initializer), TRAVERSAL_MOTION_ID,
-        MOTION_PRIORITY_HIGHEST, POINT_MOTION_TYPE);
+    auto beginTraversal = [&]()
+    {
+        player->GetMotionMaster()->LaunchMoveSpline(std::move(initializer), TRAVERSAL_MOTION_ID,
+            MOTION_PRIORITY_HIGHEST, POINT_MOTION_TYPE);
+    };
 
-    if (player->movespline->Finalized())
-        return { StartStatus::Rejected, 0 };
+    if (obstacle)
+    {
+        bool const accepted = Warscape::ExecuteAgilityAttempt(true, false, obstacle->successChancePercent, roll,
+            [&]() { player->AddRSSkillXP(Player::RS_Skill::Agility, obstacle->rewardXP); }, beginTraversal);
+        if (!accepted)
+            return { StartStatus::RollFailed, 0 };
+    }
+    else
+        beginTraversal();
 
     sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs });
-    // The accepted attempt earns XP before the next movement update; interruption never revokes it.
-    if (obstacle)
-        player->AddRSSkillXP(Player::RS_Skill::Agility, obstacle->rewardXP);
     return { StartStatus::Started, obstacle ? obstacle->rewardXP : 0 };
 }
 
