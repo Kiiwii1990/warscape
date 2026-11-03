@@ -19257,9 +19257,9 @@ void Player::SaveToDB(bool create /*=false*/)
     auto const savedXP = Warscape::SerializeSkillXP(rsSkills);
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
         rsStmt->setUInt32(i + 1, savedXP[i]);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 1, warscapeMiningHalfXP);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 2, warscapeSmithingTenthXP);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 3, warscapeAttackStyle);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 2, warscapeMiningHalfXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 3, warscapeSmithingTenthXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 4, warscapeAttackStyle);
     trans->Append(rsStmt);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -26764,7 +26764,7 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
     if (!leveled)
         return;
 
-    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing", "Agility" };
     ChatHandler chat(GetSession());
     chat.PSendSysMessage("Your %s level is now %u!", skillNames[static_cast<uint8>(skill)], data.Level);
 

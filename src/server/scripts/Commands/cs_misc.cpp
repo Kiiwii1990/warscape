@@ -290,7 +290,7 @@ public:
 
         if (StringEqualI(style, "stats"))
         {
-            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing", "Agility" };
             for (uint8 i = 0; i < Player::RS_SKILL_COUNT; ++i)
             {
                 Player::RS_Skill skill = static_cast<Player::RS_Skill>(i);
@@ -377,7 +377,7 @@ public:
             int const skillIndex = Warscape::SkillIndexFromName(skillName.c_str());
             if (skillIndex < 0)
             {
-                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic, prayer, mining or smithing.");
+                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic, prayer, mining, smithing or agility.");
                 return true;
             }
 
@@ -422,7 +422,7 @@ public:
             }
 
             player->SaveToDB();
-            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing", "Agility" };
             handler->PSendSysMessage("%s is level %u (%u XP).", skillNames[skillIndex], player->GetRSSkillLevel(skill), player->GetRSSkillXP(skill));
             return true;
         }

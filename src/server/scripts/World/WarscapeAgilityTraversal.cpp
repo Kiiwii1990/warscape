@@ -26,6 +26,7 @@
 namespace
 {
     constexpr uint32 TEST_MAP_ID = 0;
+    constexpr uint32 AGILITY_XP_PER_LOG_CROSSING = 8;
     constexpr float START_X = -9066.463867f;
     constexpr float START_Y = -199.568985f;
     constexpr float END_X = -9072.518555f;
@@ -53,12 +54,38 @@ namespace
         { -9079.845703f, -213.721573f, 70.746696f }  // landing
     }};
 
+    struct ObstacleDefinition
+    {
+        char const* id;
+        uint32 mapId;
+        uint32 instanceId;
+        std::array<RoutePoint, 7> const* route;
+        float startRadius;
+        float speed;
+        uint32 timeoutMs;
+        uint8 requiredAgility;
+        uint32 rewardXP;
+        float landingRadius;
+    };
+
+    // Keep obstacle data independent from the shared spline/session runner.
+    constexpr std::array<ObstacleDefinition, 1> OBSTACLES = {{
+        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1,
+            AGILITY_XP_PER_LOG_CROSSING, 2.0f }
+    }};
+
     struct TraversalSession
     {
         ObjectGuid playerGuid;
         uint32 splineId;
         uint32 elapsedMs;
         uint32 timeoutMs;
+        uint32 mapId;
+        uint32 instanceId;
+        RoutePoint landing;
+        float landingRadius;
+        uint32 rewardXP;
+        bool rewardsAgility;
     };
 
     using SessionMap = std::unordered_map<Map*, TraversalSession>;
@@ -71,6 +98,14 @@ namespace
     bool IsOwner(Player const* player, TraversalSession const& session)
     {
         return player && player->GetGUID() == session.playerGuid && player->GetSession();
+    }
+
+    bool IsEligible(Player const* player, Map* map, uint32 mapId, uint32 instanceId)
+    {
+        return player && player->GetSession() && player->IsInWorld() && player->IsAlive() &&
+            !player->IsBeingTeleported() && !player->IsInCombat() && !player->IsInFlight() &&
+            !player->GetVehicle() && !player->IsMounted() && player->GetMap() == map &&
+            map->GetId() == mapId && map->GetInstanceId() == instanceId;
     }
 
     bool IsValidRoute(std::vector<G3D::Vector3> const& path)
@@ -129,9 +164,24 @@ namespace
             return;
         }
 
-        if (player->movespline->GetId() != itr->second.splineId || player->movespline->Finalized())
+        if (player->movespline->GetId() != itr->second.splineId)
         {
             Sessions().erase(itr);
+            return;
+        }
+
+        if (player->movespline->Finalized())
+        {
+            TraversalSession const session = itr->second;
+            float const dx = player->GetPositionX() - session.landing.x;
+            float const dy = player->GetPositionY() - session.landing.y;
+            float const dz = player->GetPositionZ() - session.landing.z;
+            bool const completed = session.rewardsAgility &&
+                IsEligible(player, map, session.mapId, session.instanceId) &&
+                dx * dx + dy * dy + dz * dz <= session.landingRadius * session.landingRadius;
+            Sessions().erase(itr);
+            if (completed)
+                player->AddRSSkillXP(Player::RS_Skill::Agility, session.rewardXP);
             return;
         }
 
@@ -189,16 +239,21 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
     float startDistance = MAX_START_DISTANCE;
     bool walk = false;
     float speed = 4.5f;
+    ObstacleDefinition const* obstacle = nullptr;
     if (route == Route::NorthshireLog)
     {
-        path.reserve(NORTHSHIRE_LOG_ROUTE.size());
-        for (RoutePoint const& point : NORTHSHIRE_LOG_ROUTE)
+        obstacle = &OBSTACLES.front();
+        if (player->GetMapId() != obstacle->mapId || player->GetMap()->GetInstanceId() != obstacle->instanceId ||
+            player->GetRSSkillLevel(Player::RS_Skill::Agility) < obstacle->requiredAgility)
+            return false;
+        path.reserve(obstacle->route->size());
+        for (RoutePoint const& point : *obstacle->route)
             path.emplace_back(point.x, point.y, point.z);
-        startX = NORTHSHIRE_LOG_ROUTE.front().x;
-        startY = NORTHSHIRE_LOG_ROUTE.front().y;
-        startDistance = 3.0f;
+        startX = obstacle->route->front().x;
+        startY = obstacle->route->front().y;
+        startDistance = obstacle->startRadius;
         walk = true;
-        speed = 2.5f;
+        speed = obstacle->speed;
     }
     else
     {
@@ -226,7 +281,7 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
         sessions.erase(existing);
     }
 
-    uint32 const timeoutMs = route == Route::NorthshireLog ? 30000 : MAX_TRAVERSAL_MS;
+    uint32 const timeoutMs = obstacle ? obstacle->timeoutMs : MAX_TRAVERSAL_MS;
     std::function<void(Movement::MoveSplineInit&)> initializer = [path = std::move(path), walk, speed](Movement::MoveSplineInit& init)
     {
         init.Path() = path;
@@ -239,7 +294,12 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
     if (player->movespline->Finalized())
         return false;
 
-    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs });
+    RoutePoint landing{ END_X, END_Y, END_Z };
+    if (obstacle)
+        landing = obstacle->route->back();
+    sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs,
+        map->GetId(), map->GetInstanceId(), landing, obstacle ? obstacle->landingRadius : 0.0f,
+        obstacle ? obstacle->rewardXP : 0, obstacle != nullptr });
     return true;
 }
 

@@ -4,7 +4,8 @@ local metadata = {
     defence = {"Defence", "Ability_Warrior_DefensiveStance"}, hitpoints = {"Hitpoints", "Spell_Holy_LayOnHands"},
     ranged = {"Ranged", "Ability_Hunter_RunningShot"}, magic = {"Magic", "Spell_Holy_MagicalSentry"},
     prayer = {"Prayer", "Spell_Holy_PrayerOfHealing02"}, mining = {"Mining", "INV_Pick_02"},
-    smithing = {"Smithing", "Trade_BlackSmithing"}
+    smithing = {"Smithing", "Trade_BlackSmithing"},
+    agility = {"Agility", "Ability_Rogue_Sprint"}
 }
 local panel = CreateFrame("Frame", "WarscapeSkillsFrame", UIParent)
 local skin = WarscapeSkillsSkin
@@ -77,7 +78,7 @@ end
 local function render(data)
     -- Match the reference's combat columns; append future stable IDs dynamically.
     local order, included = {}, {}
-    for _, id in ipairs({"attack", "hitpoints", "strength", "ranged", "defence", "magic", "prayer", "mining", "smithing"}) do
+    for _, id in ipairs({"attack", "hitpoints", "strength", "ranged", "defence", "magic", "prayer", "mining", "smithing", "agility"}) do
         if data.rows[id] then order[#order+1] = id; included[id] = true end
     end
     for _, id in ipairs(data.order) do

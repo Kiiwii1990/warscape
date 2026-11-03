@@ -1,6 +1,6 @@
 # Warscape Agility traversal prototypes
 
-These developer-only commands test server-controlled player splines near Northshire Abbey on map 0. They add no skill data, XP, persistence, obstacles, permanent spawns, database changes, or client assets.
+These developer-only commands test server-controlled player splines near Northshire Abbey on map 0. The AGI-001B stream remains a prototype. The AGI-003A log route now uses the AGI-004A obstacle reward and requires the prepared character migration before the updated worldserver can run.
 
 ## AGI-001B stream prototype
 
@@ -41,6 +41,18 @@ The handler accepts only a living GM on non-instanced map 0, outside combat, fli
 ### AGI-003A user-confirmed in-game result
 
 The user confirmed that the seven-waypoint Northshire log traversal worked in-game. They spammed movement buttons during traversal and the route continued to hold. This confirms the tested traversal and movement-button behavior only. It does not confirm interruption cleanup, server collision coverage, exact collision support, or behavior in other scenarios.
+
+## AGI-004A obstacle reward
+
+The Northshire log is registered as a reusable obstacle definition, separate from
+the shared traversal/session runner. It requires Agility level 1 and awards
+exactly 8 Agility XP only when the owned spline finalizes and the eligible
+player remains on map 0, instance 0, within 2 yards of the measured landing
+point. The session is erased before XP is applied, so one run can award at most
+once. Start, interruption, replacement spline, timeout, death/combat, logout,
+teleport and map/instance departure do not award XP. Those failure paths still
+need in-game verification. See [WarscapeAgilityAGI004A.md](WarscapeAgilityAGI004A.md)
+for the pending migration, rollback limits and exact acceptance steps.
 
 ## Acceptance checks
 

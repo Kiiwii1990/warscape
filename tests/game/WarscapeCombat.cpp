@@ -688,11 +688,12 @@ TEST_CASE("Warscape pickaxe tiers select speed from attained Mining, not Attack"
     CHECK_FALSE(Warscape::ShouldRestoreMiningTool(0, 0));
 }
 
-TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape][smithing]")
+TEST_CASE("Smithing and Agility share progression, persistence and stable IDs", "[warscape][smithing][agility]")
 {
-    REQUIRE(Warscape::SkillCount == 9);
+    REQUIRE(Warscape::SkillCount == 10);
     REQUIRE(Warscape::SkillIndexFromName("smithing") == 8);
     REQUIRE(Warscape::SkillIndexFromName("mining") == 7);
+    REQUIRE(Warscape::SkillIndexFromName("agility") == 9);
     std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
     auto& smithing = skills[8];
     CHECK(smithing.Level == 1);
@@ -715,6 +716,15 @@ TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape]
     CHECK(smithingCarry == 0);
     CHECK(miningCarry == 1);
     CHECK(restored[7].XP == 0);
+    auto& agility = skills[9];
+    CHECK(agility.Level == 1);
+    CHECK(Warscape::AddSkillXP(agility, 8) == false);
+    CHECK(agility.XP == 8);
+    auto const withAgilityXP = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> agilityRestored{};
+    Warscape::RestoreSkillXP(agilityRestored, withAgilityXP);
+    CHECK(agilityRestored[9].XP == 8);
+    CHECK(agilityRestored[9].Level == 1);
     CHECK(Warscape::SetSkillLevel(smithing, 0, false) == Warscape::SkillUpdateResult::InvalidLevel);
     CHECK(Warscape::SetSkillLevel(smithing, 100, false) == Warscape::SkillUpdateResult::InvalidLevel);
     CHECK(Warscape::SetSkillXP(smithing, 200000001, false) == Warscape::SkillUpdateResult::InvalidXP);
