@@ -1,0 +1,7 @@
+# Native WoW project data must survive checkout byte for byte.
+*.adt binary
+*.wdt binary
+*.dbc binary
+*.md text eol=lf
+*.json text eol=lf
+uid.ini text eol=lf
