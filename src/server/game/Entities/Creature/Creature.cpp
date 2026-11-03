@@ -53,6 +53,7 @@
 #include "Vehicle.h"
 #include "World.h"
 #include "WorldPacket.h"
+#include "WarscapeCombat.h"
 #include <G3D/g3dmath.h>
 
 CreatureMovementData::CreatureMovementData() : Ground(CreatureGroundMovementType::Run), Flight(CreatureFlightMovementType::None), Swim(true), Rooted(false), Chase(CreatureChaseMovementType::Run),
@@ -950,7 +951,8 @@ void Creature::RegenerateHealth()
     uint32 addvalue = 0;
 
     // Not only pet, but any controlled creature (and not polymorphed)
-    if (!GetCharmerOrOwnerGUID().IsEmpty() && !IsPolymorphed())
+    bool const scaleFlatRegen = !GetCharmerOrOwnerGUID().IsEmpty() && !IsPolymorphed();
+    if (scaleFlatRegen)
     {
         float HealthIncreaseRate = sWorld->getRate(RATE_HEALTH);
         float Spirit = GetStat(STAT_SPIRIT);
@@ -966,7 +968,15 @@ void Creature::RegenerateHealth()
     // Apply modifiers (if any).
     addvalue *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
 
-    addvalue += GetTotalAuraModifier(SPELL_AURA_MOD_REGEN) * CREATURE_REGEN_INTERVAL  / (5 * IN_MILLISECONDS);
+    int64 flatRegen = int64(GetTotalAuraModifier(SPELL_AURA_MOD_REGEN)) * CREATURE_REGEN_INTERVAL / (5 * IN_MILLISECONDS);
+    if (!scaleFlatRegen)
+        flatRegen *= Warscape::HealthDamageScale;
+    addvalue = uint32(std::max<int64>(0, int64(addvalue) + flatRegen));
+
+    if (scaleFlatRegen)
+        addvalue = Warscape::ScaleHealthOrDamage(addvalue);
+
+    addvalue = std::min(addvalue, maxValue - curValue);
 
     ModifyHealth(addvalue);
 }
@@ -1445,6 +1455,12 @@ void Creature::UpdateLevelDependantStats()
 
     uint32 basehp = stats->GenerateHealth(cInfo);
     uint32 health = uint32(basehp * healthmod);
+
+    // WARSCAPE: Until monster Hitpoints is fully balanced, live creature
+    // survivability uses the independent monster profile at its base tier.
+    // WoW creature level/rank must not silently multiply the OSRS hitpoints.
+    auto const warscapeStats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+    health = Warscape::ScaleHealthOrDamage(std::max<uint32>(1, warscapeStats[Warscape::Hitpoints]));
 
     SetCreateHealth(health);
     SetMaxHealth(health);

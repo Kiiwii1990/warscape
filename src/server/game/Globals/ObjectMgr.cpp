@@ -16,6 +16,7 @@
  */
 
 #include "ObjectMgr.h"
+#include "WarscapeTrainingDummy.h"
 #include "AchievementMgr.h"
 #include "ArenaTeamMgr.h"
 #include "Bag.h"
@@ -10401,4 +10402,254 @@ ByteBuffer QuestPOIWrapper::BuildQueryData() const
     }
 
     return tempBuffer;
+}
+
+// Loaded once during world startup; combat performs only cached lookups.
+void ObjectMgr::LoadWarscapeMonsterStats()
+{
+    _warscapeMonsterProfiles.clear();
+    _warscapeMonsterDefinitions.clear();
+    QueryResult tables = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name IN ('warscape_monster_profile', 'warscape_monster_template')");
+    if (!tables || tables->Fetch()[0].GetUInt64() != 2)
+    {
+        TC_LOG_INFO("server.loading", "Warscape monster tables are absent; using neutral base-stat defaults.");
+        return;
+    }
+
+    QueryResult profiles = WorldDatabase.Query("SELECT id, base_attack, base_strength, base_defence, base_ranged, base_magic, base_hitpoints, growth_attack, growth_strength, growth_defence, growth_ranged, growth_magic, growth_hitpoints, attack_bonus, strength_bonus, defence_bonus FROM warscape_monster_profile");
+    if (profiles)
+    {
+        do
+        {
+            Field* fields = profiles->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            Warscape::MonsterProfile profile;
+            bool valid = true;
+            for (std::size_t i = 0; i < Warscape::StatCount; ++i)
+            {
+                profile.Base[i] = fields[1 + i].GetUInt32();
+                profile.Growth[i] = fields[7 + i].GetUInt32();
+                valid = valid && profile.Base[i] >= 1 && profile.Base[i] <= Warscape::MaxStat
+                    && profile.Growth[i] <= Warscape::MaxStat;
+            }
+            profile.AttackBonus = fields[13].GetInt32();
+            profile.StrengthBonus = fields[14].GetInt32();
+            profile.DefenceBonus = fields[15].GetInt32();
+            for (int32 bonus : { profile.AttackBonus, profile.StrengthBonus, profile.DefenceBonus })
+                valid = valid && bonus >= -64 && bonus <= Warscape::MaxBonus;
+            if (!valid)
+            {
+                TC_LOG_ERROR("sql.sql", "Warscape monster profile {} has out-of-range stats or bonuses; skipped.", id);
+                continue;
+            }
+            _warscapeMonsterProfiles.emplace(id, profile);
+        } while (profiles->NextRow());
+    }
+
+    QueryResult definitions = WorldDatabase.Query("SELECT entry, profile_id, attack_override, strength_override, defence_override, ranged_override, magic_override, hitpoints_override FROM warscape_monster_template");
+    if (definitions)
+    {
+        do
+        {
+            Field* fields = definitions->Fetch();
+            uint32 entry = fields[0].GetUInt32();
+            Warscape::MonsterDefinition definition;
+            definition.Profile = fields[1].GetUInt32();
+            bool valid = GetCreatureTemplate(entry) && _warscapeMonsterProfiles.contains(definition.Profile);
+            for (std::size_t i = 0; i < Warscape::StatCount; ++i)
+            {
+                definition.Overrides[i] = fields[2 + i].GetUInt32();
+                valid = valid && definition.Overrides[i] <= Warscape::MaxStat;
+            }
+            if (!valid)
+            {
+                TC_LOG_ERROR("sql.sql", "Warscape monster entry {} has an unknown creature/profile or invalid override; skipped.", entry);
+                continue;
+            }
+            _warscapeMonsterDefinitions.emplace(entry, definition);
+        } while (definitions->NextRow());
+    }
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape monster profiles and {} creature definitions.",
+        _warscapeMonsterProfiles.size(), _warscapeMonsterDefinitions.size());
+}
+
+Warscape::MonsterProfile const& ObjectMgr::GetWarscapeMonsterProfile(uint32 entry) const
+{
+    uint32 profileId = 0;
+    if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
+        profileId = itr->second.Profile;
+    if (auto itr = _warscapeMonsterProfiles.find(profileId); itr != _warscapeMonsterProfiles.end())
+        return itr->second;
+    static Warscape::MonsterProfile const fallback;
+    return fallback;
+}
+
+void ObjectMgr::LoadWarscapeEquipmentBonuses()
+{
+    _warscapeItemProfiles.clear();
+    _warscapeWeaponRules.clear();
+    QueryResult rulesTable = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='warscape_weapon_rule'");
+    if (rulesTable && rulesTable->Fetch()[0].GetUInt64() == 1)
+    {
+        if (QueryResult rules = WorldDatabase.Query("SELECT item_id, tier, archetype FROM warscape_weapon_rule"))
+        {
+            do
+            {
+                Field* fields = rules->Fetch();
+                uint32 const itemId = fields[0].GetUInt32();
+                Warscape::WeaponRule rule;
+                rule.Tier = fields[1].GetUInt32();
+                rule.Archetype = Warscape::WeaponArchetype(fields[2].GetUInt8());
+                ItemTemplate const* item = GetItemTemplate(itemId);
+                if (!item || item->GetClass() != ITEM_CLASS_WEAPON || rule.Tier < Warscape::DefaultEquipmentTier
+                    || rule.Tier > Warscape::MaximumEquipmentTier || uint8(rule.Archetype) > uint8(Warscape::WeaponArchetype::Halberd))
+                {
+                    TC_LOG_ERROR("sql.sql", "Invalid Warscape weapon rule for item {}; using conservative defaults.", itemId);
+                    continue;
+                }
+                _warscapeWeaponRules.emplace(itemId, rule);
+            } while (rules->NextRow());
+        }
+    }
+    QueryResult table = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'warscape_item_bonus'");
+    if (!table || table->Fetch()[0].GetUInt64() != 1)
+    {
+        TC_LOG_INFO("server.loading", "Warscape item bonus table is absent; melee weapons use bronze baseline bonuses.");
+        return;
+    }
+
+    QueryResult result = WorldDatabase.Query("SELECT item_id, archetype, tier, attack_stab, attack_slash, attack_crush, attack_ranged, attack_magic, defence_stab, defence_slash, defence_crush, defence_ranged, defence_magic, melee_strength, ranged_strength, magic_damage, prayer, attack_speed_ticks, generation_version, generation_seed FROM warscape_item_bonus");
+    if (!result)
+    {
+        TC_LOG_ERROR("sql.sql", "Unable to load Warscape item bonus profiles.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 const itemId = fields[0].GetUInt32();
+        ItemTemplate const* item = GetItemTemplate(itemId);
+        Warscape::WeaponArchetype const overrideArchetype = Warscape::WeaponArchetype(fields[1].GetUInt8());
+        Warscape::ItemProfile profile;
+        profile.Archetype = item ? Warscape::ResolveWeaponArchetype(item->GetClass(), item->GetSubClass(), overrideArchetype) : Warscape::WeaponArchetype::Unknown;
+        profile.Tier = fields[2].GetUInt32();
+        int32* bonuses[] = {
+            &profile.Bonuses.AttackStab, &profile.Bonuses.AttackSlash, &profile.Bonuses.AttackCrush, &profile.Bonuses.AttackRanged, &profile.Bonuses.AttackMagic,
+            &profile.Bonuses.DefenceStab, &profile.Bonuses.DefenceSlash, &profile.Bonuses.DefenceCrush, &profile.Bonuses.DefenceRanged, &profile.Bonuses.DefenceMagic,
+            &profile.Bonuses.MeleeStrength, &profile.Bonuses.RangedStrength, &profile.Bonuses.MagicDamage, &profile.Bonuses.Prayer
+        };
+        bool valid = item && profile.Tier <= Warscape::MaxStat && uint8(overrideArchetype) <= uint8(Warscape::WeaponArchetype::Wand);
+        for (uint8 i = 0; i < std::size(bonuses); ++i)
+        {
+            *bonuses[i] = fields[3 + i].GetInt32();
+            valid = valid && *bonuses[i] >= -Warscape::MaxBonus && *bonuses[i] <= Warscape::MaxBonus;
+        }
+        profile.AttackSpeedTicks = fields[17].GetUInt32();
+        profile.GenerationVersion = fields[18].GetUInt32();
+        profile.HasGenerationSeed = !fields[19].IsNull();
+        if (profile.HasGenerationSeed)
+            profile.GenerationSeed = fields[19].GetUInt64();
+        if (!valid)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape item profile {} has a missing item or out-of-range values; skipped.", itemId);
+            continue;
+        }
+        if (profile.AttackSpeedTicks < Warscape::MinimumAttackSpeedTicks
+            || profile.AttackSpeedTicks > Warscape::MaximumAttackSpeedTicks)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape item profile {} has invalid attack speed {} ticks; defaulting to {}.",
+                itemId, profile.AttackSpeedTicks, Warscape::DefaultAttackSpeedTicks);
+            profile.AttackSpeedTicks = Warscape::DefaultAttackSpeedTicks;
+        }
+        _warscapeItemProfiles.emplace(itemId, profile);
+    } while (result->NextRow());
+
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape item bonus profiles.", _warscapeItemProfiles.size());
+}
+
+Warscape::WeaponArchetype ObjectMgr::GetWarscapeWeaponArchetype(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return profile->second.Archetype;
+    if (ItemTemplate const* item = GetItemTemplate(itemId))
+    {
+        auto const rule = _warscapeWeaponRules.find(itemId);
+        return Warscape::ResolveWeaponArchetype(item->GetClass(), item->GetSubClass(),
+            rule != _warscapeWeaponRules.end() ? rule->second.Archetype : Warscape::WeaponArchetype::Auto);
+    }
+    return Warscape::WeaponArchetype::Unknown;
+}
+
+Warscape::EquipmentBonuses ObjectMgr::GetWarscapeItemBonuses(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return Warscape::ResolveEquipmentBonuses(profile->second.Archetype, profile->second.Tier, &profile->second.Bonuses);
+    return Warscape::ResolveEquipmentBonuses(GetWarscapeWeaponArchetype(itemId), GetWarscapeItemTier(itemId), nullptr);
+}
+
+uint32 ObjectMgr::GetWarscapeItemTier(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return profile->second.Tier;
+    if (auto rule = _warscapeWeaponRules.find(itemId); rule != _warscapeWeaponRules.end())
+        return rule->second.Tier;
+    return Warscape::DefaultEquipmentTier;
+}
+
+uint32 ObjectMgr::GetWarscapeItemAttackSpeedTicks(uint32 itemId) const
+{
+    if (auto profile = _warscapeItemProfiles.find(itemId); profile != _warscapeItemProfiles.end())
+        return Warscape::NormalizeAttackSpeedTicks(profile->second.AttackSpeedTicks);
+    return Warscape::DefaultAttackSpeedTicks;
+}
+
+void ObjectMgr::LoadWarscapeMonsterAttackSpeeds()
+{
+    _warscapeMonsterAttackSpeeds.clear();
+    QueryResult table = WorldDatabase.Query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'warscape_monster_attack_speed'");
+    if (!table || table->Fetch()[0].GetUInt64() != 1)
+    {
+        TC_LOG_INFO("server.loading", "Warscape monster attack speed table is absent; using the {}-tick default.", Warscape::DefaultAttackSpeedTicks);
+        return;
+    }
+
+    QueryResult result = WorldDatabase.Query("SELECT creature_entry, attack_speed_ticks FROM warscape_monster_attack_speed");
+    if (!result)
+    {
+        TC_LOG_ERROR("sql.sql", "Unable to load Warscape monster attack speeds.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 const entry = fields[0].GetUInt32();
+        uint32 const ticks = fields[1].GetUInt32();
+        if (!GetCreatureTemplate(entry) || ticks < Warscape::MinimumAttackSpeedTicks || ticks > Warscape::MaximumAttackSpeedTicks)
+        {
+            TC_LOG_ERROR("sql.sql", "Warscape monster attack speed for creature {} is invalid; skipped.", entry);
+            continue;
+        }
+        _warscapeMonsterAttackSpeeds.emplace(entry, ticks);
+    } while (result->NextRow());
+
+    TC_LOG_INFO("server.loading", "Loaded {} Warscape monster attack speed overrides.", _warscapeMonsterAttackSpeeds.size());
+}
+
+uint32 ObjectMgr::GetWarscapeMonsterAttackSpeedTicks(uint32 creatureEntry) const
+{
+    if (auto speed = _warscapeMonsterAttackSpeeds.find(creatureEntry); speed != _warscapeMonsterAttackSpeeds.end())
+        return speed->second;
+    return Warscape::DefaultAttackSpeedTicks;
+}
+
+std::array<uint32, Warscape::StatCount> ObjectMgr::GetWarscapeMonsterStats(uint32 entry) const
+{
+    if (Warscape::IsTrainingDummyEntry(entry))
+        return { 1, 1, 1, 1, 1, Warscape::MaxStat };
+    auto const& profile = GetWarscapeMonsterProfile(entry);
+    if (auto itr = _warscapeMonsterDefinitions.find(entry); itr != _warscapeMonsterDefinitions.end())
+        return itr->second.Calculate(profile, 1);
+    return profile.Scale(1);
 }

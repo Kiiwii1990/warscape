@@ -25,6 +25,7 @@
 #include "Timer.h"
 #include "UnitDefines.h"
 #include "Util.h"
+#include "WarscapeEquipment.h"
 #include <map>
 #include <memory>
 #include <stack>
@@ -433,6 +434,9 @@ struct CleanDamage
     uint32 absorbed_damage;
     uint32 mitigated_damage;
 
+    // Unscaled Warscape hit value, used for XP regardless of displayed variation.
+    uint32 warscapeOSRSDamage = 0;
+
     WeaponAttackType attackType;
     MeleeHitOutcome hitOutCome;
 };
@@ -499,6 +503,7 @@ class TC_GAME_API HealInfo
         HealInfo(Unit* healer, Unit* target, uint32 heal, SpellInfo const* spellInfo, SpellSchoolMask schoolMask);
 
         void AbsorbHeal(uint32 amount);
+        void ScaleHeal(uint32 maximum);
         void SetEffectiveHeal(uint32 amount) { _effectiveHeal = amount; }
 
         Unit* GetHealer() const { return _healer; }
@@ -571,6 +576,8 @@ struct CalcDamageInfo
     uint32 ProcAttacker;
     uint32 ProcVictim;
     uint32 CleanDamage;          // Used only for rage calculation
+    uint32 WarscapeOSRSDamage = 0;
+    bool IsWarscapeMelee = false;
     MeleeHitOutcome HitOutCome;  /// @todo remove this field (need use TargetState)
 };
 
@@ -957,7 +964,15 @@ class TC_GAME_API Unit : public WorldObject
         int32 ModifyPower(Powers power, int32 val, bool withPowerUpdate = true);
 
         uint32 GetAttackTime(WeaponAttackType att) const;
-        void SetAttackTime(WeaponAttackType att, uint32 val) { SetFloatValue(UNIT_FIELD_BASEATTACKTIME + int32(att), val * m_modAttackSpeedPct[att]); }
+        bool IsWarscapeMeleeTarget(Unit const* target) const;
+        bool IsWarscapeMeleeCombat() const { return IsWarscapeMeleeTarget(GetVictim()); }
+        uint32 GetWarscapeMeleeAttackInterval(WeaponAttackType att) const;
+        void SetAttackTime(WeaponAttackType att, uint32 val)
+        {
+            SetFloatValue(UNIT_FIELD_BASEATTACKTIME + int32(att), val * m_modAttackSpeedPct[att]);
+            if (att != RANGED_ATTACK && IsWarscapeMeleeCombat())
+                m_attackTimer[att] = Warscape::AttackTimerAfterWeaponChange(m_attackTimer[att], GetWarscapeMeleeAttackInterval(att) / Warscape::CombatTickMilliseconds);
+        }
         void ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply);
         void ApplyCastTimePercentMod(float val, bool apply);
 

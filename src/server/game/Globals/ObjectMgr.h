@@ -19,6 +19,8 @@
 #define _OBJECTMGR_H
 
 #include "Common.h"
+#include "WarscapeCombat.h"
+#include "WarscapeEquipment.h"
 #include "ConditionMgr.h"
 #include "CreatureData.h"
 #include "DatabaseEnvFwd.h"
@@ -1141,6 +1143,17 @@ class TC_GAME_API ObjectMgr
         void LoadCreatureClassLevelStats();
         void LoadCreatureLocales();
         void LoadCreatureTemplates();
+        void LoadWarscapeMonsterStats();
+        Warscape::MonsterProfile const& GetWarscapeMonsterProfile(uint32 entry) const;
+        std::array<uint32, Warscape::StatCount> GetWarscapeMonsterStats(uint32 entry) const;
+        void LoadWarscapeEquipmentBonuses();
+        Warscape::WeaponArchetype GetWarscapeWeaponArchetype(uint32 itemId) const;
+        Warscape::EquipmentBonuses GetWarscapeItemBonuses(uint32 itemId) const;
+        uint32 GetWarscapeItemAttackSpeedTicks(uint32 itemId) const;
+        uint32 GetWarscapeItemTier(uint32 itemId) const;
+        bool HasWarscapeItemProfile(uint32 itemId) const { return _warscapeItemProfiles.count(itemId) != 0; }
+        void LoadWarscapeMonsterAttackSpeeds();
+        uint32 GetWarscapeMonsterAttackSpeedTicks(uint32 creatureEntry) const;
         void LoadCreatureTemplateAddons();
         void LoadCreatureTemplate(Field* fields);
         void LoadCreatureTemplateResistances();
@@ -1668,6 +1681,8 @@ class TC_GAME_API ObjectMgr
         MapObjectGuids _mapObjectGuidsStore;
         CreatureDataContainer _creatureDataStore;
         CreatureTemplateContainer _creatureTemplateStore;
+        std::unordered_map<uint32, Warscape::MonsterProfile> _warscapeMonsterProfiles;
+        std::unordered_map<uint32, Warscape::MonsterDefinition> _warscapeMonsterDefinitions;
         CreatureModelContainer _creatureModelStore;
         CreatureAddonContainer _creatureAddonStore;
         CreatureTemplateAddonContainer _creatureTemplateAddonStore;
@@ -1709,6 +1724,9 @@ class TC_GAME_API ObjectMgr
         std::unordered_map<uint32, Trainer::Trainer> _trainers;
         std::unordered_map<uint8, std::vector<Trainer::Trainer const*>> _classTrainers;
         std::unordered_map<uint32, Trainer::Trainer const*> _creatureDefaultTrainers;
+        std::unordered_map<uint32, Warscape::ItemProfile> _warscapeItemProfiles;
+        std::unordered_map<uint32, Warscape::WeaponRule> _warscapeWeaponRules;
+        std::unordered_map<uint32, uint32> _warscapeMonsterAttackSpeeds;
 
         std::set<uint32> _difficultyEntries[MAX_DIFFICULTY - 1]; // already loaded difficulty 1 value in creatures, used in CheckCreatureTemplate
         std::set<uint32> _hasDifficultyEntries[MAX_DIFFICULTY - 1]; // already loaded creatures with difficulty 1 values, used in CheckCreatureTemplate

@@ -118,14 +118,14 @@ void CharacterDatabaseConnection::DoPrepareStatements()
 
     // WARSCAPE: Persistent OSRS combat skill XP.
     PrepareStatement(CHAR_SEL_WARSCAPE_SKILLS,
-        "SELECT attack_xp, strength_xp, defence_xp, hitpoints_xp, ranged_xp, magic_xp, prayer_xp, attack_style FROM warscape_skills WHERE guid = ?",
+        "SELECT attack_xp, strength_xp, defence_xp, hitpoints_xp, ranged_xp, magic_xp, prayer_xp, mining_xp, smithing_xp, mining_half_xp, smithing_tenth_xp, attack_style FROM warscape_skills WHERE guid = ?",
         CONNECTION_SYNCH);
     PrepareStatement(CHAR_REP_WARSCAPE_SKILLS,
-        "INSERT INTO warscape_skills (guid, attack_xp, strength_xp, defence_xp, hitpoints_xp, ranged_xp, magic_xp, prayer_xp, attack_style) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
+        "INSERT INTO warscape_skills (guid, attack_xp, strength_xp, defence_xp, hitpoints_xp, ranged_xp, magic_xp, prayer_xp, mining_xp, smithing_xp, mining_half_xp, smithing_tenth_xp, attack_style) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE "
         "attack_xp=VALUES(attack_xp), strength_xp=VALUES(strength_xp), defence_xp=VALUES(defence_xp), "
         "hitpoints_xp=VALUES(hitpoints_xp), ranged_xp=VALUES(ranged_xp), magic_xp=VALUES(magic_xp), "
-        "prayer_xp=VALUES(prayer_xp), attack_style=VALUES(attack_style)",
+        "prayer_xp=VALUES(prayer_xp), mining_xp=VALUES(mining_xp), smithing_xp=VALUES(smithing_xp), mining_half_xp=VALUES(mining_half_xp), smithing_tenth_xp=VALUES(smithing_tenth_xp), attack_style=VALUES(attack_style)",
         CONNECTION_ASYNC);
     PrepareStatement(CHAR_SEL_CHARACTER_RANDOMBG, "SELECT guid FROM character_battleground_random WHERE guid = ?", CONNECTION_ASYNC);
     PrepareStatement(CHAR_SEL_CHARACTER_BANNED, "SELECT guid FROM character_banned WHERE guid = ? AND active = 1", CONNECTION_ASYNC);

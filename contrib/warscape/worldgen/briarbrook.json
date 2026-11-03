@@ -1,0 +1,48 @@
+{
+  "map_id": 905,
+  "directory": "WarscapeBriarbrook",
+  "display_name": "Briarbrook",
+  "tiles": [[32, 32]],
+  "height": 30.0,
+  "uid_base": 9050000,
+  "scale": {"units_per_tile": 1.0, "osrs_origin": [0, 0], "world_origin": [-266.666667, -266.666667]},
+  "textures": [
+    "Tileset\\Elwynn\\ElwynnGrassShadow.blp",
+    "Tileset\\Elwynn\\ElwynnDirtBase2.blp",
+    "Tileset\\Elwynn\\ElwynnCobbleStoneBase.blp",
+    "Tileset\\Elwynn\\ElwynnTreeDirtBase.blp"
+  ],
+  "texture_flags": [1, 0, 0, 1],
+  "buildings": [
+    {"name": "The Blue Bough inn", "asset": "World\\wmo\\Azeroth\\Buildings\\GoldshireInn\\GoldshireInn.wmo", "foot": [-22, 8], "entry_local": [21.8, -2.6, 0], "yaw": 90, "ground": 31.2, "doodad_set": 1, "apron": [5, 0, 7, 6]},
+    {"name": "Copperkettle smithy", "asset": "World\\wmo\\Azeroth\\Buildings\\GoldshireBlacksmith\\goldshireblacksmith.wmo", "foot": [32, 27], "entry_local": [16.0, 0, 0], "yaw": 315, "ground": 33.0, "doodad_set": 0, "apron": [5, 0, 7, 6]},
+    {"name": "Wayfarers' provisioner", "asset": "World\\wmo\\Azeroth\\Buildings\\HumanTwoStory\\HumanTwoStory.wmo", "foot": [-10, 46], "entry_local": [11.7, -10.8, -1.687], "yaw": 120, "ground": 34.5, "doodad_set": 1, "apron": [0, -4, 6, 6]},
+    {"name": "Baker's cottage", "asset": "World\\wmo\\Azeroth\\Buildings\\human_farm\\farm.wmo", "foot": [22, -30], "entry_local": [-1.54, -8.8, 3.111], "yaw": 315, "ground": 30.6, "doodad_set": 1, "apron": [0, -3, 6, 5]},
+    {"name": "Herbalist's cottage", "asset": "World\\wmo\\Azeroth\\Buildings\\human_farm\\farm.wmo", "foot": [-29, -30], "entry_local": [-1.54, -8.8, 3.111], "yaw": 225, "ground": 31.2, "doodad_set": 2, "apron": [0, -3, 6, 5]},
+    {"name": "Orchard keeper", "asset": "World\\wmo\\Azeroth\\Buildings\\human_farm\\farm.wmo", "foot": [16, 82], "entry_local": [-1.54, -8.8, 3.111], "yaw": 45, "ground": 36.5, "doodad_set": 4, "apron": [0, -3, 6, 5]},
+    {"name": "Harvest barn", "asset": "World\\wmo\\Azeroth\\Buildings\\Human_Barn_Silo\\barn.wmo", "foot": [64, -6], "entry_local": [0, -18.5, 0], "yaw": 0, "ground": 32.8, "doodad_set": 0, "apron": [0, -4, 8, 8]}
+  ],
+  "roads": [
+    {"name": "Winding high street", "width": 6.2, "points": [[-6,-112],[-14,-79],[-12,-48],[-8,-22],[4,-7],[8,13],[6,33],[5,58],[8,74],[2,88],[7,105],[35,113]]},
+    {"name": "Inn and well crescent", "width": 4.2, "points": [[-8,-22],[-17,-10],[-18,2],[-22,8]]},
+    {"name": "Smithy apron", "width": 4.0, "points": [[8,13],[23,20],[32,27]]},
+    {"name": "Provisioner's lane", "width": 3.4, "points": [[6,33],[0,37],[-3,41],[-10,46]]},
+    {"name": "Baker's lane", "width": 3.0, "points": [[-8,-22],[3,-22],[13,-22],[18,-26],[22,-30]]},
+    {"name": "Herb walk", "width": 2.7, "points": [[-8,-22],[-18,-20],[-24,-24],[-29,-30]]},
+    {"name": "Harvest lane", "width": 3.4, "points": [[8,13],[25,4],[48,-3],[64,-6]]},
+    {"name": "Kitchen garden track", "width": 2.0, "points": [[3,-22],[6,-45],[18,-60],[35,-73],[73,-73],[82,-55],[84,-36],[76,-30],[57,-22],[54,-9],[64,-6]]},
+    {"name": "Orchard door", "width": 2.7, "points": [[8,75],[16,82]]},
+    {"name": "Woodland ramble", "width": 1.5, "points": [[35,113],[62,123],[87,115],[103,87],[104,55],[113,30],[113,2],[117,-22],[109,-32],[87,-34],[67,-27],[55,-18],[54,-9],[64,-6]]}
+  ],
+  "clearings": [
+    {"center": [-2,6], "radii": [18,15], "strength": 0.86},
+    {"center": [30,19], "radii": [11,9], "strength": 0.8},
+    {"center": [64,-10], "radii": [12,15], "strength": 0.75}
+  ],
+  "gardens": [
+    {"center": [53,-57], "radii": [13,10]},
+    {"center": [-47,-51], "radii": [12,9]}
+  ],
+  "woodland": {"seed": 905267, "canopy_count": 165, "understory_count": 140, "shrub_count": 210, "floor_detail_count": 360},
+  "spawn": {"x": -322.666667, "y": -257.666667, "z": 33.5}
+}

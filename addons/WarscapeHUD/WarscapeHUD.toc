@@ -1,0 +1,8 @@
+## Interface: 30300
+## Title: Warscape HUD
+## Notes: Bottom-centred Warscape menu and minimap
+## Author: Warscape
+## Version: 1.10.0
+## Dependencies: WarscapePanels, WarscapeSkills, WarscapeInventory, WarscapeMenuPanels, WarscapeUIHide
+## SavedVariablesPerCharacter: WarscapeHUDScales
+WarscapeHUD.lua

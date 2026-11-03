@@ -383,6 +383,12 @@ void WorldSession::HandleSellItemOpcode(WorldPackets::Item::SellItem& packet)
             return;
         }
 
+        if (_player->IsWarscapeInventoryContainer(pItem->GetBagSlot(), pItem->GetSlot()))
+        {
+            _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, creature, packet.ItemGUID);
+            return;
+        }
+
         // prevent sell non empty bag by drag-and-drop at vendor's item list
         if (pItem->IsNotEmptyBag())
         {

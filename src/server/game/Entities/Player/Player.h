@@ -20,6 +20,9 @@
 
 #include "GridObject.h"
 #include "Unit.h"
+#include "WarscapeSkills.h"
+#include "WarscapeEquipment.h"
+#include "WarscapeAttackTest.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
 #include "EquipmentSet.h"
@@ -916,52 +919,64 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             Ranged,
             Magic,
             Prayer,
+            Mining,
+            Smithing,
             Count
         };
 
-        struct RS_SkillData
-        {
-            uint8 Level = 1;
-            uint32 XP = 0;
-        };
+        using RS_SkillData = Warscape::SkillProgress;
 
 
         static constexpr uint8 RS_SKILL_COUNT = static_cast<uint8>(RS_Skill::Count);
 
         uint8 warscapeAttackStyle = 0;
 
-        RS_SkillData rsSkills[RS_SKILL_COUNT] = {
+        std::array<RS_SkillData, RS_SKILL_COUNT> rsSkills = {{
             {1, 0},       // Attack
             {1, 0},       // Strength
             {1, 0},       // Defence
             {10, 1154},   // Hitpoints
             {1, 0},       // Ranged
             {1, 0},       // Magic
-            {1, 0}        // Prayer
-        };
+            {1, 0},       // Prayer
+            {1, 0},       // Mining
+            {1, 0}        // Smithing
+        }};
+
+        // Fractional XP carry for Mining; persisted as half-point parity.
+        uint8 warscapeMiningHalfXP = 0;
+        uint8 warscapeSmithingTenthXP = 0;
+        uint32 warscapeSmeltRemaining = 0;
+        uint32 warscapeSmeltMap = 0;
+        Position warscapeSmeltStart;
+        uint32 warscapeSmeltRequestCooldown = 0;
+        bool IsWarscapeSmelting() const { return warscapeSmeltRemaining != 0; }
+        void CancelWarscapeSmelting();
+        void StartWarscapeBronzeSmelting();
+        ObjectGuid warscapeForge;
+        uint32 warscapeForgeSerial = 0, warscapeForgeSequence = 0;
+        uint32 warscapeBatch = 0, warscapeForgeRefresh = 0;
+        bool warscapeSmeltingMenuOpen = false;
+        void OpenWarscapeSmelting(GameObject* forge);
+        bool HasWarscapeForge() const;
+        void SendWarscapeSmelting(std::string const& message);
+        bool HandleWarscapeSmelting(std::string_view message, std::string const& target, bool whisper);
+        void CloseWarscapeSmelting();
+        void RefreshWarscapeSmelting(uint32 diff);
+        void UpdateWarscapeSmelting(uint32 diff);
+        bool HasWarscapeCraftingFocus(uint32 focusId) const;
+        bool PrepareWarscapeBronze(Item*& copper, Item*& tin, ItemPosCountVec& dest) const;
+        void AddRSSkillTenthXP(RS_Skill skill, uint32 tenths);
 
         // Exact OSRS XP thresholds, calculated with integer rounding.
         static uint32 RS_XPForLevel(uint8 level)
         {
-            if (level <= 1)
-                return 0;
-
-            level = std::min<uint8>(level, 99);
-
-            uint32 points = 0;
-            for (uint32 i = 1; i < level; ++i)
-                points += uint32(std::floor(i + 300.0 * std::pow(2.0, i / 7.0)));
-
-            return points / 4;
+            return Warscape::XPForLevel(level);
         }
 
         static uint8 RS_LevelForXP(uint32 xp)
         {
-            for (int32 level = 99; level >= 2; --level)
-                if (xp >= RS_XPForLevel(uint8(level)))
-                    return uint8(level);
-
-            return 1;
+            return Warscape::LevelForXP(xp);
         }
 
         uint8 GetRSSkillLevel(RS_Skill skill) const
@@ -974,12 +989,17 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             return rsSkills[static_cast<uint8>(skill)].XP;
         }
 
-        void AddRSSkillXP(RS_Skill skill, uint32 amount)
-        {
-            RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
-            data.XP = uint32(std::min<uint64>(200000000ULL, uint64(data.XP) + amount));
-            data.Level = RS_LevelForXP(data.XP);
-        }
+        bool HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper);
+        bool HandleWarscapeInventoryAddon(std::string_view message, std::string const& target, bool whisper);
+        bool HasWarscapeInventory() const;
+        bool IsWarscapeInventoryUnlocked() const;
+        bool IsWarscapeInventoryContainer(uint8 bag, uint8 slot) const;
+        bool InitializeWarscapeInventory();
+        bool UnlockWarscapeInventory();
+        void AddRSSkillXP(RS_Skill skill, uint32 amount);
+        void AddRSSkillHalfXP(RS_Skill skill, uint32 halfPoints);
+        Warscape::SkillUpdateResult SetRSSkillLevel(RS_Skill skill, uint32 level);
+        Warscape::SkillUpdateResult SetRSSkillXP(RS_Skill skill, uint32 xp);
 
         // Warscape attack styles: 0 Accurate, 1 Aggressive, 2 Defensive, 3 Controlled.
         uint8 GetWarscapeAttackStyle() const { return warscapeAttackStyle; }
@@ -1712,8 +1732,14 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool UpdateGatherSkill(uint32 SkillId, uint32 SkillValue, uint32 RedLevel, uint32 Multiplicator = 1);
         bool UpdateFishingSkill();
 
-        uint32 GetBaseDefenseSkillValue() const { return GetBaseSkillValue(SKILL_DEFENSE); }
-        uint32 GetBaseWeaponSkillValue(WeaponAttackType attType) const;
+        Warscape::EquipmentBonuses GetWarscapeEquipmentBonuses() const;
+        Warscape::MeleeDamageType GetWarscapeMeleeDamageType(WeaponAttackType attackType = BASE_ATTACK) const;
+        int32 GetWarscapeMeleeAttackBonus(WeaponAttackType attackType = BASE_ATTACK) const;
+        Warscape::WeaponArchetype GetWarscapeWeaponArchetype(WeaponAttackType attackType = BASE_ATTACK) const;
+        uint32 GetWarscapeWeaponAttackSpeedTicks(WeaponAttackType attackType = BASE_ATTACK) const;
+        void HandleWarscapeAttackTestCommand(std::string const& args);
+        void RecordWarscapeAttackTestSwing(Unit const* target, CalcDamageInfo const& damage);
+
 
         float GetHealthBonusFromStamina();
         float GetManaBonusFromIntellect();
@@ -1852,10 +1878,6 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         typedef std::list<Channel*> JoinedChannelsList;
         JoinedChannelsList const& GetJoinedChannels() const { return m_channels; }
-
-        void UpdateDefense();
-        void UpdateWeaponSkill(Unit* victim, WeaponAttackType attType);
-        void UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defense);
 
         void SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal);
         uint16 GetMaxSkillValue(uint32 skill) const;        // max + perm. bonus + temp bonus
@@ -2645,6 +2667,28 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         uint32 manaBeforeDuel;
 
         WorldLocation _corpseLocation;
+
+        void UpdateWarscapeSkillsAddon(uint32 diff);
+        void UpdateWarscapeInventoryAddon(uint32 diff);
+        void SendWarscapeInventoryState();
+        bool _warscapeInventoryReady = false;
+        bool _warscapeInventoryNeedsSave = false;
+        std::string _warscapeInventoryToken;
+        uint32 _warscapeInventoryRevision = 0;
+        uint32 _warscapeInventoryRequestCooldown = 0;
+        void SendWarscapeSkillsSnapshot();
+        bool _warscapeSkillsDirty = false;
+        std::string _warscapeSkillsToken;
+        uint32 _warscapeSkillsRevision = 0;
+        uint32 _warscapeSkillsRequestCooldown = 0;
+        uint32 _warscapeSkillsSendCooldown = 0;
+        void UpdateWarscapeAttackTest();
+        void FinishWarscapeAttackTest(bool report, char const* reason, bool notify = false);
+        Warscape::AttackTestXP GetWarscapeAttackTestXP() const;
+        Warscape::AttackTestSetup GetWarscapeAttackTestSetup(Creature const* dummy) const;
+        Warscape::AttackTestSession _warscapeAttackTest;
+        ObjectGuid _warscapeAttackTestTarget;
+        std::string _warscapeAttackTestWeapon;
 };
 
 TC_GAME_API void AddItemsSetItem(Player* player, Item* item);

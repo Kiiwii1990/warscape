@@ -25,6 +25,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellMgr.h"
 #include "World.h"
+#include "WarscapeCombat.h"
 #include <numeric>
 
 inline bool _ModifyUInt32(bool apply, uint32& baseValue, int32& amount)
@@ -307,14 +308,9 @@ float Player::GetManaBonusFromIntellect()
 
 void Player::UpdateMaxHealth()
 {
-    UnitMods unitMod = UNIT_MOD_HEALTH;
-
-    float value = GetFlatModifierValue(unitMod, BASE_VALUE) + GetCreateHealth();
-    value *= GetPctModifierValue(unitMod, BASE_PCT);
-    value += GetFlatModifierValue(unitMod, TOTAL_VALUE) + GetHealthBonusFromStamina();
-    value *= GetPctModifierValue(unitMod, TOTAL_PCT);
-
-    SetMaxHealth((uint32)value);
+    // WARSCAPE: Keep player survivability tied to the persistent OSRS
+    // Hitpoints level while WoW stamina, level and health modifiers are retired.
+    SetMaxHealth(Warscape::ScaleHealthOrDamage(std::max<uint32>(Warscape::MinHitpointsLevel, GetRSSkillLevel(RS_Skill::Hitpoints))));
 }
 
 void Player::UpdateMaxPower(Powers power)

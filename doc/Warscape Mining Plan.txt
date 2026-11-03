@@ -1,0 +1,87 @@
+WARSCAPE — MINING DESIGN NOTES
+Saved: 27 October 2026
+Status: Agreed design direction; NOT YET IMPLEMENTED
+
+1. CORE SKILL FRAMEWORK
+- Warscape Mining is independent from Blizzard's Mining profession.
+- Retain Blizzard's underlying profession assets/mechanics for compatibility, but remove player access to Blizzard professions and profession progression.
+- Skills use OSRS levels 1–99, XP progression and Mining/pickaxe attempt mechanics.
+- Award XP for successful ore extraction; persist skill XP and levels in Warscape's database.
+- Reuse the existing Warscape combat XP framework where sensible.
+
+2. OPEN-WORLD MINING (RELAXED)
+- Normal rocks follow OSRS-style mining: one ore upon successful extraction, then depleted.
+- The rock stays at its original location and changes to a depleted visual/model; it does not disappear or respawn at a random location.
+- Each rock has its own restoration timer and returns to its normal mineable appearance.
+- Players manually select another rock; no automatic moving to the next deposit.
+- Relaxed/low-attention play, never fully idle mining.
+
+3. ACTIVE MINING — FIRST COPPER INSTANCE
+- A small WoW-style cave instance, using existing WoW instance/map assets where feasible.
+- Solo and group play are both allowed; no elaborate group mechanics initially.
+- Approximately 5–8 kobolds on the path to the mining chamber.
+- One rich copper deposit containing exactly 28 total ore per instance run, shared by all participants.
+- Each completed pickaxe mining attempt at this rich copper deposit guarantees one ore, assuming inventory space; normal OSRS-style pickaxe attempt cadence applies.
+- Copper awards 17.5 Mining XP per successfully extracted ore regardless of mining method.
+- The rich deposit is depleted when its shared 28 ores have been mined.
+- An interactive mine lift/lever behind the deposit returns players outside.
+- A fresh run should restore the enemies and 28-ore deposit, subject to appropriate instance reset safeguards.
+- Players may enter with partially filled inventories and can mine only as much as fits.
+
+4. BALANCE AND TESTING
+- Initial target: active instance mining provides roughly 10–20% more ore and Mining XP per hour (approximately 20% target) than relaxed open-world mining for characters appropriately levelled for the activity.
+- Measure complete 30–60 minute loops: travel, combat, mining, banking, and return trips; compare ore and Mining XP per hour.
+- Tune during alpha rather than hard-code assumptions now.
+- Higher-level combat characters naturally complete lower-level caves faster; do not artificially penalise their earned advantage.
+- Keep XP per copper ore consistent across both methods.
+
+5. LATER DEVELOPMENT
+- Extend to tin, iron, coal, mithril and other ores with appropriate mechanics and instances.
+- Potential rare enemies and special rewards.
+- Save defensive roles, tougher encounters and advanced group mechanics for higher-tier mines.
+- Develop Smithing afterward using the same independent Warscape skill framework.
+
+6. WORKFLOW
+- Cody is currently working on Warscape HUD/UI (panels, buttons, icons).
+- Do not send the Mining implementation task until the current UI work is finished.
+- First implementation target: reusable skill progression framework and small, testable copper mining prototype.
+
+7. IMPLEMENTATION STATUS — 28 OCTOBER 2026
+Completed in source (database migration not applied):
+- The existing Warscape skill model and addon snapshot now include Mining, using
+  the existing OSRS XP curve and 1–99 level calculation.
+- The general OSRS success-rate interpolation is implemented as a reusable
+  helper taking verified level-1/level-99 parameters. Copper's parameters remain
+  unknown, so no copper success chance is configured.
+- Integer XP remains unchanged. A reusable half-point accumulator carries a
+  remainder between awards; copper's 35 half-points produce 17 XP, then 18 XP,
+  repeating. The Mining remainder is stored per character as `mining_half_xp`.
+- The existing Skills panel now has a Mining row and a clipped scroll-list/
+  scrollbar path for overflow. Server snapshot reports its real level and XP.
+- Migration `2026_10_28_00_characters.sql` adds `mining_xp` and
+  `mining_half_xp` to `warscape_skills`. Its verification specification is
+  prepared in `contrib/warscape/verifications/2026_10_28_00_characters.json`.
+  It was pending when prepared; the database follow-up below records its later
+  live status. Future migrations require approval and a fresh verified backup.
+
+Still planned / under investigation:
+- Copper success probability parameters have not been verified. The OSRS Wiki
+  copper-rock page lists level 1 and 17.5 XP but currently lacks its success
+  chart. Do not ship a guessed probability. Bronze timing remains 8 ticks
+  (4.8 seconds), per the OSRS Mining reference.
+- Copper rock template, persistent GM placement, independent depletion state,
+  grey appearance, continuous interaction, inventory-safe reward, and complete
+  mining cancellation behavior are not implemented yet.
+- Character migration application, server build/deployment, and in-game checks
+  remain outstanding. The user performs in-game checks.
+
+Database follow-up — 28 October 2026:
+- On the next approved migration workflow check, the live characters database
+  already reported migration `2026_10_28_00_characters.sql` as applied. Codex
+  did not execute it. Its schema postcondition now verifies successfully, and a
+  fresh complete backup was made after that observation. The workflow cannot
+  reconstruct a before/after row comparison because the migration was already
+  recorded before this turn began.
+- The exact schema changes remain the two nullable-free, zero-default integer
+  columns specified above. The migration itself contains only `ALTER TABLE ADD
+  COLUMN` operations and does not update existing character XP values.

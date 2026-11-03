@@ -21,6 +21,10 @@
 #include "CellImpl.h"
 #include "CharacterCache.h"
 #include "Chat.h"
+#include "Creature.h"
+#include "CreatureAI.h"
+#include "TemporarySummon.h"
+#include "WarscapeTrainingDummy.h"
 #include "DatabaseEnv.h"
 #include "DisableMgr.h"
 #include "GridNotifiers.h"
@@ -51,6 +55,9 @@
 #include "WeatherMgr.h"
 #include "World.h"
 #include "WorldSession.h"
+
+#include <charconv>
+#include <sstream>
 
 // temporary hack until includes are sorted out (don't want to pull in Windows.h)
 #ifdef GetClassName
@@ -130,6 +137,30 @@ public:
         return commandTable;
     }
 
+    static char const* WarscapeArchetypeName(Warscape::WeaponArchetype archetype)
+    {
+        switch (archetype)
+        {
+            case Warscape::WeaponArchetype::Dagger: return "Dagger";
+            case Warscape::WeaponArchetype::Scimitar: return "Scimitar";
+            case Warscape::WeaponArchetype::ShortSword: return "Short sword";
+            case Warscape::WeaponArchetype::Longsword: return "Longsword";
+            case Warscape::WeaponArchetype::TwoHandedSword: return "Two-handed sword";
+            case Warscape::WeaponArchetype::Battleaxe: return "Battleaxe";
+            case Warscape::WeaponArchetype::Warhammer: return "Warhammer";
+            case Warscape::WeaponArchetype::Mace: return "Mace";
+            case Warscape::WeaponArchetype::Spear: return "Spear";
+            case Warscape::WeaponArchetype::Halberd: return "Halberd";
+            case Warscape::WeaponArchetype::Bow: return "Bow";
+            case Warscape::WeaponArchetype::Crossbow: return "Crossbow";
+            case Warscape::WeaponArchetype::Staff: return "Staff";
+            case Warscape::WeaponArchetype::Wand: return "Wand";
+            case Warscape::WeaponArchetype::Auto: return "Auto";
+            case Warscape::WeaponArchetype::Unknown:
+            default: return "Unknown";
+        }
+    }
+
     // WARSCAPE: Temporary attack-style selector. Available to normal players.
     static bool HandleWarscapeStyleCommand(ChatHandler* handler, char const* args)
     {
@@ -142,6 +173,260 @@ public:
         else
             style = style.substr(first, style.find_last_not_of(" \\t") - first + 1);
 
+        if (style == "attacktest" || style.rfind("attacktest ", 0) == 0)
+        {
+            if (!handler->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
+            {
+                handler->SendSysMessage("This combat test requires GM NPC-spawn permission.");
+                return true;
+            }
+            player->HandleWarscapeAttackTestCommand(style.substr(10));
+            return true;
+        }
+
+        if (style == "dummy" || style.rfind("dummy ", 0) == 0)
+        {
+            if (!handler->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
+            {
+                handler->SendSysMessage("This training utility requires GM NPC-spawn permission.");
+                return true;
+            }
+            std::istringstream input(style);
+            std::string command, operation, valueText, extra;
+            input >> command >> operation;
+            if (operation == "remove" || operation == "defence")
+            {
+                Creature* dummy = handler->getSelectedCreature();
+                if (!dummy || !Warscape::IsTrainingDummyEntry(dummy->GetEntry()))
+                {
+                    handler->SendSysMessage("Select a Warscape Training Dummy first.");
+                    return true;
+                }
+                if (operation == "remove")
+                {
+                    if ((input >> extra) || !handler->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_DELETE))
+                    {
+                        handler->SendSysMessage("Use .rs dummy remove with GM NPC-delete permission.");
+                        return true;
+                    }
+                    if (TempSummon* summon = dummy->ToTempSummon())
+                        summon->UnSummon();
+                    else if (!Creature::DeleteFromDB(dummy->GetSpawnId()))
+                    {
+                        handler->SendSysMessage("Could not remove the saved dummy spawn.");
+                        return true;
+                    }
+                    handler->SendSysMessage("Warscape Training Dummy removed.");
+                    return true;
+                }
+                input >> valueText;
+                uint32 level = 0;
+                auto parsed = std::from_chars(valueText.data(), valueText.data() + valueText.size(), level);
+                if (valueText.empty() || (input >> extra) || parsed.ec != std::errc()
+                    || parsed.ptr != valueText.data() + valueText.size() || level < 1 || level > 99 || !dummy->AI())
+                {
+                    handler->SendSysMessage("Usage: .rs dummy defence <1-99> (selected dummy; resets to 1 on reload).");
+                    return true;
+                }
+                dummy->AI()->SetData(Warscape::TrainingDummyDefenceData, level);
+                handler->PSendSysMessage("Dummy OSRS Defence: %u (zero equipment defence bonus; session setting).", level);
+                return true;
+            }
+            if ((!operation.empty() && operation != "permanent") || (input >> extra))
+            {
+                handler->SendSysMessage("Use .rs dummy, .rs dummy permanent, .rs dummy remove or .rs dummy defence <1-99>.");
+                return true;
+            }
+            if (player->IsInCombat() || player->GetTransport() || (operation == "permanent" && player->GetMap()->Instanceable()))
+            {
+                handler->SendSysMessage("Leave combat/transports before spawning; permanent dummies require a non-instance map.");
+                return true;
+            }
+            if (!sObjectMgr->GetCreatureTemplate(Warscape::TrainingDummyEntry))
+            {
+                handler->SendSysMessage("Training dummy template is absent; apply the reviewed utility migration first.");
+                return true;
+            }
+            Position const position = player->GetNearPosition(3.0f, 0.0f);
+            if (operation.empty())
+            {
+                if (!player->SummonCreature(Warscape::TrainingDummyEntry, position, TEMPSUMMON_MANUAL_DESPAWN))
+                {
+                    handler->SendSysMessage("Could not summon the training dummy.");
+                    return true;
+                }
+                handler->SendSysMessage("Temporary Warscape Training Dummy spawned ahead. Select it and use .rs dummy remove when finished.");
+                return true;
+            }
+            Map* map = player->GetMap();
+            Creature* dummy = new Creature();
+            if (!dummy->Create(map->GenerateLowGuid<HighGuid::Unit>(), map, player->GetPhaseMaskForSpawn(), Warscape::TrainingDummyEntry, position))
+            {
+                delete dummy;
+                handler->SendSysMessage("Could not create the permanent dummy.");
+                return true;
+            }
+            dummy->SaveToDB(map->GetId(), 1 << map->GetSpawnMode(), player->GetPhaseMaskForSpawn());
+            ObjectGuid::LowType const spawnId = dummy->GetSpawnId();
+            dummy->CleanupsBeforeDelete();
+            delete dummy;
+            dummy = new Creature();
+            if (!dummy->LoadFromDB(spawnId, map, true, true))
+            {
+                delete dummy;
+                handler->SendSysMessage("Saved dummy could not be loaded; inspect the spawn before retrying.");
+                return true;
+            }
+            sObjectMgr->AddCreatureToGrid(spawnId, sObjectMgr->GetCreatureData(spawnId));
+            handler->SendSysMessage("Permanent Warscape Training Dummy saved. It survives restarts; select it and use .rs dummy remove to delete its spawn.");
+            return true;
+        }
+
+        if (style == "smelt bronze")
+        {
+            player->StartWarscapeBronzeSmelting();
+            return true;
+        }
+
+        if (StringEqualI(style, "stats"))
+        {
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+            for (uint8 i = 0; i < Player::RS_SKILL_COUNT; ++i)
+            {
+                Player::RS_Skill skill = static_cast<Player::RS_Skill>(i);
+                uint8 level = player->GetRSSkillLevel(skill);
+                uint32 xp = player->GetRSSkillXP(skill);
+                if (level >= 99)
+                    handler->PSendSysMessage("%s: level %u, %u XP (maximum level)", skillNames[i], level, xp);
+                else
+                {
+                    uint32 nextLevelXP = Player::RS_XPForLevel(level + 1);
+                    handler->PSendSysMessage("%s: level %u, %u XP, %u XP to level %u", skillNames[i], level, xp,
+                        nextLevelXP - xp, level + 1);
+                }
+            }
+            handler->SendSysMessage("OSRS combat level: not implemented yet.");
+            handler->PSendSysMessage("Smithing fractional carry: %u tenths of an XP.", player->warscapeSmithingTenthXP);
+            return true;
+        }
+
+        if (StringEqualI(style, "bonuses"))
+        {
+            Warscape::EquipmentBonuses const bonuses = player->GetWarscapeEquipmentBonuses();
+            char const* damageType = "Stab";
+            switch (player->GetWarscapeMeleeDamageType(BASE_ATTACK))
+            {
+                case Warscape::MeleeDamageType::Slash: damageType = "Slash"; break;
+                case Warscape::MeleeDamageType::Crush: damageType = "Crush"; break;
+                case Warscape::MeleeDamageType::Stab:
+                default: break;
+            }
+            handler->PSendSysMessage("Warscape equipment bonuses (Attack / Defence): Stab %d / %d, Slash %d / %d, Crush %d / %d",
+                bonuses.AttackStab, bonuses.DefenceStab, bonuses.AttackSlash, bonuses.DefenceSlash, bonuses.AttackCrush, bonuses.DefenceCrush);
+            handler->PSendSysMessage("Ranged %d / %d, Magic %d / %d; Melee Strength %d, Ranged Strength %d, Magic Damage %d, Prayer %d",
+                bonuses.AttackRanged, bonuses.DefenceRanged, bonuses.AttackMagic, bonuses.DefenceMagic,
+                bonuses.MeleeStrength, bonuses.RangedStrength, bonuses.MagicDamage, bonuses.Prayer);
+            uint32 const speedTicks = player->GetWarscapeWeaponAttackSpeedTicks(BASE_ATTACK);
+            float const speedSeconds = float(Warscape::AttackIntervalMilliseconds(speedTicks)) / 1000.0f;
+            handler->PSendSysMessage("Weapon archetype: %s; Selected melee damage type: %s",
+                WarscapeArchetypeName(player->GetWarscapeWeaponArchetype(BASE_ATTACK)), damageType);
+            handler->PSendSysMessage("Attack Speed: %u ticks (%.1f seconds)", speedTicks, speedSeconds);
+            if (Item const* weapon = player->GetWeaponForAttack(BASE_ATTACK, true))
+            {
+                uint32 const tier = sObjectMgr->GetWarscapeItemTier(weapon->GetEntry());
+                handler->PSendSysMessage("Weapon tier: %u (%s); stats source: %s", tier, Warscape::EquipmentTierName(tier),
+                    sObjectMgr->HasWarscapeItemProfile(weapon->GetEntry()) ? "preserved custom profile" : "OSRS baseline / explicit tier rule");
+            }
+            return true;
+        }
+
+        if (StringEqualI(style, "monsterspeed"))
+        {
+            Unit* selected = player->GetSelectedUnit();
+            if (!selected || !selected->ToCreature())
+            {
+                handler->SendSysMessage("Select a creature first, then use .rs monsterspeed.");
+                return true;
+            }
+
+            Creature* creature = selected->ToCreature();
+            uint32 const speedTicks = sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry());
+            float const speedSeconds = float(Warscape::AttackIntervalMilliseconds(speedTicks)) / 1000.0f;
+            handler->PSendSysMessage("Warscape melee speed for %s (entry %u): %u ticks (%.1f seconds)",
+                creature->GetName().c_str(), creature->GetEntry(), speedTicks, speedSeconds);
+            return true;
+        }
+
+        if (style.rfind("setlevel ", 0) == 0 || style.rfind("setxp ", 0) == 0 || style.rfind("addxp ", 0) == 0 || style.rfind("addhalfxp ", 0) == 0)
+        {
+            if (!Warscape::CanModifySkills(handler->HasPermission(rbac::RBAC_PERM_COMMAND_SETSKILL)))
+            {
+                handler->SendSysMessage("You do not have permission to change OSRS skills.");
+                return true;
+            }
+
+            std::istringstream input(style);
+            std::string operation, skillName, valueText, extra;
+            input >> operation >> skillName >> valueText;
+            if (skillName.empty() || valueText.empty() || (input >> extra))
+            {
+                handler->SendSysMessage("Usage: .rs setlevel <skill> <1-99> or .rs setxp/addxp/addhalfxp <skill> <0-200000000>");
+                return true;
+            }
+
+            int const skillIndex = Warscape::SkillIndexFromName(skillName.c_str());
+            if (skillIndex < 0)
+            {
+                handler->SendSysMessage("Unknown OSRS skill. Use attack, strength, defence, hitpoints, ranged, magic, prayer, mining or smithing.");
+                return true;
+            }
+
+            uint32 value = 0;
+            auto const parsed = std::from_chars(valueText.data(), valueText.data() + valueText.size(), value);
+            if (parsed.ec != std::errc() || parsed.ptr != valueText.data() + valueText.size())
+            {
+                handler->SendSysMessage("The value must be a whole number in the supported range.");
+                return true;
+            }
+
+            Player::RS_Skill const skill = static_cast<Player::RS_Skill>(skillIndex);
+            if ((operation == "addxp" || operation == "addhalfxp") && value > Warscape::MaxSkillXP)
+            {
+                handler->SendSysMessage("XP award must be between 0 and 200000000.");
+                return true;
+            }
+            if (operation == "addhalfxp" && skill != Player::RS_Skill::Mining && skill != Player::RS_Skill::Smithing)
+            {
+                handler->SendSysMessage("Fractional XP is supported for Mining and Smithing only.");
+                return true;
+            }
+            if (operation == "addxp")
+                player->AddRSSkillXP(skill, value);
+            else if (operation == "addhalfxp")
+                player->AddRSSkillHalfXP(skill, value);
+            Warscape::SkillUpdateResult result = (operation == "addxp" || operation == "addhalfxp")
+                ? Warscape::SkillUpdateResult::Success : operation == "setlevel"
+                ? player->SetRSSkillLevel(skill, value)
+                : player->SetRSSkillXP(skill, value);
+            if (result != Warscape::SkillUpdateResult::Success)
+            {
+                if (result == Warscape::SkillUpdateResult::InvalidLevel)
+                    handler->SendSysMessage(skill == Player::RS_Skill::Hitpoints
+                        ? "Hitpoints level must be between 10 and 99."
+                        : "Skill level must be between 1 and 99.");
+                else
+                    handler->SendSysMessage(skill == Player::RS_Skill::Hitpoints
+                        ? "XP must be at most 200000000 and Hitpoints XP must remain at or above level 10."
+                        : "XP must be between 0 and 200000000.");
+                return true;
+            }
+
+            player->SaveToDB();
+            static char const* skillNames[Player::RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+            handler->PSendSysMessage("%s is level %u (%u XP).", skillNames[skillIndex], player->GetRSSkillLevel(skill), player->GetRSSkillXP(skill));
+            return true;
+        }
+
         uint8 selected = player->GetWarscapeAttackStyle();
         if (StringEqualI(style, "accurate"))
             selected = 0;
@@ -153,7 +438,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs addxp, .rs addhalfxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

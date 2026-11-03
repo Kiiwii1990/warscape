@@ -57,6 +57,7 @@ void UnitAI::DoMeleeAttackIfReady()
         return;
 
     Unit* victim = me->GetVictim();
+    bool const warscapeMelee = me->IsWarscapeMeleeTarget(victim);
 
     if (!me->IsWithinMeleeRange(victim))
         return;
@@ -68,7 +69,10 @@ void UnitAI::DoMeleeAttackIfReady()
         me->resetAttackTimer();
     }
 
-    if (me->haveOffhandWeapon() && me->isAttackReady(OFF_ATTACK))
+    if (warscapeMelee && me->haveOffhandWeapon())
+        me->setAttackTimer(OFF_ATTACK, std::max(me->getAttackTimer(OFF_ATTACK), me->GetWarscapeMeleeAttackInterval(OFF_ATTACK)));
+
+    if (Warscape::AllowsOffhandAutoAttack(warscapeMelee) && me->haveOffhandWeapon() && me->isAttackReady(OFF_ATTACK))
     {
         me->AttackerStateUpdate(victim, OFF_ATTACK);
         me->resetAttackTimer(OFF_ATTACK);

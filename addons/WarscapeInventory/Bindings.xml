@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="WARSCAPE_TOGGLE_INVENTORY" header="WARSCAPE_INVENTORY">
+        WarscapeInventory_Toggle();
+    </Binding>
+</Bindings>

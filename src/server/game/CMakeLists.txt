@@ -14,6 +14,9 @@ CollectSourceFiles(
   # Exclude
   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders)
 
+# Local source backups must remain on disk without becoming duplicate build inputs.
+list(FILTER PRIVATE_SOURCES EXCLUDE REGEX " - bk[.]cpp$")
+
 if(USE_COREPCH)
   set(PRIVATE_PCH_HEADER PrecompiledHeaders/gamePCH.h)
 endif()

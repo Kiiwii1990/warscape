@@ -1,0 +1,5 @@
+{
+  "sha1": "7816CDE62EEF29146F8E7CAD9907D7D89FB7CAB2",
+  "precondition_sql": "SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND engine='InnoDB') AND NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND column_name='smithing_tenth_xp') AND EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND column_name='smithing_half_xp' AND column_type='tinyint(3) unsigned') AND NOT EXISTS(SELECT 1 FROM warscape_skills WHERE smithing_half_xp>1)",
+  "verify_sql": "SELECT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND column_name='smithing_tenth_xp' AND column_type='tinyint(3) unsigned' AND is_nullable='NO' AND column_default='0' AND ordinal_position=(SELECT ordinal_position+1 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND column_name='smithing_half_xp')) AND NOT EXISTS(SELECT 1 FROM warscape_skills WHERE smithing_tenth_xp<>smithing_half_xp*5)"
+}

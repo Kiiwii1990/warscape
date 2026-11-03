@@ -1,0 +1,5 @@
+{
+  "sha1": "2DDEDC8DB5B119DDD6944992338AF15A006D58D7",
+  "precondition_sql": "SELECT (SELECT COUNT(*) FROM creature_template WHERE entry=900001)=0\nAND (SELECT COUNT(*) FROM creature WHERE id=900001)=0\nAND (SELECT COUNT(*) FROM creature_template WHERE entry=31144 AND modelid1>0)=1",
+  "verify_sql": "SELECT COUNT(*)=1 FROM creature_template WHERE entry=900001 AND name='Warscape Training Dummy'\nAND ScriptName='npc_warscape_training_dummy' AND AIName='' AND faction=14 AND type=9\nAND minlevel=1 AND maxlevel=1 AND unit_class=1 AND modelid1=(SELECT modelid1 FROM creature_template WHERE entry=31144)\nAND npcflag=0 AND unit_flags=0 AND dynamicflags=0 AND MovementType=0 AND RegenHealth=1\nAND lootid=0 AND pickpocketloot=0 AND skinloot=0 AND mingold=0 AND maxgold=0\nAND KillCredit1=0 AND KillCredit2=0 AND ExperienceModifier=0 AND flags_extra=262466\nAND spell_school_immune_mask=0"
+}

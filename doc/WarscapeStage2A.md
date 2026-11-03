@@ -1,0 +1,180 @@
+# Stage 2A — interactive skills panel
+
+Source: `addons/WarscapeSkills`. Original client interface version: 30300
+(WoW 3.3.5a, build 12340). No executable patch or database migration is needed.
+
+## Primary client — corrected 26 October 2026
+
+The user's primary Warscape client is **wowdecomp**, rooted at
+`C:\WoWDev\wowdecomp`. This supersedes the earlier ChromieCraft deployment
+assumption. Do not modify or deploy to ChromieCraft unless explicitly requested.
+All implementation, asset preparation, validation and deployment run on Windows.
+
+The identified executable is `C:\WoWDev\wowdecomp\bin\Win\WowClient64.exe`.
+Before deployment, inspect the actual running process and any `-datadir` argument.
+With no override, the effective game directory is `C:\WoWDev\wowdecomp\bin\Win`,
+and WarscapeSkills belongs at
+`C:\WoWDev\wowdecomp\bin\Win\Interface\AddOns\WarscapeSkills`.
+`WoW/Source/Client.cpp::SetPaths` sets both the working directory and SFile base
+path from `datadir`, falling back to the executable directory. The addon loader
+uses `Interface\AddOns` relative to that game directory. The verified directories
+are ordinary local folders, not junctions to another client installation.
+
+No WowClient64 process was running during the initial corrected-target inspection.
+Use the verified default launch path when starting it; recheck a running process
+before subsequent deployments. Never infer the primary client from a realmlist.
+Read-only source inspection confirms wowdecomp implements `GetBindingKey`,
+`GetBindingAction`, `SetOverrideBinding` and `ClearOverrideBindings`.
+
+The corrected 18-file addon deployment was SHA-256 checked against the source.
+Lua 5.1, binding and texture tests pass, and the local layout preview reads the
+fonts/icons from wowdecomp's own Data archives. The executable was then launched
+and its running process path rechecked; startup reached the login screen.
+Panel rendering, live updates and N-key behaviour in-game still require the
+user's logged-in QA session; reaching the login screen is not panel acceptance.
+
+For a local preview using the primary client, run:
+
+```
+python addons/WarscapeSkills/tools/preview_skin.py --output build/stage2a-ui/wowdecomp-preview.png
+```
+
+The default preview client is the verified `bin\Win` directory. An explicit
+`--client` override must name a separately verified effective game directory.
+
+## Use and appearance
+
+Enable **Warscape Skills** in the character selection AddOns list. **N** toggles
+the panel when N is still assigned to the original Talents action. `/wskills`
+also toggles it; Escape or the integrated close button closes it. Drag the frame
+to move it. Position is saved per character by the client's SavedVariables system.
+The panel starts closed and subscribes automatically on login and UI reload.
+
+The seven combat skills retain their original native WoW spell/item icons. The
+26 October UI correction supersedes the original native-dialog appearance with
+separate textures sliced locally from the approved reference: fully opaque dark
+stone, thick gold/metal borders, sculpted corner dragons, recessed cells, silver
+icon sockets and a total-level footer. The skin uses real nine-slice frames and
+independent ornaments; it is not a flattened illustration of the panel.
+Tooltips show base level, available current level, cumulative XP, next threshold,
+remaining XP and progress. Maximum-level bars are full. No boosts currently exist;
+the server sends an unavailable marker, and both sides display the base level
+(for example `12 / 12`). Future current levels can display `15 / 12`. Total level
+sums base levels from the complete server snapshot, never temporary boosts.
+The reference's unimplemented tabs and Slayer skill are deliberately absent.
+
+### Three-column grid refinement — approved, 29 October 2026
+
+The internal layout now uses three columns while retaining the 350 x 514 frame
+and its existing artwork. The starting order is Attack, Hitpoints, Strength;
+Ranged, Defence, Magic; Prayer, Mining, then future snapshot skills. Each compact
+tile contains its native icon, gold name, current level and a thin green XP bar.
+Bar progress is `(xp - floor) / (nextXP - floor)`, clamped to 0–100%; the level
+99 bar is full. Hover details show total XP, next-level XP, remaining XP and
+base level only when it differs from current level. New stable skill IDs append
+to the grid automatically. The grid scrolls independently; title and Total Level
+footer stay fixed, with Total Level continuing to sum base levels. This approved
+refinement supersedes the earlier two-column arrangement without changing the
+server snapshot or progression system.
+
+The supported addon action **Toggle Warscape Skills** appears under **Warscape**
+in Key Bindings. A session-local override replaces the default N/Talents binding
+without changing saved bindings, modifying Blizzard talent functions or disabling
+the talent system. A custom action on N, an unbound N, or an explicit key assigned
+to the addon takes precedence over the automatic default. Changes reapply after
+login, UI reload or binding changes; protected binding changes defer until combat
+ends. If N is custom-bound, use `/wskills` or assign the addon action yourself.
+
+### Icon, level and scaling refinement — approved, 29 October 2026
+
+The three-column grid keeps its order, scrolling and fixed Total Level footer.
+Tiles omit visible skill names and instead show a larger icon, `current/attained`
+level and the thin XP bar. Names remain in tooltips alongside current level,
+attained level, total XP, the next-level XP threshold and remaining XP. Total
+Level continues to sum attained levels. Ctrl-wheel over the scroll grid routes
+to `WarscapePanels:AdjustScale`; ordinary wheel input scrolls one row. The shared
+saved panel scale remains independent from HUD scale.
+
+The snapshot supports an optional effective-level field, but the server's current
+`SkillProgress` contains only attained level and XP and sends `-` for effective
+level. The client therefore renders equal current/attained levels when there is
+no supplied modifier. No buff/drain gameplay or database change is included.
+
+## Data channel and safeguards
+
+The addon sends `WCSkills` addon-prefix traffic by whisper to its own character:
+`HELLO|1|<session token>`. The server accepts only this read-only handshake from
+an in-world player targeting themselves. The reserved prefix is consumed on all
+supported addon distributions before ordinary chat and GM command handling. It
+cannot relay forged skills to another player or dispatch a privileged command.
+Subscriptions are session-local and rate-limited to one per second. Existing
+server addon-channel configuration remains authoritative.
+
+The server reads the same `rsSkills` used by `.rs stats` and persistence. Login
+subscription sends a complete snapshot; successful XP or GM skill changes mark
+it dirty. Updates are coalesced to at most four snapshots per second, with no
+continuous polling once synchronized. The first login handshake retries every two
+seconds until data arrives. An incomplete snapshot expires after five seconds
+and requests a replacement. No skill writes or schema changes are made by the UI.
+
+Version 1 messages (each below the client's 255-byte addon limit):
+
+```
+B|1|token|revision|count
+S|1|token|revision|stable_id|base|effective_or_-|xp|level_floor|next_threshold_or_-
+E|1|token|revision
+```
+
+Only complete snapshots with matching token/revision, unique IDs and validated
+numeric ranges are displayed. The receiver accepts only self-whisper responses;
+old revisions and other senders are ignored. The token correlates UI reloads,
+not an authentication secret. Stable IDs separate protocol identity from labels.
+New skills require persistence/server metadata and optional client label/icon
+metadata; the grid expands automatically and unknown IDs use a question-mark icon.
+Mining, Smithing, Stage 2B and Stage 1H are not implemented.
+
+## Automated verification
+
+Build the full configured x64 solution with `cmake --build build --config Release`.
+Run `build/bin/Release/tests.exe --reporter compact` with the server runtime DLLs
+on PATH. The C++ suite covers handshake rejection, level threshold serialization
+and packet bounds in addition to existing combat tests.
+
+Run `python addons/WarscapeSkills/tests/test_addon.py` and
+`python addons/WarscapeSkills/tests/test_bindings.py` with `lupa` installed.
+It explicitly uses Lua 5.1 and tests malformed/duplicate/incomplete/replayed
+snapshots, max level, future IDs, tooltip handlers, open/close, saved position and
+the login handshake, total base level, reference column order, current/base
+formatting, integrated close action and dynamic sizing. Binding tests cover the
+default N, customized/unbound keys, explicit addon bindings and combat deferral.
+Run `python addons/WarscapeSkills/tests/test_skin.py` with Pillow installed to
+check all 12 TGA formats, alpha and dimensions. The UI mock and local preview do
+not verify real client rendering/networking. No server rebuild is needed for the
+UI-only correction; the server channel and combat code are unchanged.
+
+## Safe local deployment
+
+Keep the client closed while replacing addon files. Keep authserver/worldserver
+stopped when replacing server binaries. Back up previous versions outside Git.
+For a UI-only update, leave server processes/binaries untouched. Copy runtime files
+(`.toc`, `.lua`, `Bindings.xml`, and `art/*.tga`), and compare SHA-256 hashes. Do not
+copy generated configuration over local configuration. Keep database updater
+settings unchanged and do not start an updater as part of deployment.
+
+## In-game acceptance
+
+1. Restart the client after installation so it discovers `Bindings.xml`. Press N:
+   only Skills should toggle. Also test `/wskills`, the close button and Escape.
+   Check opaque stone, both dragons, beveled borders, labels and the native icons.
+2. Compare Attack, Strength, Defence, Hitpoints, Ranged, Magic and Prayer against
+   `.rs stats` on your QA character. Check `current / base` and the summed total.
+   Ordinary players need no GM rights for UI data.
+3. Hover each skill: check total XP, next threshold, remaining XP and percentage.
+4. Gain actual combat XP from eligible creatures; verify automatic bar/tooltip
+   updates. Training dummies deliberately award no XP.
+5. Gain a skill level; verify the new level and progress without reopening the UI.
+6. Move the panel, `/reload`, reopen with N, and confirm position/current data.
+   Relog and repeat. Verify a custom action on N remains intact, then restore your
+   default binding or assign **Toggle Warscape Skills** explicitly.
+
+Stop Stage 2A development at this handoff until the user confirms these tests.

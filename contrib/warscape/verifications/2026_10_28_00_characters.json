@@ -1,0 +1,5 @@
+{
+  "sha1": "87c74214ee63ffa2a5caa74a0fdf3a0daa6834e4",
+  "precondition_sql": "SELECT COUNT(*)=1 FROM information_schema.tables t WHERE t.table_schema=DATABASE() AND t.table_name='warscape_skills' AND t.table_type='BASE TABLE' AND EXISTS (SELECT 1 FROM information_schema.columns c WHERE c.table_schema=t.table_schema AND c.table_name=t.table_name AND c.column_name='prayer_xp') AND NOT EXISTS (SELECT 1 FROM information_schema.columns c WHERE c.table_schema=t.table_schema AND c.table_name=t.table_name AND c.column_name IN ('mining_xp','mining_half_xp'))",
+  "verify_sql": "SELECT COUNT(*)=2 AND SUM(column_name='mining_xp' AND data_type='int' AND numeric_precision=10 AND is_nullable='NO' AND column_default='0')=1 AND SUM(column_name='mining_half_xp' AND data_type='tinyint' AND numeric_precision=3 AND is_nullable='NO' AND column_default='0')=1 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_skills' AND column_name IN ('mining_xp','mining_half_xp')"
+}

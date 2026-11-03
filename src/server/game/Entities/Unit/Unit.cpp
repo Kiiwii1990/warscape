@@ -83,6 +83,8 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "WarscapeCombat.h"
+#include "WarscapeTrainingDummy.h"
 #include <cmath>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
@@ -248,6 +250,11 @@ void HealInfo::AbsorbHeal(uint32 amount)
     amount = std::min(amount, GetEffectiveHeal());
     _effectiveHeal -= amount;
     _hitMask |= PROC_HIT_ABSORB;
+}
+
+void HealInfo::ScaleHeal(uint32 maximum)
+{
+    _heal = Warscape::ScaleHealing(_heal, maximum);
 }
 
 uint32 HealInfo::GetHitMask() const
@@ -605,7 +612,25 @@ void Unit::DisableSpline()
 
 void Unit::resetAttackTimer(WeaponAttackType type)
 {
-    m_attackTimer[type] = uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
+    m_attackTimer[type] = IsWarscapeMeleeCombat() && type != RANGED_ATTACK
+        ? GetWarscapeMeleeAttackInterval(type)
+        : uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
+}
+
+bool Unit::IsWarscapeMeleeTarget(Unit const* target) const
+{
+    return target && ((GetTypeId() == TYPEID_PLAYER && target->GetTypeId() == TYPEID_UNIT)
+        || (GetTypeId() == TYPEID_UNIT && target->GetTypeId() == TYPEID_PLAYER));
+}
+
+uint32 Unit::GetWarscapeMeleeAttackInterval(WeaponAttackType att) const
+{
+    uint32 ticks = Warscape::DefaultAttackSpeedTicks;
+    if (GetTypeId() == TYPEID_PLAYER)
+        ticks = ToPlayer()->GetWarscapeWeaponAttackSpeedTicks(att);
+    else if (GetTypeId() == TYPEID_UNIT)
+        ticks = sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(GetEntry());
+    return Warscape::AttackIntervalMilliseconds(ticks);
 }
 
 bool Unit::IsWithinCombatRange(Unit const* obj, float dist2compare) const
@@ -834,6 +859,16 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
 
     uint32 health = victim->GetHealth();
 
+    // Training targets retain the full post-mitigation damage for combat logs
+    // and spell/proc callers, but never consume health or award progress.
+    // This also handles damage greater than current/max HP without clamping it.
+    if (victim->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+    {
+        if (attacker && attacker != victim)
+            victim->SetInCombatWith(attacker);
+        return damage;
+    }
+
     // duel ends when player has 1 or less hp
     bool duel_hasEnded = false;
     bool duel_wasMounted = false;
@@ -991,11 +1026,14 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
 
     // WARSCAPE: Award skill XP for actual melee damage to creatures.
     // This is temporary Attack-style training until combat styles are implemented.
-    if (attacker && attacker->ToPlayer() && victim->ToCreature() &&
+    if (damage > 0 && attacker && attacker->ToPlayer() && victim->ToCreature() &&
         damagetype == DIRECT_DAMAGE && cleanDamage &&
         (cleanDamage->attackType == BASE_ATTACK || cleanDamage->attackType == OFF_ATTACK))
     {
-        attacker->ToPlayer()->AwardWarscapeMeleeXP(std::min(damage, health));
+        uint32 const osrsDamage = cleanDamage->warscapeOSRSDamage
+            ? Warscape::OSRSDamageForXP(cleanDamage->warscapeOSRSDamage, health)
+            : Warscape::ToOSRSDamage(std::min(damage, health));
+        attacker->ToPlayer()->AwardWarscapeMeleeXP(osrsDamage);
     }
 
     // make player victims stand up automatically
@@ -1172,6 +1210,8 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     damageInfo->ProcAttacker     = PROC_FLAG_NONE;
     damageInfo->ProcVictim       = PROC_FLAG_NONE;
     damageInfo->CleanDamage      = 0;
+    damageInfo->WarscapeOSRSDamage = 0;
+    damageInfo->IsWarscapeMelee = false;
     damageInfo->HitOutCome       = MELEE_HIT_EVADE;
 
     if (!victim)
@@ -1210,6 +1250,33 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         return;
     }
 
+    bool const warscapePlayerMelee = GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT;
+    bool const warscapeMonsterMelee = GetTypeId() == TYPEID_UNIT && victim->GetTypeId() == TYPEID_PLAYER;
+    bool const warscapeMelee = (attackType == BASE_ATTACK || attackType == OFF_ATTACK) && (warscapePlayerMelee || warscapeMonsterMelee);
+    uint32 warscapeDamage = 0;
+    if (warscapeMelee)
+    {
+        uint32 warscapeOSRSDamage = 0;
+        if (warscapePlayerMelee)
+        {
+            Player const* player = ToPlayer();
+            uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
+            Warscape::EquipmentBonuses const equipment = player->GetWarscapeEquipmentBonuses();
+            warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), equipment.MeleeStrength, styleBonus));
+        }
+        else
+        {
+            auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+            auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
+            warscapeOSRSDamage = urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
+        }
+
+        warscapeDamage = Warscape::ScaleHealthOrDamage(warscapeOSRSDamage);
+        damageInfo->WarscapeOSRSDamage = warscapeOSRSDamage;
+        damageInfo->IsWarscapeMelee = true;
+    }
+    bool warscapeDamageAssigned = false;
+
     for (uint8 i = 0; i < MAX_ITEM_PROTO_DAMAGES; ++i)
     {
         // only players have secondary weapon damage
@@ -1223,26 +1290,48 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         bool const addPctMods = (schoolMask & SPELL_SCHOOL_MASK_NORMAL);
 
         uint32 damage = 0;
-        uint8 itemDamagesMask = (GetTypeId() == TYPEID_PLAYER) ? (1 << i) : 0;
-        damage += CalculateDamage(damageInfo->AttackType, false, addPctMods, itemDamagesMask);
-        // Add melee damage bonus
-        damage = MeleeDamageBonusDone(damageInfo->Target, damage, damageInfo->AttackType, nullptr, schoolMask);
-        damage = damageInfo->Target->MeleeDamageBonusTaken(this, damage, damageInfo->AttackType, nullptr, schoolMask);
-
-        // Script Hook For CalculateMeleeDamage -- Allow scripts to change the Damage pre class mitigation calculations
-        sScriptMgr->ModifyMeleeDamage(damageInfo->Target, damageInfo->Attacker, damage);
-
-        // Calculate armor reduction
-        if (Unit::IsDamageReducedByArmor(SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask)))
+        if (warscapeMelee)
         {
-            damageInfo->Damages[i].Damage = Unit::CalcArmorReducedDamage(damageInfo->Attacker, damageInfo->Target, damage, nullptr, damageInfo->AttackType);
-            damageInfo->CleanDamage += damage - damageInfo->Damages[i].Damage;
+            // Keep a single OSRS-style damage roll; do not add WoW weapon DPS,
+            // attack power, damage auras or the WoW armour formula.
+            if (!warscapeDamageAssigned)
+            {
+                damageInfo->Damages[i].Damage = warscapeDamage;
+                warscapeDamageAssigned = true;
+            }
         }
         else
-            damageInfo->Damages[i].Damage = damage;
+        {
+            uint8 itemDamagesMask = (GetTypeId() == TYPEID_PLAYER) ? (1 << i) : 0;
+            damage += CalculateDamage(damageInfo->AttackType, false, addPctMods, itemDamagesMask);
+            // Add melee damage bonus
+            damage = MeleeDamageBonusDone(damageInfo->Target, damage, damageInfo->AttackType, nullptr, schoolMask);
+            damage = damageInfo->Target->MeleeDamageBonusTaken(this, damage, damageInfo->AttackType, nullptr, schoolMask);
+
+            // Script Hook For CalculateMeleeDamage -- Allow scripts to change the Damage pre class mitigation calculations
+            sScriptMgr->ModifyMeleeDamage(damageInfo->Target, damageInfo->Attacker, damage);
+
+            // Calculate armor reduction
+            if (Unit::IsDamageReducedByArmor(SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask)))
+            {
+                damageInfo->Damages[i].Damage = Unit::CalcArmorReducedDamage(damageInfo->Attacker, damageInfo->Target, damage, nullptr, damageInfo->AttackType);
+                damageInfo->CleanDamage += damage - damageInfo->Damages[i].Damage;
+            }
+            else
+                damageInfo->Damages[i].Damage = damage;
+        }
     }
 
     damageInfo->HitOutCome = RollMeleeOutcomeAgainst(damageInfo->Target, damageInfo->AttackType);
+
+    // Randomize only a positive successful Warscape roll; misses and zero hits
+    // consume no variation roll and stay at zero.
+    if (warscapeMelee && damageInfo->WarscapeOSRSDamage && damageInfo->HitOutCome == MELEE_HIT_NORMAL)
+    {
+        uint32 const variation = sWorld->getIntConfig(CONFIG_WARSCAPE_DAMAGE_VARIATION_PERCENT);
+        uint32 const multiplier = urand(100 - variation, 100 + variation);
+        damageInfo->Damages[0].Damage = Warscape::VaryScaledDamage(damageInfo->WarscapeOSRSDamage, multiplier);
+    }
 
     switch (damageInfo->HitOutCome)
     {
@@ -1403,7 +1492,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
     {
         int32 resilienceReduction = damageInfo->Damages[i].Damage;
         // attackType is checked already for BASE_ATTACK or OFF_ATTACK so it can't be RANGED_ATTACK here
-        if (CanApplyResilience())
+        if (!warscapeMelee && CanApplyResilience())
             Unit::ApplyResilience(victim, nullptr, &resilienceReduction, (damageInfo->HitOutCome == MELEE_HIT_CRIT), CR_CRIT_TAKEN_MELEE);
         resilienceReduction = damageInfo->Damages[i].Damage - resilienceReduction;
         damageInfo->Damages[i].Damage -= resilienceReduction;
@@ -1413,20 +1502,23 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         if (int32(damageInfo->Damages[i].Damage) > 0)
         {
             damageInfo->ProcVictim |= PROC_FLAG_TAKEN_DAMAGE;
-            // Calculate absorb & resists
-            DamageInfo dmgInfo(*damageInfo, i);
-            Unit::CalcAbsorbResist(dmgInfo);
-            damageInfo->Damages[i].Absorb = dmgInfo.GetAbsorb();
-            damageInfo->Damages[i].Resist = dmgInfo.GetResist();
+            if (!warscapeMelee)
+            {
+                // WoW absorbs/resists do not alter Warscape's authoritative OSRS roll.
+                DamageInfo dmgInfo(*damageInfo, i);
+                Unit::CalcAbsorbResist(dmgInfo);
+                damageInfo->Damages[i].Absorb = dmgInfo.GetAbsorb();
+                damageInfo->Damages[i].Resist = dmgInfo.GetResist();
 
-            if (damageInfo->Damages[i].Absorb)
-                tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Absorb == 0 ? HITINFO_FULL_ABSORB : HITINFO_PARTIAL_ABSORB);
+                if (damageInfo->Damages[i].Absorb)
+                    tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Absorb == 0 ? HITINFO_FULL_ABSORB : HITINFO_PARTIAL_ABSORB);
 
-            if (damageInfo->Damages[i].Resist)
-                tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Resist == 0 ? HITINFO_FULL_RESIST : HITINFO_PARTIAL_RESIST);
+                if (damageInfo->Damages[i].Resist)
+                    tmpHitInfo[i] |= (damageInfo->Damages[i].Damage - damageInfo->Damages[i].Resist == 0 ? HITINFO_FULL_RESIST : HITINFO_PARTIAL_RESIST);
 
-            damageInfo->CleanDamage += damageInfo->Damages[i].Damage - dmgInfo.GetDamage();
-            damageInfo->Damages[i].Damage = dmgInfo.GetDamage();
+                damageInfo->CleanDamage += damageInfo->Damages[i].Damage - dmgInfo.GetDamage();
+                damageInfo->Damages[i].Damage = dmgInfo.GetDamage();
+            }
         }
         else // Impossible get negative result but....
             damageInfo->Damages[i].Damage = 0;
@@ -1502,6 +1594,8 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
 
         // Call default DealDamage
         CleanDamage cleanDamage(damageInfo->CleanDamage, damageInfo->Damages[i].Absorb, damageInfo->AttackType, damageInfo->HitOutCome);
+        if (damageInfo->IsWarscapeMelee)
+            cleanDamage.warscapeOSRSDamage = damageInfo->WarscapeOSRSDamage;
         Unit::DealDamage(this, victim, damageInfo->Damages[i].Damage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->Damages[i].DamageSchoolMask), nullptr, durabilityLoss);
     }
 
@@ -2133,6 +2227,8 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
 
         for (uint8 i = 0; i < MAX_ITEM_PROTO_DAMAGES; ++i)
             Unit::DealDamageMods(victim, damageInfo.Damages[i].Damage, &damageInfo.Damages[i].Absorb);
+        if (Player* player = ToPlayer(); player && attType == BASE_ATTACK)
+            player->RecordWarscapeAttackTestSwing(victim, damageInfo);
         SendAttackStateUpdate(&damageInfo);
 
         _lastDamagedTargetGuid = victim->GetGUID();
@@ -2177,22 +2273,157 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
     if (victim->GetTypeId() == TYPEID_UNIT && victim->ToCreature()->IsInEvadeMode())
         return MELEE_HIT_EVADE;
 
-    // Temporary RuneScape-style accuracy prototype.
-    // Later: replace these with OSRS Attack, Defence,
-    // equipment bonuses and combat-style modifiers.
-    int32 attackRoll = int32(GetWeaponSkillValue(attType, victim));
-    int32 defenceRoll = int32(victim->GetDefenseSkillValue(this));
+    // OSRS accuracy applies only to player melee auto-attacks against creatures.
+    // Physical immunity is handled by CalculateMeleeDamage before this roll.
+    if (GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT
+        && (attType == BASE_ATTACK || attType == OFF_ATTACK))
+    {
+        Player const* attacker = ToPlayer();
+        uint32 style = attacker->GetWarscapeAttackStyle();
+        auto stats = sObjectMgr->GetWarscapeMonsterStats(victim->GetEntry());
+        auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
+        // WoW hit rating, item level and attributes are not Warscape bonuses.
+        uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style, attacker->GetWarscapeMeleeAttackBonus(attType));
+        uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
+        if (Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+        {
+            uint32 const defence = victim->GetAI() ? victim->GetAI()->GetData(Warscape::TrainingDummyDefenceData) : 1;
+            defenceRoll = Warscape::CombatRoll(Warscape::NormalizeTrainingDefence(defence) + 8, 0);
+        }
+        double hitChance = Warscape::HitChance(attackRoll, defenceRoll);
+        return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
+    }
+    if (GetTypeId() == TYPEID_UNIT && victim->GetTypeId() == TYPEID_PLAYER
+        && (attType == BASE_ATTACK || attType == OFF_ATTACK))
+    {
+        Player const* defender = victim->ToPlayer();
+        auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
+        auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
+        uint64 const attackRoll = Warscape::CombatRoll(stats[Warscape::Attack] + 8, profile.AttackBonus);
+        uint64 const defenceRoll = Warscape::CombatRoll(defender->GetRSSkillLevel(Player::RS_Skill::Defence) + 8, 0);
+        double const hitChance = Warscape::HitChance(attackRoll, defenceRoll);
+        return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
+    }
+    int32 const attackerMaxSkillValueForLevel = GetMaxSkillValueForLevel(victim);
+    int32 const victimMaxSkillValueForLevel = victim->GetMaxSkillValueForLevel(this);
 
-    attackRoll = std::max(1, attackRoll);
-    defenceRoll = std::max(1, defenceRoll);
+    int32 const attackerWeaponSkill = GetWeaponSkillValue(attType, victim);
+    int32 const victimDefenseSkill = victim->GetDefenseSkillValue(this);
 
-    float hitChance;
+    // Miss chance based on melee
+    int32 miss_chance = int32(MeleeSpellMissChance(victim, attType, attackerWeaponSkill - victimMaxSkillValueForLevel, 0) * 100.0f);
 
-    if (attackRoll > defenceRoll)
-        hitChance = 1.0f - (float(defenceRoll + 2) / (2.0f * float(attackRoll + 1)));
-    else
-        hitChance = float(attackRoll) / (2.0f * float(defenceRoll + 1));
+    // Critical hit chance
+    int32 crit_chance = int32(GetUnitCriticalChanceAgainst(attType, victim) * 100.0f);
 
+    int32 dodge_chance = int32(GetUnitDodgeChance(attType, victim) * 100.0f);
+    int32 block_chance = int32(GetUnitBlockChance(attType, victim) * 100.0f);
+    int32 parry_chance = int32(GetUnitParryChance(attType, victim) * 100.0f);
+
+    // melee attack table implementation
+    // outcome priority:
+    //   1. >    2. >    3. >       4. >    5. >   6. >       7. >  8.
+    // MISS > DODGE > PARRY > GLANCING > BLOCK > CRIT > CRUSHING > HIT
+
+    int32    sum = 0, tmp = 0;
+    int32    roll = urand(0, 9999);
+
+    // check if attack comes from behind, nobody can parry or block if attacker is behind
+    bool canParryOrBlock = victim->HasInArc(float(M_PI), this) || victim->HasAuraType(SPELL_AURA_IGNORE_HIT_DIRECTION);
+
+    // only creatures can dodge if attacker is behind
+    bool canDodge = victim->GetTypeId() != TYPEID_PLAYER || canParryOrBlock;
+
+    // if victim is casting or cc'd it can't avoid attacks
+    if (victim->IsNonMeleeSpellCast(false, false, true) || victim->HasUnitState(UNIT_STATE_CONTROLLED))
+    {
+        canDodge = false;
+        canParryOrBlock = false;
+    }
+
+    // 1. MISS
+    tmp = miss_chance;
+    if (tmp > 0 && roll < (sum += tmp))
+        return MELEE_HIT_MISS;
+
+    // always crit against a sitting target (except 0 crit chance)
+    if (victim->GetTypeId() == TYPEID_PLAYER && crit_chance > 0 && !victim->IsStandState())
+        return MELEE_HIT_CRIT;
+
+    // 2. DODGE
+    if (canDodge)
+    {
+        tmp = dodge_chance;
+        if (tmp > 0                                         // check if unit _can_ dodge
+            && roll < (sum += tmp))
+            return MELEE_HIT_DODGE;
+    }
+
+    // 3. PARRY
+    if (canParryOrBlock)
+    {
+        tmp = parry_chance;
+        if (tmp > 0                                         // check if unit _can_ parry
+            && roll < (sum += tmp))
+            return MELEE_HIT_PARRY;
+    }
+
+    // 4. GLANCING
+    // Max 40% chance to score a glancing blow against mobs of the same or higher level (only players and pets, not for ranged weapons).
+    if ((GetTypeId() == TYPEID_PLAYER || IsPet()) &&
+        victim->GetTypeId() != TYPEID_PLAYER && !victim->IsPet() &&
+        GetLevel() <= victim->GetLevelForTarget(this))
+    {
+        // cap possible value (with bonuses > max skill)
+        int32 skill = attackerWeaponSkill;
+        int32 maxskill = attackerMaxSkillValueForLevel;
+        skill = (skill > maxskill) ? maxskill : skill;
+
+        // against boss-level targets - 24% chance of 25% average damage reduction (damage reduction range : 20-30%)
+        // against level 82 elites - 18% chance of 15% average damage reduction (damage reduction range : 10-20%)
+        tmp = 600 + (victimDefenseSkill - skill) * 120;
+        tmp = std::min(tmp, 4000);
+        if (tmp > 0 && roll < (sum += tmp))
+            return MELEE_HIT_GLANCING;
+    }
+
+    // 5. BLOCK
+    if (canParryOrBlock)
+    {
+        tmp = block_chance;
+        if (tmp > 0                                          // check if unit _can_ block
+            && roll < (sum += tmp))
+            return MELEE_HIT_BLOCK;
+    }
+
+    // 6.CRIT
+    tmp = crit_chance;
+    if (tmp > 0 && roll < (sum += tmp))
+        return MELEE_HIT_CRIT;
+
+    // 7. CRUSHING
+    // mobs can score crushing blows if they're 4 or more levels above victim
+    if (GetLevelForTarget(victim) >= victim->GetLevelForTarget(this) + 4 &&
+        // can be from by creature (if can) or from controlled player that considered as creature
+        !IsControlledByPlayer() &&
+        !(GetTypeId() == TYPEID_UNIT && ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_CRUSHING_BLOWS))
+    {
+        // when their weapon skill is 15 or more above victim's defense skill
+        tmp = victimDefenseSkill;
+        // having defense above your maximum (from items, talents etc.) has no effect
+        tmp = std::min(tmp, victimMaxSkillValueForLevel);
+        // tmp = mob's level * 5 - player's current defense skill
+        tmp = attackerMaxSkillValueForLevel - tmp;
+        // minimum of 20 points diff (4 levels difference)
+        tmp = std::max(tmp, 20);
+
+        // add 2% chance per lacking skill point
+        tmp = tmp * 200 - 1500;
+        if (tmp > 0 && roll < (sum += tmp))
+            return MELEE_HIT_CRUSHING;
+    }
+
+    // 8. HIT
     return MELEE_HIT_NORMAL;
 }
 
@@ -5383,6 +5614,8 @@ Unit* Unit::getAttackerForHelper() const                 // If someone wants to 
 
 bool Unit::Attack(Unit* victim, bool meleeAttack)
 {
+    if (GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(GetEntry()))
+        return false;
     if (!victim || victim == this)
         return false;
 
@@ -5426,6 +5659,8 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
                 {
                     AddUnitState(UNIT_STATE_MELEE_ATTACKING);
                     SendMeleeAttackStart(victim);
+                    if (IsWarscapeMeleeTarget(victim) && getAttackTimer(BASE_ATTACK))
+                        setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
                     return true;
                 }
             }
@@ -5453,6 +5688,14 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     // Set our target
     SetTarget(victim->GetGUID());
 
+    if (IsWarscapeMeleeTarget(victim))
+    {
+        if (getAttackTimer(BASE_ATTACK))
+            setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
+        if (haveOffhandWeapon() && getAttackTimer(OFF_ATTACK))
+            setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), GetWarscapeMeleeAttackInterval(OFF_ATTACK)));
+    }
+
     if (meleeAttack)
         AddUnitState(UNIT_STATE_MELEE_ATTACKING);
 
@@ -5472,7 +5715,7 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     }
 
     // delay offhand weapon attack by 50% of the base attack time
-    if (haveOffhandWeapon() && GetTypeId() != TYPEID_PLAYER)
+    if (haveOffhandWeapon() && GetTypeId() != TYPEID_PLAYER && !IsWarscapeMeleeCombat())
         setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), getAttackTimer(BASE_ATTACK) + uint32(CalculatePct(GetFloatValue(UNIT_FIELD_BASEATTACKTIME), 50))));
 
     if (meleeAttack)
@@ -6266,6 +6509,15 @@ void Unit::SendHealSpellLog(HealInfo& healInfo, bool critical /*= false*/)
 
 int32 Unit::HealBySpell(HealInfo& healInfo, bool critical /*= false*/)
 {
+    Unit* target = healInfo.GetTarget();
+    // Percentage heals and leech already use displayed health/damage units.
+    SpellInfo const* healSpell = healInfo.GetSpellInfo();
+    bool const displayedUnits = healSpell && (healSpell->HasEffect(SPELL_EFFECT_HEAL_PCT) || healSpell->HasEffect(SPELL_EFFECT_HEAL_MAX_HEALTH)
+        || healSpell->HasEffect(SPELL_EFFECT_HEALTH_LEECH) || healSpell->HasAura(SPELL_AURA_PERIODIC_LEECH)
+        || healSpell->HasAura(SPELL_AURA_PERIODIC_HEALTH_FUNNEL));
+    if (!displayedUnits && target && (target->IsPlayer() || target->GetTypeId() == TYPEID_UNIT))
+        healInfo.ScaleHeal(target->GetMaxHealth());
+
     // calculate heal absorb and reduce healing
     Unit::CalcHealAbsorb(healInfo);
     Unit::DealHeal(healInfo);
@@ -8227,6 +8479,9 @@ bool Unit::isTargetableForAttack(bool checkFakeDeath) const
 
 int32 Unit::ModifyHealth(int32 dVal)
 {
+    // Some health drains bypass DealDamage. Keep this protection independent of AI.
+    if (dVal < 0 && GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(GetEntry()))
+        return 0;
     int32 gain = 0;
 
     if (dVal == 0)
@@ -8317,6 +8572,9 @@ int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*
 
 uint32 Unit::GetAttackTime(WeaponAttackType att) const
 {
+    if (att != RANGED_ATTACK && IsWarscapeMeleeCombat())
+        return GetWarscapeMeleeAttackInterval(att);
+
     float f_BaseAttackTime = GetFloatValue(UNIT_FIELD_BASEATTACKTIME + AsUnderlyingType(att)) / m_modAttackSpeedPct[att];
     return (uint32)f_BaseAttackTime;
 }
@@ -9956,33 +10214,17 @@ uint32 createProcHitMask(SpellNonMeleeDamage* damageInfo, SpellMissInfo missCond
     return hitMask;
 }
 
-void Unit::ProcSkillsAndReactives(bool isVictim, Unit* procTarget, uint32 typeMask, uint32 hitMask, WeaponAttackType attType)
+void Unit::ProcSkillsAndReactives(bool isVictim, Unit* procTarget, uint32 typeMask, uint32 hitMask, WeaponAttackType /*attType*/)
 {
     // Player is loaded now - do not allow passive spell casts to proc
     if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->GetSession()->PlayerLoading())
         return;
 
-    // For melee/ranged based attack need update skills and set some Aura states if victim present
+    // For melee/ranged based attacks update aura states if a victim is present.
     if (typeMask & MELEE_BASED_TRIGGER_MASK && procTarget)
     {
-        // Update skills here for players
-        // only when you are not fighting other players or their pets/totems (pvp)
-        if (GetTypeId() == TYPEID_PLAYER &&
-                procTarget->GetTypeId() != TYPEID_PLAYER &&
-                !(procTarget->IsTotem() && procTarget->ToTotem()->GetOwner()->IsPlayer()) &&
-                !procTarget->IsPet()
-           )
-        {
-            // On melee based hit/miss/resist need update skill (for victim and attacker)
-            if (hitMask & (PROC_HIT_NORMAL | PROC_HIT_MISS | PROC_HIT_FULL_RESIST))
-            {
-                if (procTarget->GetTypeId() != TYPEID_PLAYER && !procTarget->IsCritter())
-                    ToPlayer()->UpdateCombatSkills(procTarget, attType, isVictim);
-            }
-            // Update defense if player is victim and parry/dodge/block
-            else if (isVictim && (hitMask & (PROC_HIT_DODGE | PROC_HIT_PARRY | PROC_HIT_BLOCK)))
-                ToPlayer()->UpdateCombatSkills(procTarget, attType, true);
-        }
+        // WARSCAPE: Legacy weapon and Defence skill progression is disabled.
+        // Skill records remain for equipment and client compatibility.
         // If exist crit/parry/dodge/block need update aura state (for victim and attacker)
         if (hitMask & (PROC_HIT_CRITICAL | PROC_HIT_PARRY | PROC_HIT_DODGE | PROC_HIT_BLOCK))
         {
@@ -10519,7 +10761,8 @@ void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply
     }
 
     SetFloatValue(UNIT_FIELD_BASEATTACKTIME + AsUnderlyingType(att), amount);
-    m_attackTimer[att] = uint32(GetAttackTime(att) * m_modAttackSpeedPct[att] * remainingTimePct);
+    if (!IsWarscapeMeleeCombat() || att == RANGED_ATTACK)
+        m_attackTimer[att] = uint32(GetAttackTime(att) * m_modAttackSpeedPct[att] * remainingTimePct);
 }
 
 void Unit::ApplyCastTimePercentMod(float val, bool apply)
@@ -10807,6 +11050,9 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
 
 /*static*/ void Unit::Kill(Unit* attacker, Unit* victim, bool durabilityLoss /*= true*/)
 {
+    // Instant-kill effects must not bypass the training target's damage guard.
+    if (victim->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(victim->GetEntry()))
+        return;
     // Prevent killing unit twice (and giving reward from kill twice)
     if (!victim->GetHealth())
         return;

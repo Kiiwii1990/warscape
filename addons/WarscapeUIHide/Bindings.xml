@@ -1,0 +1,3 @@
+<Bindings>
+    <Binding name="WARSCAPEUI_TOGGLE" header="WARSCAPE_UI">WarscapeUI_Toggle()</Binding>
+</Bindings>

@@ -1,0 +1,7 @@
+## Interface: 30300
+## Title: Warscape Panels
+## Notes: Two-sided main-menu visibility, synchronized HUD state and persistent side-owned layouts
+## Author: Warscape
+## Version: 1.4.0
+## SavedVariablesPerCharacter: WarscapePanelScales, WarscapePanelLayouts, WarscapeWindowLayouts
+Panels.lua

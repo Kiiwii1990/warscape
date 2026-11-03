@@ -1,0 +1,56 @@
+{
+  "revision": "refinement-1",
+  "terrain": {"outer_rise": 14.0, "hill_scale": 0.22, "hill_width": 1.4, "protected_bounds": [-96,-86,96,95], "transition": 24},
+  "farm": {
+    "name": "Cinderfield",
+    "clearing": {"center": [151,78], "radii": [36,33]},
+    "combat_space": {"center": [145,63], "radii": [20,15]},
+    "ruin": {"name": "Cinderfield burnt farmhouse", "asset": "World\\wmo\\Azeroth\\Buildings\\Westfall_human_farm_Burnt\\WestFallFarmHouseburnt.wmo", "foot": [163,84], "entry_local": [-1.54,-8.8,3.111], "yaw": 45, "doodad_set": 0},
+    "crop_patch": {"center": [141,90], "radii": [10,7]},
+    "roads": [
+      {"name": "Cinderfield approach and retreat", "width": 3.8, "points": [[104,55],[116,54],[128,58],[138,62],[145,63]]},
+      {"name": "Old farmhouse track", "width": 2.6, "points": [[138,62],[145,73],[156,79],[163,84]]}
+    ],
+    "future_spawn_points": [[135,61],[145,56],[157,61],[139,72],[152,72]],
+    "inspection_point": [145,63]
+  },
+  "profiles": {
+    "pathside": [
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnDetailGrass\\ElwynnDetailGrass02.m2", "weight": 7, "scale": [1.1,1.8], "radius": 0.24},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnDetailGrass\\ElwynnDetailGrass01.m2", "weight": 3, "scale": [1.0,1.6], "radius": 0.24},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnFlower01.m2", "weight": 2, "scale": [0.65,1.1], "radius": 0.3},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnShrub1\\ElwynnShrub1.m2", "weight": 2, "scale": [0.9,1.35], "radius": 0.28},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnDetailRocks\\ElwynnDetailRock01.m2", "weight": 1, "scale": [0.6,1.0], "radius": 0.32}
+    ],
+    "woodland": [
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnDetailGrass\\ElwynnDetailGrass02.m2", "weight": 5, "scale": [1.0,1.7], "radius": 0.24},
+      {"asset": "World\\Azeroth\\Stranglethorn\\PassiveDoodads\\Detail\\StranglethornFern03.m2", "weight": 3, "scale": [0.18,0.3], "radius": 2.6},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnMushroom01\\ElwynnMushroom01.m2", "weight": 2, "scale": [0.55,0.9], "radius": 0.52},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnShrub1\\ElwynnShrub1.m2", "weight": 3, "scale": [1.0,1.6], "radius": 0.28},
+      {"asset": "World\\Azeroth\\Elwynn\\PassiveDoodads\\Detail\\ElwynnDetailRocks\\ElwynnDetailRock02.m2", "weight": 1, "scale": [0.6,1.1], "radius": 0.25}
+    ]
+  },
+  "patches": [
+    {"name": "Inn garden outer weeds", "profile": "pathside", "center": [-39,-10], "radii": [11,4], "count": 38, "seed": 11},
+    {"name": "Inn western foundation", "profile": "woodland", "center": [-85,11], "radii": [4,16], "count": 42, "seed": 12},
+    {"name": "Provisioner western bank", "profile": "woodland", "center": [-45,54], "radii": [7,16], "count": 42, "seed": 13},
+    {"name": "Common north verge", "profile": "pathside", "center": [12,43], "radii": [4,14], "count": 32, "seed": 14},
+    {"name": "Smithy southern verge", "profile": "pathside", "center": [35,3], "radii": [14,4], "count": 35, "seed": 15},
+    {"name": "Baker east garden", "profile": "pathside", "center": [42,-39], "radii": [4,12], "count": 32, "seed": 16},
+    {"name": "Herbalist west garden", "profile": "woodland", "center": [-46,-27], "radii": [6,9], "count": 32, "seed": 17},
+    {"name": "Western crop wall weeds", "profile": "pathside", "center": [-65,-52], "radii": [3,13], "count": 32, "seed": 18},
+    {"name": "Harvest south grass", "profile": "pathside", "center": [87,-26], "radii": [16,6], "count": 40, "seed": 19},
+    {"name": "Kitchen field east weeds", "profile": "pathside", "center": [79,-56], "radii": [3,13], "count": 28, "seed": 20},
+    {"name": "Orchard edge fern beds", "profile": "woodland", "center": [50,98], "radii": [20,10], "count": 48, "seed": 21},
+    {"name": "South approach western verge", "profile": "pathside", "center": [-20,-81], "radii": [4,20], "count": 42, "seed": 22},
+    {"name": "South approach eastern verge", "profile": "pathside", "center": [-4,-80], "radii": [4,20], "count": 42, "seed": 23},
+    {"name": "Woodland trail north shoulder", "profile": "woodland", "center": [74,126], "radii": [23,8], "count": 48, "seed": 24},
+    {"name": "Woodland trail eastern shoulder", "profile": "woodland", "center": [113,88], "radii": [9,20], "count": 40, "seed": 25},
+    {"name": "Woodland southern fern hollow", "profile": "woodland", "center": [109,-51], "radii": [17,11], "count": 40, "seed": 26},
+    {"name": "West woodland mushrooms", "profile": "woodland", "center": [-111,-13], "radii": [18,23], "count": 48, "seed": 27},
+    {"name": "North woodland mushrooms", "profile": "woodland", "center": [-26,128], "radii": [27,14], "count": 48, "seed": 28},
+    {"name": "Cinderfield north overgrowth", "profile": "woodland", "center": [149,102], "radii": [20,8], "count": 36, "seed": 29},
+    {"name": "Cinderfield east overgrowth", "profile": "woodland", "center": [181,85], "radii": [6,18], "count": 36, "seed": 30},
+    {"name": "Abandoned crop weeds", "profile": "pathside", "center": [140,92], "radii": [11,7], "count": 32, "seed": 31}
+  ]
+}

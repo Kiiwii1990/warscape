@@ -16,6 +16,14 @@
  */
 
 #include "Player.h"
+#include "Config.h"
+#include "WarscapeSmelting.h"
+#include "WarscapeTrainingDummy.h"
+#include "WarscapeSkillsAddon.h"
+#include "WarscapeInventory.h"
+#include <charconv>
+#include <chrono>
+#include <sstream>
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
 #include "ArenaTeam.h"
@@ -372,6 +380,7 @@ Player::~Player()
 
 void Player::CleanupsBeforeDelete(bool finalCleanup)
 {
+    FinishWarscapeAttackTest(false, "CLEANUP");
     TradeCancel(false);
     DuelComplete(DUEL_INTERRUPTED);
 
@@ -922,6 +931,10 @@ void Player::Update(uint32 p_time)
     if (!IsInWorld())
         return;
 
+    UpdateWarscapeAttackTest();
+    UpdateWarscapeSkillsAddon(p_time);
+    UpdateWarscapeInventoryAddon(p_time);
+
     // undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= GameTime::GetGameTime())
     {
@@ -1005,6 +1018,10 @@ void Player::Update(uint32 p_time)
     {
         if (Unit* victim = GetVictim())
         {
+            bool const warscapeMelee = IsWarscapeMeleeTarget(victim);
+            if (warscapeMelee && haveOffhandWeapon())
+                setAttackTimer(OFF_ATTACK, std::max(getAttackTimer(OFF_ATTACK), GetWarscapeMeleeAttackInterval(OFF_ATTACK)));
+
             // default combat reach 10
             /// @todo add weapon, skill check
 
@@ -1043,7 +1060,7 @@ void Player::Update(uint32 p_time)
                     m_swingErrorMsg = 0;                    // reset swing error state
 
                     // prevent base and off attack in same time, delay attack at 0.2 sec
-                    if (haveOffhandWeapon())
+                    if (haveOffhandWeapon() && !warscapeMelee)
                         if (getAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                             setAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
 
@@ -1053,7 +1070,7 @@ void Player::Update(uint32 p_time)
                 }
             }
 
-            if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
+            if (Warscape::AllowsOffhandAutoAttack(warscapeMelee) && haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
             {
                 if (!IsWithinMeleeRange(victim))
                     setAttackTimer(OFF_ATTACK, 100);
@@ -1265,6 +1282,8 @@ void Player::Heartbeat()
 
 void Player::setDeathState(DeathState s)
 {
+    if (s != ALIVE)
+        CancelWarscapeSmelting();
     uint32 ressSpellId = 0;
 
     bool cur = IsAlive();
@@ -1842,6 +1861,7 @@ void Player::AddToWorld()
 
 void Player::RemoveFromWorld()
 {
+    FinishWarscapeAttackTest(false, "LOGOUT/TRANSFER");
     // cleanup
     if (IsInWorld())
     {
@@ -2036,10 +2056,14 @@ void Player::RegenerateHealth()
         HealthIncreaseRate = sWorld->getRate(RATE_HEALTH) * (2.066f - (GetLevel() * 0.066f));
 
     float addValue = 0.0f;
+    bool scaleFlatRegen = true;
 
     // polymorphed case
     if (IsPolymorphed())
+    {
         addValue = float(GetMaxHealth()) / 3.0f;
+        scaleFlatRegen = false;
+    }
     // normal regen case (maybe partly in combat case)
     else if (!IsInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT))
     {
@@ -2058,16 +2082,20 @@ void Player::RegenerateHealth()
     }
 
     // always regeneration bonus (including combat)
-    addValue += GetTotalAuraModifier(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT);
-    addValue += m_baseHealthRegen / 2.5f;
+    float const flatBonus = GetTotalAuraModifier(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT) + m_baseHealthRegen / 2.5f;
+    addValue += scaleFlatRegen ? flatBonus : flatBonus * Warscape::HealthDamageScale;
 
     if (addValue < 0.0f)
         return;
 
+    if (scaleFlatRegen)
+        addValue *= Warscape::HealthDamageScale;
     addValue += m_healthFraction;
     int32 integerValue = int32(addValue);
     if (!integerValue)
         return;
+
+    integerValue = std::min<int32>(integerValue, int32(maxValue - curValue));
 
     if (curValue + integerValue < maxValue)
     {
@@ -4464,6 +4492,7 @@ void Player::RemoveGhoul()
 
 void Player::KillPlayer()
 {
+    FinishWarscapeAttackTest(false, "DEATH", true);
     if (IsFlying() && !GetTransport())
         GetMotionMaster()->MoveFall();
 
@@ -4963,12 +4992,6 @@ void Player::LeaveLFGChannel()
             break;
         }
     }
-}
-
-void Player::UpdateDefense()
-{
-    if (UpdateSkill(SKILL_DEFENSE, sWorld->getIntConfig(CONFIG_SKILL_GAIN_DEFENSE)))
-        UpdateDefenseBonusesMod(); // update dependent from defense skill part
 }
 
 void Player::HandleBaseModFlatValue(BaseModGroup modGroup, float amount, bool apply)
@@ -5560,6 +5583,254 @@ bool Player::UpdateFishingSkill()
     return false;
 }
 
+namespace
+{
+    uint64 AttackTestNowMs()
+    {
+        return uint64(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
+    }
+}
+
+Warscape::AttackTestXP Player::GetWarscapeAttackTestXP() const
+{
+    static_assert(RS_SKILL_COUNT >= 7);
+    Warscape::AttackTestXP xp;
+    for (uint8 i = 0; i < xp.size(); ++i)
+        xp[i] = GetRSSkillXP(static_cast<RS_Skill>(i));
+    return xp;
+}
+
+Warscape::AttackTestSetup Player::GetWarscapeAttackTestSetup(Creature const* dummy) const
+{
+    Warscape::AttackTestSetup setup;
+    if (Item const* weapon = GetWeaponForAttack(BASE_ATTACK, true); weapon && !weapon->IsBroken())
+        setup.Weapon = weapon->GetEntry();
+    setup.Style = GetWarscapeAttackStyle();
+    setup.IntervalMs = Warscape::AttackIntervalMilliseconds(GetWarscapeWeaponAttackSpeedTicks(BASE_ATTACK));
+    setup.AttackBonus = GetWarscapeMeleeAttackBonus(BASE_ATTACK);
+    setup.StrengthBonus = GetWarscapeEquipmentBonuses().MeleeStrength;
+    setup.Defence = Warscape::NormalizeTrainingDefence(dummy && dummy->AI() ? dummy->AI()->GetData(Warscape::TrainingDummyDefenceData) : 1);
+    return setup;
+}
+
+void Player::HandleWarscapeAttackTestCommand(std::string const& args)
+{
+    ChatHandler chat(GetSession());
+    UpdateWarscapeAttackTest();
+    std::istringstream input(args);
+    std::string operation, extra;
+    input >> operation;
+    if (operation.empty() || (input >> extra))
+    {
+        chat.SendSysMessage("Use .rs attacktest <1-30 minutes>, stop, cancel or status.");
+        return;
+    }
+    if (operation == "stop" || operation == "cancel" || operation == "status")
+    {
+        if (!_warscapeAttackTest.Active)
+        {
+            chat.SendSysMessage("No active Warscape attack test.");
+            return;
+        }
+        if (operation == "status")
+        {
+            uint32 const remaining = uint32((_warscapeAttackTest.RemainingMs(AttackTestNowMs()) + 999) / 1000);
+            chat.PSendSysMessage("Attack test: %u:%02u remaining; %llu real swings recorded.", remaining / 60, remaining % 60,
+                static_cast<unsigned long long>(_warscapeAttackTest.Timestamps.size()));
+        }
+        else
+            FinishWarscapeAttackTest(operation == "stop", operation == "stop" ? "STOPPED" : "CANCELLED", true);
+        return;
+    }
+    uint32 minutes = 0;
+    auto const parsed = std::from_chars(operation.data(), operation.data() + operation.size(), minutes);
+    if (parsed.ec != std::errc() || parsed.ptr != operation.data() + operation.size() || minutes < 1 || minutes > 30)
+    {
+        chat.SendSysMessage("Test duration must be a whole number of minutes from 1 to 30.");
+        return;
+    }
+    if (_warscapeAttackTest.Active)
+    {
+        chat.SendSysMessage("An attack test is already active. Use stop or cancel first.");
+        return;
+    }
+    Creature* dummy = GetSelectedUnit() ? GetSelectedUnit()->ToCreature() : nullptr;
+    if (!dummy || !Warscape::IsTrainingDummyEntry(dummy->GetEntry()) || !dummy->IsAlive())
+    {
+        chat.SendSysMessage("Select a Warscape Training Dummy first.");
+        return;
+    }
+    if (!IsAlive() || GetVehicle() || !IsValidAttackTarget(dummy))
+    {
+        chat.SendSysMessage("You must be alive, outside a vehicle, and able to attack this dummy.");
+        return;
+    }
+    auto const setup = GetWarscapeAttackTestSetup(dummy);
+    if (!_warscapeAttackTest.Start(AttackTestNowMs(), minutes, GetWarscapeAttackTestXP(), setup))
+        return;
+    _warscapeAttackTestTarget = dummy->GetGUID();
+    Item const* weapon = GetWeaponForAttack(BASE_ATTACK, true);
+    _warscapeAttackTestWeapon = weapon && !weapon->IsBroken() ? weapon->GetTemplate()->GetDefaultLocaleName() : "Unarmed/broken";
+    if (!(GetVictim() == dummy && HasUnitState(UNIT_STATE_MELEE_ATTACKING)) && !Attack(dummy, true))
+    {
+        FinishWarscapeAttackTest(false, "AUTO-ATTACK COULD NOT START", true);
+        return;
+    }
+    UpdateWarscapeAttackTest();
+    chat.PSendSysMessage("Attack test started: %u minute(s). Real melee swings only; stop/cancel/status are available.", minutes);
+}
+
+void Player::UpdateWarscapeAttackTest()
+{
+    if (!_warscapeAttackTest.Active)
+        return;
+    if (World::IsStopped())
+    {
+        FinishWarscapeAttackTest(false, "SHUTDOWN");
+        return;
+    }
+    if (!GetSession()->HasPermission(rbac::RBAC_PERM_COMMAND_NPC_ADD))
+    {
+        FinishWarscapeAttackTest(false, "GM PERMISSION REMOVED", true);
+        return;
+    }
+    if (!IsAlive())
+    {
+        FinishWarscapeAttackTest(false, "DEATH", true);
+        return;
+    }
+    Creature* dummy = ObjectAccessor::GetCreature(*this, _warscapeAttackTestTarget);
+    if (!dummy || !dummy->IsAlive() || !dummy->IsInWorld() || !Warscape::IsTrainingDummyEntry(dummy->GetEntry()))
+    {
+        FinishWarscapeAttackTest(false, "DUMMY REMOVED/UNAVAILABLE", true);
+        return;
+    }
+    if (GetVictim() && GetVictim()->GetGUID() != _warscapeAttackTestTarget)
+    {
+        FinishWarscapeAttackTest(false, "ATTACK TARGET CHANGED", true);
+        return;
+    }
+    uint64 const now = AttackTestNowMs();
+    _warscapeAttackTest.ObserveSetup(GetWarscapeAttackTestSetup(dummy));
+    uint32 reason = 0;
+    if (!IsWithinMeleeRange(dummy)) reason |= Warscape::AttackTestRange;
+    if (!HasInArc(2 * float(M_PI) / 3, dummy)) reason |= Warscape::AttackTestFacing;
+    if (!IsWithinLOSInMap(dummy)) reason |= Warscape::AttackTestLOS;
+    if (HasUnitState(UNIT_STATE_CASTING | UNIT_STATE_CHARGING | UNIT_STATE_CANNOT_AUTOATTACK) || HasUnitFlag(UNIT_FLAG_PACIFIED)) reason |= Warscape::AttackTestControl;
+    if (!HasUnitState(UNIT_STATE_MELEE_ATTACKING) || !GetVictim()) reason |= Warscape::AttackTestAutoStopped;
+    if (!IsValidAttackTarget(dummy)) reason |= Warscape::AttackTestInvalidTarget;
+    _warscapeAttackTest.ObservePause(now, reason);
+    if (_warscapeAttackTest.Expired(now))
+        FinishWarscapeAttackTest(true, "COMPLETE");
+    else if (_warscapeAttackTest.Timestamps.size() >= Warscape::AttackTestSession::MaximumSamples)
+        FinishWarscapeAttackTest(true, "SAMPLE LIMIT");
+}
+
+void Player::RecordWarscapeAttackTestSwing(Unit const* target, CalcDamageInfo const& damage)
+{
+    if (!_warscapeAttackTest.Active || !target || target->GetTypeId() != TYPEID_UNIT
+        || target->GetGUID() != _warscapeAttackTestTarget || !Warscape::IsTrainingDummyEntry(target->GetEntry()))
+        return;
+    _warscapeAttackTest.ObserveSetup(GetWarscapeAttackTestSetup(target->ToCreature()));
+    bool const connected = damage.HitOutCome == MELEE_HIT_NORMAL || damage.HitOutCome == MELEE_HIT_CRIT
+        || damage.HitOutCome == MELEE_HIT_BLOCK || damage.HitOutCome == MELEE_HIT_GLANCING || damage.HitOutCome == MELEE_HIT_CRUSHING;
+    uint64 amount = 0;
+    for (auto const& part : damage.Damages)
+        amount += part.Damage;
+    _warscapeAttackTest.RecordSwing(AttackTestNowMs(), connected, amount);
+}
+
+void Player::FinishWarscapeAttackTest(bool report, char const* reason, bool notify)
+{
+    if (!_warscapeAttackTest.Active)
+        return;
+    _warscapeAttackTest.Finish(AttackTestNowMs(), GetWarscapeAttackTestXP());
+    if (GetVictim() && GetVictim()->GetGUID() == _warscapeAttackTestTarget)
+        AttackStop();
+    ChatHandler chat(GetSession());
+    if (report)
+    {
+        auto const& test = _warscapeAttackTest;
+        constexpr char const* Styles[] = { "Accurate", "Aggressive", "Defensive", "Controlled" };
+        uint32 const elapsed = uint32(test.ElapsedMs() / 1000);
+        std::string pauses;
+        for (auto const& entry : { std::pair<uint32, char const*>{Warscape::AttackTestRange, "range"},
+            {Warscape::AttackTestFacing, "facing"}, {Warscape::AttackTestLOS, "LOS"}, {Warscape::AttackTestControl, "cast/control"},
+            {Warscape::AttackTestAutoStopped, "auto-stop"}, {Warscape::AttackTestInvalidTarget, "invalid"} })
+            if (test.PauseReasons & entry.first)
+                pauses += (pauses.empty() ? "" : "/") + std::string(entry.second);
+        std::string defence = std::to_string(test.InitialSetup.Defence);
+        if (test.DefenceChanged)
+            defence += "->" + std::to_string(test.LatestSetup.Defence) + " (mixed)";
+        chat.SendSysMessage("===== WARSCAPE ATTACK TEST =====");
+        chat.PSendSysMessage("Weapon: %s%s | Style: %s%s", _warscapeAttackTestWeapon.c_str(), test.WeaponChanged ? " [changed]" : "",
+            Styles[std::min<uint32>(test.InitialSetup.Style, 3)], test.StyleChanged ? " [changed]" : "");
+        chat.PSendSysMessage("Duration: %u:%02u | Swings: %llu", elapsed / 60, elapsed % 60, static_cast<unsigned long long>(test.Timestamps.size()));
+        chat.PSendSysMessage("Hits: %llu (zero: %llu) | Misses: %llu | Accuracy: %.1f%%", static_cast<unsigned long long>(test.Hits),
+            static_cast<unsigned long long>(test.ZeroHits), static_cast<unsigned long long>(test.Misses), test.Accuracy());
+        if (test.Hits)
+            chat.PSendSysMessage("Avg Hit: %.2f | Min/Max: %llu/%llu", test.AverageHit(), static_cast<unsigned long long>(test.MinHit), static_cast<unsigned long long>(test.MaxHit));
+        else
+            chat.SendSysMessage("Avg Hit: n/a | Min/Max: n/a");
+        chat.PSendSysMessage("Damage: %llu | DPS: %.2f | Dummy Defence: %s", static_cast<unsigned long long>(test.TotalDamage), test.DPS(), defence.c_str());
+        std::ostringstream interval;
+        interval.precision(2);
+        if (test.Timestamps.size() > 1)
+            interval << std::fixed << test.AverageIntervalSeconds();
+        else
+            interval << "n/a";
+        std::string const actual = interval.str();
+        if (test.MinExpectedMs == test.MaxExpectedMs)
+            chat.PSendSysMessage("Avg Swing: %s s | Expected: %.2f s", actual.c_str(), test.MinExpectedMs / 1000.0);
+        else
+            chat.PSendSysMessage("Avg Swing: %s s | Expected: %.2f-%.2f s (mixed)", actual.c_str(), test.MinExpectedMs / 1000.0, test.MaxExpectedMs / 1000.0);
+        chat.PSendSysMessage("Pauses: %u / %.2fs (%s) | XP delta: %+lld (%u/7 changed)", test.PauseCount, test.PausedMs / 1000.0,
+            pauses.empty() ? "none" : pauses.c_str(), static_cast<long long>(test.TotalXPDelta), test.ChangedSkills);
+        chat.PSendSysMessage("Result: %s%s%s", reason, test.ChangedSkills ? " [XP CHANGED]" : "", test.MixedSetup ? " [MIXED SETUP]" : "");
+        chat.SendSysMessage("================================");
+    }
+    else if (notify)
+        chat.PSendSysMessage("Attack test cancelled: %s. No results retained.", reason);
+    _warscapeAttackTest.Cancel();
+    _warscapeAttackTestTarget.Clear();
+    _warscapeAttackTestWeapon.clear();
+}
+
+Warscape::EquipmentBonuses Player::GetWarscapeEquipmentBonuses() const
+{
+    Warscape::EquipmentBonuses total;
+    for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
+        if (Item const* item = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
+            total += sObjectMgr->GetWarscapeItemBonuses(item->GetEntry());
+    return total;
+}
+
+Warscape::MeleeDamageType Player::GetWarscapeMeleeDamageType(WeaponAttackType attackType) const
+{
+    return Warscape::SelectMeleeDamageType(GetWarscapeWeaponArchetype(attackType), GetWarscapeAttackStyle());
+}
+
+int32 Player::GetWarscapeMeleeAttackBonus(WeaponAttackType attackType) const
+{
+    return GetWarscapeEquipmentBonuses().AttackBonus(GetWarscapeMeleeDamageType(attackType));
+}
+
+Warscape::WeaponArchetype Player::GetWarscapeWeaponArchetype(WeaponAttackType attackType) const
+{
+    Item const* weapon = GetWeaponForAttack(attackType, true);
+    if (!weapon || weapon->IsBroken())
+        return Warscape::WeaponArchetype::Unknown;
+    return sObjectMgr->GetWarscapeWeaponArchetype(weapon->GetEntry());
+}
+
+uint32 Player::GetWarscapeWeaponAttackSpeedTicks(WeaponAttackType attackType) const
+{
+    Item const* weapon = GetWeaponForAttack(attackType, true);
+    if (!weapon || weapon->IsBroken())
+        return Warscape::DefaultAttackSpeedTicks;
+    return sObjectMgr->GetWarscapeItemAttackSpeedTicks(weapon->GetEntry());
+}
+
 bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
 {
     // levels sync. with spell requirement for skill levels to learn
@@ -5619,77 +5890,6 @@ bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
     TC_LOG_DEBUG("entities.player.skills", "Player::UpdateSkillPro: Player '{}' ({}), SkillID: {}, Chance: {:3.1f}% taken",
         GetName(), GetGUID().ToString(), skillId, chance / 10.0f);
     return true;
-}
-
-void Player::UpdateWeaponSkill(Unit* victim, WeaponAttackType attType)
-{
-    if (IsInFeralForm())
-        return;                                             // always maximized SKILL_FERAL_COMBAT in fact
-
-    if (GetShapeshiftForm() == FORM_TREE)
-        return;                                             // use weapon but not skill up
-
-    if (victim->GetTypeId() == TYPEID_UNIT && (victim->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_SKILL_GAINS))
-        return;
-
-    uint32 weapon_skill_gain = sWorld->getIntConfig(CONFIG_SKILL_GAIN_WEAPON);
-
-    Item* tmpitem = GetWeaponForAttack(attType, true);
-    if (!tmpitem && attType == BASE_ATTACK)
-    {
-        // Keep unarmed & fist weapon skills in sync
-        UpdateSkill(SKILL_UNARMED, weapon_skill_gain);
-        UpdateSkill(SKILL_FIST_WEAPONS, weapon_skill_gain);
-    }
-    else if (tmpitem)
-    {
-        switch (tmpitem->GetTemplate()->GetSubClass())
-        {
-            case ITEM_SUBCLASS_WEAPON_FISHING_POLE:
-                break;
-            case ITEM_SUBCLASS_WEAPON_FIST_WEAPON:
-                UpdateSkill(SKILL_UNARMED, weapon_skill_gain);
-                [[fallthrough]];
-            default:
-                UpdateSkill(tmpitem->GetSkill(), weapon_skill_gain);
-                break;
-        }
-    }
-
-    UpdateAllCritPercentages();
-}
-
-void Player::UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defense)
-{
-    int32 plevel = GetLevel();                              // if defense than victim == attacker
-    int32 greylevel = Trinity::XP::GetGrayLevel(plevel);
-    int32 moblevel = victim->GetLevelForTarget(this);
-
-    if (moblevel > plevel + 5)
-        moblevel = plevel + 5;
-
-    int32 lvldif = moblevel - greylevel;
-    if (lvldif < 3)
-        lvldif = 3;
-
-    int32 skilldif = 5 * plevel - int32(defense ? GetBaseDefenseSkillValue() : GetBaseWeaponSkillValue(attType));
-    if (skilldif <= 0)
-        return;
-
-    float chance = float(3 * lvldif * skilldif) / plevel;
-    if (!defense)
-        if (GetClass() == CLASS_WARRIOR || GetClass() == CLASS_ROGUE)
-            chance += chance * 0.02f * GetStat(STAT_INTELLECT);
-
-    chance = chance < 1.0f ? 1.0f : chance;                 //minimum chance to increase skill is 1%
-
-    if (roll_chance_f(chance))
-    {
-        if (defense)
-            UpdateDefense();
-        else
-            UpdateWeaponSkill(victim, attType);
-    }
 }
 
 void Player::ModifySkillBonus(uint32 skillid, int32 val, bool talent)
@@ -10032,6 +10232,12 @@ bool Player::HasItemTotemCategory(uint32 TotemCategory) const
 
 InventoryResult Player::CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec &dest, ItemTemplate const* pProto, uint32& count, bool swap, Item* pSrcItem) const
 {
+    // A native container may expose fewer slots than its item template. Check
+    // its current server capacity even for direct packets and occupied targets.
+    if (bag != INVENTORY_SLOT_BAG_0)
+        if (Bag* container = GetBagByPos(bag))
+            if (slot >= container->GetBagSize())
+                return EQUIP_ERR_WRONG_BAG_TYPE;
     Item* pItem2 = GetItemByPos(bag, slot);
 
     // ignore move item (this slot will be empty at move)
@@ -11041,6 +11247,9 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
             if (eslot == NULL_SLOT)
                 return EQUIP_ERR_NOT_EQUIPPABLE;
 
+            if (not_loading && HasWarscapeInventory() && eslot >= INVENTORY_SLOT_BAG_START && eslot < INVENTORY_SLOT_BAG_END)
+                return EQUIP_ERR_NOT_EQUIPPABLE;
+
             res = CanUseItem(pItem, not_loading);
             if (res != EQUIP_ERR_OK)
                 return res;
@@ -11139,6 +11348,8 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
 
 InventoryResult Player::CanUnequipItem(uint16 pos, bool swap) const
 {
+    if (IsWarscapeInventoryContainer(pos >> 8, pos & 255))
+        return EQUIP_ERR_CLIENT_LOCKED_OUT;
     // Applied only to equipped items and bank bags
     if (!IsEquipmentPos(pos) && !IsBagPos(pos))
         return EQUIP_ERR_OK;
@@ -11908,6 +12119,9 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
     if (slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND)
         CheckTitanGripPenalty();
 
+    if ((slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND) && IsWarscapeMeleeCombat() && getAttackTimer(BASE_ATTACK))
+        setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
+
     // only for full equip instead adding to stack
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, slot, pItem->GetEntry());
@@ -12065,6 +12279,9 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
         pItem->SetSlot(NULL_SLOT);
         if (IsInWorld() && update)
             pItem->SendUpdateToPlayer(this);
+
+        if ((slot == EQUIPMENT_SLOT_MAINHAND || slot == EQUIPMENT_SLOT_OFFHAND) && IsWarscapeMeleeCombat() && getAttackTimer(BASE_ATTACK))
+            setAttackTimer(BASE_ATTACK, std::max(getAttackTimer(BASE_ATTACK), GetWarscapeMeleeAttackInterval(BASE_ATTACK)));
     }
 }
 
@@ -12116,6 +12333,8 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
 
 void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
 {
+    if (IsWarscapeInventoryContainer(bag, slot))
+        return;
     Item* pItem = GetItemByPos(bag, slot);
     if (pItem)
     {
@@ -16154,6 +16373,8 @@ void Player::KilledMonster(CreatureTemplate const* cInfo, ObjectGuid guid)
 
 void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid /*= ObjectGuid::Empty*/)
 {
+    if (Warscape::IsTrainingDummyEntry(entry))
+        return;
     uint16 addKillCount = 1;
     uint32 real_entry = entry;
     Creature* killed = nullptr;
@@ -16164,6 +16385,8 @@ void Player::KilledMonsterCredit(uint32 entry, ObjectGuid guid /*= ObjectGuid::E
             real_entry = killed->GetEntry();
     }
 
+    if (Warscape::IsTrainingDummyEntry(real_entry))
+        return;
     StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_CREATURE, real_entry);   // MUST BE CALLED FIRST
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, real_entry, addKillCount, killed);
 
@@ -16941,13 +17164,18 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         if (PreparedQueryResult rsResult = CharacterDatabase.Query(rsStmt))
         {
             Field* rsFields = rsResult->Fetch();
+            std::array<uint32, RS_SKILL_COUNT> savedXP = {};
             for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
+                savedXP[i] = rsFields[i].GetUInt32();
+            Warscape::RestoreSkillXP(rsSkills, savedXP);
+            warscapeMiningHalfXP = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 1);
+            // OSRS characters cannot have less than the starting 10 Hitpoints.
+            if (rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level < Warscape::MinHitpointsLevel)
             {
-                uint32 xp = std::min<uint32>(rsFields[i].GetUInt32(), 200000000U);
-                rsSkills[i].XP = xp;
-                rsSkills[i].Level = RS_LevelForXP(xp);
+                rsSkills[static_cast<uint8>(RS_Skill::Hitpoints)].Level = Warscape::MinHitpointsLevel;
             }
-            warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT].GetUInt8(), 3);
+            warscapeSmithingTenthXP = std::min<uint8>(rsFields[RS_SKILL_COUNT + 1].GetUInt8(), 9);
+            warscapeAttackStyle = std::min<uint8>(rsFields[RS_SKILL_COUNT + 2].GetUInt8(), 3);
         }
     }
 
@@ -17398,6 +17626,9 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         TC_LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player ({}) has invalid taximask ({}) in DB. Forced partial load.", GetGUID().ToString(), fields[22].GetString());
 
     uint32 extraflags = fields[36].GetUInt16();
+    // Preserve only the two normal per-character inventory flags; GM flags
+    // continue through the existing permission/config restoration below.
+    m_ExtraFlags |= extraflags & (Warscape::Inventory::ManagedFlag | Warscape::Inventory::UnlockedFlag);
 
     _LoadPetStable(fields[37].GetUInt8(), holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS));
 
@@ -17508,6 +17739,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     m_reputationMgr->LoadFromDB(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_REPUTATION));
 
     _LoadInventory(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_INVENTORY), time_diff);
+    InitializeWarscapeInventory();
 
     // update items with duration and realtime
     UpdateItemDuration(time_diff, true);
@@ -19022,9 +19254,12 @@ void Player::SaveToDB(bool create /*=false*/)
     // WARSCAPE: Persist skill XP and attack style in the same character save transaction.
     CharacterDatabasePreparedStatement* rsStmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_WARSCAPE_SKILLS);
     rsStmt->setUInt32(0, GetGUID().GetCounter());
+    auto const savedXP = Warscape::SerializeSkillXP(rsSkills);
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
-        rsStmt->setUInt32(i + 1, rsSkills[i].XP);
-    rsStmt->setUInt8(8, warscapeAttackStyle);
+        rsStmt->setUInt32(i + 1, savedXP[i]);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 1, warscapeMiningHalfXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 2, warscapeSmithingTenthXP);
+    rsStmt->setUInt8(RS_SKILL_COUNT + 3, warscapeAttackStyle);
     trans->Append(rsStmt);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -23642,6 +23877,8 @@ void Player::RewardPlayerAndGroupAtKill(Unit* victim, bool isBattleGround)
 
 void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewardSource)
 {
+    if (pRewardSource && pRewardSource->GetTypeId() == TYPEID_UNIT && Warscape::IsTrainingDummyEntry(pRewardSource->GetEntry()))
+        return;
     if (!pRewardSource)
         return;
 
@@ -23693,19 +23930,6 @@ bool Player::IsAtRecruitAFriendDistance(WorldObject const* pOther) const
         player = this;
 
     return pOther->GetDistance(player) <= sWorld->getFloatConfig(CONFIG_MAX_RECRUIT_A_FRIEND_DISTANCE);
-}
-
-uint32 Player::GetBaseWeaponSkillValue(WeaponAttackType attType) const
-{
-    Item* item = GetWeaponForAttack(attType, true);
-
-    // unarmed only with base attack
-    if (attType != BASE_ATTACK && !item)
-        return 0;
-
-    // weapon skill or (unarmed for base attack)
-    uint32  skill = item ? item->GetSkill() : uint32(SKILL_UNARMED);
-    return GetBaseSkillValue(skill);
 }
 
 void Player::ResurrectUsingRequestData()
@@ -26528,6 +26752,72 @@ GameClient* Player::GetGameClient() const
 
 }
 
+// Add OSRS skill XP and notify the player when a level threshold is crossed.
+void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
+{
+    RS_SkillData& data = rsSkills[static_cast<uint8>(skill)];
+    uint8 const oldLevel = data.Level;
+    uint32 const oldXP = data.XP;
+    bool const leveled = Warscape::AddSkillXP(data, amount);
+    if (data.XP != oldXP)
+        _warscapeSkillsDirty = true;
+    if (!leveled)
+        return;
+
+    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+    ChatHandler chat(GetSession());
+    chat.PSendSysMessage("Your %s level is now %u!", skillNames[static_cast<uint8>(skill)], data.Level);
+
+    if (skill == RS_Skill::Hitpoints)
+    {
+        UpdateMaxHealth();
+        ModifyHealth((data.Level - oldLevel) * Warscape::HealthDamageScale);
+    }
+}
+
+void Player::AddRSSkillHalfXP(RS_Skill skill, uint32 halfPoints)
+{
+    // Only gathering skills currently persist fractional carry. Reject unsupported callers.
+    if (skill != RS_Skill::Mining && skill != RS_Skill::Smithing)
+        return;
+    if (skill == RS_Skill::Smithing)
+    {
+        // Split multiplication to keep even maximum uint32 half-point awards safe.
+        AddRSSkillXP(skill, halfPoints / 2);
+        AddRSSkillTenthXP(skill, (halfPoints % 2) * 5);
+        return;
+    }
+    uint32 const wholeXP = Warscape::AccumulateHalfXP(warscapeMiningHalfXP, halfPoints);
+    if (wholeXP)
+        AddRSSkillXP(skill, wholeXP);
+}
+
+Warscape::SkillUpdateResult Player::SetRSSkillLevel(RS_Skill skill, uint32 level)
+{
+    bool const hitpoints = skill == RS_Skill::Hitpoints;
+    Warscape::SkillUpdateResult const result = Warscape::SetSkillLevel(rsSkills[static_cast<uint8>(skill)], level, hitpoints);
+    if (result == Warscape::SkillUpdateResult::Success)
+    {
+        _warscapeSkillsDirty = true;
+        if (hitpoints)
+            UpdateMaxHealth();
+    }
+    return result;
+}
+
+Warscape::SkillUpdateResult Player::SetRSSkillXP(RS_Skill skill, uint32 xp)
+{
+    bool const hitpoints = skill == RS_Skill::Hitpoints;
+    Warscape::SkillUpdateResult const result = Warscape::SetSkillXP(rsSkills[static_cast<uint8>(skill)], xp, hitpoints);
+    if (result == Warscape::SkillUpdateResult::Success)
+    {
+        _warscapeSkillsDirty = true;
+        if (hitpoints)
+            UpdateMaxHealth();
+    }
+    return result;
+}
+
 // Warscape: Award RuneScape XP from melee damage.
 void Player::AwardWarscapeMeleeXP(uint32 damage)
 {
@@ -26569,4 +26859,344 @@ void Player::AwardWarscapeMeleeXP(uint32 damage)
                 combatXP, GetRSSkillXP(RS_Skill::Attack), hitpointsXP, GetRSSkillXP(RS_Skill::Hitpoints));
             break;
     }
+}
+
+// Reserved traffic never reaches player chat or the addon GM command dispatcher.
+bool Player::HandleWarscapeSkillsAddon(std::string_view message, std::string const& target, bool whisper)
+{
+    if (message.substr(0, 8) == "WCSmelt\t")
+        return HandleWarscapeSmelting(message.substr(8), target, whisper);
+    if (!Warscape::IsSkillsAddonMessage(message))
+        return false;
+    if (!whisper || target != GetName() || !IsInWorld() || _warscapeSkillsRequestCooldown)
+        return true;
+    std::string subscription = Warscape::ParseSkillsSubscription(message);
+    if (subscription.empty())
+        return true;
+    _warscapeSkillsToken = std::move(subscription);
+    _warscapeSkillsRequestCooldown = 1000;
+    _warscapeSkillsDirty = true;
+    return true;
+}
+
+void Player::UpdateWarscapeSkillsAddon(uint32 diff)
+{
+    RefreshWarscapeSmelting(diff);
+    UpdateWarscapeSmelting(diff);
+    _warscapeSkillsRequestCooldown -= std::min(diff, _warscapeSkillsRequestCooldown);
+    _warscapeSkillsSendCooldown -= std::min(diff, _warscapeSkillsSendCooldown);
+    if (!_warscapeSkillsToken.empty() && _warscapeSkillsDirty && !_warscapeSkillsSendCooldown)
+        SendWarscapeSkillsSnapshot();
+}
+
+void Player::SendWarscapeSkillsSnapshot()
+{
+    auto send = [this](std::string const& message)
+    {
+        WorldPackets::Chat::Chat packet;
+        packet.Initialize(CHAT_MSG_WHISPER, LANG_ADDON, this, this, message, 0, "", LOCALE_enUS, Warscape::SkillsAddonPrefix);
+        SendDirectMessage(packet.Write());
+    };
+    std::string const header = "1|" + _warscapeSkillsToken + "|" + std::to_string(++_warscapeSkillsRevision);
+    send("B|" + header + "|" + std::to_string(RS_SKILL_COUNT));
+    static_assert(RS_SKILL_COUNT == Warscape::SkillIds.size(), "Persisted skills require wire IDs");
+    for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
+        send(Warscape::SkillsRow(header, Warscape::SkillIds[i], rsSkills[i],
+            i == static_cast<uint8>(RS_Skill::Smithing) ? warscapeSmithingTenthXP : 0));
+    send("E|" + header);
+    _warscapeSkillsDirty = false;
+    _warscapeSkillsSendCooldown = 250;
+}
+
+// The same focus predicate and visibility search envelope used by Spell::SearchSpellFocus.
+bool Player::HasWarscapeCraftingFocus(uint32 focusId) const
+{
+    GameObject* focus = nullptr;
+    Trinity::GameObjectFocusCheck check(this, focusId);
+    Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck> searcher(this, focus, check);
+    Cell::VisitGridObjects(this, searcher, GetVisibilityRange());
+    return focus != nullptr;
+}
+
+void Player::AddRSSkillTenthXP(RS_Skill skill, uint32 tenths)
+{
+    if (skill != RS_Skill::Smithing)
+        return;
+    uint32 const wholeXP = Warscape::AccumulateTenthXP(warscapeSmithingTenthXP, tenths);
+    AddRSSkillXP(skill, wholeXP);
+    _warscapeSkillsDirty = true;
+}
+
+void Player::CancelWarscapeSmelting()
+{
+    warscapeBatch = 0;
+    if (!IsWarscapeSmelting())
+        return;
+    SetEmoteState(EMOTE_STATE_NONE);
+    warscapeSmeltRemaining = 0;
+    GetSession()->SendNotification("Smelting cancelled. No materials consumed.");
+}
+
+bool Player::PrepareWarscapeBronze(Item*& copper, Item*& tin, ItemPosCountVec& dest) const
+{
+    copper = tin = nullptr;
+    ItemTemplate const* output = sObjectMgr->GetItemTemplate(Warscape::BronzeBar);
+    if (!output || output->GetMaxStackSize() != 1)
+        return false;
+    // Only real carried inventory slots; never equipment, bank, keyring or trade.
+    auto inspect = [&](uint8 bag, uint8 slot)
+    {
+        Item* item = GetItemByPos(bag, slot);
+        if (!item || item->IsInTrade() || item->GetGUID() == GetLootGUID())
+            return;
+        Item*& ingredient = item->GetEntry() == Warscape::BronzeCopperOre ? copper : tin;
+        if (item->GetEntry() != Warscape::BronzeCopperOre && item->GetEntry() != Warscape::BronzeTinOre)
+            return;
+        // Prefer singleton stacks, so a full inventory can use the released slot.
+        if (!ingredient || item->GetCount() == 1)
+            ingredient = item;
+    };
+    for (uint8 slot = INVENTORY_SLOT_ITEM_START; slot < INVENTORY_SLOT_ITEM_END; ++slot)
+        inspect(INVENTORY_SLOT_BAG_0, slot);
+    for (uint8 bag = INVENTORY_SLOT_BAG_START; bag < INVENTORY_SLOT_BAG_END; ++bag)
+        if (Bag* container = GetBagByPos(bag))
+            for (uint32 slot = 0; slot < container->GetBagSize(); ++slot)
+                inspect(bag, uint8(slot));
+    if (!copper || !tin)
+        return false;
+
+    dest.clear();
+    if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, Warscape::BronzeBar, 1) == EQUIP_ERR_OK)
+        return dest.size() == 1 && dest.front().count == 1;
+    // Native swap validation checks the output's bag family and real slot capacity.
+    // It is only a capacity plan: no swap is performed and no items move here.
+    for (Item* item : {copper, tin})
+    {
+        dest.clear();
+        if (item->GetCount() == 1 && CanStoreItem(item->GetBagSlot(), item->GetSlot(), dest,
+            Warscape::BronzeBar, 1, nullptr, true) == EQUIP_ERR_OK)
+            return dest.size() == 1 && dest.front().count == 1;
+    }
+    return false;
+}
+
+void Player::StartWarscapeBronzeSmelting()
+{
+    if (!HasWarscapeForge())
+        return;
+    if (IsWarscapeSmelting() || warscapeSmeltRequestCooldown)
+    {
+        GetSession()->SendNotification("A crafting request is already active.");
+        return;
+    }
+    warscapeSmeltRequestCooldown = 500;
+    if (!IsInWorld() || !IsAlive() || IsInCombat() || isMoving() || IsBeingTeleported() ||
+        GetSession()->isLogingOut() || GetSession()->PlayerDisconnected() || GetTradeData() ||
+        IsNonMeleeSpellCast(true) || GetEmoteState() == EMOTE_STATE_WORK_MINING)
+    {
+        GetSession()->SendNotification("Stand still and finish other actions before smelting.");
+        return;
+    }
+    if (GetRSSkillLevel(RS_Skill::Smithing) < 1 || !HasWarscapeCraftingFocus(Warscape::FurnaceFocus))
+    {
+        GetSession()->SendNotification("Bronze requires Smithing 1 and a nearby furnace (not an anvil).");
+        return;
+    }
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    if (!PrepareWarscapeBronze(copper, tin, dest))
+    {
+        GetSession()->SendNotification("You need 1 Copper Ore, 1 Tin Ore and room for a Bronze Bar.");
+        return;
+    }
+    if (!warscapeBatch) warscapeBatch = 1;
+    SetEmoteState(EMOTE_STATE_USE_STANDING);
+    warscapeSmeltMap = GetMapId();
+    warscapeSmeltStart.Relocate(this);
+    warscapeSmeltRemaining = std::clamp(sConfigMgr->GetIntDefault("Warscape.Smelting.DurationMs", Warscape::SmeltingRecipes[0].DurationMs, true), 1, 60000);
+    GetSession()->SendNotification("Smelting one Bronze Bar (%.1f seconds).", warscapeSmeltRemaining / 1000.0f);
+}
+
+void Player::UpdateWarscapeSmelting(uint32 diff)
+{
+    warscapeSmeltRequestCooldown -= std::min(diff, warscapeSmeltRequestCooldown);
+    if (!IsWarscapeSmelting())
+        return;
+    if (!IsInWorld() || !IsAlive() || IsInCombat() || isMoving() || IsBeingTeleported() ||
+        GetSession()->isLogingOut() || GetSession()->PlayerDisconnected() || GetTradeData() ||
+        IsNonMeleeSpellCast(true) || GetEmoteState() == EMOTE_STATE_WORK_MINING ||
+        GetMapId() != warscapeSmeltMap || GetExactDist(&warscapeSmeltStart) > 0.0f ||
+        !HasWarscapeForge())
+    {
+        CancelWarscapeSmelting();
+        return;
+    }
+    if (diff < warscapeSmeltRemaining)
+    {
+        warscapeSmeltRemaining -= diff;
+        return;
+    }
+    SetEmoteState(EMOTE_STATE_NONE);
+    // Clear before any reward or callback: the action can complete only once.
+    warscapeSmeltRemaining = 0;
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    if (GetRSSkillLevel(RS_Skill::Smithing) < 1 || !PrepareWarscapeBronze(copper, tin, dest))
+    {
+        warscapeBatch = 0;
+        GetSession()->SendNotification("Smelting cancelled: materials or output space changed.");
+        return;
+    }
+    // Allocate BEFORE consuming anything. Single map-thread execution does not
+    // yield between revalidation, consumption and storage. Nonstackable output
+    // has exactly one prevalidated destination; StoreItem's non-cloning empty-slot
+    // path performs no item allocation and cannot fail after this point.
+    Item* bar = Item::CreateItem(Warscape::BronzeBar, 1, this);
+    if (!bar)
+    {
+        warscapeBatch = 0;
+        GetSession()->SendNotification("Unable to create Bronze Bar. No materials consumed.");
+        return;
+    }
+    uint32 count = 1;
+    DestroyItemCount(copper, count, true);
+    count = 1;
+    DestroyItemCount(tin, count, true);
+    ASSERT(!GetItemByPos(dest.front().pos));
+    Item* stored = StoreItem(dest, bar, true);
+    ASSERT(stored == bar);
+    ItemAddedQuestCheck(Warscape::BronzeBar, 1);
+    SendNewItem(stored, 1, true, false);
+    AddRSSkillTenthXP(RS_Skill::Smithing, Warscape::SmeltingRecipes[0].XPTenths);
+    // Inventory and skill XP enter the same existing character save transaction.
+    SaveToDB();
+    GetSession()->SendNotification("Created Bronze Bar. +6.2 Smithing XP.");
+    if (warscapeBatch && --warscapeBatch)
+    {
+        warscapeSmeltRequestCooldown = 0;
+        StartWarscapeBronzeSmelting();
+        if (!IsWarscapeSmelting()) warscapeBatch = 0;
+    }
+    warscapeForgeRefresh = 0;
+}
+
+// Forge interaction session. No client supplies item IDs, XP, timing or costs.
+bool Player::HasWarscapeForge() const
+{
+    GameObject* forge = ObjectAccessor::GetGameObject(*this, warscapeForge);
+    if (!forge || forge->GetEntry() != 173063 || !InSamePhase(forge)) return false;
+    return forge->GetGoType() == GAMEOBJECT_TYPE_SPELL_FOCUS &&
+        forge->GetGOInfo()->spellFocus.focusId == Warscape::FurnaceFocus && forge->isSpawned() &&
+        forge->IsAtInteractDistance(*this, Warscape::DefaultFurnaceInteractionDistance);
+}
+
+void Player::SendWarscapeSmelting(std::string const& message)
+{
+    WorldPackets::Chat::Chat packet;
+    packet.Initialize(CHAT_MSG_WHISPER, LANG_ADDON, this, this, message, 0, "", LOCALE_enUS, "WCSmelt");
+    SendDirectMessage(packet.Write());
+}
+
+void Player::OpenWarscapeSmelting(GameObject* forge)
+{
+    if (!forge || !IsAlive() || IsInCombat() || GetSession()->isLogingOut()) return;
+    if (forge->GetEntry() != 173063 || !InSamePhase(forge) ||
+        forge->GetGoType() != GAMEOBJECT_TYPE_SPELL_FOCUS ||
+        forge->GetGOInfo()->spellFocus.focusId != Warscape::FurnaceFocus || !forge->isSpawned() ||
+        !forge->IsAtInteractDistance(*this, Warscape::DefaultFurnaceInteractionDistance)) return;
+    if (IsWarscapeSmelting())
+    {
+        warscapeForge = forge->GetGUID();
+        if (!++warscapeForgeSerial) ++warscapeForgeSerial;
+        warscapeForgeSequence = 0;
+        warscapeSmeltingMenuOpen = true;
+        SendWarscapeSmelting("OPEN|" + std::to_string(warscapeForgeSerial));
+        warscapeForgeRefresh = 0;
+        RefreshWarscapeSmelting(0);
+        return;
+    }
+    CancelWarscapeSmelting();
+    warscapeForge = forge->GetGUID();
+    if (!++warscapeForgeSerial) ++warscapeForgeSerial;
+    warscapeForgeSequence = 0;
+    warscapeSmeltingMenuOpen = true;
+    SendWarscapeSmelting("OPEN|" + std::to_string(warscapeForgeSerial));
+    warscapeForgeRefresh = 0;
+    RefreshWarscapeSmelting(0);
+}
+
+void Player::CloseWarscapeSmelting()
+{
+    CancelWarscapeSmelting();
+    if (!warscapeForge.IsEmpty()) SendWarscapeSmelting("CLOSE|" + std::to_string(warscapeForgeSerial));
+    warscapeSmeltingMenuOpen = false;
+    if (!IsWarscapeSmelting()) warscapeForge.Clear();
+}
+
+void Player::RefreshWarscapeSmelting(uint32 diff)
+{
+    if (warscapeForge.IsEmpty()) return;
+    if (!HasWarscapeForge() || !IsAlive() || GetSession()->isLogingOut() || GetSession()->PlayerDisconnected())
+    { CloseWarscapeSmelting(); return; }
+    if (!warscapeSmeltingMenuOpen && !IsWarscapeSmelting())
+    {
+        warscapeForge.Clear();
+        return;
+    }
+    warscapeForgeRefresh -= std::min(diff, warscapeForgeRefresh);
+    if (warscapeForgeRefresh) return;
+    warscapeForgeRefresh = 250;
+    Item* copper; Item* tin; ItemPosCountVec dest;
+    bool capacity = PrepareWarscapeBronze(copper, tin, dest);
+    if (!warscapeSmeltingMenuOpen) return;
+    SendWarscapeSmelting("STATE|" + std::to_string(warscapeForgeSerial) + "|" +
+        std::to_string(GetRSSkillLevel(RS_Skill::Smithing)) + "|" +
+        std::to_string(GetItemCount(Warscape::BronzeCopperOre)) + "|" +
+        std::to_string(GetItemCount(Warscape::BronzeTinOre)) + "|" +
+        (capacity ? "1" : "0") + "|" + (IsWarscapeSmelting() ? "1" : "0"));
+}
+
+bool Player::HandleWarscapeSmelting(std::string_view message, std::string const& target, bool whisper)
+{
+    if (!whisper || target != GetName() || !IsInWorld() || message.size() > 80 || message.find_first_of(" \t\r\n") != std::string_view::npos || warscapeForge.IsEmpty()) return true;
+    // Exact bounded grammar; strictly increasing sequences prevent replay.
+    std::string input(message); std::replace(input.begin(), input.end(), '|', ' ');
+    std::istringstream stream(input);
+    std::string operation, tokenText, seqText, recipe, quantity, extra;
+    stream >> operation >> tokenText >> seqText;
+    if (std::count(message.begin(), message.end(), '|') != (operation == "START" ? 4 : 2)) return true;
+    auto number = [](std::string const& text, uint32& value)
+    {
+        auto r = std::from_chars(text.data(), text.data()+text.size(), value);
+        return !text.empty() && r.ec == std::errc() && r.ptr == text.data()+text.size();
+    };
+    uint32 token=0, seq=0;
+    if (!number(tokenText, token) || !number(seqText, seq) || token != warscapeForgeSerial ||
+        seq != warscapeForgeSequence + 1 || !warscapeSmeltingMenuOpen) return true;
+    if (operation == "CLOSE")
+    {
+        if (stream >> extra) return true;
+        ++warscapeForgeSequence; CloseWarscapeSmelting(); return true;
+    }
+    if (operation != "START" || !(stream >> recipe >> quantity) || (stream >> extra)) return true;
+    uint32 count=0;
+    if (recipe != Warscape::SmeltingRecipes[0].Id || !number(quantity,count) ||
+        (count!=1 && count!=5 && count!=10 && count!=0)) return true;
+    ++warscapeForgeSequence;
+    if (!HasWarscapeForge())
+    {
+        SendWarscapeSmelting("REJECT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+        return true;
+    }
+    if (IsWarscapeSmelting()) return true;
+    warscapeBatch = count ? count : UINT32_MAX;
+    StartWarscapeBronzeSmelting();
+    if (!IsWarscapeSmelting())
+    {
+        warscapeBatch=0;
+        SendWarscapeSmelting("REJECT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+        return true;
+    }
+    warscapeSmeltingMenuOpen = false;
+    SendWarscapeSmelting("ACCEPT|" + std::to_string(warscapeForgeSerial) + "|" + std::to_string(seq));
+    warscapeForgeRefresh=0;
+    return true;
 }

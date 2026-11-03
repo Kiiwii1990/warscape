@@ -1,0 +1,7 @@
+## Interface: 30300
+## Title: Warscape UI Hide
+## Notes: Reversibly hides the game interface for Warscape visual development
+## Author: Warscape
+## Version: 1.1.0
+## SavedVariablesPerCharacter: WarscapeUIHidden, WarscapeUIOriginalCVars
+WarscapeUIHide.lua

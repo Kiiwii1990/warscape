@@ -1,0 +1,8 @@
+{
+  "reference": "codex-clipboard-22b2a40b-adb1-4a0b-ba38-8269ddf76d96.png",
+  "method": "Imagegen from user-approved reference; original outputs retained; runtime conversion to 256x256 RGBA TGA",
+  "assets": [
+    "SmeltingHammer",
+    "SmeltingStone"
+  ]
+}
