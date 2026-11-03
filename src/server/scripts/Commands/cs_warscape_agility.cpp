@@ -47,14 +47,17 @@ namespace
                     selectedRoute = WarscapeAgilityTraversal::Route::NorthshireLog;
                 }
 
-                if (!WarscapeAgilityTraversal::Start(player, selectedRoute))
+                WarscapeAgilityTraversal::StartResult const result = WarscapeAgilityTraversal::Start(player, selectedRoute);
+                if (result.status == WarscapeAgilityTraversal::StartStatus::RollFailed)
+                    handler->SendSysMessage("Agility Roll Failed");
+                else if (result.status == WarscapeAgilityTraversal::StartStatus::Rejected)
                     handler->SendSysMessage(selectedRoute == WarscapeAgilityTraversal::Route::NorthshireLog
-                        ? "AGI-003A: stand within 3 yards of the measured Northshire approach on map 0; the route requires a living GM outside combat, flight, mount, or vehicle states, with no route active in this map instance."
+                        ? "AGI-003A: rejected. Stand within 3 horizontal yards of the measured approach point on map 0; Agility level 1 is required, and you must be alive, out of combat/flight/mount/vehicle, with no traversal active in this map instance."
                         : "AGI-001B: stand at the Northshire Abbey test start on map 0; the route is GM-only and unavailable while dead, mounted, in combat, or already active.");
+                else if (selectedRoute == WarscapeAgilityTraversal::Route::NorthshireLog)
+                    handler->PSendSysMessage("Agility Roll Succeeded: %u Agility XP awarded. Traversal started.", result.rewardXP);
                 else
-                    handler->SendSysMessage(selectedRoute == WarscapeAgilityTraversal::Route::NorthshireLog
-                        ? "AGI-003A: measured Northshire log route started. Watch the descent and collision; use .agi stop to interrupt."
-                        : "AGI-001B: automatic player spline started. Use .agi stop to interrupt.");
+                    handler->SendSysMessage("AGI-001B: automatic player spline started. Use .agi stop to interrupt.");
                 return true;
             }
 

@@ -4,13 +4,19 @@
 
 The Northshire log obstacle requires Agility level 1. After validating the
 player, route, start location and active-session state, the server performs the
-obstacle's success roll. The prototype is configured at 100%, so every eligible
-accepted attempt succeeds. It awards exactly 8 Agility XP immediately before
+obstacle's success roll. For testing, the prototype has a 50% success chance.
+A failed roll displays `Agility Roll Failed`, awards no XP, and does not start
+movement. A successful roll awards exactly 8 Agility XP immediately before
 movement begins, then starts the existing seven-point spline. Completion only
 restores normal movement and clears the session. An interruption after an
 accepted attempt does not revoke XP; rejected starts and repeated active-session
 commands award none. XP uses the existing curve, character save/load path, and
 `WCSkills` UI update.
+
+At Agility level 1, the tooltip's `83 XP to next level` is the level-2
+threshold, not the character's earned Agility XP. The tooltip separately labels
+`Total XP`. A successful attempt from 0 XP should show `Total XP: 8` and
+`XP remaining: 75`.
 
 The seven measured route points and the `.agi start log` command are retained.
 Obstacle configuration is separated from the shared traversal/session runner.
@@ -44,10 +50,12 @@ discard earned Agility XP.
 ## Acceptance steps after migration and deployment are separately approved
 
 1. Record Agility XP and confirm level 1; travel to the measured approach point
-   and run `.agi start log`. Confirm +8 XP and the UI update immediately, before
-   the character steps onto the log.
-2. While traversal is active, run `.agi start log` again. Confirm it is rejected
-   with no additional XP. Finish the crossing and confirm completion adds none.
+   and run `.agi start log`. On `Agility Roll Succeeded`, confirm +8 XP and the
+   UI update immediately, before the character steps onto the log. On
+   `Agility Roll Failed`, confirm no movement and no XP.
+2. While a successful traversal is active, run `.agi start log` again. Confirm
+   it is rejected with no additional XP. Finish the crossing and confirm
+   completion adds none.
 3. Run another legitimate attempt and confirm another exact +8 XP.
 4. Start an accepted attempt, then use `.agi stop`, ordinary movement/replaced
    spline, or logout. Confirm the already-awarded +8 remains, no second reward is

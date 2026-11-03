@@ -16,13 +16,26 @@ class Player;
 
 namespace WarscapeAgilityTraversal
 {
+    enum class StartStatus
+    {
+        Rejected,
+        RollFailed,
+        Started
+    };
+
+    struct StartResult
+    {
+        StartStatus status;
+        uint32 rewardXP;
+    };
+
     enum class Route
     {
         StreamPrototype,
         NorthshireLog
     };
 
-    bool Start(Player* player, Route route = Route::StreamPrototype);
+    StartResult Start(Player* player, Route route = Route::StreamPrototype);
     bool Stop(Player* player, bool interrupted);
 }
 

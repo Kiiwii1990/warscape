@@ -71,7 +71,7 @@ namespace
 
     // Keep obstacle data independent from the shared spline/session runner.
     constexpr std::array<ObstacleDefinition, 1> OBSTACLES = {{
-        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1, 8, 100 }
+        { "northshire_log", TEST_MAP_ID, 0, &NORTHSHIRE_LOG_ROUTE, 3.0f, 2.5f, 30000, 1, 8, 50 }
     }};
 
     struct TraversalSession
@@ -203,12 +203,12 @@ namespace
     };
 }
 
-bool WarscapeAgilityTraversal::Start(Player* player, Route route)
+WarscapeAgilityTraversal::StartResult WarscapeAgilityTraversal::Start(Player* player, Route route)
 {
     if (!player || !player->GetSession() || !player->IsInWorld() || !player->IsAlive() ||
         player->GetMapId() != TEST_MAP_ID || player->GetMap()->GetInstanceId() != 0 ||
         player->IsInCombat() || player->IsInFlight() || player->GetVehicle() || player->IsMounted())
-        return false;
+        return { StartStatus::Rejected, 0 };
 
     std::vector<G3D::Vector3> path;
     float startX = START_X;
@@ -222,7 +222,7 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
         obstacle = &OBSTACLES.front();
         if (player->GetMapId() != obstacle->mapId || player->GetMap()->GetInstanceId() != obstacle->instanceId ||
             player->GetRSSkillLevel(Player::RS_Skill::Agility) < obstacle->requiredAgility)
-            return false;
+            return { StartStatus::Rejected, 0 };
         path.reserve(obstacle->route->size());
         for (RoutePoint const& point : *obstacle->route)
             path.emplace_back(point.x, point.y, point.z);
@@ -239,12 +239,12 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
     }
 
     if (!IsValidRoute(path))
-        return false;
+        return { StartStatus::Rejected, 0 };
 
     float dx = player->GetPositionX() - startX;
     float dy = player->GetPositionY() - startY;
     if (dx * dx + dy * dy > startDistance * startDistance)
-        return false;
+        return { StartStatus::Rejected, 0 };
 
     SessionMap& sessions = Sessions();
     Map* const map = player->GetMap();
@@ -252,16 +252,16 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
     if (existing != sessions.end())
     {
         if (existing->second.playerGuid != player->GetGUID())
-            return false;
+            return { StartStatus::Rejected, 0 };
         if (player->movespline->GetId() == existing->second.splineId && !player->movespline->Finalized())
-            return false;
+            return { StartStatus::Rejected, 0 };
         sessions.erase(existing);
     }
 
     // Roll only after every eligibility, route and duplicate-session check has passed.
     uint32 const roll = urand(0, 99);
     if (obstacle && !Warscape::ShouldAcceptAgilityAttempt(true, false, obstacle->successChancePercent, roll))
-        return false;
+        return { StartStatus::RollFailed, 0 };
 
     uint32 const timeoutMs = obstacle ? obstacle->timeoutMs : MAX_TRAVERSAL_MS;
     std::function<void(Movement::MoveSplineInit&)> initializer = [path = std::move(path), walk, speed](Movement::MoveSplineInit& init)
@@ -274,13 +274,13 @@ bool WarscapeAgilityTraversal::Start(Player* player, Route route)
         MOTION_PRIORITY_HIGHEST, POINT_MOTION_TYPE);
 
     if (player->movespline->Finalized())
-        return false;
+        return { StartStatus::Rejected, 0 };
 
     sessions.emplace(map, TraversalSession{ player->GetGUID(), player->movespline->GetId(), 0, timeoutMs });
     // The accepted attempt earns XP before the next movement update; interruption never revokes it.
     if (obstacle)
         player->AddRSSkillXP(Player::RS_Skill::Agility, obstacle->rewardXP);
-    return true;
+    return { StartStatus::Started, obstacle ? obstacle->rewardXP : 0 };
 }
 
 bool WarscapeAgilityTraversal::Stop(Player* player, bool interrupted)
