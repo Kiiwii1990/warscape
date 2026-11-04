@@ -1,0 +1,5 @@
+{
+  "sha1": "07BE21F5106C72AE6E34A1004C4C648F10D7CC8F",
+  "precondition_sql": "SELECT IF((SELECT COUNT(*) FROM gameobject WHERE id = 900700 AND map = 0 AND ABS(position_x - (-9074.780273)) < 0.001 AND ABS(position_y - (-195.128021)) < 0.001 AND ABS(position_z - 71.909966) < 0.001 AND ABS(orientation - 4.446) < 0.001 AND ABS(rotation2 - 0.795) < 0.0001 AND ABS(rotation3 - (-0.606)) < 0.0001) = 1 AND (SELECT COUNT(*) FROM updates WHERE name = '2026_11_04_01_world.sql') = 0, 1, 0)",
+  "verify_sql": "SELECT IF((SELECT COUNT(*) FROM gameobject WHERE id = 900700 AND map = 0 AND ABS(position_x - (-9074.780273)) < 0.001 AND ABS(position_y - (-195.128021)) < 0.001 AND ABS(position_z - 71.909966) < 0.001 AND ABS(orientation - 4.446) < 0.001 AND ABS(rotation2 - 0.794748233601) < 0.001 AND ABS(rotation3 - (-0.606939243407)) < 0.001 AND ABS(rotation2 * rotation2 + rotation3 * rotation3 - 1.0) < 0.0001) = 1, 1, 0)"
+}

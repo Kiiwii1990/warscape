@@ -97,6 +97,47 @@ class SafetyTests(unittest.TestCase):
                 db.main()
             self.assertTrue((Path(folder) / 'world.migration.lock').exists())
 
+    def test_recovery_requires_retained_lock(self):
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(sys, 'argv', ['db.py', 'recover', '--migration', NAME,
+                                       '--approved', '--servers-stopped', '--backup-dir', folder]), \
+             patch.object(db, 'Database') as client, \
+             patch.object(db, 'inventory', return_value=self.fake_inventory()):
+            with self.assertRaisesRegex(db.SafeError, 'retained migration lock'):
+                db.main()
+            client.return_value.execute.assert_not_called()
+
+    def test_recovery_requires_postconditions_and_failed_preconditions(self):
+        for checks, message in [(['1'], 'preconditions still hold'), (['0', '0'], 'postconditions do not hold')]:
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as folder, \
+                 patch.object(sys, 'argv', ['db.py', 'recover', '--migration', NAME,
+                                           '--approved', '--servers-stopped', '--backup-dir', folder]), \
+                 patch.object(db, 'Database') as client, \
+                 patch.object(db, 'inventory', return_value=self.fake_inventory()):
+                (Path(folder) / 'world.migration.lock').touch()
+                client.return_value.kind = 'world'
+                client.return_value.query.side_effect = checks
+                with self.assertRaisesRegex(db.SafeError, message):
+                    db.main()
+                client.return_value.execute.assert_not_called()
+
+    def test_recovery_records_verified_applied_migration_without_rerun(self):
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(sys, 'argv', ['db.py', 'recover', '--migration', NAME,
+                                       '--approved', '--servers-stopped', '--backup-dir', folder]), \
+             patch.object(db, 'Database') as client, \
+             patch.object(db, 'inventory', side_effect=[self.fake_inventory(), self.fake_inventory('applied')]), \
+             patch.object(db, 'permissions', return_value=True), \
+             contextlib.redirect_stdout(io.StringIO()):
+            lock_file = Path(folder) / 'world.migration.lock'
+            lock_file.touch()
+            client.return_value.kind = 'world'
+            client.return_value.query.side_effect = ['0', '1']
+            db.main()
+            client.return_value.execute.assert_called_once()
+            self.assertIn('INSERT INTO updates', client.return_value.execute.call_args.args[0])
+            self.assertFalse(lock_file.exists())
+
     def test_backup_completion_and_nontransactional_guard(self):
         class Fake:
             kind = 'world'

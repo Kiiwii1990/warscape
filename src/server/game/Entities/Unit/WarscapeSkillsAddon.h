@@ -9,7 +9,7 @@ namespace Warscape
 {
     inline constexpr char SkillsAddonPrefix[] = "WCSkills";
     inline constexpr std::array<char const*, SkillCount> SkillIds = {
-        "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing"
+        "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing", "agility"
     };
 
     inline bool IsSkillsAddonMessage(std::string_view message)

@@ -51,6 +51,7 @@
 #include "Containers.h"
 #include "CreatureAI.h"
 #include "DatabaseEnv.h"
+#include "WarscapeSkillStatements.h"
 #include "DisableMgr.h"
 #include "EquipmentSetPackets.h"
 #include "Formulas.h"
@@ -17160,7 +17161,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     // WARSCAPE: Load saved RuneScape XP; new characters retain starting defaults.
     {
         CharacterDatabasePreparedStatement* rsStmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_WARSCAPE_SKILLS);
-        rsStmt->setUInt32(0, guid.GetCounter());
+        rsStmt->setUInt32(Warscape::SkillStatements::SelectGuidParameter, guid.GetCounter());
         if (PreparedQueryResult rsResult = CharacterDatabase.Query(rsStmt))
         {
             Field* rsFields = rsResult->Fetch();
@@ -19253,13 +19254,13 @@ void Player::SaveToDB(bool create /*=false*/)
 
     // WARSCAPE: Persist skill XP and attack style in the same character save transaction.
     CharacterDatabasePreparedStatement* rsStmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_WARSCAPE_SKILLS);
-    rsStmt->setUInt32(0, GetGUID().GetCounter());
+    rsStmt->setUInt32(Warscape::SkillStatements::SaveGuidParameter, GetGUID().GetCounter());
     auto const savedXP = Warscape::SerializeSkillXP(rsSkills);
     for (uint8 i = 0; i < RS_SKILL_COUNT; ++i)
-        rsStmt->setUInt32(i + 1, savedXP[i]);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 1, warscapeMiningHalfXP);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 2, warscapeSmithingTenthXP);
-    rsStmt->setUInt8(RS_SKILL_COUNT + 3, warscapeAttackStyle);
+        rsStmt->setUInt32(Warscape::SkillStatements::FirstSkillXPParameter + i, savedXP[i]);
+    rsStmt->setUInt8(Warscape::SkillStatements::MiningHalfXPParameter, warscapeMiningHalfXP);
+    rsStmt->setUInt8(Warscape::SkillStatements::SmithingTenthXPParameter, warscapeSmithingTenthXP);
+    rsStmt->setUInt8(Warscape::SkillStatements::AttackStyleParameter, warscapeAttackStyle);
     trans->Append(rsStmt);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -26764,7 +26765,7 @@ void Player::AddRSSkillXP(RS_Skill skill, uint32 amount)
     if (!leveled)
         return;
 
-    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing" };
+    static char const* skillNames[RS_SKILL_COUNT] = { "Attack", "Strength", "Defence", "Hitpoints", "Ranged", "Magic", "Prayer", "Mining", "Smithing", "Agility" };
     ChatHandler chat(GetSession());
     chat.PSendSysMessage("Your %s level is now %u!", skillNames[static_cast<uint8>(skill)], data.Level);
 

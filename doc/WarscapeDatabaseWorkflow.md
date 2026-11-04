@@ -123,6 +123,14 @@ never restore over the working database merely to test a backup. The export uses
 `--databases`, so it contains database-selection statements; review/remap those
 privately before any isolated restore.
 
+When an apply has already executed its SQL but failed only at postcondition or
+ledger recording, `db.py recover` can record the existing migration without
+rerunning its SQL. It requires the retained lock, a still-pending matching
+migration, failed preconditions, passing postconditions, sufficient permissions,
+and stopped servers/updaters. It removes the lock only after the recorded hash
+is confirmed in TrinityCore's update history. Do not use recovery to bypass a
+failed postcondition or unresolved migration state.
+
 Completion checks and checksums verify an export, not a successful restoration.
 An isolated restore and row-by-row comparison have not been performed. SHA-256
 detects accidental corruption; it is not an authenticity signature. Files are

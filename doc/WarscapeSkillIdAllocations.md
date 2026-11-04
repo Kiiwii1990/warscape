@@ -18,24 +18,25 @@ at 900100 and advance by 200. The current reservations are:
 | Mining | 900100 | 900299 | Reserved |
 | Woodcutting | 900300 | 900499 | Reserved |
 | Smithing | 900500 | 900699 | Reserved, approved 1 November 2026 |
+| Agility | 900700 | 900899 | Reserved, approved 4 November 2026 |
 
 The former proposal for 900500-900699 is superseded by the user's approved
 Bronze smelting task on 1 November 2026: it is now reserved for Smithing.
-The next block, 900700-900899, remains unassigned.
+The Agility block 900700-900899 is assigned to Agility obstacles.
 
 ## Per-category reservations and current use
 
-| Entity category / key | Mining: 900100–900299 | Woodcutting: 900300–900499 |
-| --- | --- | --- |
-| `gameobject_template.entry` | Reserved. In use: 900101 active copper rock; 900103 grayscale depletion counterpart. Assigned in the pending implementation (not yet database rows): active even entries 900110–900136 and depleted odd entries 900111–900137. | Reserved; no IDs in use. |
-| `item_template.entry` | Reserved; 900201–900214 are the ore items listed in `WarscapeMiningExpansionPlan.md` (live presence rechecked 1 November). 900220 Bronze, 900221 Iron and 900222 Steel Pickaxes are allocated to the pending pickaxe migration. Copper Ore 2770 and Mining Pick 2901 remain unchanged. | Reserved; no IDs in use. |
-| `Item.dbc` ID | 900201–900214 ore entries; 900220–900222 allocated to the staged pickaxe package. | Reserved; no IDs in use. |
-| `creature_template.entry` | Reserved; no Mining creature IDs in use. Training Dummy 900001 is an existing Warscape utility outside this block. | Reserved; no IDs in use. |
-| Spell ID (`Spell.dbc`, mirrored by world `spell_dbc`) | Reserved; no custom Mining spell IDs in use. | Reserved; no IDs in use. |
-| `GameObjectDisplayInfo.dbc` ID | Reserved. In use: 900102, the grayscale copper display referenced by entry 900103. Assigned in the pending implementation: depleted displays 900104–900117 and active displays 900118–900131. | Reserved; no IDs in use. |
-| `CreatureDisplayInfo.dbc` ID | Reserved; no Mining display IDs in use. | Reserved; no IDs in use. |
-| `ItemDisplayInfo.dbc` ID | 900220 Bronze, 900221 Iron and 900222 Steel Pickaxes allocated to the staged pickaxe package. Each clones the original pick display 6568 with its own icon and replaceable metal texture. | Reserved; no IDs in use. |
-| `quest_template.ID` | Reserved; no Mining quest IDs in use. | Reserved; no IDs in use. |
+| Entity category / key | Mining: 900100-900299 | Woodcutting: 900300-900499 | Agility: 900700-900899 |
+| --- | --- | --- | --- |
+| `gameobject_template.entry` | Reserved. In use: 900101 active copper rock; 900103 grayscale depletion counterpart. Assigned in the pending implementation (not yet database rows): active even entries 900110-900136 and depleted odd entries 900111-900137. | Reserved; no IDs in use. | In use: 900700 Northshire Agility Log clickable proxy. |
+| `item_template.entry` | Reserved; 900201-900214 are the ore items listed in `WarscapeMiningExpansionPlan.md` (live presence rechecked 1 November). 900220 Bronze, 900221 Iron and 900222 Steel Pickaxes are allocated to the pending pickaxe migration. Copper Ore 2770 and Mining Pick 2901 remain unchanged. | Reserved; no IDs in use. | Reserved; no IDs in use. |
+| `Item.dbc` ID | 900201-900214 ore entries; 900220-900222 allocated to the staged pickaxe package. | Reserved; no IDs in use. | Reserved; no IDs in use. |
+| `creature_template.entry` | Reserved; no Mining creature IDs in use. Training Dummy 900001 is an existing Warscape utility outside this block. | Reserved; no IDs in use. | Reserved; no IDs in use. |
+| Spell ID (`Spell.dbc`, mirrored by world `spell_dbc`) | Reserved; no custom Mining spell IDs in use. | Reserved; no IDs in use. | Reserved; no Agility spells in use. |
+| `GameObjectDisplayInfo.dbc` ID | Reserved. In use: 900102, the grayscale copper display referenced by entry 900103. Assigned in the pending implementation: depleted displays 900104-900117 and active displays 900118-900131. | Reserved; no IDs in use. | Uses existing Blizzard display 8028; no custom display allocated. |
+| `CreatureDisplayInfo.dbc` ID | Reserved; no Mining creature display IDs in use. | Reserved; no IDs in use. | Reserved; no Agility creature displays in use. |
+| `ItemDisplayInfo.dbc` ID | 900220 Bronze, 900221 Iron and 900222 Steel Pickaxes allocated to the staged pickaxe package. Each clones the original pick display 6568 with its own icon and replaceable metal texture. | Reserved; no IDs in use. | Reserved; no Agility item displays in use. |
+| `quest_template.ID` | Reserved; no Mining quest IDs in use. | Reserved; no IDs in use. | Reserved; no Agility quest IDs in use. |
 
 `gameobject_template_addon.entry` is a foreign key into
 `gameobject_template.entry`, not a separate allocation namespace; addon rows

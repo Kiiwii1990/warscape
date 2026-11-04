@@ -229,5 +229,13 @@ for _, w in ipairs(widgets) do if w.label == "Smithing" and w.shown then smith=w
 assert(math.abs(smith.data.xp-6.2)<.00001)
 smith.scripts.OnEnter(smith)
 assert(GameTooltip.lines[3][2] == "6.2")
+receive("B|1|"..token.."|11|10")
+for _, id in ipairs({"attack","strength","defence","hitpoints","ranged","magic","prayer","mining","smithing","agility"}) do
+    receive("S|1|"..token.."|11|"..id.."|1|-|0|0|83")
+end
+receive("E|1|"..token.."|11")
+local agility
+for _, w in ipairs(widgets) do if w.label == "Agility" and w.shown then agility=w end end
+assert(agility and agility.level.text == "1/1" and agility.bar.value == 0)
 ''')
 print('PASS: Lua 5.1 protocol validation and UI event smoke tests')

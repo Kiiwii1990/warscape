@@ -26,6 +26,8 @@
 #include "WarscapeSkillsAddon.h"
 #include "WarscapeTrainingDummy.h"
 #include "WarscapeAttackTest.h"
+#include "WarscapeAgilityAttempt.h"
+#include "WarscapeSkillStatements.h"
 
 TEST_CASE("Warscape skills addon accepts only bounded read-only subscriptions", "[warscape]")
 {
@@ -688,11 +690,18 @@ TEST_CASE("Warscape pickaxe tiers select speed from attained Mining, not Attack"
     CHECK_FALSE(Warscape::ShouldRestoreMiningTool(0, 0));
 }
 
-TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape][smithing]")
+TEST_CASE("Smithing and Agility share progression, persistence and stable IDs", "[warscape][smithing][agility]")
 {
-    REQUIRE(Warscape::SkillCount == 9);
+    REQUIRE(Warscape::SkillCount == 10);
     REQUIRE(Warscape::SkillIndexFromName("smithing") == 8);
     REQUIRE(Warscape::SkillIndexFromName("mining") == 7);
+    REQUIRE(Warscape::SkillIndexFromName("agility") == 9);
+    CHECK(Warscape::SkillStatements::CountParameters(Warscape::SkillStatements::SelectSql) == 1);
+    CHECK(Warscape::SkillStatements::CountParameters(Warscape::SkillStatements::SaveSql) == 14);
+    CHECK(Warscape::SkillStatements::SaveParameterCount == 14);
+    CHECK(Warscape::SkillStatements::MiningHalfXPParameter == 11);
+    CHECK(Warscape::SkillStatements::SmithingTenthXPParameter == 12);
+    CHECK(Warscape::SkillStatements::AttackStyleParameter == 13);
     std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
     auto& smithing = skills[8];
     CHECK(smithing.Level == 1);
@@ -715,6 +724,15 @@ TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape]
     CHECK(smithingCarry == 0);
     CHECK(miningCarry == 1);
     CHECK(restored[7].XP == 0);
+    auto& agility = skills[9];
+    CHECK(agility.Level == 1);
+    CHECK(Warscape::AddSkillXP(agility, 8) == false);
+    CHECK(agility.XP == 8);
+    auto const withAgilityXP = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> agilityRestored{};
+    Warscape::RestoreSkillXP(agilityRestored, withAgilityXP);
+    CHECK(agilityRestored[9].XP == 8);
+    CHECK(agilityRestored[9].Level == 1);
     CHECK(Warscape::SetSkillLevel(smithing, 0, false) == Warscape::SkillUpdateResult::InvalidLevel);
     CHECK(Warscape::SetSkillLevel(smithing, 100, false) == Warscape::SkillUpdateResult::InvalidLevel);
     CHECK(Warscape::SetSkillXP(smithing, 200000001, false) == Warscape::SkillUpdateResult::InvalidXP);
@@ -722,4 +740,47 @@ TEST_CASE("Smithing shares progression, persistence and stable IDs", "[warscape]
     CHECK(smithing.XP == 13034431);
     CHECK(Warscape::SetSkillLevel(smithing, 1, false) == Warscape::SkillUpdateResult::Success);
     CHECK(smithing.XP == 0);
+}
+
+TEST_CASE("Agility attempt reward is accepted once before traversal", "[warscape][agility]")
+{
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(false, false, 100, 0));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, true, 100, 0));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 100, 100));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 0, 0));
+    CHECK(Warscape::ShouldAcceptAgilityAttempt(true, false, 100, 99));
+    CHECK(Warscape::ShouldAcceptAgilityAttempt(true, false, 50, 49));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 50, 50));
+    CHECK_FALSE(Warscape::ShouldAcceptAgilityAttempt(true, false, 101, 0));
+
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> skills{};
+    skills[9].Level = 1;
+    bool traversalActive = false;
+    int callbackOrder = 0;
+    int rewardOrder = 0;
+    int traversalOrder = 0;
+    CHECK_FALSE(Warscape::ExecuteAgilityAttempt(true, traversalActive, 50, 50,
+        [&]() { rewardOrder = ++callbackOrder; Warscape::AddSkillXP(skills[9], 8); },
+        [&]() { traversalOrder = ++callbackOrder; traversalActive = true; }));
+    CHECK_FALSE(traversalActive);
+    CHECK(skills[9].XP == 0);
+
+    REQUIRE(Warscape::ExecuteAgilityAttempt(true, traversalActive, 50, 0,
+        [&]() { rewardOrder = ++callbackOrder; Warscape::AddSkillXP(skills[9], 8); },
+        [&]() { traversalOrder = ++callbackOrder; traversalActive = true; }));
+    CHECK(rewardOrder == 1);
+    CHECK(traversalOrder == 2);
+    CHECK_FALSE(Warscape::ExecuteAgilityAttempt(true, traversalActive, 50, 0,
+        [&]() { Warscape::AddSkillXP(skills[9], 8); },
+        [&]() { traversalActive = true; }));
+    CHECK(skills[9].XP == 8);
+
+    // An interruption ends the session but does not reverse the accepted-attempt XP.
+    traversalActive = false;
+    CHECK(skills[9].XP == 8);
+    auto const saved = Warscape::SerializeSkillXP(skills);
+    std::array<Warscape::SkillProgress, Warscape::SkillCount> restored{};
+    Warscape::RestoreSkillXP(restored, saved);
+    CHECK(restored[9].Level == 1);
+    CHECK(restored[9].XP == 8);
 }

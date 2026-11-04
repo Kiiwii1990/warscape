@@ -24,10 +24,12 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include "WarscapeSkillStatements.h"
 
 namespace Warscape
 {
-    constexpr std::size_t SkillCount = 9;
+    constexpr std::size_t SkillCount = 10;
+    static_assert(SkillCount == SkillStatements::PersistedSkillCount);
     constexpr std::uint32_t MaxSkillXP = 200000000;
     constexpr std::uint8_t MaxSkillLevel = 99;
     constexpr std::uint8_t MinHitpointsLevel = 10;
@@ -73,7 +75,7 @@ namespace Warscape
 
     inline int SkillIndexFromName(char const* name)
     {
-        static char const* names[SkillCount] = { "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing" };
+        static char const* names[SkillCount] = { "attack", "strength", "defence", "hitpoints", "ranged", "magic", "prayer", "mining", "smithing", "agility" };
         if (!name)
             return -1;
         for (std::size_t i = 0; i < SkillCount; ++i)

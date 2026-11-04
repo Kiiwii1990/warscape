@@ -921,6 +921,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             Prayer,
             Mining,
             Smithing,
+            Agility,
             Count
         };
 
@@ -940,7 +941,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
             {1, 0},       // Magic
             {1, 0},       // Prayer
             {1, 0},       // Mining
-            {1, 0}        // Smithing
+            {1, 0},       // Smithing
+            {1, 0}        // Agility
         }};
 
         // Fractional XP carry for Mining; persisted as half-point parity.
