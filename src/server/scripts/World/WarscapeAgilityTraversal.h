@@ -36,6 +36,7 @@ namespace WarscapeAgilityTraversal
     };
 
     StartResult Start(Player* player, Route route = Route::StreamPrototype);
+    StartResult StartFromGameObject(Player* player, uint32 gameObjectEntry);
     bool Stop(Player* player, bool interrupted);
 }
 

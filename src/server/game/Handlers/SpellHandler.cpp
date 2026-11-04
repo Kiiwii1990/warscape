@@ -41,6 +41,14 @@
 #include "World.h"
 #include "WorldPacket.h"
 
+namespace
+{
+bool IsWarscapeAgilityObstacle(GameObject const* gameObject)
+{
+    return gameObject && sObjectMgr->GetScriptName(gameObject->GetScriptId()) == "go_warscape_agility_obstacle";
+}
+}
+
 void WorldSession::HandleUseItemOpcode(WorldPackets::Spells::UseItem& packet)
 {
     Player* user = _player;
@@ -250,7 +258,15 @@ void WorldSession::HandleOpenWrappedItemCallback(uint16 pos, ObjectGuid itemGuid
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPackets::GameObject::GameObjUse& packet)
 {
-    if (GameObject* obj = GetPlayer()->GetGameObjectIfCanInteractWith(packet.Guid))
+    Player* player = GetPlayer();
+    GameObject* target = ObjectAccessor::GetGameObject(*player, packet.Guid);
+    GameObject* obj = player->GetGameObjectIfCanInteractWith(packet.Guid);
+    if (IsWarscapeAgilityObstacle(target))
+        TC_LOG_INFO("scripts", "WarscapeAgility: CMSG_GAMEOBJ_USE received entry={} guid={} player={} rangeCheck={} playerPosition=({:.3f},{:.3f},{:.3f})",
+            target->GetEntry(), packet.Guid.ToString(), player->GetGUID().ToString(), obj != nullptr,
+            player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+
+    if (obj)
     {
         // ignore for remote control state
         if (GetPlayer()->IsCharmed())
@@ -267,7 +283,15 @@ void WorldSession::HandleGameobjectReportUse(WorldPackets::GameObject::GameObjRe
     if (_player->IsCharmed())
         return;
 
-    if (GameObject* go = GetPlayer()->GetGameObjectIfCanInteractWith(packet.Guid))
+    Player* player = GetPlayer();
+    GameObject* target = ObjectAccessor::GetGameObject(*player, packet.Guid);
+    GameObject* go = player->GetGameObjectIfCanInteractWith(packet.Guid);
+    if (IsWarscapeAgilityObstacle(target))
+        TC_LOG_INFO("scripts", "WarscapeAgility: CMSG_GAMEOBJECT_REPORT_USE received entry={} guid={} player={} rangeCheck={} playerPosition=({:.3f},{:.3f},{:.3f})",
+            target->GetEntry(), packet.Guid.ToString(), player->GetGUID().ToString(), go != nullptr,
+            player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+
+    if (go)
     {
         if (go->AI()->OnReportUse(_player))
             return;

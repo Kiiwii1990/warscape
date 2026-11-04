@@ -210,7 +210,7 @@ def backup(db, directory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['status', 'permissions', 'backup', 'verify', 'apply'])
+    parser.add_argument('command', choices=['status', 'permissions', 'backup', 'verify', 'apply', 'recover'])
     parser.add_argument('--database', choices=KEYS, default='world')
     parser.add_argument('--config', type=Path, default=ROOT / 'worldserver.conf')
     parser.add_argument('--client-dir', type=Path, default=Path(r'C:\Program Files\MariaDB 11.7\bin'))
@@ -248,6 +248,33 @@ def main():
             if db.query(spec['verify_sql']) != '1':
                 raise SafeError('Expected schema/data checks failed.')
             print('Expected schema/data checks passed; migration history unchanged.')
+            return
+        if args.command == 'recover':
+            if not args.approved or not args.servers_stopped:
+                raise SafeError('Recovery requires explicit approval and stopped servers/updaters.')
+            if item['status'] != 'pending':
+                raise SafeError('Recovery requires an unrecorded migration; refusing execution.')
+            if any(x['status'] in ('hash-conflict', 'renamed-or-duplicate') for x in files.values()):
+                raise SafeError('Resolve migration history conflicts before recovery.')
+            earlier = [n for n, x in files.items() if n < args.migration and x['status'] == 'pending']
+            if earlier:
+                raise SafeError('Earlier pending migrations must be resolved before recovery.')
+            lock_file = args.backup_dir / (db.kind + '.migration.lock')
+            if not lock_file.is_file():
+                raise SafeError('Recovery requires the retained migration lock.')
+            if db.query(spec['precondition_sql']) == '1':
+                raise SafeError('Migration preconditions still hold; recovery is not justified.')
+            if db.query(spec['verify_sql']) != '1':
+                raise SafeError('Migration postconditions do not hold; recovery is refused.')
+            if not permissions(db):
+                raise SafeError('Required permissions not verified.')
+            db.execute('INSERT INTO updates (name, hash, state, speed) VALUES (' +
+                       ','.join([literal(args.migration), literal(item['hash']),
+                                 literal(item['state']), '0']) + ');')
+            if inventory(db)[args.migration]['status'] != 'applied':
+                raise SafeError('Migration ledger recovery verification failed; lock retained.')
+            lock_file.unlink()
+            print('Verified migration postconditions and recorded recovery in TrinityCore updates history.')
             return
         if not args.approved or not args.servers_stopped:
             raise SafeError('Apply requires explicit user approval and stopped servers/updaters.')

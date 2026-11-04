@@ -1,0 +1,5 @@
+{
+  "sha1": "0E7301AB38FFE6112665F15D795C6296B153E8E7",
+  "precondition_sql": "SELECT IF((SELECT COUNT(*) FROM gameobject_template WHERE entry = 900700) = 0 AND (SELECT COUNT(*) FROM gameobject WHERE id = 900700) = 0 AND (SELECT COUNT(*) FROM gameobject_template_addon WHERE entry = 900700) = 0 AND (SELECT COUNT(*) FROM updates WHERE name = '2026_11_04_00_world.sql') = 0, 1, 0)",
+  "verify_sql": "SELECT IF((SELECT COUNT(*) FROM gameobject_template WHERE entry = 900700 AND type = 10 AND displayId = 8028 AND name = 'Northshire Agility Log' AND ABS(size - 0.65) < 0.001 AND ScriptName = 'go_warscape_agility_obstacle') = 1 AND (SELECT COUNT(*) FROM gameobject WHERE id = 900700 AND map = 0 AND zoneId = 12 AND areaId = 9 AND spawnMask = 1 AND phaseMask = 1 AND ABS(position_x - (-9074.780273)) < 0.001 AND ABS(position_y - (-195.128021)) < 0.001 AND ABS(position_z - 71.909966) < 0.001 AND ABS(orientation - 4.446) < 0.001 AND state = 1) = 1 AND (SELECT COUNT(*) FROM gameobject_template_addon WHERE entry = 900700) = 0, 1, 0)"
+}

@@ -24,6 +24,10 @@ Server collision coverage and interruption behavior remain subject to in-game
 acceptance; the earlier confirmed traversal covered only the happy path and
 movement-button spamming.
 
+AGI-005A supersedes the temporary 50% success setting with 100% and adds the
+clickable GameObject entry point. `.agi start log` remains a GM diagnostic;
+normal play uses the Northshire log object.
+
 ## Prepared character migration
 
 `sql/updates/characters/3.3.5/2026_11_03_00_characters.sql` adds nullable-free,
