@@ -22,5 +22,9 @@
   {
     "data": "slayer_prototypes.json",
     "adds_slayer_reference_column": true
+  },
+  {
+    "data": "spectral.json",
+    "adds_flat_armour_column": true
   }
 ]

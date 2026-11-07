@@ -807,3 +807,20 @@ has no Slayer skill; gating, task assignment and Slayer XP remain future work.
 These are combat/loot prototypes with native WoW models and AI, rather than a
 claim that original special mechanics or the entire enemy family are complete.
 The new 70 entries await the user's gameplay/visual/drop acceptance.
+
+
+### Enemy catalogue: smaller checkpoints (7 November 2026)
+
+Confirmed user direction: reduce future enemy batches to a few at a time as the
+remaining families require more specialised behaviour. The user delegated which
+families to implement next. This supersedes the earlier request for increasingly
+large batches; it does not establish gameplay acceptance for unreported tests.
+
+This checkpoint selects Otherworldly being 64 and Catacombs Shade 140, adding
+successful-player-melee flat armour support with source values -2/-3. Misses stay
+at zero; adjusted OSRS damage feeds display scaling and health-capped combat XP.
+Every earlier catalogue variant defaults to zero armour, preserving prior policy.
+See [spectral checkpoint](WarscapeSpectralEnemies.md) for sources, deployment and
+manual tests. Other Shade variants, spectral Prayer rewards, elemental weaknesses,
+Slayer tasks, and ranged flat armour remain separate work. These two new entries
+await the user's in-game acceptance.

@@ -4,7 +4,7 @@ import json
 from family_catalogue import ROOT, release_artifacts, quote
 
 
-def artifacts(pack, prior, *, add_combat_columns=False, add_slayer_column=False):
+def artifacts(pack, prior, *, add_combat_columns=False, add_slayer_column=False, add_flat_armour_column=False):
     old_families = {f['id']:f for f in prior.get('families', [])}
     for family in pack['families']:
         old = old_families.get(family['id'])
@@ -21,6 +21,9 @@ def artifacts(pack, prior, *, add_combat_columns=False, add_slayer_column=False)
     if add_slayer_column:
         first,rest=sql.split('\n',1)
         sql=first+'\nALTER TABLE warscape_enemy_variant ADD COLUMN source_slayer_level TINYINT UNSIGNED NOT NULL DEFAULT 0;\n'+rest
+    if add_flat_armour_column:
+        first,rest=sql.split('\n',1)
+        sql=first+'\nALTER TABLE warscape_enemy_variant ADD COLUMN flat_armour INT NOT NULL DEFAULT 0;\n'+rest
     checks = []
     updates = []
     if add_combat_columns:
@@ -42,6 +45,8 @@ def artifacts(pack, prior, *, add_combat_columns=False, add_slayer_column=False)
         entry = enemy['entry']
         enabled = int(enemy.get('source_combat_overrides', False))
         values = f"defence_stab={lanes['stab']},defence_slash={lanes['slash']},defence_crush={lanes['crush']},use_source_combat={enabled}"
+        if 'flat_armour' in enemy:
+            values += f",flat_armour={enemy['flat_armour']}"
         if 'source_slayer_level' in enemy:
             values += f",source_slayer_level={enemy['source_slayer_level']}"
         updates.append(f'UPDATE warscape_enemy_variant SET {values} WHERE creature_entry={entry};')
@@ -64,6 +69,13 @@ def artifacts(pack, prior, *, add_combat_columns=False, add_slayer_column=False)
         if add_slayer_column:
             previous_ids=','.join(str(e['entry']) for e in prior['enemies'])
             checks.append(f'(SELECT COUNT(*) FROM warscape_enemy_variant WHERE creature_entry IN ({previous_ids}) AND source_slayer_level=0)={len(prior["enemies"])}')
+    if add_flat_armour_column or any('flat_armour' in e for e in pack['enemies']):
+        armour="(SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_enemy_variant' AND column_name='flat_armour')"
+        pre.append(armour+('=0' if add_flat_armour_column else '=1'))
+        checks.append("(SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='warscape_enemy_variant' AND column_name='flat_armour' AND data_type='int' AND column_type NOT LIKE '%unsigned%' AND is_nullable='NO' AND column_default='0')=1")
+        if add_flat_armour_column:
+            previous_ids=','.join(str(e['entry']) for e in prior['enemies'])
+            checks.append(f'(SELECT COUNT(*) FROM warscape_enemy_variant WHERE creature_entry IN ({previous_ids}) AND flat_armour=0)={len(prior["enemies"])}')
     spec['precondition_sql'] = spec['precondition_sql'].removesuffix(',1,0)') + ' AND ' + ' AND '.join(pre) + ',1,0)'
     spec['verify_sql'] = spec['verify_sql'].removesuffix(',1,0)') + ' AND ' + ' AND '.join(checks + [columns+'=4']) + ',1,0)'
     spec['sha1'] = hashlib.sha1(sql.encode()).hexdigest().upper()

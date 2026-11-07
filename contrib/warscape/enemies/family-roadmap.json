@@ -313,7 +313,7 @@
       "family": "Shade",
       "model_direction": "Floating shadow shade",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Skeleton",
@@ -535,7 +535,7 @@
       "family": "Otherworldly Being",
       "model_direction": "Voidwalker",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Rockslug",

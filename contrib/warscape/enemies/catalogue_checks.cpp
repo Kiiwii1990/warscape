@@ -59,7 +59,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==275);
+    assert(Warscape::EnemyVariants.size()==277);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -166,4 +166,36 @@ int main() {
     auto const largeTotal = Warscape::FindEnemyLootPool(901409)->Total;
     assert(largeTotal > 0xFFFFFFFFULL);
     assert(Warscape::DrawEnemyLootRoll(largeTotal,[] {return 0xFFFFFFFFu;}) == 0xFFFFFFFFFFFFFFFFULL%largeTotal);
+
+    for (auto const& v : Warscape::EnemyVariants)
+        if (v.Entry < 901500) assert(v.FlatArmour == 0);
+    assert(Warscape::EnemyFlatArmour(901500) == -2);
+    assert(Warscape::EnemyFlatArmour(901501) == -3);
+    assert(Warscape::EnemyFlatArmour(0) == 0);
+    // Successful zeroes gain negative armour; misses/evades never do.
+    assert(Warscape::ApplyFlatArmour(0,-2,true) == 2);
+    assert(Warscape::ApplyFlatArmour(10,-3,true) == 13);
+    assert(Warscape::ApplyFlatArmour(10,-3,false) == 0);
+    assert(Warscape::ApplyFlatArmour(0,-3,false) == 0);
+    assert(Warscape::ApplyFlatArmour(10,4,true) == 6);
+    assert(Warscape::ApplyFlatArmour(2,4,true) == 0);
+    assert(Warscape::ApplyFlatArmour(10,0,true) == 10);
+    assert(Warscape::ApplyFlatArmour(0xFFFFFFFFu,-2147483647,true) == 0xFFFFFFFFu);
+    assert(Warscape::ApplyFlatArmour(0,2147483647,true) == 0);
+    // Damage and XP use the adjusted OSRS roll, still capped by remaining health.
+    auto const adjusted = Warscape::ApplyFlatArmour(5,Warscape::EnemyFlatArmour(901500),true);
+    assert(Warscape::ScaleHealthOrDamage(adjusted) == 70);
+    assert(Warscape::OSRSDamageForXP(adjusted,45) == 5);
+    for (std::uint32_t entry : {901500u,901501u}) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        assert(pool && Warscape::FindEnemyVariant(entry)->SourceCombat);
+        std::uint64_t cursor = 0;
+        for (std::uint32_t i=0; i<pool->Count; ++i) {
+            auto const& o = Warscape::EnemyLootOutcomes[pool->First+i];
+            assert(Warscape::SelectEnemyLoot(entry,cursor) == o.Loot);
+            assert(Warscape::SelectEnemyLoot(entry,cursor+o.Weight-1) == o.Loot);
+            cursor += o.Weight;
+        }
+        assert(cursor == pool->Total && Warscape::SelectEnemyLoot(entry,cursor) == 0);
+    }
 }

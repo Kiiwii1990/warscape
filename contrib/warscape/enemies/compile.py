@@ -138,7 +138,7 @@ def main():
         if release.get('creates_family_schema', False):
             artifacts.update(release_artifacts(pack, old))
         else:
-            artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False), add_slayer_column=release.get('adds_slayer_reference_column', False)))
+            artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False), add_slayer_column=release.get('adds_slayer_reference_column', False), add_flat_armour_column=release.get('adds_flat_armour_column', False)))
         for key in ('families', 'enemies'):
             if key == 'families':
                 combined[key].extend(f for f in pack[key] if f['id'] not in {old['id'] for old in combined[key]})

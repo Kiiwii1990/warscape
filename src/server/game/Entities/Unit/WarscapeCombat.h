@@ -100,6 +100,16 @@ namespace Warscape
         return std::uint32_t(std::min<std::uint64_t>((effectiveStrength * bonus + 320) / 640, MaxStat));
     }
 
+    // Flat armour modifies successful physical rolls; misses never gain damage.
+    // Apply in OSRS units before display scaling/variation, including successful zeroes.
+    inline std::uint32_t ApplyFlatArmour(std::uint32_t roll, std::int32_t armour, bool successful)
+    {
+        if (!successful)
+            return 0;
+        return std::uint32_t(std::clamp<std::int64_t>(std::int64_t(roll) - armour,
+            0, std::numeric_limits<std::uint32_t>::max()));
+    }
+
     inline std::uint32_t ScaleHealthOrDamage(std::uint32_t osrsValue)
     {
         return std::uint32_t(std::min<std::uint64_t>(std::uint64_t(osrsValue) * HealthDamageScale, std::numeric_limits<std::uint32_t>::max()));

@@ -361,6 +361,8 @@ public:
             if (variant->SourceCombat)
                 handler->PSendSysMessage("Source max hit: %u; melee defence Stab %d / Slash %d / Crush %d",
                     variant->MaximumHit, variant->DefenceStab, variant->DefenceSlash, variant->DefenceCrush);
+            if (variant->FlatArmour)
+                handler->PSendSysMessage("Flat armour: %d (applied to successful player melee hits)", variant->FlatArmour);
             if (variant->RequiredSlayerLevel)
                 handler->PSendSysMessage("Source Slayer requirement: %u (prototype reference; Slayer skill/gating is not enabled)", variant->RequiredSlayerLevel);
             if (!variant->NativeAttackAnimation)

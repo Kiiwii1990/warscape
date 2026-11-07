@@ -1,0 +1,473 @@
+{
+  "release": "2026_11_07_08_world",
+  "loot_policy": "Members baseline; no ring of wealth, pre-Legends gem policy. No guaranteed bones/ashes; no spectral Prayer rewards or Catacombs tertiary drops.",
+  "sources": {
+    "Otherworldly_being": {
+      "url": "https://oldschool.runescape.wiki/w/Otherworldly_being",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "3d2e97b1c631782f24a48f804a871e130c35d2a3ae3fc3ab8731854f4f297dbd"
+    },
+    "Shade": {
+      "url": "https://oldschool.runescape.wiki/w/Shade",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "3d54deadcba4599e43850df554ecd97431bc6d8fba2ae00e3ee1254e5ed7c9bc"
+    },
+    "Flat_armour": {
+      "url": "https://oldschool.runescape.wiki/w/Flat_armour",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "40c6b7cbfeb33c524646897a29016b97e2b9e917650ff4f35e875f67c06d79c4"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    },
+    "Gem_drop_table": {
+      "url": "https://oldschool.runescape.wiki/w/Gem_drop_table",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "d7e54e63a55542bd18f8471f104c9dce2e05fae11b8f09f71417d8eee18a1073"
+    }
+  },
+  "families": [
+    {
+      "id": 51,
+      "key": "otherworldly_beings",
+      "name": "Otherworldly Beings",
+      "model_note": "Stock Voidwalker silhouette, display 1132; visible stand-in for floating clothing."
+    },
+    {
+      "id": 52,
+      "key": "shades",
+      "name": "Shades",
+      "model_note": "Stock shadowy Shade display 4629; Catacombs combat form only."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Blood rune",
+      "entry": 902138,
+      "display_source": 6948
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078,
+      "display_source": 6948
+    },
+    {
+      "name": "Coins",
+      "entry": 902006,
+      "display_source": 19698
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098,
+      "display_source": 6948
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106,
+      "display_source": 6948
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067,
+      "display_source": 2447
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065,
+      "display_source": 2447
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089,
+      "display_source": 6948
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045,
+      "display_source": 4882
+    },
+    {
+      "name": "Mithril mace",
+      "entry": 902178,
+      "display_source": 2028
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079,
+      "display_source": 6948
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042,
+      "display_source": 6948
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044,
+      "display_source": 2512
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046,
+      "display_source": 4882
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043,
+      "display_source": 1210
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040,
+      "display_source": 818
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041,
+      "display_source": 1206
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039,
+      "display_source": 774
+    }
+  ],
+  "items": [
+    {
+      "name": "Ruby ring",
+      "entry": 902357,
+      "display_source": 11918
+    },
+    {
+      "name": "Mackerel",
+      "entry": 902358,
+      "display_source": 4592
+    },
+    {
+      "name": "Shade robe top",
+      "entry": 902359,
+      "display_source": 9748
+    },
+    {
+      "name": "Shade robe",
+      "entry": 902360,
+      "display_source": 139
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901500,
+      "profile_id": 1500,
+      "family_id": 51,
+      "subcategory": "zanaris_64",
+      "name": "Otherworldly being (OSRS zanaris_64)",
+      "source": "Otherworldly_being",
+      "source_npc_ids": "2843",
+      "combat_level": 64,
+      "stats": [
+        56,
+        56,
+        46,
+        1,
+        1,
+        66
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 15,
+      "defence_bonuses": {
+        "stab": 15,
+        "slash": 10,
+        "crush": 20
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 66,
+      "source_slayer_level": 0,
+      "flat_armour": -2,
+      "respawn_ticks": 20,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1132,
+      "model_path": "Creature\\VoidWalker\\VoidWalker.m2",
+      "scale": 1,
+      "creature_type": 10,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1070000,
+      "outcomes": [
+        {
+          "item": "Nature rune",
+          "quantity": 5,
+          "weight": 1152
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 4,
+          "weight": 1024
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 896
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Death rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 7552
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2304
+        },
+        {
+          "item": "Ruby ring",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Mithril mace",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Mackerel",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 180
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 140
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 110
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 50
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 189
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 48
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 6
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 3
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 3
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901501,
+      "profile_id": 1501,
+      "family_id": 52,
+      "subcategory": "catacombs_140",
+      "name": "Shade (OSRS catacombs_140)",
+      "source": "Shade",
+      "source_npc_ids": "7258",
+      "combat_level": 140,
+      "stats": [
+        130,
+        136,
+        100,
+        50,
+        50,
+        115
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 15,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 115,
+      "source_slayer_level": 0,
+      "flat_armour": -3,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 4629,
+      "model_path": "Creature\\Shade\\Shade.m2",
+      "scale": 1,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1070100,
+      "outcomes": [
+        {
+          "item": "Shade robe top",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Shade robe",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2
+        }
+      ],
+      "denominator": 4
+    }
+  ]
+}

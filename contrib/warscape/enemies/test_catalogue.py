@@ -1,6 +1,17 @@
 import copy,importlib.util,json,unittest
 from pathlib import Path
 s=importlib.util.spec_from_file_location('catalogue_compiler',Path(__file__).with_name('compile.py'));m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+
+def prior_to(filename):
+    prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
+    prior.update(families=[],native_references=[])
+    for release in json.loads(Path(__file__).with_name('releases.json').read_text()):
+        if release['data']==filename:return prior
+        pack=json.loads(Path(__file__).with_name(release['data']).read_text())
+        for key in ('enemies','items','native_references'):prior[key].extend(pack.get(key,[]))
+        prior['families'].extend(f for f in pack['families'] if f['id'] not in {old['id'] for old in prior['families']})
+    raise ValueError('Unknown release')
+
 class CatalogueTests(unittest.TestCase):
     def setUp(self):self.c=json.loads(Path(__file__).with_name('goblins.json').read_text())
     def test_bad_distribution_refused(self):
@@ -428,11 +439,7 @@ class SlayerPrototypeTests(unittest.TestCase):
         import family_catalogue
         self.module=family_catalogue
         self.pack=json.loads(Path(__file__).with_name('slayer_prototypes.json').read_text())
-        self.prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
-        self.prior['families']=[]
-        for release in json.loads(Path(__file__).with_name('releases.json').read_text())[:-1]:
-            old=json.loads(Path(__file__).with_name(release['data']).read_text())
-            for key in ('enemies','items','families'):self.prior[key].extend(old[key])
+        self.prior=prior_to('slayer_prototypes.json')
     def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
     def chance(self,entry,name):
         from fractions import Fraction
@@ -530,5 +537,62 @@ class SlayerPrototypeTests(unittest.TestCase):
         for value in (-1,100,True):
             self.pack['enemies'][0]['source_slayer_level']=value
             with self.assertRaisesRegex(ValueError,'Slayer reference'):self.module.validate(self.pack,self.prior)
+
+
+
+class SpectralTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('spectral.json').read_text())
+        self.prior=prior_to('spectral.json')
+    def test_two_neutral_spectral_enemies_exact_stats_and_ids(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual(len(self.prior['enemies']),275)
+        a,b=self.pack['enemies']
+        self.assertEqual((a['entry'],a['source_npc_ids'],a['stats'],a['source_max_hit'],a['flat_armour']),(901500,'2843',[56,56,46,1,1,66],7,-2))
+        self.assertEqual((b['entry'],b['source_npc_ids'],b['stats'],b['source_max_hit'],b['flat_armour']),(901501,'7258',[130,136,100,50,50,115],15,-3))
+        self.assertTrue(all(not e['aggressive'] and not e['guaranteed'] for e in self.pack['enemies']))
+    def test_otherworldly_exact_loot_and_empty_subtable(self):
+        from fractions import Fraction
+        e=self.pack['enemies'][0]
+        def chance(name):return sum(Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']==name)
+        self.assertEqual(chance('Coins'),Fraction(59,128))
+        self.assertEqual(chance('Nature rune'),Fraction(9,128))
+        self.assertEqual(chance('Grimy guam leaf'),Fraction(10*32,128*128))
+        self.assertEqual(chance('Nothing'),Fraction(18,128)+Fraction(3*63,128*128))
+        self.assertEqual(chance('Nature talisman'),Fraction(3*4,128*128))
+        self.assertEqual(chance('Rune spear'),0)
+        self.assertEqual(chance('Ruby ring'),Fraction(2,128))
+    def test_shade_members_robes_and_explicit_no_loot(self):
+        from fractions import Fraction
+        e=self.pack['enemies'][1]
+        self.assertEqual({o['item']:Fraction(o['weight'],e['denominator']) for o in e['outcomes']},{'Shade robe top':Fraction(1,4),'Shade robe':Fraction(1,4),'Nothing':Fraction(1,2)})
+    def test_additive_flat_armour_sql_schema_and_prior_defaults(self):
+        from expansion_release import artifacts
+        import hashlib
+        result=artifacts(self.pack,self.prior,add_flat_armour_column=True)
+        sql=next(v for p,v in result.items() if p.suffix=='.sql');spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        self.assertIn('ADD COLUMN flat_armour INT NOT NULL DEFAULT 0',sql)
+        self.assertIn("column_name='flat_armour')=0",spec['precondition_sql'])
+        self.assertIn("column_type NOT LIKE '%unsigned%'",spec['verify_sql'])
+        self.assertIn('AND flat_armour=0)=275',spec['verify_sql'])
+        self.assertEqual(hashlib.sha1(sql.encode()).hexdigest().upper(),spec['sha1'])
+        self.assertEqual(sql.count('UPDATE warscape_enemy_variant'),2)
+        self.assertNotIn('DELETE ',sql);self.assertNotIn('TRUNCATE ',sql)
+    def test_invalid_flat_armour_metadata_refused(self):
+        import family_catalogue
+        for value in (-1000001,1000001,True,1.5):
+            self.pack['enemies'][0]['flat_armour']=value
+            with self.assertRaisesRegex(ValueError,'flat armour'):family_catalogue.validate(self.pack,self.prior)
+    def test_native_empty_outcomes_have_no_loot_rows(self):
+        from expansion_release import artifacts
+        sql=next(v for p,v in artifacts(self.pack,self.prior,add_flat_armour_column=True).items() if p.suffix=='.sql')
+        for e in self.pack['enemies']:
+            for i,o in enumerate(e['outcomes']):
+                if o['item']=='Nothing':self.assertNotIn(f'VALUES ({e["loot_base"]+i},',sql)
+    def test_four_new_items_without_redefining_shared_items(self):
+        self.assertEqual([i['entry'] for i in self.pack['items']],list(range(902357,902361)))
+        self.assertNotIn('Mithril mace',{i['name'] for i in self.pack['items']})
+        self.assertIn('Mithril mace',{i['name'] for i in self.pack['shared_items']})
 
 if __name__=='__main__':unittest.main()

@@ -1327,6 +1327,16 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
 
     damageInfo->HitOutCome = RollMeleeOutcomeAgainst(damageInfo->Target, damageInfo->AttackType);
 
+    if (warscapeMelee && warscapePlayerMelee)
+    {
+        if (int32 const armour = Warscape::EnemyFlatArmour(victim->GetEntry()))
+        {
+            damageInfo->WarscapeOSRSDamage = Warscape::ApplyFlatArmour(
+                damageInfo->WarscapeOSRSDamage, armour, damageInfo->HitOutCome == MELEE_HIT_NORMAL);
+            damageInfo->Damages[0].Damage = Warscape::ScaleHealthOrDamage(damageInfo->WarscapeOSRSDamage);
+        }
+    }
+
     // Randomize only a positive successful Warscape roll; misses and zero hits
     // consume no variation roll and stay at zero.
     if (warscapeMelee && damageInfo->WarscapeOSRSDamage && damageInfo->HitOutCome == MELEE_HIT_NORMAL)
