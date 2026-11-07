@@ -159,3 +159,10 @@ new metadata column. Do not edit applied SQL/history or delete loot records.
 The previous binary lacks this armour rule and is not an equivalent gameplay
 rollback for these entries. Backup restoration needs separate review and has not
 been exercised. No privileges were changed.
+
+
+## User acceptance - following checkpoint
+
+The user confirmed both entries working with drops, then requested that future
+batches follow the supplied list order. This records that reported result only;
+it does not establish exhaustive damage, loot odds or every persistence path.

@@ -1,6 +1,8 @@
 # Enemy families: Cows and Rats release
 
-Current expansion: [two-enemy spectral checkpoint](WarscapeSpectralEnemies.md).
+Current expansion: [ordered Lizard/Scarab/Druid/Dwarf checkpoint](WarscapeOrderedEnemyBatch.md).
+The preceding [two-enemy spectral checkpoint](WarscapeSpectralEnemies.md) was
+user-confirmed working with drops.
 The preceding [70-variant Slayer and melee prototype batch](WarscapeSlayerPrototypesBatch.md)
 has its own acceptance checklist.
 The preceding [57-variant giants/demons batch](WarscapeGiantsDemonsBatch.md) was

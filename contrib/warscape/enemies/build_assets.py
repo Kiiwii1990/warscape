@@ -1,6 +1,7 @@
 """Prepare additive collectible Item.dbc rows; preserve every existing record and MPQ entry."""
 import argparse,json,struct,sys,hashlib
 from pathlib import Path
+from dbc_records import dbc,append_spells
 ROOT=Path(__file__).resolve().parents[3]
 sys.path[:0]=[str(ROOT/'contrib/warscape/worldgen'),str(ROOT/'contrib/warscape/mining')]
 sys.path.insert(0,str(ROOT/'addons/WarscapeHUD/tools'))
@@ -14,15 +15,6 @@ class ClientAssets(BaseClientAssets):
             rank=ord(suffix) if path.stem.lower().startswith('patch-') and len(suffix)==1 and suffix.isalpha() else 0
             return rank, path.parent.name.lower()=='enus' if rank else False
         self.archives.sort(key=priority,reverse=True)
-def dbc(data,fields):
-    magic,count,actual,width,length=struct.unpack_from('<4s4I',data)
-    if magic!=b'WDBC' or actual!=fields or width!=fields*4 or len(data)!=20+count*width+length:raise ValueError('Unexpected DBC layout')
-    rows={}
-    for i in range(count):
-        row=list(struct.unpack_from('<'+str(fields)+'I',data,20+i*width))
-        if row[0] in rows:raise ValueError('Duplicate DBC ID')
-        rows[row[0]]=row
-    return rows,data[20+count*width:]
 def merge(existing,updates,destination):
     original=archive_entries(existing); merged=dict(original)
     for name,data in updates.items():
@@ -39,12 +31,13 @@ def append(data,items):
     rows,strings=dbc(data,8); extra=b''
     for item in items:
         if item['entry'] in rows: raise ValueError('Item.dbc ID collision')
-        row=rows[item['display_source']][:]; row[0]=item['entry'];row[1]=15;row[2]=0;row[6]=0;row[7]=0
+        row=rows[item['display_source']][:]; row[0]=item['entry'];row[1]=item.get('class',15);row[2]=0;row[6]=0;row[7]=0
         extra+=struct.pack('<8I',*row)
     result=struct.pack('<4s4I',b'WDBC',len(rows)+len(items),8,32,len(strings))+data[20:20+len(rows)*32]+extra+strings
     checked,st=dbc(result,8)
     if st!=strings or any(checked[k]!=v for k,v in rows.items()): raise ValueError('Existing DBC data changed')
     return result
+
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--client',type=Path,required=True);p.add_argument('--server-data',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--catalogue',type=Path,default=Path(__file__).with_name('goblins.json'));a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
@@ -57,10 +50,16 @@ def main():
         newclient=append(client,c['items']);newserver=append(server,c['items'])
         (a.output/'Item.dbc').write_bytes(newserver)
         patch=a.client/'Data/enUS/patch-enUS-Z.MPQ';target=a.output/'patch-enUS-Z.MPQ'
-        if patch.exists():merge(patch,{r'DBFilesClient\Item.dbc':newclient},target)
-        else:archive(target,{r'DBFilesClient\Item.dbc':newclient})
+        updates={r'DBFilesClient\Item.dbc':newclient}
+        if c.get('client_spells'):
+            original_client_spell=assets.get(r'DBFilesClient\Spell.dbc')[0]
+            original_server_spell=(a.server_data/'dbc/Spell.dbc').read_bytes()
+            updates[r'DBFilesClient\Spell.dbc']=append_spells(original_client_spell,c['client_spells'])
+            (a.output/'Spell.dbc').write_bytes(append_spells(original_server_spell,c['client_spells']))
+        if patch.exists():merge(patch,updates,target)
+        else:archive(target,updates)
         manifest={'client':str(a.client),'server_data':str(a.server_data),'server_original_sha256':hashlib.sha256(server).hexdigest(),'client_original_sha256':hashlib.sha256(client).hexdigest(),'items':len(c['items']),'server_prepared_sha256':hashlib.sha256(newserver).hexdigest(),'patch_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
-        (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(f"Prepared {len(c['items'])} additive collectible items; original DBC rows/strings preserved.")
+        (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(f"Prepared {len(c['items'])} additive items and {len(c.get('client_spells',[]))} item-target spell records; originals preserved.")
     finally:
         for _,f in assets.archives:f.file.close()
 if __name__=='__main__':main()

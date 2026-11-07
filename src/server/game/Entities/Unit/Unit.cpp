@@ -17,6 +17,7 @@
 
 #include "Unit.h"
 #include "WarscapeEnemyCatalogue.h"
+#include "WarscapeEnemyMechanics.h"
 #include "AbstractFollower.h"
 #include "Battlefield.h"
 #include "BattlefieldMgr.h"
@@ -631,7 +632,8 @@ uint32 Unit::GetWarscapeMeleeAttackInterval(WeaponAttackType att) const
         ticks = ToPlayer()->GetWarscapeWeaponAttackSpeedTicks(att);
     else if (GetTypeId() == TYPEID_UNIT)
         ticks = sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(GetEntry());
-    return Warscape::AttackIntervalMilliseconds(ticks);
+    return GetTypeId() == TYPEID_UNIT ? Warscape::MonsterAttackIntervalMilliseconds(ticks)
+        : Warscape::AttackIntervalMilliseconds(ticks);
 }
 
 bool Unit::IsWithinCombatRange(Unit const* obj, float dist2compare) const
@@ -1031,8 +1033,11 @@ bool Unit::HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel) cons
         damagetype == DIRECT_DAMAGE && cleanDamage &&
         (cleanDamage->attackType == BASE_ATTACK || cleanDamage->attackType == OFF_ATTACK))
     {
+        auto const* behaviour = Warscape::FindEnemyBehaviour(victim->GetEntry());
+        uint32 const xpHealth = behaviour && behaviour->FinisherItem
+            ? Warscape::NonFinishingDamage(health, health) : health;
         uint32 const osrsDamage = cleanDamage->warscapeOSRSDamage
-            ? Warscape::OSRSDamageForXP(cleanDamage->warscapeOSRSDamage, health)
+            ? Warscape::OSRSDamageForXP(cleanDamage->warscapeOSRSDamage, xpHealth)
             : Warscape::ToOSRSDamage(std::min(damage, health));
         attacker->ToPlayer()->AwardWarscapeMeleeXP(osrsDamage);
     }

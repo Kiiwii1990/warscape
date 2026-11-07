@@ -595,4 +595,84 @@ class SpectralTests(unittest.TestCase):
         self.assertNotIn('Mithril mace',{i['name'] for i in self.pack['items']})
         self.assertIn('Mithril mace',{i['name'] for i in self.pack['shared_items']})
 
+
+
+class OrderedEnemyTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('ordered_desert_druids.json').read_text())
+        self.prior=prior_to('ordered_desert_druids.json')
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction
+        e=next(e for e in self.pack['enemies'] if e['entry']==entry)
+        return sum((Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if any(d['item']==name and (quantity is None or d['quantity']==quantity) for d in [o]+o.get('additional',[]))),Fraction())
+    def test_order_and_existing_dwarf_identity(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual([e['source'] for e in self.pack['enemies']],['Small_Lizard','Desert_Lizard','Lizard','Scarab_Swarm','Druid','Dwarf'])
+        self.assertEqual(len(self.prior['enemies']),277)
+        self.assertTrue(self.pack['families'][-1]['existing'])
+        self.assertEqual(self.pack['enemies'][-1]['source_npc_ids'],'292')
+    def test_lizard_paired_marginals_and_glove_bonus(self):
+        from fractions import Fraction
+        for entry in (901600,901601,901602):
+            self.assertEqual(self.chance(entry,'Fire rune',42),Fraction(14,128))
+            self.assertEqual(self.chance(entry,'Energy potion(3)'),Fraction(13,128))
+            self.assertEqual(self.chance(entry,'Mystic gloves (light)'),Fraction(1,512))
+            self.assertEqual(self.chance(entry,'Grimy guam leaf'),Fraction(10*32,128*128))
+    def test_double_gem_roll_keeps_duplicate_quantity(self):
+        from fractions import Fraction
+        for entry in (901600,901601,901602):
+            self.assertEqual(self.chance(entry,'Uncut sapphire',2),Fraction(2,128)*Fraction(32,128)**2)
+            self.assertEqual(self.chance(entry,'Rune spear'),0)
+    def test_behaviour_configuration_and_source_speed(self):
+        e=self.pack['enemies'];self.assertTrue(all(x['behaviour']=={'finisher_item':902361} for x in e[:3]))
+        self.assertEqual(e[3]['behaviour'],{'poison_max_hit':3});self.assertEqual(e[3]['attack_ticks'],1)
+        self.assertEqual(e[4]['behaviour'],{'magic_max_hit':5});self.assertEqual(e[4]['source_max_hit'],4)
+        self.assertEqual(e[5]['source_max_hit'],3)
+    def test_dwarf_inferred_coin_slots_and_total(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901605,'Coins',4),Fraction(23,128))
+        self.assertEqual(self.chance(901605,'Coins',10),Fraction(12,128))
+        self.assertEqual(round(128/23,2),5.57);self.assertEqual(round(128/12,1),10.7)
+    def test_script_and_cooler_bindings_additive(self):
+        from encounter_release import encounter_artifacts
+        r=encounter_artifacts(self.pack,self.prior);sql=next(v for p,v in r.items() if p.suffix=='.sql');spec=json.loads(next(v for p,v in r.items() if p.suffix=='.json'))
+        self.assertEqual(sql.count("ScriptName='npc_warscape_enemy'"),5)
+        self.assertIn("WHERE entry=902361 AND name='Ice cooler' AND class=0",spec['verify_sql'])
+        self.assertIn("entry=901605",spec['verify_sql']);self.assertIn("AIName='AggressorAI'",spec['verify_sql'])
+        self.assertIn("(900701,'spell_warscape_enemy_magic')",sql);self.assertIn("(900702,'spell_warscape_enemy_poison')",sql)
+        self.assertNotIn('UPDATE spell_',sql);self.assertNotIn('DELETE ',sql)
+    def test_script_verification_targets_identity_not_pack_order(self):
+        from encounter_release import encounter_artifacts
+        import re
+        self.pack['enemies'].insert(0,self.pack['enemies'].pop())
+        result=encounter_artifacts(self.pack,self.prior)
+        spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        dwarf=re.search(r"FROM creature_template WHERE entry=901605 AND (.*?) AND mingold=0",spec['verify_sql'])[1]
+        self.assertIn("AIName='AggressorAI'",dwarf)
+    def test_invalid_behaviours_and_speed_rejected(self):
+        import family_catalogue
+        self.pack['enemies'][0]['behaviour']={'finisher_item':1}
+        with self.assertRaisesRegex(ValueError,'finisher'):family_catalogue.validate(self.pack,self.prior)
+        self.pack['enemies'][0]['behaviour']={'bad':1}
+        with self.assertRaisesRegex(ValueError,'behaviour'):family_catalogue.validate(self.pack,self.prior)
+    def test_druid_and_scarab_guaranteed_bones(self):
+        for e in self.pack['enemies'][3:]:self.assertEqual(e['guaranteed'],[{'item':'Bones','quantity':1}])
+        self.assertEqual(len(self.pack['items']),8)
+    def test_additive_spell_layout_and_collision_guards(self):
+        import struct
+        from dbc_records import append_spells,dbc
+        rows=[]
+        for source in (30455,5176,2818):
+            r=[0]*234;r[0]=source;rows.append(r)
+        data=struct.pack('<4s4I',b'WDBC',3,234,936,1)+b''.join(struct.pack('<234I',*r) for r in rows)+b'\0'
+        result=append_spells(data,self.pack['client_spells']);after,strings=dbc(result,234)
+        self.assertEqual(len(after),6)
+        for r in rows:self.assertEqual(after[r[0]],r)
+        self.assertEqual(strings[:1],b'\0')
+        self.assertEqual(after[900701][7]&0x40000,0x40000)
+        self.assertEqual(strings[after[900700][136]:].split(b'\0')[0],b'Ice cooler')
+        with self.assertRaisesRegex(ValueError,'collision'):append_spells(result,self.pack['client_spells'])
+        with self.assertRaises(ValueError):append_spells(data[:-1],self.pack['client_spells'])
+
 if __name__=='__main__':unittest.main()

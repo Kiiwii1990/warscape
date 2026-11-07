@@ -58,12 +58,16 @@ def validate(pack, old):
         require(not ({e[key] for e in pack['enemies']} & {e[key] for e in old['enemies']}), 'Enemy/profile collides with deployed release')
     for enemy in pack['enemies']:
         require(enemy['family_id'] in family_ids, 'Unknown family')
+        behaviour=enemy.get('behaviour',{})
+        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        if 'finisher_item' in behaviour:
+            require(behaviour['finisher_item'] in {i['entry'] for i in items}, 'Unknown finisher item')
         require(type(enemy.get('flat_armour',0)) is int and -1000000 <= enemy.get('flat_armour',0) <= 1000000, 'Invalid flat armour')
         require(type(enemy.get('source_slayer_level',0)) is int and 0 <= enemy.get('source_slayer_level',0) <= 99, 'Invalid Slayer reference')
         require(enemy['source'] in pack['sources'], 'Missing Wiki source')
         require(pack['sources'][enemy['source']]['url'].startswith('https://oldschool.runescape.wiki/w/'), 'Invalid Wiki provenance')
         require(len(enemy['stats']) == 6 and all(type(n) is int and (0 if i in (3,4) else 1) <= n <= 1000000 for i,n in enumerate(enemy['stats'])), 'Invalid combat stats')
-        require(1 <= enemy['combat_level'] <= 255 and 2 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
+        require(1 <= enemy['combat_level'] <= 255 and 1 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
         require(enemy['attack_style'] in ('stab', 'slash', 'crush', 'm_melee'), 'Unsupported melee style')
         require(0 < enemy['scale'] <= 10 and type(enemy['aggressive']) is bool, 'Invalid model/aggression')
         require(all(-64 <= enemy[k] <= 1000000 for k in ('attack_bonus', 'strength_bonus', 'defence_bonus')), 'Invalid combat bonus')
@@ -109,11 +113,19 @@ struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; };
 struct EnemyLootPool { std::uint32_t Entry, First, Count; std::uint64_t Total; };
 struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; std::uint8_t RequiredSlayerLevel; std::int32_t FlatArmour; };
 '''
+    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit")]) for e in enemies if e.get("behaviour")]
     def array(kind, name, rows):
         return f'inline constexpr std::array<{kind}, {len(rows)}> {name} = {{{{\n' + ',\n'.join('    {' + ', '.join((str(v)+'ULL' if type(v) is int and v>0x7FFFFFFFFFFFFFFF else json.dumps(v)) for v in row) + '}' for row in rows) + '\n}};\n'
     text += array('EnemyLootOutcome', 'EnemyLootOutcomes', outcomes)
     text += array('EnemyLootPool', 'EnemyLootPools', pools)
     text += array('EnemyVariant', 'EnemyVariants', metadata)
+    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit; };\n'
+    text += array('EnemyBehaviour','EnemyBehaviours',behaviours)
+    text += '''inline EnemyBehaviour const* FindEnemyBehaviour(std::uint32_t entry) {
+    for (auto const& b : EnemyBehaviours) if (b.Entry == entry) return &b;
+    return nullptr;
+}
+'''
     text += '''inline EnemyVariant const* FindEnemyVariant(std::uint32_t entry) {
     for (auto const& variant : EnemyVariants) if (variant.Entry == entry) return &variant;
     return nullptr;

@@ -1,5 +1,7 @@
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeCombat.h"
+#include "WarscapeEnemyMechanics.h"
+#include "WarscapeEquipment.h"
 #include <cassert>
 #include <map>
 #include <string_view>
@@ -59,7 +61,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==277);
+    assert(Warscape::EnemyVariants.size()==283);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -197,5 +199,40 @@ int main() {
             cursor += o.Weight;
         }
         assert(cursor == pool->Total && Warscape::SelectEnemyLoot(entry,cursor) == 0);
+    }
+
+    assert(Warscape::NonFinishingDamage(400,999) == 390);
+    assert(Warscape::NonFinishingDamage(10,999) == 0);
+    assert(Warscape::NonFinishingDamage(5,999) == 0);
+    assert(Warscape::NonFinishingDamage(400,20) == 20);
+    assert(Warscape::OSRSDamageForXP(10,Warscape::NonFinishingDamage(40,40)) == 3);
+    assert(Warscape::OSRSDamageForXP(10,Warscape::NonFinishingDamage(10,10)) == 0);
+    assert(Warscape::CanCoolLizard(49) && Warscape::CanCoolLizard(10));
+    assert(!Warscape::CanCoolLizard(50) && !Warscape::CanCoolLizard(0));
+    assert(Warscape::PoisonDuration(3) == 270000);
+    assert(Warscape::PoisonHit(3,18000) == 3);
+    assert(Warscape::PoisonHit(3,90000) == 3);
+    assert(Warscape::PoisonHit(3,108000) == 2);
+    assert(Warscape::PoisonHit(3,198000) == 1);
+    assert(Warscape::PoisonHit(3,270000) == 1);
+    assert(Warscape::PoisonHit(3,288000) == 0);
+    assert(Warscape::MagicDefenceLevel(99,1) == 69);
+    assert(Warscape::PlayerMagicDefenceLevel(99,1,0)==77);
+    assert(Warscape::PlayerMagicDefenceLevel(99,1,2)==80);
+    assert(Warscape::PlayerMagicDefenceLevel(99,1,3)==78);
+    assert(Warscape::MonsterAttackIntervalMilliseconds(1) == 600);
+    assert(Warscape::AttackIntervalMilliseconds(1) == 2400);
+    assert(Warscape::FindEnemyBehaviour(901600)->FinisherItem == 902361);
+    assert(!Warscape::FindEnemyBehaviour(901100));
+    for (std::uint32_t entry=901600; entry<=901605; ++entry) {
+        auto const* p=Warscape::FindEnemyLootPool(entry);
+        assert(p);std::uint64_t cursor=0;
+        for (std::uint32_t i=0; i<p->Count; ++i) {
+            auto const& o=Warscape::EnemyLootOutcomes[p->First+i];
+            assert(Warscape::SelectEnemyLoot(entry,cursor)==o.Loot);
+            assert(Warscape::SelectEnemyLoot(entry,cursor+o.Weight-1)==o.Loot);
+            cursor+=o.Weight;
+        }
+        assert(cursor==p->Total && Warscape::SelectEnemyLoot(entry,cursor)==0);
     }
 }

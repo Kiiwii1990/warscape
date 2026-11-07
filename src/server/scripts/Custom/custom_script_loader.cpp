@@ -23,9 +23,12 @@ void AddSC_warscape_copper_mining();
 void AddSC_warscape_agility_commandscript();
 void AddSC_WarscapeAgilityTraversal();
 
+void AddSC_warscape_enemies();
+
 void AddCustomScripts()
 {
     AddSC_warscape_copper_mining();
+    AddSC_warscape_enemies();
     AddSC_warscape_agility_commandscript();
     AddSC_WarscapeAgilityTraversal();
 }

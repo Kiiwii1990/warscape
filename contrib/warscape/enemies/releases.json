@@ -26,5 +26,9 @@
   {
     "data": "spectral.json",
     "adds_flat_armour_column": true
+  },
+  {
+    "data": "ordered_desert_druids.json",
+    "adds_encounters": true
   }
 ]

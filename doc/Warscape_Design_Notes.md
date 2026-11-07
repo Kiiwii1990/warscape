@@ -824,3 +824,19 @@ See [spectral checkpoint](WarscapeSpectralEnemies.md) for sources, deployment an
 manual tests. Other Shade variants, spectral Prayer rewards, elemental weaknesses,
 Slayer tasks, and ranged flat armour remain separate work. These two new entries
 await the user's in-game acceptance.
+
+
+### Enemy catalogue: follow the supplied list order (7 November 2026)
+
+Confirmed: the user accepted both spectral entries working with drops and now
+requires the remaining enemy families in the supplied list order. The explicit
+next batch is Lizard, Scarab, Druid and Dwarf. Preserve this ordering for future
+choices, skipping already covered families unless the user requests additions.
+This refines the earlier permission to choose freely; batches remain focused.
+
+The implementation adds three desert-lizard tiers with an ice-cooler finishing
+item, one Scarab Swarm with source-speed melee and a scoped poison aura, one
+Taverley Druid with mixed melee/magic, and the missing level-20 Dwarf. The prior
+13 Dwarves remain unchanged. Data, documented assumptions, deployment and pending
+manual tests are in [ordered checkpoint](WarscapeOrderedEnemyBatch.md).
+Only source Slayer requirement metadata is retained; no Slayer skill was added.

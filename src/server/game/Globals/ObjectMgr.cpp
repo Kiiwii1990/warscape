@@ -10626,7 +10626,7 @@ void ObjectMgr::LoadWarscapeMonsterAttackSpeeds()
         Field* fields = result->Fetch();
         uint32 const entry = fields[0].GetUInt32();
         uint32 const ticks = fields[1].GetUInt32();
-        if (!GetCreatureTemplate(entry) || ticks < Warscape::MinimumAttackSpeedTicks || ticks > Warscape::MaximumAttackSpeedTicks)
+        if (!GetCreatureTemplate(entry) || ticks < Warscape::MinimumMonsterAttackSpeedTicks || ticks > Warscape::MaximumAttackSpeedTicks)
         {
             TC_LOG_ERROR("sql.sql", "Warscape monster attack speed for creature {} is invalid; skipped.", entry);
             continue;

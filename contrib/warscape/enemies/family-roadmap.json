@@ -49,7 +49,7 @@
       "family": "Lizard",
       "model_direction": "Thunder lizard scaled down",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Mammoth",
@@ -73,7 +73,7 @@
       "family": "Scarab",
       "model_direction": "Ahn\u2019Qiraj scarab beetle",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Scorpion",
@@ -121,7 +121,7 @@
       "family": "Druid",
       "model_direction": "Night elf druid in robes, or human caster for Chaos Druids",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Dwarf",

@@ -55,6 +55,13 @@ namespace Warscape
         return NormalizeAttackSpeedTicks(ticks) * CombatTickMilliseconds;
     }
 
+    constexpr uint32_t MinimumMonsterAttackSpeedTicks = 1;
+    inline uint32_t MonsterAttackIntervalMilliseconds(uint32_t ticks)
+    {
+        return (ticks >= MinimumMonsterAttackSpeedTicks && ticks <= MaximumAttackSpeedTicks
+            ? ticks : DefaultAttackSpeedTicks) * CombatTickMilliseconds;
+    }
+
     inline uint32_t AttackTimerAfterReset(uint32_t ticks)
     {
         return AttackIntervalMilliseconds(ticks);
