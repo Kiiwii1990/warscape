@@ -257,3 +257,9 @@ Fresh verified world backup (integrity checked, restore not tested):
 Previous binary/PDB, server Item.dbc and client patch:
 `C:\WarscapeBackups\Martial-20261107-deploy`.
 Prepared new assets: `C:\WarscapeBackups\Martial-20261107-prepared`.
+
+## User acceptance - next checkpoint
+
+The user confirmed this 53-variant batch with drops and requested the next batch,
+authorizing a larger batch where appropriate. This records the reported result;
+rare-drop probability and exhaustive visual/navigation tests are not inferred.

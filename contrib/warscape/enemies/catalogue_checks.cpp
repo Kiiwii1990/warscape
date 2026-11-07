@@ -59,7 +59,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==148);
+    assert(Warscape::EnemyVariants.size()==205);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -114,4 +114,28 @@ int main() {
     assert(Warscape::EnemyMaximumHit(901245, 99) == 1);
     assert(Warscape::FindEnemyVariant(901236)->MeleeLane == 2);
     assert(Warscape::FindEnemyVariant(901237)->MeleeLane == 0);
+    Warscape::MonsterProfile zeroCaster;
+    zeroCaster.Base = {40,75,40,0,0,90}; zeroCaster.Growth.fill(0);
+    auto const zeroStats = zeroCaster.Scale(1);
+    assert(zeroStats[Warscape::Ranged] == 0 && zeroStats[Warscape::Magic] == 0);
+    assert(zeroCaster.Scale(100) == zeroStats);
+    Warscape::MonsterDefinition inherited;
+    assert(inherited.Calculate(zeroCaster,1) == zeroStats);
+    Warscape::MonsterProfile defaultStats;
+    assert(defaultStats.Scale(1)[Warscape::Ranged] == 1);
+    assert(defaultStats.Scale(1)[Warscape::Hitpoints] == 10);
+    zeroCaster.Base[Warscape::Hitpoints] = 0;
+    assert(zeroCaster.Scale(1)[Warscape::Hitpoints] == 1);
+    for (std::uint32_t entry = 901300; entry <= 901356; ++entry) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        assert(pool && Warscape::FindEnemyVariant(entry)->SourceCombat);
+        std::uint32_t cursor = 0;
+        for (std::uint32_t i = 0; i < pool->Count; ++i) {
+            auto const& o = Warscape::EnemyLootOutcomes[pool->First+i];
+            assert(Warscape::SelectEnemyLoot(entry,cursor) == o.Loot);
+            assert(Warscape::SelectEnemyLoot(entry,cursor+o.Weight-1) == o.Loot);
+            cursor += o.Weight;
+        }
+        assert(cursor == pool->Total);
+    }
 }

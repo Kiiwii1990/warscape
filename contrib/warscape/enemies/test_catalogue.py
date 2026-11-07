@@ -338,4 +338,87 @@ class MartialTests(unittest.TestCase):
         self.assertNotIn('equipment',self.e(901236))
         self.assertEqual(self.e(901252)['equipment'],[2764,2764,0])
 
+
+class GiantDemonTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module=family_catalogue
+        self.pack=json.loads(Path(__file__).with_name('giants_demons.json').read_text())
+        self.prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
+        self.prior['families']=[]
+        for n in ('farm_animals_rats.json','wildlife.json','coastal_wildlife.json','dungeon_humanoids.json','martial_families.json'):
+            d=json.loads(Path(__file__).with_name(n).read_text())
+            for k in ('items','enemies','families'):self.prior[k].extend(d[k])
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction
+        e=self.e(entry)
+        return sum(Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']==name and (quantity is None or o['quantity']==quantity))
+    def test_57_variants_six_families(self):
+        self.module.validate(self.pack,self.prior)
+        self.assertEqual(len(self.pack['enemies']),57)
+        self.assertEqual({e['family_id'] for e in self.pack['enemies']},set(range(31,37)))
+        self.assertEqual(len({e['source_npc_ids'] for e in self.pack['enemies']}),57)
+    def test_monster_zero_ranged_magic_preserved_melee_hp_guarded(self):
+        self.assertEqual(self.e(901349)['stats'],[40,75,40,0,0,90])
+        self.assertEqual(self.e(901350)['stats'],[40,90,25,0,0,90])
+        self.e(901349)['stats'][5]=0
+        with self.assertRaisesRegex(ValueError,'stats'):self.module.validate(self.pack,self.prior)
+    def test_rare_table_totals_and_pre_legends_branch(self):
+        from fractions import Fraction
+        from loot_tables import rare_table,gem_table
+        rows=rare_table(Fraction(1))
+        self.assertEqual(sum(r for _,r in rows),1)
+        chance=lambda n:sum(r for d,r in rows if d['item']==n)
+        self.assertEqual(chance('Coins'),Fraction(21,128))
+        self.assertEqual(chance('Rune spear'),Fraction(15*8,128*128))
+        self.assertEqual(sum(r for d,r in gem_table(1) if d['item']=='Rune spear'),0)
+        self.assertEqual(sum(r for _,r in rare_table(Fraction(1,128),Fraction(5,128))),Fraction(6,128))
+    def test_source_cave_talismans_and_individual_ash_types(self):
+        self.assertEqual(self.chance(901317,'Nature talisman'),0)
+        self.assertGreater(self.chance(901317,'Chaos talisman'),0)
+        self.assertGreater(self.chance(901314,'Nature talisman'),0)
+        self.assertEqual(self.e(901314)['guaranteed'],[{'item':'Vile ashes','quantity':1}])
+        self.assertEqual(self.e(901323)['guaranteed'],[{'item':'Malicious ashes','quantity':1}])
+    def test_native_fixed_coin_reference_3000_and_remainder_450(self):
+        from expansion_release import artifacts
+        result=artifacts(self.pack,self.prior)
+        sql=next(v for k,v in result.items() if k.suffix=='.sql')
+        spec=json.loads(next(v for k,v in result.items() if k.suffix=='.json'))
+        self.assertIn('VALUES (970000,902006,100,200,200,',sql)
+        for entry,q,loops,remainder in ((901323,3000,15,0),(901314,450,2,50)):
+            e=self.e(entry);index=next(i for i,o in enumerate(e['outcomes']) if o['item']=='Coins' and o['quantity']==q);loot=e['loot_base']+index
+            self.assertIn(f'VALUES ({loot},0,970000,100,1,{loops},',sql)
+            if remainder:self.assertIn(f'VALUES ({loot},902006,100,{remainder},{remainder},',sql)
+            self.assertEqual(loops*200+remainder,q)
+        self.assertIn('reference_loot_template WHERE Entry=970000',spec['precondition_sql'])
+        self.assertIn('entry=902006 AND stackable=200',spec['precondition_sql'])
+    def test_native_slot_budget_and_non_fixed_large_counts_refused(self):
+        e=self.e(901323);o=next(o for o in e['outcomes'] if o['item']=='Coins' and o['quantity']==3000)
+        o['quantity_max']=3001
+        with self.assertRaisesRegex(ValueError,'count'):self.module.validate(self.pack,self.prior)
+        del o['quantity_max'];o['quantity']=3600
+        with self.assertRaisesRegex(ValueError,'slot limit'):self.module.validate(self.pack,self.prior)
+    def test_reference_collision_and_bad_stack_contract_refused(self):
+        self.prior['native_references']=[{'id':970000}]
+        with self.assertRaisesRegex(ValueError,'collision'):self.module.validate(self.pack,self.prior)
+        self.prior['native_references']=[];self.pack['native_references'][0]['count']=100
+        with self.assertRaisesRegex(ValueError,'Invalid native reference'):self.module.validate(self.pack,self.prior)
+    def test_ice_cave_unlisted_main_slot_is_explicit(self):
+        from fractions import Fraction
+        e=self.e(901307)
+        self.assertTrue(any(o['item']=='Nothing' and Fraction(o['weight'],e['denominator'])==Fraction(1,62) for o in e['outcomes']))
+    def test_werewolf_ash_free_wolf_bones_and_tools_rewards(self):
+        for i in range(901327,901349):self.assertEqual(self.e(i)['guaranteed'],[{'item':'Wolf bones','quantity':1}])
+        self.assertEqual(self.e(901352)['guaranteed'],[{'item':'Iron battleaxe','quantity':1}])
+        self.assertEqual(self.e(901354)['guaranteed'],[{'item':'Iron pickaxe','quantity':1}])
+        self.assertEqual(self.e(901356)['guaranteed'],[{'item':'Spade','quantity':1}])
+        self.assertEqual(self.chance(901353,'Rune battleaxe'),__import__('fractions').Fraction(1,500))
+    def test_mammoth_rare_coins_and_seeds_exact(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901351,'Coins',3000),Fraction(2*21,128*128))
+        self.assertEqual(self.chance(901351,'Potato seed'),Fraction(30,640))
+        self.assertEqual(self.chance(901351,'Papaya tree seed'),Fraction(1,640))
+        self.assertEqual(self.e(901351)['guaranteed'],[{'item':'Big bones','quantity':1}])
+
 if __name__=='__main__':unittest.main()

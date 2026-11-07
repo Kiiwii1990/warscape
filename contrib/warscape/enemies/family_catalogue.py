@@ -35,6 +35,11 @@ def validate(pack, old):
     def require(condition, message):
         if not condition:
             raise ValueError(message)
+    refs = pack.get('native_references', [])
+    require(len({r['id'] for r in refs}) == len(refs) and len({r['item'] for r in refs}) == len(refs), 'Duplicate native reference')
+    require(not ({r['id'] for r in refs} & {r['id'] for r in old.get('native_references', [])}), 'Native reference collision')
+    require(all(type(r['id']) is int and 1 <= r['id'] <= 0xFFFFFFFF and type(r['count']) is int and r['count'] == 200 for r in refs), 'Invalid native reference')
+    references = {r['item']:r for r in refs}
     items = pack['shared_items'] + pack['items']
     for key in ('entry', 'name'):
         require(len({x[key] for x in items}) == len(items), 'Duplicate item identity')
@@ -46,6 +51,7 @@ def validate(pack, old):
     require(len(family_ids) == len(pack['families']), 'Duplicate family ID')
     require(len({f['key'] for f in pack['families']}) == len(family_ids), 'Duplicate family key')
     names = {x['name'] for x in items}
+    require(set(references).issubset(names), 'Unknown native reference item')
     used_loot = {enemy['loot_base'] + i for enemy in old['enemies'] for i in range(len(enemy['outcomes']))}
     for key in ('entry', 'profile_id'):
         require(len({e[key] for e in pack['enemies']}) == len(pack['enemies']), 'Duplicate enemy/profile ID')
@@ -54,7 +60,7 @@ def validate(pack, old):
         require(enemy['family_id'] in family_ids, 'Unknown family')
         require(enemy['source'] in pack['sources'], 'Missing Wiki source')
         require(pack['sources'][enemy['source']]['url'].startswith('https://oldschool.runescape.wiki/w/'), 'Invalid Wiki provenance')
-        require(len(enemy['stats']) == 6 and all(type(n) is int and 1 <= n <= 1000000 for n in enemy['stats']), 'Invalid combat stats')
+        require(len(enemy['stats']) == 6 and all(type(n) is int and (0 if i in (3,4) else 1) <= n <= 1000000 for i,n in enumerate(enemy['stats'])), 'Invalid combat stats')
         require(1 <= enemy['combat_level'] <= 255 and 2 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
         require(enemy['attack_style'] in ('stab', 'slash', 'crush'), 'Unsupported melee style')
         require(0 < enemy['scale'] <= 10 and type(enemy['aggressive']) is bool, 'Invalid model/aggression')
@@ -72,7 +78,9 @@ def validate(pack, old):
             require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
             drops = outcome_drops(enemy, outcome)
             require(len({d['item'] for d in drops}) == len(drops), 'Duplicate item in one outcome')
-            require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= 255 for d in drops), 'Invalid loot item/count')
+            require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= (3600 if d['item'] in references and d['quantity'] == d.get('quantity_max', d['quantity']) else 255) for d in drops), 'Invalid loot item/count')
+            if refs:
+                require(sum((d.get('quantity_max', d['quantity']) + 199)//200 for d in drops) <= 18, 'Native loot slot limit')
             loot = enemy['loot_base'] + i
             require(loot not in used_loot, 'Loot ID collision')
             used_loot.add(loot)
@@ -159,6 +167,12 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
     for item in pack['items']:
         sql.append(f"INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,description,Material) SELECT {item['entry']},15,0,{quote(item['name'])},displayid,1,1,200,-1,-1,'OSRS enemy catalogue collectible; gameplay use is not implemented.',Material FROM item_template WHERE entry={item['display_source']};")
         checks.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['entry']} AND name={quote(item['name'])} AND class=15 AND stackable=200 AND displayid=(SELECT displayid FROM item_template WHERE entry={item['display_source']}))=1")
+    references = {r['item']:r for r in pack.get('native_references', [])}
+    for name, ref in references.items():
+        item = items[name]['entry']
+        sql.append(f"INSERT INTO reference_loot_template (Entry,Item,Chance,MinCount,MaxCount,Comment) VALUES ({ref['id']},{item},100,{ref['count']},{ref['count']},'OSRS fixed stack reference');")
+        checks.append(f"(SELECT COUNT(*) FROM reference_loot_template WHERE Entry={ref['id']})=1")
+        checks.append(f"(SELECT COUNT(*) FROM reference_loot_template WHERE Entry={ref['id']} AND Item={item} AND Reference=0 AND Chance=100 AND MinCount={ref['count']} AND MaxCount={ref['count']})=1")
     expected_loot = []
     for enemy in pack['enemies']:
         entry, profile = enemy['entry'], enemy['profile_id']
@@ -184,10 +198,19 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
             loot = enemy['loot_base'] + i
             drops = outcome_drops(enemy, outcome)
             expected_loot.append(loot)
-            checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={len(drops)}')
+            row_count = sum(1 + int(d['quantity'] % references[d['item']]['count'] > 0) if d['quantity'] > 255 else 1 for d in drops)
+            checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={row_count}')
             for drop in drops:
                 item, count = items[drop['item']]['entry'], drop['quantity']
                 maximum = drop.get('quantity_max', count)
+                if count > 255:
+                    ref = references[drop['item']]
+                    loops, remainder = divmod(count, ref['count'])
+                    sql.append(f"INSERT INTO creature_loot_template (Entry,Item,Reference,Chance,MinCount,MaxCount,Comment) VALUES ({loot},0,{ref['id']},100,1,{loops},'OSRS fixed count via native reference');")
+                    checks.append(f"(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item=0 AND Reference={ref['id']} AND Chance=100 AND MinCount=1 AND MaxCount={loops})=1")
+                    if not remainder:
+                        continue
+                    count = maximum = remainder
                 sql.append(f"INSERT INTO creature_loot_template (Entry,Item,Chance,MinCount,MaxCount,Comment) VALUES ({loot},{item},100,{count},{maximum},'OSRS family catalogue guaranteed outcome');")
                 checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item={item} AND Chance=100 AND MinCount={count} AND MaxCount={maximum})=1')
     for enemy in metadata_enemies:
@@ -207,6 +230,9 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
         pre.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['entry']} AND name={quote(item['name'])})=1")
     for item in pack['items']:
         pre.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['display_source']})=1")
+    for name, ref in references.items():
+        pre.append(f"(SELECT COUNT(*) FROM reference_loot_template WHERE Entry={ref['id']})=0")
+        pre.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={items[name]['entry']} AND stackable=200)=1")
     pre.append('(SELECT COUNT(*) FROM creature_template WHERE entry=901000)=1')
     checks.append("(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('warscape_enemy_family','warscape_enemy_variant') AND engine='InnoDB')=2")
     text = '\n'.join(sql) + '\n'

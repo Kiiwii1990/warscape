@@ -55,7 +55,7 @@
       "family": "Mammoth",
       "model_direction": "Wooly Mammoth from Howling Fjord",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Monkey",
@@ -169,7 +169,7 @@
       "family": "Giant",
       "model_direction": "Mountain giant or scaled-up human for flesh and clothing",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Goblin",
@@ -211,7 +211,7 @@
       "family": "Troll",
       "model_direction": "Ice troll for frozen variants, forest troll for others",
       "assessment": "Close. WoW trolls are leaner.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "TzHaar",
@@ -223,7 +223,7 @@
       "family": "Werewolf",
       "model_direction": "Classic Duskwood worgen",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Dragon",
@@ -259,7 +259,7 @@
       "family": "Demon",
       "model_direction": "Felguard for greater demons, satyr for smaller demons",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Hellhound",
@@ -355,7 +355,7 @@
       "family": "Possessed Tool",
       "model_direction": "Kael\u2019thas Tempest Keep animated weapon, Devastation for magic axe",
       "assessment": "Direct for the animated axe. The reference item ID differs from the creature display ID.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Aberrant Spectre",

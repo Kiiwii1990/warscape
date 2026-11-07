@@ -32,6 +32,11 @@ namespace Warscape
     constexpr std::uint32_t DamageVariationScale = 100;
     constexpr std::int32_t MaxBonus = 1000000;
 
+    constexpr std::uint32_t MinimumMonsterStat(std::size_t stat)
+    {
+        return stat == Ranged || stat == Magic ? 0 : 1;
+    }
+
     struct MonsterProfile
     {
         std::array<std::uint32_t, StatCount> Base = { 1, 1, 1, 1, 1, 10 };
@@ -46,7 +51,7 @@ namespace Warscape
             std::array<std::uint32_t, StatCount> result;
             for (std::size_t i = 0; i < StatCount; ++i)
                 result[i] = std::uint32_t(std::clamp<std::uint64_t>(
-                    Base[i] + std::uint64_t(level > 0 ? level - 1 : 0) * Growth[i] / 100, 1, MaxStat));
+                    Base[i] + std::uint64_t(level > 0 ? level - 1 : 0) * Growth[i] / 100, MinimumMonsterStat(i), MaxStat));
             return result;
         }
     };

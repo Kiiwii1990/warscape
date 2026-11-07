@@ -145,6 +145,7 @@ def main():
         prior['families'].extend(pack['families'])
         prior['enemies'].extend(pack['enemies'])
         prior['items'].extend(pack['items'])
+        prior.setdefault('native_references', []).extend(pack.get('native_references', []))
     for path, text in artifacts.items():
         if path.exists():
             if path.read_text(encoding='utf-8') != text:

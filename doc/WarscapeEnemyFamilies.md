@@ -1,6 +1,8 @@
 # Enemy families: Cows and Rats release
 
-Current expansion: [53-variant martial-family batch](WarscapeMartialFamiliesBatch.md).
+Current expansion: [57-variant giants/demons batch](WarscapeGiantsDemonsBatch.md).
+The previous [53-variant martial batch](WarscapeMartialFamiliesBatch.md) was user-confirmed
+with drops.
 The previous [39-variant dungeon batch](WarscapeDungeonHumanoidBatch.md) was user-confirmed
 working with drops.
 The previous [28-variant coastal batch](WarscapeCoastalWildlifeBatch.md) was user-confirmed

@@ -778,3 +778,13 @@ listed probabilities retained and the uncommon table's unlisted two slots
 explicitly modeled empty. See [martial-family batch](WarscapeMartialFamiliesBatch.md)
 for model approximations, source assumptions and acceptance steps. The new
 53 variants await user gameplay acceptance.
+
+### Enemy catalogue: giants/demons checkpoint (7 November 2026)
+
+Confirmed: the user accepted the martial-family batch with drops and authorized
+the next batch, including more entries where appropriate. This checkpoint adds
+57 variants across Giants, Demons, Werewolves, Trolls, Mammoths and Possessed
+Tools. Native loot references support fixed quantities above 255 without
+changing existing item stacks; monster-only zero Ranged/Magic stats preserve
+the published Mountain troll stats. See [giants/demons checkpoint](WarscapeGiantsDemonsBatch.md)
+for scope, assumptions, model approximations and pending acceptance.

@@ -10429,7 +10429,7 @@ void ObjectMgr::LoadWarscapeMonsterStats()
             {
                 profile.Base[i] = fields[1 + i].GetUInt32();
                 profile.Growth[i] = fields[7 + i].GetUInt32();
-                valid = valid && profile.Base[i] >= 1 && profile.Base[i] <= Warscape::MaxStat
+                valid = valid && profile.Base[i] >= Warscape::MinimumMonsterStat(i) && profile.Base[i] <= Warscape::MaxStat
                     && profile.Growth[i] <= Warscape::MaxStat;
             }
             profile.AttackBonus = fields[13].GetInt32();
