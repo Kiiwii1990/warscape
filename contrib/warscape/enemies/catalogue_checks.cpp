@@ -61,7 +61,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==283);
+    assert(Warscape::EnemyVariants.size()==289);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -234,5 +234,31 @@ int main() {
             cursor+=o.Weight;
         }
         assert(cursor==p->Total && Warscape::SelectEnemyLoot(entry,cursor)==0);
+    }
+
+    assert(Warscape::FindEnemyVariant(901700)->SourceSlayerXPTenths==1075);
+    assert(Warscape::FindEnemyVariant(901705)->SourceSlayerXPTenths==1076);
+    assert(Warscape::FindEnemyVariant(901100)->SourceSlayerXPTenths==0);
+    assert(Warscape::RejectAirborneMelee(true,true,false));
+    assert(Warscape::RejectAirborneMelee(true,false,true));
+    assert(!Warscape::RejectAirborneMelee(true,false,false));
+    assert(!Warscape::RejectAirborneMelee(false,true,true));
+    assert(Warscape::PlayerRangedDefenceLevel(50,0)==58);
+    assert(Warscape::PlayerRangedDefenceLevel(50,2)==61);
+    assert(Warscape::PlayerRangedDefenceLevel(50,3)==59);
+    assert(!Warscape::MagicRangeAllowed(true,false,true,true));
+    assert(Warscape::MagicRangeAllowed(true,true,true,true));
+    assert(Warscape::MagicRangeAllowed(false,false,true,true));
+    assert(!Warscape::MagicRangeAllowed(false,true,false,true));
+    for (std::uint32_t entry=901700; entry<=901705; ++entry) {
+        auto const* pool=Warscape::FindEnemyLootPool(entry);assert(pool);
+        std::uint64_t cursor=0;
+        for (std::uint32_t i=0; i<pool->Count; ++i) {
+            auto const& o=Warscape::EnemyLootOutcomes[pool->First+i];
+            assert(Warscape::SelectEnemyLoot(entry,cursor)==o.Loot);
+            assert(Warscape::SelectEnemyLoot(entry,cursor+o.Weight-1)==o.Loot);
+            cursor+=o.Weight;
+        }
+        assert(cursor==pool->Total && Warscape::SelectEnemyLoot(entry,cursor)==0);
     }
 }

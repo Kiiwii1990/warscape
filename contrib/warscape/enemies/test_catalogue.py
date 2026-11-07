@@ -675,4 +675,83 @@ class OrderedEnemyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'collision'):append_spells(result,self.pack['client_spells'])
         with self.assertRaises(ValueError):append_spells(data[:-1],self.pack['client_spells'])
 
+
+
+class ElfAvianSuqahTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('elves_aviansie_suqah.json').read_text())
+        self.prior=prior_to('elves_aviansie_suqah.json')
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name):
+        from fractions import Fraction
+        e=self.e(entry)
+        return sum((Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']==name),Fraction())
+    def test_six_entries_three_new_families_no_duplicate_hobgoblins(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual(len(self.prior['enemies']),283)
+        self.assertEqual([e['entry'] for e in self.pack['enemies']],list(range(901700,901706)))
+        self.assertEqual([f['id'] for f in self.pack['families']],[56,57,58])
+        old=[e for e in self.prior['enemies'] if e.get('source')=='Hobgoblin']
+        self.assertEqual([e['entry'] for e in old],list(range(901236,901243)))
+        self.assertEqual([e['source_npc_ids'] for e in old],['3049','3050','3286','3287','3288','3289','2241'])
+    def test_fractional_slayer_reference_not_truncated(self):
+        self.assertEqual([e['source_slayer_xp_tenths'] for e in self.pack['enemies']],[1075,1075,700,1390,1076,1076])
+        self.assertEqual(self.e(901700)['slayer_xp'],107)
+        self.assertEqual(self.e(901705)['slayer_xp'],107)
+    def test_precise_metadata_bounds_and_mismatch_refused(self):
+        import family_catalogue
+        for value in (-1,True,10000001,1069):
+            self.pack['enemies'][0]['source_slayer_xp_tenths']=value
+            with self.assertRaisesRegex(ValueError,'precise Slayer'):family_catalogue.validate(self.pack,self.prior)
+    def test_source_ranged_stats_and_flight_config(self):
+        self.assertEqual(self.e(901702)['stats'],[1,1,70,71,1,70])
+        self.assertEqual(self.e(901703)['stats'],[1,1,160,151,1,139])
+        for entry,maximum in ((901702,8),(901703,16)):
+            e=self.e(entry);self.assertEqual(e['attack_style'],'ranged')
+            self.assertEqual(e['behaviour'],{'ranged_max_hit':maximum,'airborne':1,'attack_spell':900710})
+    def test_feather_quantity_range_and_elf_bones(self):
+        for entry in (901700,901701):self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Bones','quantity':1}])
+        for entry in (901702,901703):self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Bones','quantity':1},{'item':'Feather','quantity':1,'quantity_max':6}])
+    def test_elf_main_marginals(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901700,'Crystal teleport seed'),Fraction(25,128))
+        self.assertEqual(self.chance(901701,'Teleport crystal (1)'),Fraction(1,128))
+        self.assertEqual(self.chance(901700,'Coins'),Fraction(44,128))
+    def test_suqah_129_slot_table_and_quest_preroll_excluded(self):
+        from fractions import Fraction
+        for entry in (901704,901705):
+            self.assertEqual(self.chance(entry,'Suqah tooth'),Fraction(69,129))
+            self.assertEqual(self.chance(entry,'Grimy guam leaf'),Fraction(30,129))
+            self.assertEqual(self.chance(entry,'Grimy marrentill'),Fraction(25,129))
+            self.assertEqual(self.chance(entry,'A special tiara'),0)
+            self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Big bones','quantity':1},{'item':'Suqah hide','quantity':1}])
+    def test_suqah_melee_and_hybrid_source_image_ids(self):
+        self.assertEqual(self.e(901704)['source_npc_ids'],'790')
+        self.assertNotIn('behaviour',self.e(901704))
+        self.assertEqual(self.e(901705)['source_npc_ids'],'787')
+        self.assertEqual(self.e(901705)['behaviour']['magic_melee_only'],1)
+        self.assertEqual(self.e(901705)['behaviour']['alternate_spell'],900712)
+    def test_additive_schema_preserves_legacy_metadata(self):
+        from ranged_release import ranged_artifacts
+        import hashlib
+        result=ranged_artifacts(self.pack,self.prior);sql=next(v for p,v in result.items() if p.suffix=='.sql');spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        self.assertIn('ADD COLUMN source_slayer_xp_tenths INT UNSIGNED NOT NULL DEFAULT 0',sql)
+        self.assertIn('AND source_slayer_xp_tenths=0)=283',spec['verify_sql'])
+        self.assertEqual(hashlib.sha1(sql.encode()).hexdigest().upper(),spec['sha1'])
+        self.assertEqual(sql.count("ScriptName='npc_warscape_enemy'"),3)
+        self.assertNotIn('DELETE ',sql);self.assertNotIn('MODIFY COLUMN',sql)
+        self.assertNotIn('UPDATE warscape_enemy_variant SET slayer_xp=',sql)
+    def test_root_spell_contains_no_periodic_damage(self):
+        import struct
+        from dbc_records import append_spells,dbc
+        sources=(6660,31707,30455,339);rows=[]
+        for source in sources:
+            row=[0]*234;row[0]=source;row[71]=6;row[72]=6;row[95]=26;row[96]=3;rows.append(row)
+        data=struct.pack('<4s4I',b'WDBC',4,234,936,1)+b''.join(struct.pack('<234I',*r) for r in rows)+b'\0'
+        result=append_spells(data,self.pack['client_spells']);after,strings=dbc(result,234)
+        self.assertEqual(after[900713][71:74],[6,0,0]);self.assertEqual(after[900713][95:98],[26,0,0])
+        for source,row in zip(sources,rows):self.assertEqual(after[source],row)
+        self.assertTrue(after[900710][7]&0x40000)
+
 if __name__=='__main__':unittest.main()

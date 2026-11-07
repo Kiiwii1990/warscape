@@ -133,7 +133,7 @@
       "family": "Elf",
       "model_direction": "Blood elf",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Knight",
@@ -163,7 +163,7 @@
       "family": "Aviansie",
       "model_direction": "Terokkar arakkoa",
       "assessment": "Close. Hunched avian humanoid.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Giant",
@@ -205,7 +205,7 @@
       "family": "Suqah",
       "model_direction": "Feral yeti from Winterspring or Alterac",
       "assessment": "Stand-in. Similar bulk, furrier silhouette.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Troll",

@@ -20,6 +20,11 @@ def append_spells(data,spells):
         row=rows[spell['source']][:];row[0]=spell['entry']
         row[37]=0;row[38]=1;row[39]=1;row[42]=0;row[43]=0;row[204]=0
         if spell.get('ignore_native_hit'):row[7] |= 0x00040000 # SPELL_ATTR3_IGNORE_HIT_RESULT
+        if 'keep_effects' in spell:
+            if not set(spell['keep_effects']).issubset({0,1,2}):raise ValueError('Invalid spell effect selection')
+            for effect in set(range(3))-set(spell['keep_effects']):
+                for start in range(71,122,3):row[start+effect]=0
+                row[122+3*effect:125+3*effect]=[0]*3
         for start,text in ((136,spell['name']),(153,''),(170,spell['description']),(187,'')):
             row[start:start+16]=[0]*16
             if text:

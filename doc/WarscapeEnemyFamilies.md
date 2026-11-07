@@ -1,6 +1,8 @@
 # Enemy families: Cows and Rats release
 
-Current expansion: [ordered Lizard/Scarab/Druid/Dwarf checkpoint](WarscapeOrderedEnemyBatch.md).
+Current expansion: [Elf/Aviansie/Hobgoblin/Suqah checkpoint](WarscapeElvesAviansieSuqah.md).
+The preceding [Lizard/Scarab/Druid/Dwarf checkpoint](WarscapeOrderedEnemyBatch.md)
+was user-confirmed working with drops.
 The preceding [two-enemy spectral checkpoint](WarscapeSpectralEnemies.md) was
 user-confirmed working with drops.
 The preceding [70-variant Slayer and melee prototype batch](WarscapeSlayerPrototypesBatch.md)

@@ -241,3 +241,11 @@ feedback. Record only the user's observed acceptance results.
 - [Module:GemDropLines](https://oldschool.runescape.wiki/w/Module:GemDropLines)
 - [Gem drop table](https://oldschool.runescape.wiki/w/Gem_drop_table)
 - [Wiki NPC combat calculator](https://github.com/weirdgloop/osrs-dps-calc/blob/main/src/lib/NPCVsPlayerCalc.ts)
+
+
+## User acceptance - next checkpoint
+
+The user confirmed this batch working with drops and requested Elf, Aviansie,
+Hobgoblin and Suqah next. This records that reported gameplay/drop result only;
+long-duration poison/relog and every rejection/cleanup path are not independently
+established by that confirmation. See the next checkpoint's test guide.

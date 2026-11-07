@@ -21,5 +21,14 @@ inline std::uint32_t MagicDefenceLevel(std::uint32_t magic,std::uint32_t defence
 inline std::uint32_t PlayerMagicDefenceLevel(std::uint32_t magic,std::uint32_t defence,std::uint32_t style) {
     return MagicDefenceLevel(magic,defence)+8+(style==2 ? 3 : style==3 ? 1 : 0);
 }
+inline std::uint32_t PlayerRangedDefenceLevel(std::uint32_t defence,std::uint32_t style) {
+    return defence+8+(style==2 ? 3 : style==3 ? 1 : 0);
+}
+inline bool RejectAirborneMelee(bool airborne,bool directAuto,bool meleeSpell) {
+    return airborne && (directAuto || meleeSpell);
+}
+inline bool MagicRangeAllowed(bool meleeOnly,bool inMelee,bool inRange,bool lineOfSight) {
+    return inRange && lineOfSight && (!meleeOnly || inMelee);
+}
 }
 #endif

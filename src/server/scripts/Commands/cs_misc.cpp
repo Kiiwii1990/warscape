@@ -355,9 +355,19 @@ public:
                 variant->Family, variant->FamilyId, variant->Subcategory, variant->Entry);
             handler->PSendSysMessage("Attack %u / Strength %u / Defence %u / Ranged %u / Magic %u / Hitpoints %u",
                 stats[0], stats[1], stats[2], stats[3], stats[4], stats[5]);
-            handler->PSendSysMessage("Source melee style: %s; interval: %u ticks; source respawn: %u ticks",
+            handler->PSendSysMessage("Source attack style: %s; interval: %u ticks; source respawn: %u ticks",
                 (variant->MeleeLane == 3 ? "Magical melee" : variant->AttackStyle), sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry()), variant->RespawnTicks);
-            handler->PSendSysMessage("Slayer XP reference: %u (Slayer tasks/rewards are not enabled)", variant->SlayerXP);
+            if (variant->SourceSlayerXPTenths && variant->SourceSlayerXPTenths % 10)
+                handler->PSendSysMessage("Slayer XP reference: %u.%u (Slayer tasks/rewards are not enabled)", variant->SourceSlayerXPTenths/10, variant->SourceSlayerXPTenths%10);
+            else
+                handler->PSendSysMessage("Slayer XP reference: %u (Slayer tasks/rewards are not enabled)", variant->SlayerXP);
+            if (auto const* behaviour = Warscape::FindEnemyBehaviour(creature->GetEntry()))
+            {
+                if (behaviour->RangedMaxHit)
+                    handler->PSendSysMessage("Ranged attack max hit: %u; ordinary player melee cannot reach this airborne target.", behaviour->RangedMaxHit);
+                if (behaviour->MagicMaxHit && behaviour->MagicMeleeOnly)
+                    handler->PSendSysMessage("Hybrid magic max hit: %u; casts only at melee range.", behaviour->MagicMaxHit);
+            }
             if (variant->SourceCombat)
                 handler->PSendSysMessage("Source max hit: %u; melee defence Stab %d / Slash %d / Crush %d",
                     variant->MaximumHit, variant->DefenceStab, variant->DefenceSlash, variant->DefenceCrush);

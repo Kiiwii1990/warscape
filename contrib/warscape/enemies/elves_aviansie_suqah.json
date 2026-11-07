@@ -1,0 +1,1541 @@
+{
+  "release": "2026_11_07_10_world",
+  "loot_policy": "Members/no wealth/pre-Legends main drops. Suqah 129-slot table; quest pre-roll and tertiary excluded. Existing Hobgoblins audited, not duplicated.",
+  "sources": {
+    "Elf_Warrior": {
+      "url": "https://oldschool.runescape.wiki/w/Elf_Warrior",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "b866e4ff95af8965e781c5c10799e7119ffc6cf823d7bdbdc6120fc41f11620d"
+    },
+    "Aviansie": {
+      "url": "https://oldschool.runescape.wiki/w/Aviansie",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "823c8bc50d6c93f1658f8a56469b747a2bf4f55ead7cf871c10a16fd1aa5b8d0"
+    },
+    "Suqah": {
+      "url": "https://oldschool.runescape.wiki/w/Suqah",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "9b661d1c1bdde434052b5e568863897d88d14ab29dee7037f52049a7ad8ec2a7"
+    },
+    "Hobgoblin": {
+      "url": "https://oldschool.runescape.wiki/w/Hobgoblin",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "457245becfc11022204a37a315b33f977a4a1c1cddd2b1f19f49d8fd7e023e31"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    },
+    "Gem_drop_table": {
+      "url": "https://oldschool.runescape.wiki/w/Gem_drop_table",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "d7e54e63a55542bd18f8471f104c9dce2e05fae11b8f09f71417d8eee18a1073"
+    }
+  },
+  "families": [
+    {
+      "id": 56,
+      "key": "elves",
+      "name": "Elves",
+      "model_note": "Blood Elf guard 15511 and female Blood Elf 15510 with polearms."
+    },
+    {
+      "id": 57,
+      "key": "aviansie",
+      "name": "Aviansie",
+      "model_note": "Skettis Arakkoa display17864 with native hover; ranged attacks."
+    },
+    {
+      "id": 58,
+      "key": "suqah",
+      "name": "Suqah",
+      "model_note": "Ice Thistle Yeti10579/Patriarch10946; bulky furred stand-ins for melee/hybrid forms."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Mithril spear",
+      "entry": 902195
+    },
+    {
+      "name": "Mithril kiteshield",
+      "entry": 902224
+    },
+    {
+      "name": "Adamant full helm",
+      "entry": 902301
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Bass",
+      "entry": 902275
+    },
+    {
+      "name": "Adamantite ore",
+      "entry": 902240
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Feather",
+      "entry": 902023
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Body rune",
+      "entry": 902003
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Mind rune",
+      "entry": 902100
+    },
+    {
+      "name": "Adamantite bar",
+      "entry": 902236
+    },
+    {
+      "name": "Silver ore",
+      "entry": 902208
+    },
+    {
+      "name": "Antipoison(3)",
+      "entry": 902368
+    },
+    {
+      "name": "Big bones",
+      "entry": 902172
+    }
+  ],
+  "items": [
+    {
+      "name": "Green d'hide chaps",
+      "entry": 902369,
+      "display_source": 153
+    },
+    {
+      "name": "Green d'hide body",
+      "entry": 902370,
+      "display_source": 847
+    },
+    {
+      "name": "Crystal teleport seed",
+      "entry": 902371,
+      "display_source": 17034
+    },
+    {
+      "name": "Teleport crystal (1)",
+      "entry": 902372,
+      "display_source": 1206
+    },
+    {
+      "name": "Shark",
+      "entry": 902373,
+      "display_source": 13948
+    },
+    {
+      "name": "Rune dagger(p+)",
+      "entry": 902374,
+      "display_source": 2764
+    },
+    {
+      "name": "Runite limbs",
+      "entry": 902375,
+      "display_source": 2504
+    },
+    {
+      "name": "Swordfish",
+      "entry": 902376,
+      "display_source": 2131
+    },
+    {
+      "name": "Suqah hide",
+      "entry": 902377,
+      "display_source": 2318
+    },
+    {
+      "name": "Suqah tooth",
+      "entry": 902378,
+      "display_source": 17056
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901700,
+      "profile_id": 1700,
+      "family_id": 56,
+      "subcategory": "lletya_1",
+      "name": "Elf Warrior (OSRS lletya_1)",
+      "source": "Elf_Warrior",
+      "source_npc_ids": "5293",
+      "combat_level": 108,
+      "stats": [
+        95,
+        95,
+        80,
+        0,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 107,
+      "source_slayer_xp_tenths": 1075,
+      "source_slayer_level": 0,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 15511,
+      "model_path": "Creature\\BloodElfGuard\\BloodElfMale_Guard.m2",
+      "scale": 1,
+      "creature_type": 7,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1090000,
+      "outcomes": [
+        {
+          "item": "Green d'hide chaps",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Green d'hide body",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mithril spear",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Water rune",
+          "quantity": 70,
+          "weight": 1024
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 12,
+          "weight": 640
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 384
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 37,
+          "weight": 384
+        },
+        {
+          "item": "Coins",
+          "quantity": 20,
+          "weight": 640
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 180,
+          "weight": 1280
+        },
+        {
+          "item": "Crystal teleport seed",
+          "quantity": 1,
+          "weight": 3200
+        },
+        {
+          "item": "Teleport crystal (1)",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bass",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Shark",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 270
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 210
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 165
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 75
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 315
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 160
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 20
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 10
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 5
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 5
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 5
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        39202,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901701,
+      "profile_id": 1701,
+      "family_id": 56,
+      "subcategory": "lletya_2",
+      "name": "Elf Warrior (OSRS lletya_2)",
+      "source": "Elf_Warrior",
+      "source_npc_ids": "5294",
+      "combat_level": 108,
+      "stats": [
+        95,
+        95,
+        80,
+        0,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 107,
+      "source_slayer_xp_tenths": 1075,
+      "source_slayer_level": 0,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 15510,
+      "model_path": "Character\\BloodElf\\Female\\BloodElfFemale.m2",
+      "scale": 1,
+      "creature_type": 7,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1091000,
+      "outcomes": [
+        {
+          "item": "Green d'hide chaps",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Green d'hide body",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mithril spear",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Water rune",
+          "quantity": 70,
+          "weight": 1024
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 12,
+          "weight": 640
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 384
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 37,
+          "weight": 384
+        },
+        {
+          "item": "Coins",
+          "quantity": 20,
+          "weight": 640
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 180,
+          "weight": 1280
+        },
+        {
+          "item": "Crystal teleport seed",
+          "quantity": 1,
+          "weight": 3200
+        },
+        {
+          "item": "Teleport crystal (1)",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bass",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Shark",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 270
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 210
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 165
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 75
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 315
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 160
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 20
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 10
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 5
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 5
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 5
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        39202,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901702,
+      "profile_id": 1702,
+      "family_id": 57,
+      "subcategory": "gwd_69",
+      "name": "Aviansie (OSRS gwd_69)",
+      "source": "Aviansie",
+      "source_npc_ids": "3169",
+      "combat_level": 69,
+      "stats": [
+        1,
+        1,
+        70,
+        71,
+        1,
+        70
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "ranged",
+      "slayer_xp": 70,
+      "source_slayer_xp_tenths": 700,
+      "source_slayer_level": 0,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 17864,
+      "model_path": "Creature\\Arakkoa\\Arakkoa.m2",
+      "scale": 1,
+      "creature_type": 7,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Feather",
+          "quantity": 1,
+          "quantity_max": 6
+        }
+      ],
+      "loot_base": 1092000,
+      "outcomes": [
+        {
+          "item": "Rune dagger(p+)",
+          "quantity": 1,
+          "weight": 1408
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 2304
+        },
+        {
+          "item": "Water rune",
+          "quantity": 30,
+          "weight": 1664
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 9,
+          "weight": 512
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Body rune",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 11,
+          "weight": 256
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 5,
+          "weight": 128
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 16,
+          "weight": 128
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "weight": 3840
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Runite limbs",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Antipoison(3)",
+          "quantity": 5,
+          "weight": 640
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Swordfish",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 270
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 210
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 165
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 75
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 189
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 48
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 6
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 3
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 3
+        }
+      ],
+      "denominator": 16384,
+      "behaviour": {
+        "ranged_max_hit": 8,
+        "airborne": 1,
+        "attack_spell": 900710
+      },
+      "equipment": [
+        0,
+        0,
+        2504
+      ]
+    },
+    {
+      "entry": 901703,
+      "profile_id": 1703,
+      "family_id": 57,
+      "subcategory": "gwd_148",
+      "name": "Aviansie (OSRS gwd_148)",
+      "source": "Aviansie",
+      "source_npc_ids": "3176",
+      "combat_level": 148,
+      "stats": [
+        1,
+        1,
+        160,
+        151,
+        1,
+        139
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 16,
+      "attack_ticks": 4,
+      "attack_style": "ranged",
+      "slayer_xp": 139,
+      "source_slayer_xp_tenths": 1390,
+      "source_slayer_level": 0,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 17864,
+      "model_path": "Creature\\Arakkoa\\Arakkoa.m2",
+      "scale": 1.15,
+      "creature_type": 7,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Feather",
+          "quantity": 1,
+          "quantity_max": 6
+        }
+      ],
+      "loot_base": 1093000,
+      "outcomes": [
+        {
+          "item": "Rune dagger(p+)",
+          "quantity": 1,
+          "weight": 1408
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 2304
+        },
+        {
+          "item": "Water rune",
+          "quantity": 30,
+          "weight": 1664
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 9,
+          "weight": 512
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Body rune",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 11,
+          "weight": 256
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 5,
+          "weight": 128
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 16,
+          "weight": 128
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "weight": 3840
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Runite limbs",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Antipoison(3)",
+          "quantity": 5,
+          "weight": 640
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Swordfish",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 270
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 210
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 165
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 75
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 189
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 48
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 6
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 3
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 3
+        }
+      ],
+      "denominator": 16384,
+      "behaviour": {
+        "ranged_max_hit": 16,
+        "airborne": 1,
+        "attack_spell": 900710
+      },
+      "equipment": [
+        0,
+        0,
+        2504
+      ]
+    },
+    {
+      "entry": 901704,
+      "profile_id": 1704,
+      "family_id": 58,
+      "subcategory": "dual_melee_111",
+      "name": "Suqah (OSRS dual_melee_111)",
+      "source": "Suqah",
+      "source_npc_ids": "790",
+      "combat_level": 111,
+      "stats": [
+        95,
+        95,
+        95,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 6,
+      "attack_style": "stab",
+      "slayer_xp": 107,
+      "source_slayer_xp_tenths": 1076,
+      "source_slayer_level": 0,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 10579,
+      "model_path": "Creature\\Wendigo\\Wendigo.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        },
+        {
+          "item": "Suqah hide",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1094000,
+      "outcomes": [
+        {
+          "item": "Suqah tooth",
+          "quantity": 1,
+          "weight": 8832
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 3840
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 3200
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 315
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 160
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 20
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 10
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 5
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 5
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 5
+        }
+      ],
+      "denominator": 16512
+    },
+    {
+      "entry": 901705,
+      "profile_id": 1705,
+      "family_id": 58,
+      "subcategory": "shield_hybrid_111",
+      "name": "Suqah (OSRS shield_hybrid_111)",
+      "source": "Suqah",
+      "source_npc_ids": "787",
+      "combat_level": 111,
+      "stats": [
+        95,
+        95,
+        95,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 6,
+      "attack_style": "stab",
+      "slayer_xp": 107,
+      "source_slayer_xp_tenths": 1076,
+      "source_slayer_level": 0,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 10946,
+      "model_path": "Creature\\Wendigo\\Wendigo.m2",
+      "scale": 1.1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        },
+        {
+          "item": "Suqah hide",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1095000,
+      "outcomes": [
+        {
+          "item": "Suqah tooth",
+          "quantity": 1,
+          "weight": 8832
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 3840
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 3200
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 315
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 160
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 20
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 10
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 5
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 5
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 5
+        }
+      ],
+      "denominator": 16512,
+      "behaviour": {
+        "magic_max_hit": 10,
+        "attack_spell": 900711,
+        "alternate_spell": 900712,
+        "magic_melee_only": 1
+      }
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900710,
+      "source": 6660,
+      "name": "Aviansie shot",
+      "description": "A ranged attack from an Aviansie.",
+      "ignore_native_hit": true
+    },
+    {
+      "entry": 900711,
+      "source": 31707,
+      "name": "Suqah water wave",
+      "description": "A water attack from a Suqah.",
+      "ignore_native_hit": true
+    },
+    {
+      "entry": 900712,
+      "source": 30455,
+      "name": "Suqah ice barrage",
+      "description": "An icy attack from a Suqah.",
+      "ignore_native_hit": true
+    },
+    {
+      "entry": 900713,
+      "source": 339,
+      "name": "Suqah freeze",
+      "description": "Frozen briefly by a Suqah.",
+      "ignore_native_hit": true,
+      "keep_effects": [
+        0
+      ]
+    }
+  ],
+  "source_assumptions": [
+    "Prototype magic choice50% in melee, equal Ice/Water choice; no published selection odds. Ice root3seconds chosen until exact source duration is established.",
+    "Source images4 and1 identify dual-weapon/melee and shield/hybrid forms respectively.",
+    "Aviansie levitate using stock Arakkoa; no bespoke flapping model. Halberd/salamander exemptions await functional corresponding weapon definitions.",
+    "Slayer XP tenths are authoritative; legacy integer metadata retains whole part. No Slayer training or tasks.",
+    "Aviansie god-affiliation protection, source faction NPC wars and diary/noted variants deferred. New enemy ranged damage uses RS stats; player ranged/magic continue existing native spell paths."
+  ]
+}

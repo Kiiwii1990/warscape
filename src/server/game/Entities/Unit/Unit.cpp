@@ -1065,6 +1065,15 @@ void Unit::CalculateSpellDamageTaken(SpellNonMeleeDamage* damageInfo, int32 dama
     if (!victim || !victim->IsAlive())
         return;
 
+    if (GetTypeId() == TYPEID_PLAYER && victim->GetTypeId() == TYPEID_UNIT && spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE)
+    {
+        if (auto const* behaviour = Warscape::FindEnemyBehaviour(victim->GetEntry()); behaviour && behaviour->Airborne)
+        {
+            damageInfo->damage = 0;
+            return;
+        }
+    }
+
     SpellSchoolMask damageSchoolMask = SpellSchoolMask(damageInfo->schoolMask);
     uint32 crTypeMask = victim->GetCreatureTypeMask();
 
@@ -1269,6 +1278,9 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
             uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
             Warscape::EquipmentBonuses const equipment = player->GetWarscapeEquipmentBonuses();
             warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), equipment.MeleeStrength, styleBonus));
+            // Gate before the combat packet so unreachable targets never display false melee damage.
+            if (auto const* behaviour = Warscape::FindEnemyBehaviour(victim->GetEntry()); behaviour && behaviour->Airborne)
+                warscapeOSRSDamage = 0;
         }
         else
         {

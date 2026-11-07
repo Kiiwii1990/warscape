@@ -123,6 +123,7 @@ def main():
     from expansion_release import artifacts as expansion_artifacts
     import copy
     from encounter_release import encounter_artifacts
+    from ranged_release import ranged_artifacts
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--write', action='store_true', help='Create new release artifacts and update generated runtime header')
@@ -142,6 +143,8 @@ def main():
             artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False), add_slayer_column=release.get('adds_slayer_reference_column', False), add_flat_armour_column=release.get('adds_flat_armour_column', False)))
         if release.get('adds_encounters',False):
             artifacts.update(encounter_artifacts(pack,prior))
+        if release.get('adds_ranged_encounters',False):
+            artifacts.update(ranged_artifacts(pack,prior))
         for key in ('families', 'enemies'):
             if key == 'families':
                 combined[key].extend(f for f in pack[key] if f['id'] not in {old['id'] for old in combined[key]})

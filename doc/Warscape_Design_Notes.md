@@ -840,3 +840,19 @@ Taverley Druid with mixed melee/magic, and the missing level-20 Dwarf. The prior
 13 Dwarves remain unchanged. Data, documented assumptions, deployment and pending
 manual tests are in [ordered checkpoint](WarscapeOrderedEnemyBatch.md).
 Only source Slayer requirement metadata is retained; no Slayer skill was added.
+
+
+### Enemy catalogue: Elf, Aviansie, Hobgoblin and Suqah (7 November 2026)
+
+Confirmed: the user accepted the preceding ordered batch working with drops and
+requested these next four families, continuing the supplied order and delegating
+routine decisions. Six new entries represent Elf Warriors, low/high Aviansie and
+Suqah melee/hybrid forms. All seven existing Hobgoblins match the current complete
+Wiki page hash, stats, IDs and attack speeds; they are retained without duplication.
+
+The batch introduces NPC ranged attacks, ordinary-player-melee protection for
+Aviansie, melee-range-only hybrid casts and precise fractional Slayer XP reference
+metadata. No Slayer skill/training is added. Existing player ranged/magic paths
+remain in use. Native models, selected spell probabilities, a three-second freeze
+and deferred source exceptions are documented prototype choices. See the
+[checkpoint](WarscapeElvesAviansieSuqah.md) for exact scope and pending user tests.

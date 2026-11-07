@@ -30,5 +30,9 @@
   {
     "data": "ordered_desert_druids.json",
     "adds_encounters": true
+  },
+  {
+    "data": "elves_aviansie_suqah.json",
+    "adds_ranged_encounters": true
   }
 ]
