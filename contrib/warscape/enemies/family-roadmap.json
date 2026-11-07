@@ -6,13 +6,13 @@
       "family": "Bat",
       "model_direction": "Duskbat",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Bear",
       "model_direction": "Grizzly bear from Grizzly Hills",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Bird",
@@ -79,7 +79,7 @@
       "family": "Scorpion",
       "model_direction": "Durotar scorpid",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Snake",
@@ -91,7 +91,7 @@
       "family": "Spider",
       "model_direction": "Duskwood widow spider",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Terrorbird",
@@ -109,7 +109,7 @@
       "family": "Wolf",
       "model_direction": "Old World timber wolf",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Bandit",

@@ -7,7 +7,8 @@ from build_assets import ClientAssets, dbc
 
 
 def audit(client):
-    catalogue = json.loads(Path(__file__).with_name('farm_animals_rats.json').read_text(encoding='utf-8'))
+    releases = json.loads(Path(__file__).with_name('releases.json').read_text())
+    enemies = [enemy for release in releases for enemy in json.loads(Path(__file__).with_name(release['data']).read_text(encoding='utf-8'))['enemies']]
     assets = ClientAssets(client)
     try:
         def table(name):
@@ -16,7 +17,7 @@ def audit(client):
         displays, _ = table('CreatureDisplayInfo')
         models, strings = table('CreatureModelData')
         checked = set()
-        for enemy in catalogue['enemies']:
+        for enemy in enemies:
             display = enemy['model']
             if display in checked:
                 continue

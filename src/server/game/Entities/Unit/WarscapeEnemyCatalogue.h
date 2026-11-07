@@ -6,8 +6,8 @@
 namespace Warscape {
 struct EnemyLootOutcome { std::uint32_t Weight, Loot; };
 struct EnemyLootPool { std::uint32_t Entry, First, Count, Total; };
-struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; };
-inline constexpr std::array<EnemyLootOutcome, 23> EnemyLootOutcomes = {{
+struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; };
+inline constexpr std::array<EnemyLootOutcome, 44> EnemyLootOutcomes = {{
     {3, 901000},
     {6, 901001},
     {5, 901002},
@@ -30,29 +30,106 @@ inline constexpr std::array<EnemyLootOutcome, 23> EnemyLootOutcomes = {{
     {1, 901120},
     {1, 901130},
     {1, 901140},
-    {1, 901150}
+    {1, 901150},
+    {1, 901200},
+    {1, 901210},
+    {1, 901220},
+    {1, 901230},
+    {1, 901240},
+    {1, 901250},
+    {1, 901260},
+    {1, 901270},
+    {1, 901280},
+    {1, 901290},
+    {1, 901300},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0},
+    {1, 0}
 }};
-inline constexpr std::array<EnemyLootPool, 7> EnemyLootPools = {{
+inline constexpr std::array<EnemyLootPool, 28> EnemyLootPools = {{
     {901000, 0, 17, 128},
     {901010, 17, 1, 1},
     {901020, 18, 1, 1},
     {901021, 19, 1, 1},
     {901022, 20, 1, 1},
     {901023, 21, 1, 1},
-    {901024, 22, 1, 1}
+    {901024, 22, 1, 1},
+    {901030, 23, 1, 1},
+    {901031, 24, 1, 1},
+    {901032, 25, 1, 1},
+    {901033, 26, 1, 1},
+    {901034, 27, 1, 1},
+    {901035, 28, 1, 1},
+    {901036, 29, 1, 1},
+    {901037, 30, 1, 1},
+    {901038, 31, 1, 1},
+    {901039, 32, 1, 1},
+    {901040, 33, 1, 1},
+    {901041, 34, 1, 1},
+    {901042, 35, 1, 1},
+    {901043, 36, 1, 1},
+    {901044, 37, 1, 1},
+    {901045, 38, 1, 1},
+    {901046, 39, 1, 1},
+    {901047, 40, 1, 1},
+    {901048, 41, 1, 1},
+    {901049, 42, 1, 1},
+    {901050, 43, 1, 1}
 }};
-inline constexpr std::array<EnemyVariant, 7> EnemyVariants = {{
-    {901000, 1, "Goblins", "regular_2", "crush", 5, 35, true},
-    {901010, 2, "Cows", "regular", "crush", 8, 45, false},
-    {901020, 3, "Rats", "regular", "crush", 2, 2, true},
-    {901021, 3, "Rats", "stronghold", "crush", 2, 30, true},
-    {901022, 3, "Rats", "giant_3", "stab", 5, 30, true},
-    {901023, 3, "Rats", "giant_6", "stab", 10, 30, true},
-    {901024, 3, "Rats", "giant_26", "stab", 25, 30, true}
+inline constexpr std::array<EnemyVariant, 28> EnemyVariants = {{
+    {901000, 1, "Goblins", "regular_2", "crush", 5, 35, true, 1, -15, -15, -15, 2, false},
+    {901010, 2, "Cows", "regular", "crush", 8, 45, false, 1, -21, -21, -21, 2, false},
+    {901020, 3, "Rats", "regular", "crush", 2, 2, true, 0, -42, -42, -42, 2, false},
+    {901021, 3, "Rats", "stronghold", "crush", 2, 30, true, 0, -42, -42, -42, 2, false},
+    {901022, 3, "Rats", "giant_3", "stab", 5, 30, true, 1, 0, 0, 0, 0, false},
+    {901023, 3, "Rats", "giant_6", "stab", 10, 30, true, 1, 0, 0, 0, 0, false},
+    {901024, 3, "Rats", "giant_26", "stab", 25, 30, true, 3, 0, 0, 0, 0, false},
+    {901030, 4, "Bats", "regular_6", "stab", 8, 35, true, 1, 2, 2, 5, 0, true},
+    {901031, 4, "Bats", "giant_27", "stab", 32, 35, true, 3, 10, 10, 12, 0, true},
+    {901032, 4, "Bats", "arceuus_27", "stab", 32, 35, true, 3, 10, 10, 12, 0, true},
+    {901033, 5, "Bears", "black_19", "slash", 25, 50, true, 3, 0, 0, 0, 1, true},
+    {901034, 5, "Bears", "grizzly_21", "slash", 27, 50, true, 3, 0, 0, 0, 1, true},
+    {901035, 5, "Bears", "grizzly_42", "slash", 35, 50, true, 5, 0, 0, 0, 1, true},
+    {901036, 6, "Wolves", "stronghold_11", "stab", 10, 90, true, 2, 0, 0, 0, 0, true},
+    {901037, 6, "Wolves", "stronghold_14", "stab", 15, 90, true, 2, 0, 0, 0, 0, true},
+    {901038, 6, "Wolves", "regular_25", "stab", 34, 90, true, 3, 0, 0, 0, 0, true},
+    {901039, 6, "Wolves", "regular_64", "stab", 69, 90, true, 6, 0, 0, 0, 0, true},
+    {901040, 6, "Wolves", "rellekka_64", "stab", 69, 90, true, 6, 0, 0, 0, 0, true},
+    {901041, 7, "Spiders", "common_1", "stab", 2, 35, true, 0, -53, -53, -53, 0, true},
+    {901042, 7, "Spiders", "underground_pass_1", "stab", 2, 35, true, 1, -53, -53, -53, 0, true},
+    {901043, 7, "Spiders", "stronghold_24", "stab", 22, 27, true, 6, 53, 53, 53, 0, true},
+    {901044, 7, "Spiders", "giant_2", "stab", 5, 30, true, 1, -10, -10, -10, 0, true},
+    {901045, 7, "Spiders", "giant_27", "stab", 33, 30, true, 3, 0, 0, 0, 0, true},
+    {901046, 7, "Spiders", "giant_50", "stab", 50, 25, true, 7, 10, 10, 10, 0, true},
+    {901047, 8, "Scorpions", "sailing_1", "stab", 2, 35, true, 0, -53, -53, -53, 0, true},
+    {901048, 8, "Scorpions", "regular_14", "stab", 17, 25, true, 2, 5, 15, 15, 0, true},
+    {901049, 8, "Scorpions", "stronghold_37", "stab", 37, 25, true, 4, 35, 15, 15, 0, true},
+    {901050, 8, "Scorpions", "stronghold_59", "stab", 55, 22, true, 6, 5, 15, 15, 0, true}
 }};
 inline EnemyVariant const* FindEnemyVariant(std::uint32_t entry) {
     for (auto const& variant : EnemyVariants) if (variant.Entry == entry) return &variant;
     return nullptr;
+}
+inline std::uint32_t EnemyMaximumHit(std::uint32_t entry, std::uint32_t fallback) {
+    auto const* variant = FindEnemyVariant(entry);
+    return variant && variant->SourceCombat ? variant->MaximumHit : fallback;
+}
+inline std::int32_t EnemyMeleeDefence(std::uint32_t entry, std::uint8_t lane, std::int32_t fallback) {
+    auto const* variant = FindEnemyVariant(entry);
+    if (!variant || !variant->SourceCombat) return fallback;
+    switch (lane) {
+        case 0: return variant->DefenceStab;
+        case 1: return variant->DefenceSlash;
+        case 2: return variant->DefenceCrush;
+        default: return fallback;
+    }
 }
 inline EnemyLootPool const* FindEnemyLootPool(std::uint32_t entry) {
     for (auto const& pool : EnemyLootPools) if (pool.Entry == entry) return &pool;

@@ -1,0 +1,1217 @@
+{
+  "release": "2026_11_07_02_world",
+  "loot_policy": "Ordinary unconditional Wiki drops; Wolves use members-world Wolf bones for all Warscape players. Conditional/tertiary drops deferred.",
+  "sources": {
+    "Bat": {
+      "url": "https://oldschool.runescape.wiki/w/Bat",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "b1ee1b18c77b1a6303ed229ea2211529fd7862fed47e4ad45575f88dab2df338"
+    },
+    "Giant_bat": {
+      "url": "https://oldschool.runescape.wiki/w/Giant_bat",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "72fd86a8731465398b37f000ad87e9137f6c2f763d27655fc5125e9b8e5c600f"
+    },
+    "Black_bear": {
+      "url": "https://oldschool.runescape.wiki/w/Black_bear",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "640b4db68a8b2849526b69712081a3bbb22249c34d112be6fae2196e8d09d457"
+    },
+    "Grizzly_bear": {
+      "url": "https://oldschool.runescape.wiki/w/Grizzly_bear",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "7923344368657b5f59dd64efe5f6a423c8bee5f25117bc15ad5e1e8d74b2cadf"
+    },
+    "Wolf": {
+      "url": "https://oldschool.runescape.wiki/w/Wolf",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "d7419990a2f9458a8ef045f521b61dbf77ab51c4bfdd90c021d04a6ffb6d1a45"
+    },
+    "Spider": {
+      "url": "https://oldschool.runescape.wiki/w/Spider",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "05ed3c980828ff829ecea5493522e4378e647c6af65f2abdc3e73a5e7ebf2434"
+    },
+    "Giant_spider": {
+      "url": "https://oldschool.runescape.wiki/w/Giant_spider",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "52b16d76866c5e05a3e093ecbe385cf564c360c3d1c7efb67856b5bc68eb5c8b"
+    },
+    "Scorpion": {
+      "url": "https://oldschool.runescape.wiki/w/Scorpion",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "cda97b7226c311ec481289adff7476f25b236382d55203ec29d0095f7c1a948e"
+    }
+  },
+  "families": [
+    {
+      "id": 4,
+      "key": "bats",
+      "name": "Bats",
+      "model_note": "Duskbat stock display 4732, larger scale for giant variants."
+    },
+    {
+      "id": 5,
+      "key": "bears",
+      "name": "Bears",
+      "model_note": "Grizzly Hills grizzly display 21635; stock black bear 719 for Black bear."
+    },
+    {
+      "id": 6,
+      "key": "wolves",
+      "name": "Wolves",
+      "model_note": "Classic unsaddled forest wolf displays 380 and 11415, varied by tier."
+    },
+    {
+      "id": 7,
+      "key": "spiders",
+      "name": "Spiders",
+      "model_note": "Duskwood venom-web widow display 955, scaled by variant."
+    },
+    {
+      "id": 8,
+      "key": "scorpions",
+      "name": "Scorpions",
+      "model_note": "Durotar scorpid display 2485, scaled by tier. Poisonous variant deferred."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bones",
+      "entry": 902000
+    }
+  ],
+  "items": [
+    {
+      "name": "Bat bones",
+      "entry": 902018,
+      "display_source": 2843
+    },
+    {
+      "name": "Bear fur",
+      "entry": 902019,
+      "display_source": 2318
+    },
+    {
+      "name": "Raw bear meat",
+      "entry": 902020,
+      "display_source": 2672
+    },
+    {
+      "name": "Wolf bones",
+      "entry": 902021,
+      "display_source": 2843
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901030,
+      "profile_id": 1030,
+      "family_id": 4,
+      "subcategory": "regular_6",
+      "name": "Bat (OSRS regular 6)",
+      "source": "Bat",
+      "source_npc_ids": "2827,10888,14042",
+      "combat_level": 6,
+      "stats": [
+        5,
+        5,
+        5,
+        1,
+        1,
+        8
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 2,
+      "defence_bonuses": {
+        "stab": 2,
+        "slash": 2,
+        "crush": 5
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 8,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 4732,
+      "scale": 0.7,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bat bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901200,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\FelBat\\FelBat.m2"
+    },
+    {
+      "entry": 901031,
+      "profile_id": 1031,
+      "family_id": 4,
+      "subcategory": "giant_27",
+      "name": "Giant bat (OSRS giant 27)",
+      "source": "Giant_bat",
+      "source_npc_ids": "2834",
+      "combat_level": 27,
+      "stats": [
+        22,
+        22,
+        22,
+        1,
+        1,
+        32
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 12
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 32,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 4732,
+      "scale": 1.3,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bat bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901210,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\FelBat\\FelBat.m2"
+    },
+    {
+      "entry": 901032,
+      "profile_id": 1032,
+      "family_id": 4,
+      "subcategory": "arceuus_27",
+      "name": "Giant bat (OSRS arceuus 27)",
+      "source": "Giant_bat",
+      "source_npc_ids": "6824",
+      "combat_level": 27,
+      "stats": [
+        22,
+        22,
+        22,
+        1,
+        1,
+        32
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 12
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 32,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 4732,
+      "scale": 1.3,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bat bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901220,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "judgement": "Wiki omits this variant respawn; reuse normal Giant bat 35 ticks as metadata.",
+      "model_path": "Creature\\FelBat\\FelBat.m2"
+    },
+    {
+      "entry": 901033,
+      "profile_id": 1033,
+      "family_id": 5,
+      "subcategory": "black_19",
+      "name": "Black bear (OSRS black 19)",
+      "source": "Black_bear",
+      "source_npc_ids": "2839",
+      "combat_level": 19,
+      "stats": [
+        15,
+        16,
+        13,
+        1,
+        1,
+        25
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 25,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 719,
+      "scale": 1.1,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Bear fur",
+          "quantity": 1
+        },
+        {
+          "item": "Raw bear meat",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901230,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\bear\\Bear.m2"
+    },
+    {
+      "entry": 901034,
+      "profile_id": 1034,
+      "family_id": 5,
+      "subcategory": "grizzly_21",
+      "name": "Grizzly bear (OSRS grizzly 21)",
+      "source": "Grizzly_bear",
+      "source_npc_ids": "2838",
+      "combat_level": 21,
+      "stats": [
+        17,
+        18,
+        15,
+        1,
+        1,
+        27
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 27,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 21635,
+      "scale": 1.1,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Bear fur",
+          "quantity": 1
+        },
+        {
+          "item": "Raw bear meat",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901240,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\bear\\Bear.m2"
+    },
+    {
+      "entry": 901035,
+      "profile_id": 1035,
+      "family_id": 5,
+      "subcategory": "grizzly_42",
+      "name": "Grizzly bear (OSRS grizzly 42)",
+      "source": "Grizzly_bear",
+      "source_npc_ids": "3423",
+      "combat_level": 42,
+      "stats": [
+        40,
+        36,
+        35,
+        1,
+        1,
+        35
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 35,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 21635,
+      "scale": 1.4,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Bear fur",
+          "quantity": 1
+        },
+        {
+          "item": "Raw bear meat",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901250,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\bear\\Bear.m2"
+    },
+    {
+      "entry": 901036,
+      "profile_id": 1036,
+      "family_id": 6,
+      "subcategory": "stronghold_11",
+      "name": "Wolf (OSRS stronghold 11)",
+      "source": "Wolf",
+      "source_npc_ids": "2491",
+      "combat_level": 11,
+      "stats": [
+        10,
+        10,
+        10,
+        1,
+        1,
+        10
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 10,
+      "respawn_ticks": 90,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 11415,
+      "scale": 0.8,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Wolf bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901260,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\DireWolf\\DireWolf.m2"
+    },
+    {
+      "entry": 901037,
+      "profile_id": 1037,
+      "family_id": 6,
+      "subcategory": "stronghold_14",
+      "name": "Wolf (OSRS stronghold 14)",
+      "source": "Wolf",
+      "source_npc_ids": "2490",
+      "combat_level": 14,
+      "stats": [
+        10,
+        15,
+        10,
+        1,
+        1,
+        15
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 15,
+      "respawn_ticks": 90,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 380,
+      "scale": 0.9,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Wolf bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901270,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Wolf\\Wolf.m2"
+    },
+    {
+      "entry": 901038,
+      "profile_id": 1038,
+      "family_id": 6,
+      "subcategory": "regular_25",
+      "name": "Wolf (OSRS regular 25)",
+      "source": "Wolf",
+      "source_npc_ids": "110",
+      "combat_level": 25,
+      "stats": [
+        20,
+        16,
+        22,
+        1,
+        1,
+        34
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 34,
+      "respawn_ticks": 90,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11415,
+      "scale": 1,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Wolf bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901280,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\DireWolf\\DireWolf.m2"
+    },
+    {
+      "entry": 901039,
+      "profile_id": 1039,
+      "family_id": 6,
+      "subcategory": "regular_64",
+      "name": "Wolf (OSRS regular 64)",
+      "source": "Wolf",
+      "source_npc_ids": "106",
+      "combat_level": 64,
+      "stats": [
+        50,
+        55,
+        52,
+        1,
+        1,
+        69
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 69,
+      "respawn_ticks": 90,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 380,
+      "scale": 1.3,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Wolf bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901290,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Wolf\\Wolf.m2"
+    },
+    {
+      "entry": 901040,
+      "profile_id": 1040,
+      "family_id": 6,
+      "subcategory": "rellekka_64",
+      "name": "Wolf (OSRS rellekka 64)",
+      "source": "Wolf",
+      "source_npc_ids": "3912",
+      "combat_level": 64,
+      "stats": [
+        50,
+        55,
+        52,
+        1,
+        1,
+        69
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 69,
+      "respawn_ticks": 90,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11415,
+      "scale": 1.3,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Wolf bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901300,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\DireWolf\\DireWolf.m2"
+    },
+    {
+      "entry": 901041,
+      "profile_id": 1041,
+      "family_id": 7,
+      "subcategory": "common_1",
+      "name": "Spider (OSRS common 1)",
+      "source": "Spider",
+      "source_npc_ids": "3019",
+      "combat_level": 1,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "attack_bonus": -35,
+      "strength_bonus": -58,
+      "defence_bonus": -53,
+      "defence_bonuses": {
+        "stab": -53,
+        "slash": -53,
+        "crush": -53
+      },
+      "source_max_hit": 0,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 2,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 955,
+      "scale": 0.4,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901310,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901042,
+      "profile_id": 1042,
+      "family_id": 7,
+      "subcategory": "underground_pass_1",
+      "name": "Spider (OSRS underground pass 1)",
+      "source": "Spider",
+      "source_npc_ids": "4561",
+      "combat_level": 1,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "attack_bonus": -35,
+      "strength_bonus": -58,
+      "defence_bonus": -53,
+      "defence_bonuses": {
+        "stab": -53,
+        "slash": -53,
+        "crush": -53
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 2,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 955,
+      "scale": 0.5,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901320,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901043,
+      "profile_id": 1043,
+      "family_id": 7,
+      "subcategory": "stronghold_24",
+      "name": "Spider (OSRS stronghold 24)",
+      "source": "Spider",
+      "source_npc_ids": "2478",
+      "combat_level": 24,
+      "stats": [
+        21,
+        21,
+        21,
+        1,
+        1,
+        22
+      ],
+      "attack_bonus": 35,
+      "strength_bonus": 58,
+      "defence_bonus": 53,
+      "defence_bonuses": {
+        "stab": 53,
+        "slash": 53,
+        "crush": 53
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 22,
+      "respawn_ticks": 27,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 955,
+      "scale": 1.1,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901330,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901044,
+      "profile_id": 1044,
+      "family_id": 7,
+      "subcategory": "giant_2",
+      "name": "Giant spider (OSRS giant 2)",
+      "source": "Giant_spider",
+      "source_npc_ids": "3017",
+      "combat_level": 2,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        5
+      ],
+      "attack_bonus": -10,
+      "strength_bonus": -10,
+      "defence_bonus": -10,
+      "defence_bonuses": {
+        "stab": -10,
+        "slash": -10,
+        "crush": -10
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 5,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 955,
+      "scale": 0.7,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901340,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901045,
+      "profile_id": 1045,
+      "family_id": 7,
+      "subcategory": "giant_27",
+      "name": "Giant spider (OSRS giant 27)",
+      "source": "Giant_spider",
+      "source_npc_ids": "3018",
+      "combat_level": 27,
+      "stats": [
+        20,
+        24,
+        21,
+        1,
+        1,
+        32
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 33,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 955,
+      "scale": 1.2,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901350,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901046,
+      "profile_id": 1046,
+      "family_id": 7,
+      "subcategory": "giant_50",
+      "name": "Giant spider (OSRS giant 50)",
+      "source": "Giant_spider",
+      "source_npc_ids": "2477",
+      "combat_level": 50,
+      "stats": [
+        41,
+        51,
+        31,
+        1,
+        1,
+        50
+      ],
+      "attack_bonus": 10,
+      "strength_bonus": 10,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 10
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 50,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 955,
+      "scale": 1.7,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901360,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2"
+    },
+    {
+      "entry": 901047,
+      "profile_id": 1047,
+      "family_id": 8,
+      "subcategory": "sailing_1",
+      "name": "Scorpion (OSRS sailing 1)",
+      "source": "Scorpion",
+      "source_npc_ids": "14940",
+      "combat_level": 1,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "attack_bonus": -35,
+      "strength_bonus": -58,
+      "defence_bonus": -53,
+      "defence_bonuses": {
+        "stab": -53,
+        "slash": -53,
+        "crush": -53
+      },
+      "source_max_hit": 0,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 2,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 2485,
+      "scale": 0.3,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901370,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Scorpion\\Scorpion.m2"
+    },
+    {
+      "entry": 901048,
+      "profile_id": 1048,
+      "family_id": 8,
+      "subcategory": "regular_14",
+      "name": "Scorpion (OSRS regular 14)",
+      "source": "Scorpion",
+      "source_npc_ids": "3024,13001",
+      "combat_level": 14,
+      "stats": [
+        11,
+        12,
+        11,
+        1,
+        1,
+        17
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 15,
+        "crush": 15
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 17,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 2485,
+      "scale": 0.8,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901380,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Scorpion\\Scorpion.m2"
+    },
+    {
+      "entry": 901049,
+      "profile_id": 1049,
+      "family_id": 8,
+      "subcategory": "stronghold_37",
+      "name": "Scorpion (OSRS stronghold 37)",
+      "source": "Scorpion",
+      "source_npc_ids": "2480",
+      "combat_level": 37,
+      "stats": [
+        31,
+        32,
+        31,
+        1,
+        1,
+        37
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 35,
+      "defence_bonuses": {
+        "stab": 35,
+        "slash": 15,
+        "crush": 15
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 37,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 2485,
+      "scale": 1.1,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901390,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Scorpion\\Scorpion.m2"
+    },
+    {
+      "entry": 901050,
+      "profile_id": 1050,
+      "family_id": 8,
+      "subcategory": "stronghold_59",
+      "name": "Scorpion (OSRS stronghold 59)",
+      "source": "Scorpion",
+      "source_npc_ids": "2479",
+      "combat_level": 59,
+      "stats": [
+        50,
+        52,
+        50,
+        1,
+        1,
+        55
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 15,
+        "crush": 15
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 55,
+      "respawn_ticks": 22,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 2485,
+      "scale": 1.5,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901400,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "model_path": "Creature\\Scorpion\\Scorpion.m2"
+    }
+  ]
+}

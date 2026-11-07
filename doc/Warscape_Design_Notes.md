@@ -733,3 +733,16 @@ three Giant Rat tiers, plus shared family metadata and `.rs enemy` diagnostics.
 See `WarscapeEnemyFamilies.md` for sources, contributor workflow, validation and
 known limitations, including the stock Bess model's missing attack animation.
 Slayer task assignment/rewards and global world spawning remain future work.
+
+## Larger enemy batches - user direction, 7 November 2026
+
+The user confirmed the Cow/Rat batch working with correct drops and authorized
+larger implementation batches chosen independently from Kieran's list. The next
+implemented batch contains 21 variants across Bats, Bears, Wolves, Spiders and
+non-poisonous Scorpions. It adds opt-in published maximum-hit caps and per-style
+melee defences for these new variants, retaining the seven accepted entries'
+prior combat policy. Wolves use members-world Wolf bones for all Warscape players;
+there is no membership gate. Conditional/tertiary loot and the poisonous Scorpion
+remain separate work. See `WarscapeWildlifeBatch.md` for source snapshots,
+validation, deployment and manual test steps. Source-backed model directions remain
+a roadmap for unimplemented families, not a claim of complete bestiary support.

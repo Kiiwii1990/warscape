@@ -358,6 +358,9 @@ public:
             handler->PSendSysMessage("Source melee style: %s; interval: %u ticks; source respawn: %u ticks",
                 variant->AttackStyle, sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry()), variant->RespawnTicks);
             handler->PSendSysMessage("Slayer XP reference: %u (Slayer tasks/rewards are not enabled)", variant->SlayerXP);
+            if (variant->SourceCombat)
+                handler->PSendSysMessage("Source max hit: %u; melee defence Stab %d / Slash %d / Crush %d",
+                    variant->MaximumHit, variant->DefenceStab, variant->DefenceSlash, variant->DefenceCrush);
             if (!variant->NativeAttackAnimation)
                 handler->SendSysMessage("This stock model has no attack animation; combat damage is server-controlled.");
             return true;

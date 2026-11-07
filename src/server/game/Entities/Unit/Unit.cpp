@@ -1269,7 +1269,9 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
         {
             auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
             auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
-            warscapeOSRSDamage = urand(0, Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
+            uint32 const maximumHit = Warscape::EnemyMaximumHit(GetEntry(),
+                Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
+            warscapeOSRSDamage = urand(0, maximumHit);
         }
 
         warscapeDamage = Warscape::ScaleHealthOrDamage(warscapeOSRSDamage);
@@ -2285,7 +2287,9 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
         // WoW hit rating, item level and attributes are not Warscape bonuses.
         uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style, attacker->GetWarscapeMeleeAttackBonus(attType));
-        uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, profile.DefenceBonus);
+        int32 const defenceBonus = Warscape::EnemyMeleeDefence(victim->GetEntry(),
+            static_cast<uint8>(attacker->GetWarscapeMeleeDamageType(attType)), profile.DefenceBonus);
+        uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, defenceBonus);
         if (Warscape::IsTrainingDummyEntry(victim->GetEntry()))
         {
             uint32 const defence = victim->GetAI() ? victim->GetAI()->GetData(Warscape::TrainingDummyDefenceData) : 1;
@@ -2301,7 +2305,19 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         auto const stats = sObjectMgr->GetWarscapeMonsterStats(GetEntry());
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
         uint64 const attackRoll = Warscape::CombatRoll(stats[Warscape::Attack] + 8, profile.AttackBonus);
-        uint64 const defenceRoll = Warscape::CombatRoll(defender->GetRSSkillLevel(Player::RS_Skill::Defence) + 8, 0);
+        int32 defenceBonus = 0;
+        if (auto const* variant = Warscape::FindEnemyVariant(GetEntry()); variant && variant->SourceCombat)
+        {
+            auto const equipment = defender->GetWarscapeEquipmentBonuses();
+            switch (variant->MeleeLane)
+            {
+                case 0: defenceBonus = equipment.DefenceStab; break;
+                case 1: defenceBonus = equipment.DefenceSlash; break;
+                case 2: defenceBonus = equipment.DefenceCrush; break;
+                default: break;
+            }
+        }
+        uint64 const defenceRoll = Warscape::CombatRoll(defender->GetRSSkillLevel(Player::RS_Skill::Defence) + 8, defenceBonus);
         double const hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
     }

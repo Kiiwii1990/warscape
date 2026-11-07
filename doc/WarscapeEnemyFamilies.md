@@ -1,5 +1,9 @@
 # Enemy families: Cows and Rats release
 
+Current expansion: [21-variant wildlife batch](WarscapeWildlifeBatch.md). The user
+confirmed the Cow/Rat release working with correct drops. The stock Cow attack-clip
+gap remains documented; no custom animation was added.
+
 ## Confirmed design
 
 Kieran's notes supplied by the user on 7 November 2026 establish shared enemy
@@ -170,7 +174,8 @@ Startup reached ready state for authserver and worldserver, with no new enemy,
 loot or item-record errors; the prior Mining/item-900500 warnings remain.
 Client/server item records matched SQL displays. Every prior client/server DBC
 row/string and unrelated MPQ payload was preserved and compared after installation.
-New-family manual gameplay, visuals and sounds remain unverified.
+At that deployment, new-family manual acceptance was pending. The user later
+confirmed the release working with correct drops, as recorded above.
 
 Verified world backup:
 `C:\WarscapeBackups\world_20261107T071947_916937Z_9fb950ae.sql`.

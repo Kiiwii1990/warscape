@@ -119,15 +119,32 @@ def legacy_release_artifacts():
 
 
 def main():
-    from family_catalogue import DATA as FAMILY_DATA, release_artifacts, runtime_header
+    from family_catalogue import release_artifacts, runtime_header
+    from expansion_release import artifacts as expansion_artifacts
+    import copy
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--write', action='store_true', help='Create new release artifacts and update generated runtime header')
     args = parser.parse_args()
     old = json.loads(DATA.read_text(encoding='utf-8'))
-    pack = json.loads(FAMILY_DATA.read_text(encoding='utf-8'))
     artifacts = legacy_release_artifacts()
-    artifacts.update(release_artifacts(pack, old))
+    prior = copy.deepcopy(old)
+    prior['families'] = []
+    combined = {'sources': {}, 'families': [], 'enemies': []}
+    releases = json.loads(Path(__file__).with_name('releases.json').read_text())
+    for release in releases:
+        path = Path(__file__).with_name(release['data'])
+        pack = json.loads(path.read_text(encoding='utf-8'))
+        if release.get('creates_family_schema', False):
+            artifacts.update(release_artifacts(pack, old))
+        else:
+            artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False)))
+        for key in ('families', 'enemies'):
+            combined[key].extend(pack[key])
+        combined['sources'].update(pack['sources'])
+        prior['families'].extend(pack['families'])
+        prior['enemies'].extend(pack['enemies'])
+        prior['items'].extend(pack['items'])
     for path, text in artifacts.items():
         if path.exists():
             if path.read_text(encoding='utf-8') != text:
@@ -136,7 +153,7 @@ def main():
             path.write_text(text, encoding='utf-8')
         else:
             raise ValueError(f'Missing release artifact: {path}')
-    header = runtime_header(pack, old)
+    header = runtime_header(combined, old)
     if args.write:
         HEADER.write_text(header, encoding='utf-8')
     elif HEADER.read_text(encoding='utf-8') != header:

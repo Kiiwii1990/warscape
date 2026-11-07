@@ -51,4 +51,44 @@ class FamilyCatalogueTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'count'):
             self.module.validate(self.pack,self.old)
 
+class WildlifeTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module = family_catalogue
+        self.pack = json.loads(Path(__file__).with_name('wildlife.json').read_text(encoding='utf-8'))
+        self.prior = json.loads(Path(__file__).with_name('goblins.json').read_text())
+        previous = json.loads(Path(__file__).with_name('farm_animals_rats.json').read_text())
+        self.prior['items'].extend(previous['items'])
+        self.prior['enemies'].extend(previous['enemies'])
+    def test_twenty_one_variants_five_families(self):
+        self.module.validate(self.pack, self.prior)
+        self.assertEqual(len(self.pack['enemies']),21)
+        self.assertEqual({e['family_id'] for e in self.pack['enemies']},{4,5,6,7,8})
+    def test_explicit_caps_preserve_published_values(self):
+        values={e['entry']:e['source_max_hit'] for e in self.pack['enemies']}
+        self.assertEqual((values[901033],values[901035],values[901041],values[901042]),(3,5,0,1))
+    def test_directional_scorpion_defence(self):
+        source=next(e for e in self.pack['enemies'] if e['entry']==901049)
+        self.assertEqual(source['defence_bonuses'],{'stab':35,'slash':15,'crush':15})
+    def test_no_saddled_wolf_or_unimplemented_poison(self):
+        for e in self.pack['enemies']:
+            self.assertNotIn('Riding',e['model_path'])
+            self.assertTrue(e['native_attack_animation'])
+        self.assertNotIn(5242,[int(i) for e in self.pack['enemies'] for i in e['source_npc_ids'].split(',')])
+    def test_members_style_wolf_bones_are_explicit(self):
+        wolves=[e for e in self.pack['enemies'] if e['family_id']==6]
+        self.assertEqual(len(wolves),5)
+        self.assertTrue(all(e['guaranteed']==[{'item':'Wolf bones','quantity':1}] for e in wolves))
+        self.assertIn('members-world',self.pack['loot_policy'])
+    def test_spider_scorpion_have_no_unconditional_loot(self):
+        self.assertTrue(all(not e['guaranteed'] for e in self.pack['enemies'] if e['family_id'] in (7,8)))
+    def test_missing_defence_lane_refused(self):
+        del self.pack['enemies'][0]['defence_bonuses']['slash']
+        with self.assertRaisesRegex(ValueError,'directional defence'):
+            self.module.validate(self.pack,self.prior)
+    def test_oversized_cap_refused(self):
+        self.pack['enemies'][0]['source_max_hit']=1000001
+        with self.assertRaisesRegex(ValueError,'maximum hit'):
+            self.module.validate(self.pack,self.prior)
+
 if __name__=='__main__':unittest.main()
