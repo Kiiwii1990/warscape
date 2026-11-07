@@ -235,7 +235,7 @@ void Loot::AddItem(LootStoreItem const& item, uint32 exactCount)
 }
 
 // Calls processor of corresponding LootTemplate (which handles everything including references)
-bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/, uint32 extraItem /*= 0*/, uint32 extraCount /*= 0*/)
+bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/, uint32 extraItem /*= 0*/, uint32 extraCount /*= 0*/, std::vector<std::pair<uint32, uint32>> const& bonusLoot /*= {}*/)
 {
     // Must be provided
     if (!lootOwner)
@@ -245,7 +245,8 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
 
     LootTemplate const* tab = store.GetLootFor(lootId);
 
-    if (!tab)
+    bool const hasCreatureExtras = &store == &LootTemplates_Creature && ((extraItem && extraCount) || !bonusLoot.empty());
+    if (!tab && !hasCreatureExtras)
     {
         if (!noEmptyError)
             TC_LOG_ERROR("sql.sql", "Table '{}' loot id #{} used but it doesn't have records.", store.GetName(), lootId);
@@ -256,9 +257,12 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
     quest_items.reserve(MAX_NR_QUEST_ITEMS);
 
     mergeWarscapeCoins = &store == &LootTemplates_Creature;
-    tab->Process(*this, store.IsRatesAllowed(), lootMode);
+    if (tab) tab->Process(*this, store.IsRatesAllowed(), lootMode);
     if (mergeWarscapeCoins && extraItem && extraCount)
         AddItem(LootStoreItem(extraItem, 0, 100.f, false, lootMode, 0, 1, 1), extraCount);
+    if (mergeWarscapeCoins)
+        for (auto const& [item, count] : bonusLoot)
+            if (item && count) AddItem(LootStoreItem(item, 0, 100.f, false, lootMode, 0, 1, 1), count);
     mergeWarscapeCoins = false;
 
                                                                     // Setting access rights for group loot case

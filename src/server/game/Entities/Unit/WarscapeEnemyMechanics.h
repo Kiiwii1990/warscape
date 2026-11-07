@@ -57,5 +57,27 @@ struct DrakeBreathSequence
     }
 };
 
+constexpr std::uint32_t Earmuffs = 902428;
+inline std::uint8_t RevenantStyle(std::uint64_t magicDefence, std::uint64_t rangedDefence,
+    std::uint64_t meleeDefence, bool inMelee)
+{
+    // Magic wins equal defensive rolls; melee is never selected outside reach.
+    std::uint8_t style = rangedDefence < magicDefence ? 1 : 0;
+    auto const lowest = std::min(magicDefence, rangedDefence);
+    return inMelee && meleeDefence < lowest ? 2 : style;
+}
+struct RevenantRecovery
+{
+    std::uint32_t Remaining = 0, Cooldown = 0;
+    void Advance(std::uint32_t diff) { Cooldown = diff >= Cooldown ? 0 : Cooldown - diff; }
+    std::uint32_t TryHeal(std::uint32_t current, std::uint32_t maximum)
+    {
+        if (!current || !Remaining || Cooldown || std::uint64_t(current)*2 >= maximum) return 0;
+        --Remaining;
+        Cooldown = 9000;
+        return std::min(200u, maximum-current); // Twenty source HP at the existing tenfold scale.
+    }
+};
+
 }
 #endif

@@ -211,3 +211,10 @@ match Wyvern melee to player Stab defence. Intermediate executable/PDB backups
 are retained in `C:\WarscapeBackups\Draconic-20261107-reviewfix` and
 `C:\WarscapeBackups\Draconic-20261107-release`; the pre-batch full rollback set
 remains in `Draconic-20261107-deploy`.
+
+
+## Lizardman acceptance update, 7 November 2026
+
+The user confirmed Lizardman retaliation works after disabling GM mode. Saved GM
+mode had prevented NPC attacks. This does not establish exhaustive acceptance of
+every other entry, drop or special mechanic in that checkpoint.

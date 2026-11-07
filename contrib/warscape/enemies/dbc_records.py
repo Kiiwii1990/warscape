@@ -19,6 +19,7 @@ def append_spells(data,spells):
         if spell['entry'] in rows:raise ValueError('Spell.dbc ID collision')
         row=rows[spell['source']][:];row[0]=spell['entry']
         row[37]=0;row[38]=1;row[39]=1;row[42]=0;row[43]=0;row[204]=0
+        if 'range_source' in spell:row[46]=rows[spell['range_source']][46]
         if spell.get('ignore_native_hit'):row[7] |= 0x00040000 # SPELL_ATTR3_IGNORE_HIT_RESULT
         if 'keep_effects' in spell:
             if not set(spell['keep_effects']).issubset({0,1,2}):raise ValueError('Invalid spell effect selection')
@@ -28,8 +29,12 @@ def append_spells(data,spells):
         if spell.get('pacify_root'):
             # Second effect: pacify with the root's same target/duration; no periodic damage.
             row[72]=6;row[87]=row[86];row[96]=25
+        if spell.get('pacify_root') or spell.get('unbreakable_root'):
             row[32]=0;row[34]=0;row[35]=0;row[36]=0
             row[208:212]=[0]*4 # No inherited Druid family procs or damage-break behaviour.
+        if spell.get('visual_only'):
+            for start in range(71,131):row[start]=0
+            row[71]=3;row[86]=1 # Dummy, caster target; no native heal/damage/aura.
         for start,text in ((136,spell['name']),(153,''),(170,spell['description']),(187,'')):
             row[start:start+16]=[0]*16
             if text:

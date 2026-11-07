@@ -880,4 +880,139 @@ class DraconicTzHaarTests(unittest.TestCase):
         for r in rows:self.assertEqual(after[r[0]],r)
 
 
+class SpiritEnemyTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('water_banshee_revenants.json').read_text())
+        self.prior=prior_to('water_banshee_revenants.json')
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction as F
+        from family_catalogue import outcome_drops
+        e=self.e(entry)
+        return sum((F(o['weight'],e['denominator']) for o in e['outcomes'] if any(d['item']==name and (quantity is None or d['quantity']==quantity) for d in outcome_drops(e,o))),F())
+    def bonus(self,entry,key):return next(p for p in self.e(entry)['bonus_pools'] if p['key']==key)
+    def test_five_variants_three_families_and_source_stats(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual(len(self.prior['enemies']),296)
+        self.assertEqual([e['entry'] for e in self.pack['enemies']],list(range(901900,901905)))
+        self.assertEqual([e['combat_level'] for e in self.pack['enemies']],[115,23,89,7,126])
+        self.assertEqual([f['id'] for f in self.pack['families']],[64,65,66])
+        self.assertEqual(self.e(901900)['stats'],[0,0,128,105,105,128])
+    def test_source_zero_offensive_stats_require_non_melee_policy(self):
+        import family_catalogue
+        e=self.e(901900);e['non_melee']=False
+        with self.assertRaisesRegex(ValueError,'stats'):family_catalogue.validate(self.pack,self.prior)
+        e['non_melee']=True;e['behaviour'].pop('magic_ranged')
+        with self.assertRaisesRegex(ValueError,'non-melee'):family_catalogue.validate(self.pack,self.prior)
+    def test_waterfiend_guaranteed_rune_ashes_and_unsplit_coin_range(self):
+        from fractions import Fraction as F
+        from family_catalogue import outcome_drops
+        self.assertEqual(self.chance(901900,'Water rune'),1)
+        self.assertEqual(self.chance(901900,'Fiendish ashes'),1)
+        self.assertEqual(self.chance(901900,'Mist battlestaff'),F(1,3000))
+        self.assertEqual(self.chance(901900,'Coins'),F(2999,3000)*F(15,128))
+        for o in self.e(901900)['outcomes']:
+            drops=outcome_drops(self.e(901900),o)
+            self.assertEqual(len({d['item'] for d in drops}),len(drops))
+        water=next(o for o in self.e(901900)['outcomes'] if o['item']=='Water rune')
+        self.assertEqual(water['quantity'],151)
+        coins=next(o for o in self.e(901900)['outcomes'] if o['item']=='Coins')
+        self.assertEqual((coins['quantity'],coins['quantity_max']),(2000,3000))
+    def test_banshee_scream_and_protected_magical_melee(self):
+        for entry,hit,unprotected in ((901901,2,6),(901902,9,7)):
+            e=self.e(entry)
+            self.assertEqual(e['attack_style'],'m_melee')
+            self.assertEqual(e['source_max_hit'],hit)
+            self.assertEqual(e['behaviour']['scream_hit'],unprotected)
+            self.assertEqual(e['behaviour']['hearing_item'],902428)
+            self.assertEqual(self.chance(entry,'Bones'),0)
+    def test_banshee_current_energy_potions_and_preroll(self):
+        from fractions import Fraction as F
+        self.assertEqual(self.chance(901901,'Mystic gloves (dark)'),F(1,512))
+        self.assertEqual(self.chance(901901,'Energy potion(4)'),F(511,512)*F(21,128))
+        self.assertEqual(self.chance(901901,'Energy potion(2)'),F(511,512)*F(10,128))
+        self.assertEqual(self.chance(901901,'Coins',13),0)
+    def test_twisted_missing_slots_and_three_herb_policy(self):
+        from fractions import Fraction as F
+        self.assertEqual(self.chance(901902,'Nothing'),0) # Empty is not an item; inspect main outcomes explicitly.
+        e=self.e(901902)
+        empty=sum(F(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']=='Nothing')
+        self.assertEqual(empty,F(3,128)+F(2,128)*F(63,128))
+        self.assertTrue(all(o['quantity']==3 for o in e['outcomes'] if o['item'].startswith('Grimy ')))
+    def test_revenant_level_dependent_formulas(self):
+        from fractions import Fraction as F
+        for entry,a,b,maximum in ((901903,1100,37,51),(901904,200,187,276)):
+            e=self.e(entry)
+            self.assertEqual((e['loot_formula']['a'],e['loot_formula']['b']),(a,b))
+            self.assertEqual(self.chance(entry,'Coins'),F(a-b,a))
+            self.assertEqual(self.chance(entry,'Ancient emblem'),F(6,40*a))
+            self.assertEqual(self.chance(entry,'Bracelet of ethereum (uncharged)'),F(b-1,a)*F(30,198))
+            coin=next(o for o in e['outcomes'] if o['item']=='Coins')
+            self.assertEqual((coin['quantity'],coin['quantity_max']),(1,maximum))
+    def test_revenant_ether_even_bounds(self):
+        for entry,maximum in ((901903,6),(901904,24)):
+            p=self.bonus(entry,'ether');self.assertEqual(p['denominator'],1)
+            o=p['outcomes'][0]
+            self.assertEqual(o['item'],'Revenant ether')
+            self.assertEqual((o['quantity'],o['quantity_max'],o['quantity_step']),(2,maximum,2))
+    def test_revenant_independent_unique_and_secondary_rates(self):
+        from fractions import Fraction as F
+        for entry,a,level in ((901903,1100,7),(901904,200,126)):
+            p=self.bonus(entry,'unique_unskulled_offtask')
+            chance={o['item']:F(o['weight'],p['denominator']) for o in p['outcomes']}
+            self.assertEqual(chance['Amulet of avarice'],F(1000,26667*a)*F(2,5))
+            self.assertEqual(chance["Craw's bow (u)"],F(1000,26667*a)*F(1,5))
+            secondary=self.bonus(entry,'secondary')
+            probability=sum(F(o['weight'],secondary['denominator']) for o in secondary['outcomes'] if o['item']!='Nothing')
+            self.assertEqual(probability,F(100,250-level))
+            self.assertEqual(len(self.e(entry)['bonus_pools']),3)
+    def test_duplicate_secondary_item_stays_separate_roll(self):
+        e=self.e(901904)
+        main=next(o for o in e['outcomes'] if o['item']=='Blighted manta ray')
+        secondary=next(o for o in self.bonus(901904,'secondary')['outcomes'] if o['item']=='Blighted manta ray')
+        self.assertEqual((main['quantity'],main['quantity_max']),(10,15))
+        self.assertEqual((secondary['quantity'],secondary['quantity_max']),(1,2))
+    def test_runtime_only_loot_has_no_missing_native_reference(self):
+        from family_catalogue import runtime_header
+        combined=dict(self.pack,families=self.prior['families']+self.pack['families'])
+        header=runtime_header(combined,json.loads(Path(__file__).with_name('goblins.json').read_text()))
+        self.assertIn(', 0, 902006, 260, 260}',header)
+        self.assertIn(', 0, 902006, 1, 276}',header)
+
+    def test_invalid_bonus_distribution_step_unknown_item_and_budget_refused(self):
+        import copy,family_catalogue
+        original=copy.deepcopy(self.pack)
+        for edit in ('weight','step','item','budget'):
+            self.pack=copy.deepcopy(original);p=self.bonus(901904,'ether')
+            if edit=='weight':p['outcomes'][0]['weight']+=1
+            if edit=='step':p['outcomes'][0]['quantity_step']=3
+            if edit=='item':p['outcomes'][0]['item']='Not a real item'
+            if edit=='budget':self.e(901904)['bonus_pools']*=2
+            with self.subTest(edit=edit),self.assertRaises(ValueError):family_catalogue.validate(self.pack,self.prior)
+    def test_additive_sql_headgear_and_script_contracts(self):
+        from spirit_release import spirit_artifacts
+        result=spirit_artifacts(self.pack,self.prior)
+        sql=next(v for p,v in result.items() if p.suffix=='.sql');spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        self.assertIn('class=4,subclass=1,InventoryType=1,stackable=1',sql)
+        self.assertIn("(900732,'spell_warscape_enemy_scream')",sql)
+        self.assertNotIn('ALTER TABLE',sql);self.assertNotIn('DELETE ',sql)
+        self.assertIn('base_attack=0 AND growth_attack=0 AND base_strength=0',spec['verify_sql'])
+        self.assertIn('source_slayer_xp_tenths=1680',spec['verify_sql'])
+    def test_freeze_and_recovery_carriers_have_no_native_damage_or_healing(self):
+        from dbc_records import append_spells,dbc
+        import struct
+        sources=sorted({sp['source'] for sp in self.pack['client_spells']});rows=[]
+        for source in sources:
+            r=[0]*234;r[0]=source;r[46]=source;r[71]=6;r[72]=6;r[95]=26;r[96]=3;r[32]=123;r[34]=456;r[208]=7;r[86]=6;rows.append(r)
+        data=struct.pack('<4s4I',b'WDBC',len(rows),234,936,1)+b''.join(struct.pack('<234I',*r) for r in rows)+b'\0'
+        after,strings=dbc(append_spells(data,self.pack['client_spells']),234)
+        self.assertEqual(after[900735][71:74],[6,0,0]);self.assertEqual(after[900735][95:98],[26,0,0])
+        self.assertEqual(after[900735][32],0);self.assertEqual(after[900735][34],0)
+        self.assertEqual(after[900736][71:74],[3,0,0]);self.assertEqual(after[900736][86],1)
+        self.assertEqual(after[900736][95:98],[0,0,0])
+        self.assertEqual(after[900734][46],after[30455][46])
+        for r in rows:self.assertEqual(after[r[0]],r)
+
+
 if __name__=='__main__':unittest.main()

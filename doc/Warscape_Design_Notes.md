@@ -879,3 +879,14 @@ breath prototypes build on the shared catalogue. Other family variants remain
 future work. See [checkpoint](WarscapeDraconicTzHaarBatch.md) for source ambiguities,
 chosen policies, deployment checks and pending user acceptance. Only the user's
 observed earlier drop acceptance is recorded; this batch is not yet accepted.
+
+
+### Enemy catalogue: Waterfiend, Banshee and Revenant (7 November 2026)
+
+The user confirmed Lizardman retaliation with GM mode off, then requested these
+next three families. Five representative entries cover Waterfiend115, Banshee23,
+Twisted Banshee89, Revenant imp7 and knight126. They extend the shared system with
+magical-Ranged defence, equipable ear protection, finite Revenant healing and
+independent stepped loot pools. Source ambiguities, chosen prototype mechanics
+and unimplemented stat drains/charged-bracelet effects are explicit in the
+[checkpoint](WarscapeWaterBansheeRevenants.md). Manual acceptance is pending.

@@ -11215,8 +11215,16 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
                     if (extraItem) extraCount = urand(outcome->ExtraMin, outcome->ExtraMax);
                 }
             }
-            if (lootid)
-                loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, creature->GetLootMode(), extraItem, extraCount);
+            std::vector<std::pair<uint32,uint32>> bonusLoot;
+            for (auto const& pool : Warscape::EnemyBonusPools)
+            {
+                if (pool.Entry!=creature->GetEntry()) continue;
+                uint64 const roll=Warscape::DrawEnemyLootRoll(pool.Total, [] { return rand32(); });
+                if (auto const* outcome=Warscape::SelectEnemyBonus(pool,roll); outcome && outcome->Item)
+                    bonusLoot.emplace_back(outcome->Item,outcome->Min+outcome->Step*urand(0,(outcome->Max-outcome->Min)/outcome->Step));
+            }
+            if (lootid || extraItem || !bonusLoot.empty())
+                loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, creature->GetLootMode(), extraItem, extraCount, bonusLoot);
 
             if (creature->GetLootMode() > 0)
                 loot->generateMoneyLoot(creature->GetCreatureTemplate()->mingold, creature->GetCreatureTemplate()->maxgold);

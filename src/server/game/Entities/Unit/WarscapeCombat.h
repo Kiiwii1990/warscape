@@ -34,7 +34,7 @@ namespace Warscape
 
     constexpr std::uint32_t MinimumMonsterStat(std::size_t stat)
     {
-        return stat == Ranged || stat == Magic ? 0 : 1;
+        return stat == Defence || stat == Hitpoints ? 1 : 0;
     }
 
     struct MonsterProfile

@@ -7,6 +7,49 @@
 #include <map>
 #include <string_view>
 int main() {
+    Warscape::MonsterProfile noMelee;
+    noMelee.Base={0,0,128,105,105,128}; noMelee.Growth.fill(0);
+    assert(noMelee.Scale(1)==noMelee.Base);
+    assert(Warscape::MinimumMonsterStat(Warscape::Defence)==1 && Warscape::MinimumMonsterStat(Warscape::Hitpoints)==1);
+    assert(Warscape::RevenantStyle(100,100,100,true)==0);
+    assert(Warscape::RevenantStyle(100,99,1,false)==1);
+    assert(Warscape::RevenantStyle(100,99,1,true)==2);
+    assert(Warscape::RevenantStyle(1,99,100,true)==0);
+    Warscape::RevenantRecovery healing;
+    healing.Remaining=8;
+    assert(healing.TryHeal(500,1000)==0);
+    assert(healing.TryHeal(0,1000)==0);
+    assert(healing.TryHeal(499,1000)==200);
+    assert(healing.Remaining==7 && healing.TryHeal(1,1000)==0);
+    healing.Advance(8999);assert(healing.TryHeal(1,1000)==0);
+    healing.Advance(1);assert(healing.TryHeal(49,100)==51);
+    for (unsigned i=0;i<6;++i) { healing.Advance(9000);assert(healing.TryHeal(1,1000)==200); }
+    healing.Advance(999999);assert(healing.Remaining==0 && healing.TryHeal(1,1000)==0);
+    healing={};assert(healing.TryHeal(1,1000)==0);
+    for (unsigned entry : {901902u,901904u}) {
+        auto const* pool=Warscape::FindEnemyLootPool(entry);bool found=false;
+        for (unsigned i=pool->First;i<pool->First+pool->Count;++i) {
+            auto const& o=Warscape::EnemyLootOutcomes[i];
+            if (o.ExtraItem==Warscape::CoinsItem) { assert(o.Loot==0);found=true; }
+        }
+        assert(found);
+    }
+    for (auto const& pool:Warscape::EnemyBonusPools) {
+        assert(pool.Entry==901903 || pool.Entry==901904);
+        std::uint64_t cursor=0;
+        for (unsigned i=pool.First;i<pool.First+pool.Count;++i) {
+            auto const& o=Warscape::EnemyBonusDrops[i];
+            assert(Warscape::SelectEnemyBonus(pool,cursor)==&o);
+            assert(Warscape::SelectEnemyBonus(pool,cursor+o.Weight-1)==&o);
+            assert(o.Step && o.Max>=o.Min && (o.Max-o.Min)%o.Step==0);
+            if (o.Item==902463) {
+                for (unsigned count=o.Min;count<=o.Max;count+=o.Step) assert(count%2==0);
+            }
+            cursor+=o.Weight;
+        }
+        assert(cursor==pool.Total && !Warscape::SelectEnemyBonus(pool,cursor));
+    }
+
     assert(Warscape::FindEnemyVariant(901806)->MeleeLane==0); // Wyvern slash accuracy rolls against Stab defence.
     Warscape::DrakeBreathSequence sequence;
     assert(!sequence.Ready());
@@ -121,7 +164,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==296);
+    assert(Warscape::EnemyVariants.size()==301);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);

@@ -38,5 +38,9 @@
   {
     "data": "draconic_tzhaar.json",
     "adds_draconic_encounters": true
+  },
+  {
+    "data": "water_banshee_revenants.json",
+    "adds_spirit_encounters": true
   }
 ]

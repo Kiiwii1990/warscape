@@ -1,0 +1,2919 @@
+{
+  "release": "2026_11_07_13_world",
+  "loot_policy": "Members/no wealth/pre-Legends. Revenants use unskulled/off-task Wiki A/B formulas, independent unique and secondary pools; explicit missing ancient-table slot remains empty.",
+  "sources": {
+    "Waterfiend": {
+      "url": "https://oldschool.runescape.wiki/w/Waterfiend",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "bf6d2282a7c6bed6b81749bf1d1c4bb9de8b9fdea0512f260052ef7ddf366c22"
+    },
+    "Banshee": {
+      "url": "https://oldschool.runescape.wiki/w/Banshee",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "523450b83eedf10605429c362f640402de18f4161c599ff017cafe9be471b279"
+    },
+    "Twisted_Banshee": {
+      "url": "https://oldschool.runescape.wiki/w/Twisted_Banshee",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "043a2e9a094a061c7466221518a18afdf52d9476bb422032443d346afffa6766"
+    },
+    "Revenant_imp": {
+      "url": "https://oldschool.runescape.wiki/w/Revenant_imp",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "edb2085d4ce1f3c83c2f3199e148c4f546966fc8063ff4cb2d93ed4ebdbafde4"
+    },
+    "Revenant_knight": {
+      "url": "https://oldschool.runescape.wiki/w/Revenant_knight",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "4b6039fc8e47bc2538320698870165ddde300b02300d2bd9b182e41bc0aba46a"
+    },
+    "Template:Revenants/Drops": {
+      "url": "https://oldschool.runescape.wiki/w/Template:Revenants/Drops",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "dcfcfcd0374adda0ac1784f2bdc8778e7456e1997f51dd1012029241146a847d"
+    },
+    "Revenants": {
+      "url": "https://oldschool.runescape.wiki/w/Revenants",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "88cd1ee8528422a721ad79aba8500c12f9ad108d387202d842ca38babb783be0"
+    },
+    "Revenants/Strategies": {
+      "url": "https://oldschool.runescape.wiki/w/Revenants/Strategies",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "e5b595f5c67168c1beb17c6840e34519f4b39958ef1c08ec2030a65e4e3b7d93"
+    },
+    "Magical_ranged": {
+      "url": "https://oldschool.runescape.wiki/w/Magical_ranged",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "2c3022b3f29d5b5324d30b730ec4eca5bf6472a1e4b81bc00f131b9f905c1d86"
+    },
+    "Earmuffs": {
+      "url": "https://oldschool.runescape.wiki/w/Earmuffs",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "0d356f4ba2b2c597e423930c6b80f7de9dfa47234c787b57fad3224032330111"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    },
+    "Template:RareSeedDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:RareSeedDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "3fb3e39a60a881cd2258d771552962a114cce33ee23a0bb5e82c65c407c8b503"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    },
+    "Gem_drop_table": {
+      "url": "https://oldschool.runescape.wiki/w/Gem_drop_table",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "d7e54e63a55542bd18f8471f104c9dce2e05fae11b8f09f71417d8eee18a1073"
+    }
+  },
+  "families": [
+    {
+      "id": 64,
+      "key": "waterfiends",
+      "name": "Waterfiends",
+      "model_note": "Northrend Water Revenant27391, native humanoid water spirit."
+    },
+    {
+      "id": 65,
+      "key": "banshees",
+      "name": "Banshees",
+      "model_note": "Classic Wailing Banshee8782 and Banshee8783 at distinct scales."
+    },
+    {
+      "id": 66,
+      "key": "revenants",
+      "name": "Revenants",
+      "model_note": "Imp4449 preserves low-tier silhouette; armoured Ice Revenant26177 for knight. No unsafe ghost phase aura."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Fiendish ashes",
+      "entry": 902327
+    },
+    {
+      "name": "Adamant chainbody",
+      "entry": 902220
+    },
+    {
+      "name": "Adamant warhammer",
+      "entry": 902246
+    },
+    {
+      "name": "Rune med helm",
+      "entry": 902217
+    },
+    {
+      "name": "Water battlestaff",
+      "entry": 902308
+    },
+    {
+      "name": "Rune full helm",
+      "entry": 902226
+    },
+    {
+      "name": "Mithril arrow",
+      "entry": 902103
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106
+    },
+    {
+      "name": "Mud rune",
+      "entry": 902330
+    },
+    {
+      "name": "Mithril ore",
+      "entry": 902181
+    },
+    {
+      "name": "Raw lobster",
+      "entry": 902293
+    },
+    {
+      "name": "Raw shark",
+      "entry": 902400
+    },
+    {
+      "name": "Shark",
+      "entry": 902373
+    },
+    {
+      "name": "Mithril bar",
+      "entry": 902323
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Watermelon seed",
+      "entry": 902132
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Oyster",
+      "entry": 902032
+    },
+    {
+      "name": "Seaweed",
+      "entry": 902026
+    },
+    {
+      "name": "Snape grass",
+      "entry": 902304
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Iron mace",
+      "entry": 902101
+    },
+    {
+      "name": "Iron dagger",
+      "entry": 902082
+    },
+    {
+      "name": "Iron kiteshield",
+      "entry": 902334
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Pure essence",
+      "entry": 902112
+    },
+    {
+      "name": "Energy potion(4)",
+      "entry": 902011
+    },
+    {
+      "name": "Energy potion(2)",
+      "entry": 902364
+    },
+    {
+      "name": "Fishing bait",
+      "entry": 902035
+    },
+    {
+      "name": "Iron ore",
+      "entry": 902029
+    },
+    {
+      "name": "Eye of newt",
+      "entry": 902105
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Battlestaff",
+      "entry": 902418
+    },
+    {
+      "name": "Adamant kiteshield",
+      "entry": 902189
+    },
+    {
+      "name": "Adamant mace",
+      "entry": 902187
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Swordfish",
+      "entry": 902376
+    },
+    {
+      "name": "Dragon med helm",
+      "entry": 902210
+    },
+    {
+      "name": "Rune kiteshield",
+      "entry": 902209
+    },
+    {
+      "name": "Rune warhammer",
+      "entry": 902420
+    },
+    {
+      "name": "Dragon platelegs",
+      "entry": 902416
+    },
+    {
+      "name": "Dragon plateskirt",
+      "entry": 902417
+    },
+    {
+      "name": "Dragon dagger",
+      "entry": 902411
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Coal",
+      "entry": 902030
+    },
+    {
+      "name": "Adamantite bar",
+      "entry": 902236
+    },
+    {
+      "name": "Runite bar",
+      "entry": 902202
+    },
+    {
+      "name": "Yew logs",
+      "entry": 902054
+    },
+    {
+      "name": "Magic logs",
+      "entry": 902423
+    }
+  ],
+  "items": [
+    {
+      "name": "Earmuffs",
+      "entry": 902428,
+      "display_source": 10504,
+      "class": 4,
+      "subclass": 1,
+      "inventory_type": 1
+    },
+    {
+      "name": "Mist battlestaff",
+      "entry": 902429,
+      "display_source": 854
+    },
+    {
+      "name": "Staff of water",
+      "entry": 902430,
+      "display_source": 854
+    },
+    {
+      "name": "Mystic water staff",
+      "entry": 902431,
+      "display_source": 854
+    },
+    {
+      "name": "Blue d'hide vambraces",
+      "entry": 902432,
+      "display_source": 7109
+    },
+    {
+      "name": "Sapphire bolts",
+      "entry": 902433,
+      "display_source": 2512
+    },
+    {
+      "name": "Mist rune",
+      "entry": 902434,
+      "display_source": 6948
+    },
+    {
+      "name": "Steam rune",
+      "entry": 902435,
+      "display_source": 6948
+    },
+    {
+      "name": "Water orb",
+      "entry": 902436,
+      "display_source": 1705
+    },
+    {
+      "name": "Vial of water",
+      "entry": 902437,
+      "display_source": 159
+    },
+    {
+      "name": "Water talisman",
+      "entry": 902438,
+      "display_source": 6948
+    },
+    {
+      "name": "Mystic gloves (dark)",
+      "entry": 902439,
+      "display_source": 7109
+    },
+    {
+      "name": "Air battlestaff",
+      "entry": 902440,
+      "display_source": 854
+    },
+    {
+      "name": "Ancient emblem",
+      "entry": 902441,
+      "display_source": 1714
+    },
+    {
+      "name": "Ancient totem",
+      "entry": 902442,
+      "display_source": 1714
+    },
+    {
+      "name": "Ancient statuette",
+      "entry": 902443,
+      "display_source": 1714
+    },
+    {
+      "name": "Ancient crystal",
+      "entry": 902444,
+      "display_source": 1705
+    },
+    {
+      "name": "Ancient medallion",
+      "entry": 902445,
+      "display_source": 1714
+    },
+    {
+      "name": "Ancient effigy",
+      "entry": 902446,
+      "display_source": 1714
+    },
+    {
+      "name": "Ancient relic",
+      "entry": 902447,
+      "display_source": 1714
+    },
+    {
+      "name": "Yew seed",
+      "entry": 902448,
+      "display_source": 17034
+    },
+    {
+      "name": "Magic seed",
+      "entry": 902449,
+      "display_source": 17034
+    },
+    {
+      "name": "Bracelet of ethereum (uncharged)",
+      "entry": 902450,
+      "display_source": 1714
+    },
+    {
+      "name": "Rune platebody",
+      "entry": 902451,
+      "display_source": 847
+    },
+    {
+      "name": "Rune platelegs",
+      "entry": 902452,
+      "display_source": 847
+    },
+    {
+      "name": "Dragon longsword",
+      "entry": 902453,
+      "display_source": 2131
+    },
+    {
+      "name": "Dragonstone bolt tips",
+      "entry": 902454,
+      "display_source": 2512
+    },
+    {
+      "name": "Onyx bolt tips",
+      "entry": 902455,
+      "display_source": 2512
+    },
+    {
+      "name": "Runite ore",
+      "entry": 902456,
+      "display_source": 2772
+    },
+    {
+      "name": "Black dragonhide",
+      "entry": 902457,
+      "display_source": 2318
+    },
+    {
+      "name": "Mahogany plank",
+      "entry": 902458,
+      "display_source": 4470
+    },
+    {
+      "name": "Blighted manta ray",
+      "entry": 902459,
+      "display_source": 13948
+    },
+    {
+      "name": "Uncut dragonstone",
+      "entry": 902460,
+      "display_source": 818
+    },
+    {
+      "name": "Revenant cave teleport",
+      "entry": 902461,
+      "display_source": 6948
+    },
+    {
+      "name": "Blighted super restore(4)",
+      "entry": 902462,
+      "display_source": 2772
+    },
+    {
+      "name": "Revenant ether",
+      "entry": 902463,
+      "display_source": 1705
+    },
+    {
+      "name": "Amulet of avarice",
+      "entry": 902464,
+      "display_source": 1714
+    },
+    {
+      "name": "Craw's bow (u)",
+      "entry": 902465,
+      "display_source": 2504
+    },
+    {
+      "name": "Thammaron's sceptre (u)",
+      "entry": 902466,
+      "display_source": 854
+    },
+    {
+      "name": "Viggora's chainmace (u)",
+      "entry": 902467,
+      "display_source": 2028
+    },
+    {
+      "name": "Blighted ancient ice sack",
+      "entry": 902468,
+      "display_source": 4632
+    },
+    {
+      "name": "Blighted entangle sack",
+      "entry": 902469,
+      "display_source": 4632
+    },
+    {
+      "name": "Blighted teleport spell sack",
+      "entry": 902470,
+      "display_source": 4632
+    },
+    {
+      "name": "Blighted vengeance sack",
+      "entry": 902471,
+      "display_source": 4632
+    },
+    {
+      "name": "Blighted anglerfish",
+      "entry": 902472,
+      "display_source": 13948
+    },
+    {
+      "name": "Blighted karambwan",
+      "entry": 902473,
+      "display_source": 13948
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901900,
+      "profile_id": 1900,
+      "family_id": 64,
+      "subcategory": "regular_115",
+      "name": "Waterfiend (OSRS regular_115)",
+      "source": "Waterfiend",
+      "source_npc_ids": "2916,2917",
+      "combat_level": 115,
+      "stats": [
+        0,
+        0,
+        128,
+        105,
+        105,
+        128
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 100,
+      "defence_bonuses": {
+        "stab": 100,
+        "slash": 100,
+        "crush": 10
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "ranged",
+      "slayer_xp": 128,
+      "source_slayer_xp_tenths": 1280,
+      "source_slayer_level": 0,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 100,
+      "aggressive": true,
+      "model": 27391,
+      "model_path": "Creature\\RevenantWater\\RevenantWater.m2",
+      "scale": 1,
+      "creature_type": 3,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Fiendish ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1170000,
+      "wide_loot": true,
+      "behaviour": {
+        "magic_max_hit": 11,
+        "ranged_max_hit": 11,
+        "magic_ranged": 1,
+        "attack_spell": 900730,
+        "alternate_spell": 900731,
+        "poison_immune": 1
+      },
+      "outcomes": [
+        {
+          "item": "Mist battlestaff",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 8929280
+        },
+        {
+          "item": "Staff of water",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 1255261440
+        },
+        {
+          "item": "Adamant chainbody",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Adamant warhammer",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Rune med helm",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Water battlestaff",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 836840960
+        },
+        {
+          "item": "Mystic water staff",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Blue d'hide vambraces",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Sapphire bolts",
+          "quantity": 15,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 1046051200
+        },
+        {
+          "item": "Mithril arrow",
+          "quantity": 90,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 2092102400
+        },
+        {
+          "item": "Water rune",
+          "quantity": 151,
+          "weight": 1255261440
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 17,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 627630720
+        },
+        {
+          "item": "Death rune",
+          "quantity": 23,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 1046051200
+        },
+        {
+          "item": "Mist rune",
+          "quantity": 25,
+          "quantity_max": 75,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Mud rune",
+          "quantity": 75,
+          "quantity_max": 100,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Steam rune",
+          "quantity": 40,
+          "quantity_max": 60,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Mithril ore",
+          "quantity": 10,
+          "quantity_max": 20,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 836840960
+        },
+        {
+          "item": "Raw lobster",
+          "quantity": 18,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 627630720
+        },
+        {
+          "item": "Raw shark",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 627630720
+        },
+        {
+          "item": "Shark",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 627630720
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 10,
+          "quantity_max": 15,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 209210240
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 5,
+          "quantity_max": 15,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 627630720
+        },
+        {
+          "item": "Coins",
+          "quantity": 2000,
+          "quantity_max": 3000,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 3138153600
+        },
+        {
+          "item": "Water orb",
+          "quantity": 6,
+          "quantity_max": 10,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 1673681920
+        },
+        {
+          "item": "Vial of water",
+          "quantity": 40,
+          "quantity_max": 50,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 836840960
+        },
+        {
+          "item": "Water talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 836840960
+        },
+        {
+          "item": "Oyster",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Seaweed",
+          "quantity": 20,
+          "quantity_max": 30,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Snape grass",
+          "quantity": 20,
+          "quantity_max": 30,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 418420480
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 470723040
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 353042280
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 264781710
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 205941330
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 161811045
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 117680760
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 88260570
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 73550475
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 58840380
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 44130285
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 44130285
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 165832704
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 113626112
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 109787392
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 79077632
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 77542144
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 73703424
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 53742080
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 52974336
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 35316224
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 24567808
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 17658112
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 15354880
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 10748416
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 6909696
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 308911995
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 156907680
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 78453840
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 39226920
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 19613460
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 9806730
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 4903365
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 4903365
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Water rune",
+              "quantity": 1
+            }
+          ],
+          "weight": 4903365
+        }
+      ],
+      "denominator": 26787840000,
+      "non_melee": true
+    },
+    {
+      "entry": 901901,
+      "profile_id": 1901,
+      "family_id": 65,
+      "subcategory": "regular_23",
+      "name": "Banshee (OSRS regular_23)",
+      "source": "Banshee",
+      "source_npc_ids": "414",
+      "combat_level": 23,
+      "stats": [
+        22,
+        15,
+        22,
+        1,
+        1,
+        22
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 5
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "m_melee",
+      "slayer_xp": 22,
+      "source_slayer_xp_tenths": 220,
+      "source_slayer_level": 15,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 8782,
+      "model_path": "Creature\\Banshee\\Banshee.m2",
+      "scale": 1,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1180000,
+      "wide_loot": true,
+      "behaviour": {
+        "scream_hit": 6,
+        "hearing_item": 902428,
+        "attack_spell": 900732
+      },
+      "outcomes": [
+        {
+          "item": "Mystic gloves (dark)",
+          "quantity": 1,
+          "weight": 16384
+        },
+        {
+          "item": "Iron mace",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Iron kiteshield",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Air rune",
+          "quantity": 3,
+          "weight": 196224
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 196224
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 130816
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 7,
+          "weight": 65408
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 7,
+          "weight": 65408
+        },
+        {
+          "item": "Coins",
+          "quantity": 26,
+          "weight": 523264
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 523264
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 13,
+          "weight": 1373568
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 2,
+          "weight": 1373568
+        },
+        {
+          "item": "Energy potion(2)",
+          "quantity": 1,
+          "weight": 654080
+        },
+        {
+          "item": "Fishing bait",
+          "quantity": 7,
+          "weight": 327040
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 196224
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 539616
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 404712
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 303534
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 236082
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 185493
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 134904
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 101178
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 84315
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 67452
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 50589
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 50589
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 64386
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32704
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16352
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8176
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4088
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2044
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1022
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1022
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1022
+        }
+      ],
+      "denominator": 8388608
+    },
+    {
+      "entry": 901902,
+      "profile_id": 1902,
+      "family_id": 65,
+      "subcategory": "twisted_89",
+      "name": "Twisted Banshee (OSRS twisted_89)",
+      "source": "Twisted_Banshee",
+      "source_npc_ids": "7272",
+      "combat_level": 89,
+      "stats": [
+        75,
+        85,
+        50,
+        1,
+        1,
+        100
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 15,
+      "defence_bonuses": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15
+      },
+      "source_max_hit": 9,
+      "attack_ticks": 4,
+      "attack_style": "m_melee",
+      "slayer_xp": 100,
+      "source_slayer_xp_tenths": 1000,
+      "source_slayer_level": 15,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 8783,
+      "model_path": "Creature\\Banshee\\Banshee.m2",
+      "scale": 1.3,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1190000,
+      "wide_loot": true,
+      "behaviour": {
+        "scream_hit": 7,
+        "hearing_item": 902428,
+        "attack_spell": 900732
+      },
+      "outcomes": [
+        {
+          "item": "Battlestaff",
+          "quantity": 1,
+          "weight": 174400
+        },
+        {
+          "item": "Adamant kiteshield",
+          "quantity": 1,
+          "weight": 34880
+        },
+        {
+          "item": "Air battlestaff",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Adamant mace",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Rune med helm",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 34880
+        },
+        {
+          "item": "Mystic gloves (dark)",
+          "quantity": 1,
+          "weight": 17440
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 20,
+          "weight": 104640
+        },
+        {
+          "item": "Air rune",
+          "quantity": 30,
+          "weight": 87200
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 30,
+          "weight": 69760
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 17,
+          "weight": 34880
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 35,
+          "weight": 34880
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 65,
+          "weight": 732480
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 34880
+        },
+        {
+          "item": "Mithril ore",
+          "quantity": 1,
+          "weight": 34880
+        },
+        {
+          "item": "Coins",
+          "quantity": 130,
+          "weight": 313920
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 244160
+        },
+        {
+          "item": "Coins",
+          "quantity": 260,
+          "weight": 244160
+        },
+        {
+          "item": "Swordfish",
+          "quantity": 1,
+          "weight": 174400
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 296480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 222360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 166770
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 129710
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 101915
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 74120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 55590
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 46325
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 37060
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 27795
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 27795
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 89856
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 61568
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 59488
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 42848
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 42016
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 39936
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 29120
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 28704
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 19136
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 13312
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 9568
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 8320
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 5824
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 3744
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 34335
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 17440
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 8720
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 4360
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 2180
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 1090
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 545
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 545
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 545
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 104640
+        }
+      ],
+      "denominator": 4464640
+    },
+    {
+      "entry": 901903,
+      "profile_id": 1903,
+      "family_id": 66,
+      "subcategory": "unskulled_offtask_7",
+      "name": "Revenant imp (OSRS unskulled_offtask_7)",
+      "source": "Revenant_imp",
+      "source_npc_ids": "7881",
+      "combat_level": 7,
+      "stats": [
+        5,
+        5,
+        4,
+        5,
+        9,
+        10
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "stab",
+      "slayer_xp": 10,
+      "source_slayer_xp_tenths": 100,
+      "source_slayer_level": 0,
+      "respawn_ticks": 33,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 4449,
+      "model_path": "Creature\\Imp\\Imp.m2",
+      "scale": 1,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1200000,
+      "wide_loot": true,
+      "behaviour": {
+        "magic_max_hit": 2,
+        "ranged_max_hit": 2,
+        "tri_style": 1,
+        "attack_spell": 900733,
+        "alternate_spell": 900734,
+        "magic_bonus": 5,
+        "root_spell": 900735,
+        "heal_visual": 900736
+      },
+      "outcomes": [
+        {
+          "item": "Ancient emblem",
+          "quantity": 1,
+          "weight": 66
+        },
+        {
+          "item": "Ancient totem",
+          "quantity": 1,
+          "weight": 44
+        },
+        {
+          "item": "Ancient statuette",
+          "quantity": 1,
+          "weight": 22
+        },
+        {
+          "item": "Ancient crystal",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Ancient medallion",
+          "quantity": 1,
+          "weight": 11
+        },
+        {
+          "item": "Ancient effigy",
+          "quantity": 1,
+          "weight": 11
+        },
+        {
+          "item": "Ancient relic",
+          "quantity": 1,
+          "weight": 11
+        },
+        {
+          "item": "Yew seed",
+          "quantity": 2,
+          "quantity_max": 6,
+          "weight": 44
+        },
+        {
+          "item": "Magic seed",
+          "quantity": 2,
+          "quantity_max": 6,
+          "weight": 44
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 143
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 11
+        },
+        {
+          "item": "Bracelet of ethereum (uncharged)",
+          "quantity": 1,
+          "weight": 2400
+        },
+        {
+          "item": "Battlestaff",
+          "quantity": 4,
+          "weight": 800
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 2,
+          "weight": 320
+        },
+        {
+          "item": "Rune platebody",
+          "quantity": 2,
+          "weight": 320
+        },
+        {
+          "item": "Rune platelegs",
+          "quantity": 2,
+          "weight": 320
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 2,
+          "weight": 320
+        },
+        {
+          "item": "Rune warhammer",
+          "quantity": 2,
+          "weight": 320
+        },
+        {
+          "item": "Dragon platelegs",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 80
+        },
+        {
+          "item": "Dragon plateskirt",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 80
+        },
+        {
+          "item": "Dragon dagger",
+          "quantity": 2,
+          "weight": 160
+        },
+        {
+          "item": "Dragon longsword",
+          "quantity": 2,
+          "weight": 160
+        },
+        {
+          "item": "Dragonstone bolt tips",
+          "quantity": 20,
+          "quantity_max": 40,
+          "weight": 480
+        },
+        {
+          "item": "Onyx bolt tips",
+          "quantity": 3,
+          "quantity_max": 6,
+          "weight": 480
+        },
+        {
+          "item": "Death rune",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 800
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 50,
+          "quantity_max": 100,
+          "weight": 800
+        },
+        {
+          "item": "Law rune",
+          "quantity": 20,
+          "quantity_max": 45,
+          "weight": 800
+        },
+        {
+          "item": "Coal",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 960
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "quantity_max": 6,
+          "weight": 960
+        },
+        {
+          "item": "Runite ore",
+          "quantity": 2,
+          "quantity_max": 4,
+          "weight": 640
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 480
+        },
+        {
+          "item": "Black dragonhide",
+          "quantity": 4,
+          "weight": 640
+        },
+        {
+          "item": "Mahogany plank",
+          "quantity": 8,
+          "quantity_max": 16,
+          "weight": 480
+        },
+        {
+          "item": "Blighted manta ray",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 640
+        },
+        {
+          "item": "Yew logs",
+          "quantity": 20,
+          "quantity_max": 40,
+          "weight": 640
+        },
+        {
+          "item": "Magic logs",
+          "quantity": 8,
+          "quantity_max": 16,
+          "weight": 320
+        },
+        {
+          "item": "Uncut dragonstone",
+          "quantity": 2,
+          "quantity_max": 5,
+          "weight": 160
+        },
+        {
+          "item": "Revenant cave teleport",
+          "quantity": 1,
+          "quantity_max": 5,
+          "weight": 800
+        },
+        {
+          "item": "Blighted super restore(4)",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 480
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "quantity_max": 51,
+          "weight": 467720
+        }
+      ],
+      "denominator": 484000,
+      "bonus_pools": [
+        {
+          "key": "ether",
+          "outcomes": [
+            {
+              "item": "Revenant ether",
+              "quantity": 2,
+              "quantity_max": 6,
+              "quantity_step": 2,
+              "weight": 1
+            }
+          ],
+          "denominator": 1
+        },
+        {
+          "key": "unique_unskulled_offtask",
+          "outcomes": [
+            {
+              "item": "Amulet of avarice",
+              "quantity": 1,
+              "weight": 4
+            },
+            {
+              "item": "Craw's bow (u)",
+              "quantity": 1,
+              "weight": 2
+            },
+            {
+              "item": "Thammaron's sceptre (u)",
+              "quantity": 1,
+              "weight": 2
+            },
+            {
+              "item": "Viggora's chainmace (u)",
+              "quantity": 1,
+              "weight": 2
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 293327
+            }
+          ],
+          "denominator": 293337
+        },
+        {
+          "key": "secondary",
+          "outcomes": [
+            {
+              "item": "Blighted ancient ice sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted entangle sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 20
+            },
+            {
+              "item": "Blighted teleport spell sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted vengeance sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted manta ray",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 15
+            },
+            {
+              "item": "Blighted anglerfish",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 15
+            },
+            {
+              "item": "Blighted karambwan",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 10
+            },
+            {
+              "item": "Blighted super restore(4)",
+              "quantity": 1,
+              "weight": 5
+            },
+            {
+              "item": "Revenant cave teleport",
+              "quantity": 1,
+              "weight": 5
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 143
+            }
+          ],
+          "denominator": 243
+        }
+      ],
+      "loot_formula": {
+        "a": 1100,
+        "b": 37,
+        "combat_sqrt": 2,
+        "unique_denominator_literal": 26667
+      }
+    },
+    {
+      "entry": 901904,
+      "profile_id": 1904,
+      "family_id": 66,
+      "subcategory": "unskulled_offtask_126",
+      "name": "Revenant knight (OSRS unskulled_offtask_126)",
+      "source": "Revenant_knight",
+      "source_npc_ids": "7939",
+      "combat_level": 126,
+      "stats": [
+        100,
+        119,
+        80,
+        146,
+        146,
+        143
+      ],
+      "attack_bonus": 69,
+      "strength_bonus": 71,
+      "defence_bonus": 145,
+      "defence_bonuses": {
+        "stab": 145,
+        "slash": 200,
+        "crush": 180
+      },
+      "source_max_hit": 27,
+      "attack_ticks": 5,
+      "attack_style": "slash",
+      "slayer_xp": 168,
+      "source_slayer_xp_tenths": 1680,
+      "source_slayer_level": 0,
+      "respawn_ticks": 20,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 26177,
+      "model_path": "Creature\\RevenantEarth\\RevenantEarth.m2",
+      "scale": 1,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1210000,
+      "wide_loot": true,
+      "behaviour": {
+        "magic_max_hit": 27,
+        "ranged_max_hit": 27,
+        "tri_style": 1,
+        "attack_spell": 900733,
+        "alternate_spell": 900734,
+        "magic_bonus": 55,
+        "ranged_bonus": 55,
+        "root_spell": 900735,
+        "heal_visual": 900736
+      },
+      "outcomes": [
+        {
+          "item": "Ancient emblem",
+          "quantity": 1,
+          "weight": 198
+        },
+        {
+          "item": "Ancient totem",
+          "quantity": 1,
+          "weight": 132
+        },
+        {
+          "item": "Ancient statuette",
+          "quantity": 1,
+          "weight": 66
+        },
+        {
+          "item": "Ancient crystal",
+          "quantity": 1,
+          "weight": 99
+        },
+        {
+          "item": "Ancient medallion",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Ancient effigy",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Ancient relic",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Yew seed",
+          "quantity": 2,
+          "quantity_max": 6,
+          "weight": 132
+        },
+        {
+          "item": "Magic seed",
+          "quantity": 2,
+          "quantity_max": 6,
+          "weight": 132
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 429
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Bracelet of ethereum (uncharged)",
+          "quantity": 1,
+          "weight": 37200
+        },
+        {
+          "item": "Battlestaff",
+          "quantity": 4,
+          "weight": 12400
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 2,
+          "weight": 4960
+        },
+        {
+          "item": "Rune platebody",
+          "quantity": 2,
+          "weight": 4960
+        },
+        {
+          "item": "Rune platelegs",
+          "quantity": 2,
+          "weight": 4960
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 2,
+          "weight": 4960
+        },
+        {
+          "item": "Rune warhammer",
+          "quantity": 2,
+          "weight": 4960
+        },
+        {
+          "item": "Dragon platelegs",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 1240
+        },
+        {
+          "item": "Dragon plateskirt",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 1240
+        },
+        {
+          "item": "Dragon dagger",
+          "quantity": 2,
+          "weight": 2480
+        },
+        {
+          "item": "Dragon longsword",
+          "quantity": 2,
+          "weight": 2480
+        },
+        {
+          "item": "Dragonstone bolt tips",
+          "quantity": 20,
+          "quantity_max": 40,
+          "weight": 7440
+        },
+        {
+          "item": "Onyx bolt tips",
+          "quantity": 3,
+          "quantity_max": 6,
+          "weight": 7440
+        },
+        {
+          "item": "Death rune",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 12400
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 50,
+          "quantity_max": 100,
+          "weight": 12400
+        },
+        {
+          "item": "Law rune",
+          "quantity": 20,
+          "quantity_max": 45,
+          "weight": 12400
+        },
+        {
+          "item": "Coal",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 14880
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "quantity_max": 6,
+          "weight": 14880
+        },
+        {
+          "item": "Runite ore",
+          "quantity": 2,
+          "quantity_max": 4,
+          "weight": 9920
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 7440
+        },
+        {
+          "item": "Black dragonhide",
+          "quantity": 4,
+          "weight": 9920
+        },
+        {
+          "item": "Mahogany plank",
+          "quantity": 8,
+          "quantity_max": 16,
+          "weight": 7440
+        },
+        {
+          "item": "Blighted manta ray",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 9920
+        },
+        {
+          "item": "Yew logs",
+          "quantity": 20,
+          "quantity_max": 40,
+          "weight": 9920
+        },
+        {
+          "item": "Magic logs",
+          "quantity": 8,
+          "quantity_max": 16,
+          "weight": 4960
+        },
+        {
+          "item": "Uncut dragonstone",
+          "quantity": 2,
+          "quantity_max": 5,
+          "weight": 2480
+        },
+        {
+          "item": "Revenant cave teleport",
+          "quantity": 1,
+          "quantity_max": 5,
+          "weight": 12400
+        },
+        {
+          "item": "Blighted super restore(4)",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 7440
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "quantity_max": 276,
+          "weight": 17160
+        }
+      ],
+      "denominator": 264000,
+      "bonus_pools": [
+        {
+          "key": "ether",
+          "outcomes": [
+            {
+              "item": "Revenant ether",
+              "quantity": 2,
+              "quantity_max": 24,
+              "quantity_step": 2,
+              "weight": 1
+            }
+          ],
+          "denominator": 1
+        },
+        {
+          "key": "unique_unskulled_offtask",
+          "outcomes": [
+            {
+              "item": "Amulet of avarice",
+              "quantity": 1,
+              "weight": 2
+            },
+            {
+              "item": "Craw's bow (u)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Thammaron's sceptre (u)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Viggora's chainmace (u)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 26662
+            }
+          ],
+          "denominator": 26667
+        },
+        {
+          "key": "secondary",
+          "outcomes": [
+            {
+              "item": "Blighted ancient ice sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted entangle sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 20
+            },
+            {
+              "item": "Blighted teleport spell sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted vengeance sack",
+              "quantity": 1,
+              "quantity_max": 10,
+              "weight": 10
+            },
+            {
+              "item": "Blighted manta ray",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 15
+            },
+            {
+              "item": "Blighted anglerfish",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 15
+            },
+            {
+              "item": "Blighted karambwan",
+              "quantity": 1,
+              "quantity_max": 2,
+              "weight": 10
+            },
+            {
+              "item": "Blighted super restore(4)",
+              "quantity": 1,
+              "weight": 5
+            },
+            {
+              "item": "Revenant cave teleport",
+              "quantity": 1,
+              "weight": 5
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 24
+            }
+          ],
+          "denominator": 124
+        }
+      ],
+      "loot_formula": {
+        "a": 200,
+        "b": 187,
+        "combat_sqrt": 11,
+        "unique_denominator_literal": 26667
+      }
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900730,
+      "source": 31707,
+      "name": "Waterfiend water blast",
+      "description": "Waterfiend water blast.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900731,
+      "source": 30455,
+      "name": "Waterfiend ice arrow",
+      "description": "Waterfiend ice arrow.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900732,
+      "source": 686,
+      "name": "Banshee scream",
+      "description": "Banshee scream.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_scream"
+    },
+    {
+      "entry": 900733,
+      "source": 30455,
+      "name": "Revenant magic",
+      "description": "Revenant magic.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900734,
+      "source": 6660,
+      "name": "Revenant ranged attack",
+      "description": "Revenant ranged attack.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid",
+      "range_source": 30455
+    },
+    {
+      "entry": 900735,
+      "source": 339,
+      "name": "Revenant freeze",
+      "description": "Revenant freeze.",
+      "ignore_native_hit": true,
+      "keep_effects": [
+        0
+      ],
+      "unbreakable_root": true
+    },
+    {
+      "entry": 900736,
+      "source": 331,
+      "name": "Revenant recovery",
+      "description": "Revenant recovery.",
+      "ignore_native_hit": true,
+      "visual_only": true
+    }
+  ],
+  "source_assumptions": [
+    "Representative normal/Slayer-area Waterfiend, regular/Twisted Banshee, Revenant imp/knight. Other Revenant variants deferred.",
+    "Waterfiend Magic versus magical-Ranged selection is50%; both use Magic defence, no melee. Attack/Strength0 preserved in native profile. Chaos talisman selected for dual-flag Waterfiend gem template.",
+    "Banshee unprotected scream6/7 replaces ordinary magical melee; Earmuffs restore normal2/9 melee. Temporary RS stat drain, Slayer gear gates and Twisted on-hit regeneration deferred; never edit persistent XP to simulate drains. Twisted herbs follow prose: three of one selected herb.",
+    "Revenants default to Magic, then choose available style with lowest player defensive roll, Magic wins ties. Exact source adaptive probabilities/high-accuracy multiplier not published; ordinary stats-based accuracy retained. Protection prayers not implemented.",
+    "Revenants heal20HP when attacking under50%,9-second cooldown,8-25 heals per reset uniformly. Magic freeze25% after positive damage,3seconds and single target are prototype choices pending exact source odds/duration.",
+    "Revenant unique chance uses literal Wiki26.667, with2/5 avarice and1/5 each weapon. It is independent of main; ancient table39/40 listed slots retain an explicit empty40th slot. Rounded source constants are not claimed exact hidden engine rates.",
+    "Revenant guaranteed ether even2..2*(floor(sqrt(combat))+1), independent secondary100/(250-combat), common/coins/ancient A/B formula. Secondary can duplicate main item; counts roll separately and are retained, not replaced with a uniform combined range.",
+    "No Wilderness PvP/skull/task access, entry fee, Maledictus, charged-bracelet damage reduction, artifact exchange, note conversion, special-weapon or blighted-item functionality. Bracelet(uncharged) remains collectible.",
+    "Models retain stock sounds and appearance: imp is opaque, not a custom translucent asset. Native neutral/hostile policy and player ranged/magic paths retained.",
+    "Twisted Banshee listed main rows total125/128; unlisted3/128 stays Nothing instead of renormalizing known rates."
+  ]
+}

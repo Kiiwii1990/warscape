@@ -37,6 +37,13 @@ bool HasOffhand(Unit* target, uint32 entry)
     Item* item=player ? player->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_OFFHAND) : nullptr;
     return item && item->GetEntry()==entry;
 }
+bool HasHearingProtection(Unit* target, uint32 entry)
+{
+    Player* player=target->ToPlayer();
+    Item* head=player ? player->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_HEAD) : nullptr;
+    return head && head->GetEntry()==entry;
+}
+
 void ApplyEnemyPoison(Unit* source, Unit* target)
 {
     auto const* b=Warscape::FindEnemyBehaviour(source->GetEntry());
@@ -65,11 +72,17 @@ struct npc_warscape_enemy : ScriptedAI
     Warscape::DrakeBreathSequence breath;
     ObjectGuid breathTarget;
     Position breathPosition;
+    Warscape::RevenantRecovery recovery;
+    bool revenantOpened = false;
 
     void Reset() override
     {
         meleeWarningDelay = 0;
         switchedToMelee = false;
+        revenantOpened = false;
+        recovery = {};
+        if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->TriStyle)
+            recovery.Remaining=urand(8,25);
         breath = {};
         breathTarget.Clear();
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->PoisonImmune)
@@ -82,6 +95,7 @@ struct npc_warscape_enemy : ScriptedAI
     }
     void JustDied(Unit*) override
     {
+        recovery = {};
         breath = {};
         breathTarget.Clear();
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->Airborne)
@@ -118,6 +132,7 @@ struct npc_warscape_enemy : ScriptedAI
     void UpdateAI(uint32 diff) override
     {
         meleeWarningDelay=diff>=meleeWarningDelay ? 0 : meleeWarningDelay-diff;
+        recovery.Advance(diff);
         if (!UpdateVictim())
         {
             breath = {};
@@ -140,6 +155,20 @@ struct npc_warscape_enemy : ScriptedAI
         Unit* victim=me->GetVictim();
         if (!victim || !victim->IsAlive()) return; // A breath pulse may have killed/cleared the victim.
         auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
+        if (b && b->ScreamHit && victim->GetTypeId()==TYPEID_PLAYER && !HasHearingProtection(victim,b->HearingItem))
+        {
+            if (me->isAttackReady() && me->IsWithinMeleeRange(victim) && me->IsWithinLOSInMap(victim))
+            {
+                me->CastSpell(victim,b->AttackSpell,TRIGGERED_FULL_MASK);
+                me->resetAttackTimer();
+                if (!meleeWarningDelay)
+                {
+                    ChatHandler(victim->ToPlayer()->GetSession()).SendSysMessage("The Banshee's scream hurts! Wear earmuffs on your head.");
+                    meleeWarningDelay=15000;
+                }
+            }
+            return;
+        }
         if (!b || (!b->MagicMaxHit && !b->RangedMaxHit))
         {
             DoMeleeAttackIfReady();
@@ -148,6 +177,51 @@ struct npc_warscape_enemy : ScriptedAI
         bool const inMelee=me->IsWithinMeleeRange(victim);
         bool const inRange=me->IsWithinDistInMap(victim,30.f);
         bool const lineOfSight=me->IsWithinLOSInMap(victim);
+        if (b && b->TriStyle)
+        {
+            if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
+            {
+                Player* player=victim->ToPlayer();
+                auto const equipment=player->GetWarscapeEquipmentBonuses();
+                uint32 const stance=player->GetWarscapeAttackStyle();
+                uint64 const magicDefence=Warscape::CombatRoll(Warscape::PlayerMagicDefenceLevel(
+                    player->GetRSSkillLevel(Player::RS_Skill::Magic),player->GetRSSkillLevel(Player::RS_Skill::Defence),stance),equipment.DefenceMagic);
+                uint64 const rangedDefence=Warscape::CombatRoll(Warscape::PlayerRangedDefenceLevel(player->GetRSSkillLevel(Player::RS_Skill::Defence),stance),equipment.DefenceRanged);
+                auto const* variant=Warscape::FindEnemyVariant(me->GetEntry());
+                int32 const meleeBonus=variant && variant->MeleeLane==1 ? equipment.DefenceSlash : equipment.DefenceStab;
+                uint64 const meleeDefence=Warscape::CombatRoll(player->GetRSSkillLevel(Player::RS_Skill::Defence)+8,meleeBonus);
+                uint8 const choice=revenantOpened ? Warscape::RevenantStyle(magicDefence,rangedDefence,meleeDefence,inMelee) : 0;
+                if (uint32 const heal=recovery.TryHeal(me->GetHealth(),me->GetMaxHealth()))
+                {
+                    me->ModifyHealth(int32(heal));
+                    me->CastSpell(me,b->HealVisual,TRIGGERED_FULL_MASK);
+                }
+                revenantOpened=true;
+                me->StopMoving();
+                if (choice==2)
+                {
+                    me->Attack(victim,true);
+                    DoMeleeAttackIfReady();
+                }
+                else
+                {
+                    me->Attack(victim,false);
+                    me->CastSpell(victim,choice==1 ? b->AlternateSpell : b->AttackSpell,TRIGGERED_FULL_MASK);
+                    me->resetAttackTimer();
+                }
+            }
+            return;
+        }
+        if (b && b->MagicRanged)
+        {
+            if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
+            {
+                me->StopMoving();
+                me->CastSpell(victim,roll_chance_i(50) ? b->AttackSpell : b->AlternateSpell,TRIGGERED_FULL_MASK);
+                me->resetAttackTimer();
+            }
+            return;
+        }
         if (b && b->RangedMaxHit)
         {
             if (b->RangedToMelee && inMelee && !switchedToMelee && me->isAttackReady())
@@ -255,16 +329,26 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         auto const& profile=sObjectMgr->GetWarscapeMonsterProfile(GetCaster()->GetEntry());
         auto const equipment=target->GetWarscapeEquipmentBonuses();
         uint32 const style=target->GetWarscapeAttackStyle();
-        bool const ranged=b->RangedMaxHit!=0;
-        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,(ranged && b->RangedBonus) ? int32(b->RangedBonus) : profile.AttackBonus);
-        uint32 const level=ranged ? Warscape::PlayerRangedDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Defence),style)
+        bool const ranged=b->RangedMaxHit && (!b->MagicMaxHit || GetSpellInfo()->Id==b->AlternateSpell);
+        bool const magicDefence=!ranged || b->MagicRanged;
+        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,ranged ? (b->RangedBonus ? int32(b->RangedBonus) : profile.AttackBonus) : (b->MagicBonus ? int32(b->MagicBonus) : profile.AttackBonus));
+        uint32 const level=!magicDefence ? Warscape::PlayerRangedDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Defence),style)
             : Warscape::PlayerMagicDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Magic),target->GetRSSkillLevel(Player::RS_Skill::Defence),style);
-        uint64 const defence=Warscape::CombatRoll(level,ranged ? equipment.DefenceRanged : equipment.DefenceMagic);
+        uint64 const defence=Warscape::CombatRoll(level,magicDefence ? equipment.DefenceMagic : equipment.DefenceRanged);
         bool const accurate=double(urand(0,999999))<Warscape::HitChance(attack,defence)*1000000.0;
         bool const ice=GetSpellInfo()->Id==900712;
         uint32 const hit=accurate ? (ice ? 10 : urand(0,ranged ? b->RangedMaxHit : b->MagicMaxHit)) : 0;
         DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,hit);
         if (ranged && hit) ApplyEnemyPoison(GetCaster(),target);
+        if (!ranged && b->TriStyle && b->RootSpell && hit && target->IsAlive() && roll_chance_i(25))
+        {
+            GetCaster()->CastSpell(target,b->RootSpell,TRIGGERED_FULL_MASK);
+            if (Aura* root=target->GetAura(b->RootSpell,GetCaster()->GetGUID()))
+            {
+                root->SetMaxDuration(3000);
+                root->SetDuration(3000);
+            }
+        }
         if (ice && accurate && target->IsAlive())
         {
             GetCaster()->CastSpell(target,900713,TRIGGERED_FULL_MASK);
@@ -276,6 +360,25 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         }
     }
     void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_ranged_hybrid::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
+};
+
+class spell_warscape_enemy_scream : public SpellScript
+{
+    PrepareSpellScript(spell_warscape_enemy_scream);
+    bool Load() override
+    {
+        auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry());
+        return GetCaster()->GetTypeId()==TYPEID_UNIT && b && b->ScreamHit;
+    }
+    void Hit(SpellEffIndex index)
+    {
+        PreventHitDefaultEffect(index);
+        Player* target=GetHitPlayer();
+        auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry());
+        if (!target || !b || HasHearingProtection(target,b->HearingItem) || !GetCaster()->IsWithinMeleeRange(target)) return;
+        DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,b->ScreamHit);
+    }
+    void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_scream::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
 };
 
 class spell_warscape_enemy_breath : public SpellScript
@@ -382,5 +485,6 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_ranged_hybrid);
     RegisterSpellScript(spell_warscape_enemy_poison);
     RegisterSpellScript(spell_warscape_enemy_breath);
+    RegisterSpellScript(spell_warscape_enemy_scream);
     new item_warscape_ice_cooler();
 }

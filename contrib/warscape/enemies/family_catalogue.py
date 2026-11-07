@@ -69,12 +69,19 @@ def validate(pack, old):
     for enemy in pack['enemies']:
         require(enemy['family_id'] in family_ids, 'Unknown family')
         behaviour=enemy.get('behaviour',{})
-        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only','mixed_ranged','ranged_to_melee','ranged_bonus','poison_spell','poison_immune','drake_breath','wyvern_breath'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only','mixed_ranged','ranged_to_melee','ranged_bonus','poison_spell','poison_immune','drake_breath','wyvern_breath','magic_ranged','tri_style','magic_bonus','scream_hit','hearing_item','root_spell','heal_visual'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        require(type(enemy.get('non_melee',False)) is bool and (not enemy.get('non_melee') or behaviour.get('magic_ranged')==1), 'Invalid non-melee policy')
         require(type(enemy.get('wide_loot',False)) is bool, 'Invalid wide loot policy')
-        require(all(behaviour.get(k,1)==1 for k in ('airborne','magic_melee_only','mixed_ranged','ranged_to_melee','poison_immune','drake_breath','wyvern_breath')), 'Invalid behaviour flag')
-        require(behaviour.get('ranged_bonus',0)<=1000000, 'Invalid ranged attack bonus')
+        require(all(behaviour.get(k,1)==1 for k in ('airborne','magic_melee_only','mixed_ranged','ranged_to_melee','poison_immune','drake_breath','wyvern_breath','magic_ranged','tri_style')), 'Invalid behaviour flag')
+        require(behaviour.get('ranged_bonus',0)<=1000000 and behaviour.get('magic_bonus',0)<=1000000, 'Invalid ranged attack bonus')
         require(not (behaviour.get('mixed_ranged') and behaviour.get('ranged_to_melee')), 'Conflicting ranged behaviour')
         require(not (behaviour.get('drake_breath') and behaviour.get('wyvern_breath')), 'Conflicting breath behaviour')
+        if behaviour.get('tri_style') or behaviour.get('magic_ranged'):
+            require(all(behaviour.get(k,0)>0 for k in ('magic_max_hit','ranged_max_hit','attack_spell','alternate_spell')), 'Incomplete hybrid behaviour')
+        if behaviour.get('tri_style'):
+            require(behaviour.get('root_spell',0)>0 and behaviour.get('heal_visual',0)>0, 'Incomplete Revenant behaviour')
+        if behaviour.get('scream_hit'):
+            require(behaviour.get('hearing_item') in {i['entry'] for i in items} and behaviour.get('attack_spell',0)>0, 'Incomplete Banshee behaviour')
         if 'finisher_item' in behaviour:
             require(behaviour['finisher_item'] in {i['entry'] for i in items}, 'Unknown finisher item')
         precise=enemy.get('source_slayer_xp_tenths',0)
@@ -83,7 +90,7 @@ def validate(pack, old):
         require(type(enemy.get('source_slayer_level',0)) is int and 0 <= enemy.get('source_slayer_level',0) <= 99, 'Invalid Slayer reference')
         require(enemy['source'] in pack['sources'], 'Missing Wiki source')
         require(pack['sources'][enemy['source']]['url'].startswith('https://oldschool.runescape.wiki/w/'), 'Invalid Wiki provenance')
-        require(len(enemy['stats']) == 6 and all(type(n) is int and (0 if i in (3,4) else 1) <= n <= 1000000 for i,n in enumerate(enemy['stats'])), 'Invalid combat stats')
+        require(len(enemy['stats']) == 6 and all(type(n) is int and (0 if i in (3,4) or (i in (0,1) and enemy.get('non_melee',False)) else 1) <= n <= 1000000 for i,n in enumerate(enemy['stats'])), 'Invalid combat stats')
         require(1 <= enemy['combat_level'] <= 255 and 1 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
         require(enemy['attack_style'] in ('stab', 'slash', 'crush', 'm_melee', 'ranged'), 'Unsupported melee style')
         require(enemy.get('target_defence_style', 'stab') in ('stab','slash','crush'), 'Invalid target defence style')
@@ -98,6 +105,15 @@ def validate(pack, old):
         else:
             require(((enemy['stats'][1] + 8) * (enemy['strength_bonus'] + 64) + 320) // 640 == enemy['source_max_hit'], 'Source maximum hit does not match combat formula')
         require(type(enemy['denominator']) is int and 0 < enemy['denominator'] <= 0xFFFFFFFFFFFFFFFF and sum(o['weight'] for o in enemy['outcomes']) == enemy['denominator'], 'Invalid loot distribution')
+        for pool in enemy.get('bonus_pools',[]):
+            require(type(pool['denominator']) is int and 0 < pool['denominator'] <= 0xFFFFFFFFFFFFFFFF and sum(o['weight'] for o in pool['outcomes'])==pool['denominator'], 'Invalid bonus distribution')
+            for o in pool['outcomes']:
+                require(type(o['weight']) is int and 0<o['weight']<=pool['denominator'], 'Invalid bonus weight')
+                if o['item']=='Nothing': continue
+                minimum=o['quantity'];maximum=o.get('quantity_max',minimum);step=o.get('quantity_step',1)
+                require(o['item'] in names and all(type(n) is int for n in (minimum,maximum,step)) and 1<=minimum<=maximum<=10000 and step>0 and (maximum-minimum)%step==0, 'Invalid bonus item/range')
+            require(not any(o.get('additional') for o in pool['outcomes']), 'Bonus pools allow one item per roll')
+        require(len(enemy.get('bonus_pools',[]))<=3, 'Too many bonus pools')
         for i, outcome in enumerate(enemy['outcomes']):
             require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
             drops = outcome_drops(enemy, outcome)
@@ -105,8 +121,7 @@ def validate(pack, old):
             require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= (10000 if enemy.get('wide_loot',False) else 3600 if d['item'] in references and d['quantity'] == d.get('quantity_max', d['quantity']) else 255) for d in drops), 'Invalid loot item/count')
             if enemy.get('wide_loot',False):
                 require(sum(d.get('quantity_max',d['quantity'])>255 for d in drops)<=1, 'At most one wide drop per outcome')
-                require(not wide_drop(enemy,outcome) or bool(native_outcome_drops(enemy,outcome)), 'Wide drop requires native guaranteed loot')
-                require(sum((d.get('quantity_max',d['quantity'])+(2147483646 if d['item']=='Coins' else 199))//(2147483647 if d['item']=='Coins' else 200) for d in drops)<=18, 'Native loot slot limit')
+                require(sum((d.get('quantity_max',d['quantity'])+(2147483646 if d['item']=='Coins' else 199))//(2147483647 if d['item']=='Coins' else 200) for d in drops)+sum(max((o.get('quantity_max',o.get('quantity',1))+199)//200 if o['item']!='Nothing' else 0 for o in pool['outcomes']) for pool in enemy.get('bonus_pools',[]))<=18, 'Native loot slot limit')
             if refs:
                 require(sum((d.get('quantity_max', d['quantity']) + 199)//200 for d in drops) <= 18, 'Native loot slot limit')
             loot = enemy['loot_base'] + i
@@ -122,7 +137,7 @@ def runtime_header(pack, old):
     for enemy in enemies:
         first = len(outcomes)
         for i, outcome in enumerate(enemy['outcomes']):
-            has_items = bool(outcome_drops(enemy, outcome))
+            has_items = bool(native_outcome_drops(enemy, outcome))
             row = (outcome['weight'], enemy['loot_base'] + i if has_items else 0)
             wide = wide_drop(enemy,outcome)
             if wide: row += (item_ids[wide['item']],wide['quantity'],wide.get('quantity_max',wide['quantity']))
@@ -139,14 +154,35 @@ struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; std::uint32_
 struct EnemyLootPool { std::uint32_t Entry, First, Count; std::uint64_t Total; };
 struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; std::uint8_t RequiredSlayerLevel; std::int32_t FlatArmour; std::uint32_t SourceSlayerXPTenths; };
 '''
-    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only","mixed_ranged","ranged_to_melee","ranged_bonus","poison_spell","poison_immune","drake_breath","wyvern_breath")]) for e in enemies if e.get("behaviour")]
+    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only","mixed_ranged","ranged_to_melee","ranged_bonus","poison_spell","poison_immune","drake_breath","wyvern_breath","magic_ranged","tri_style","magic_bonus","scream_hit","hearing_item","root_spell","heal_visual")]) for e in enemies if e.get("behaviour")]
     def array(kind, name, rows):
         return f'inline constexpr std::array<{kind}, {len(rows)}> {name} = {{{{\n' + ',\n'.join('    {' + ', '.join((str(v)+'ULL' if type(v) is int and v>0x7FFFFFFFFFFFFFFF else json.dumps(v)) for v in row) + '}' for row in rows) + '\n}};\n'
     text += array('EnemyLootOutcome', 'EnemyLootOutcomes', outcomes)
     text += array('EnemyLootPool', 'EnemyLootPools', pools)
     text += array('EnemyVariant', 'EnemyVariants', metadata)
-    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath; };\n'
+    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath, MagicRanged, TriStyle, MagicBonus, ScreamHit, HearingItem, RootSpell, HealVisual; };\n'
     text += array('EnemyBehaviour','EnemyBehaviours',behaviours)
+    bonus_outcomes,bonus_pools=[],[]
+    for enemy in enemies:
+        for pool in enemy.get('bonus_pools',[]):
+            first=len(bonus_outcomes)
+            for o in pool['outcomes']:
+                bonus_outcomes.append((o['weight'],item_ids[o['item']] if o['item']!='Nothing' else 0,o.get('quantity',1),o.get('quantity_max',o.get('quantity',1)),o.get('quantity_step',1)))
+            bonus_pools.append((enemy['entry'],first,len(pool['outcomes']),pool['denominator']))
+    text += 'struct EnemyBonusDrop { std::uint64_t Weight; std::uint32_t Item, Min, Max, Step; };\n'
+    text += array('EnemyBonusDrop','EnemyBonusDrops',bonus_outcomes)
+    text += array('EnemyLootPool','EnemyBonusPools',bonus_pools)
+    text += '''inline EnemyBonusDrop const* SelectEnemyBonus(EnemyLootPool const& pool, std::uint64_t roll) {
+    if (roll>=pool.Total) return nullptr;
+    for (std::uint32_t i=pool.First;i<pool.First+pool.Count;++i) {
+        auto const& outcome=EnemyBonusDrops[i];
+        if (roll<outcome.Weight) return &outcome;
+        roll-=outcome.Weight;
+    }
+    return nullptr;
+}
+'''
+
     text += '''inline EnemyBehaviour const* FindEnemyBehaviour(std::uint32_t entry) {
     for (auto const& b : EnemyBehaviours) if (b.Entry == entry) return &b;
     return nullptr;
