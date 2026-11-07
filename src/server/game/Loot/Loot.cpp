@@ -172,13 +172,13 @@ void Loot::clear()
 }
 
 // Inserts the item into the loot (called by LootTemplate processors)
-void Loot::AddItem(LootStoreItem const& item)
+void Loot::AddItem(LootStoreItem const& item, uint32 exactCount)
 {
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item.itemid);
     if (!proto)
         return;
 
-    uint32 count = urand(item.mincount, item.maxcount);
+    uint32 count = exactCount ? exactCount : urand(item.mincount, item.maxcount);
     // Creature coin piles may exceed the old byte-sized count. Container generation
     // keeps its original bounded path and persistence contract.
     if (mergeWarscapeCoins && item.itemid == Warscape::CoinsItem && !item.needs_quest
@@ -235,7 +235,7 @@ void Loot::AddItem(LootStoreItem const& item)
 }
 
 // Calls processor of corresponding LootTemplate (which handles everything including references)
-bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/)
+bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/, uint32 extraItem /*= 0*/, uint32 extraCount /*= 0*/)
 {
     // Must be provided
     if (!lootOwner)
@@ -257,6 +257,8 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
 
     mergeWarscapeCoins = &store == &LootTemplates_Creature;
     tab->Process(*this, store.IsRatesAllowed(), lootMode);
+    if (mergeWarscapeCoins && extraItem && extraCount)
+        AddItem(LootStoreItem(extraItem, 0, 100.f, false, lootMode, 0, 1, 1), extraCount);
     mergeWarscapeCoins = false;
 
                                                                     // Setting access rights for group loot case

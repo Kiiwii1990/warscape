@@ -250,3 +250,10 @@ before user feedback. Next supplied families should continue the user's list ord
 - [Gem drop table](https://oldschool.runescape.wiki/w/Gem_drop_table)
 - [Bestiary](https://oldschool.runescape.wiki/w/Bestiary)
 - [Wiki NPC combat calculator](https://github.com/weirdgloop/osrs-dps-calc/blob/main/src/lib/NPCVsPlayerCalc.ts)
+
+
+## User acceptance update, 7 November 2026
+
+The user confirmed this batch working with drops before requesting Lizardman,
+TzHaar, Drake, Wyrm and Wyvern. This records only that observed acceptance, not
+exhaustive coverage of all combat, movement, aura or interruption paths.

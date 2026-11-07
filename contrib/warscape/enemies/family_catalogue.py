@@ -31,6 +31,16 @@ def outcome_drops(enemy, outcome):
     return enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome]) + outcome.get('additional', [])
 
 
+def wide_drop(enemy, outcome):
+    if not enemy.get('wide_loot', False): return None
+    return next((d for d in outcome_drops(enemy, outcome) if d.get('quantity_max', d['quantity']) > 255), None)
+
+
+def native_outcome_drops(enemy, outcome):
+    wide = wide_drop(enemy, outcome)
+    return [d for d in outcome_drops(enemy, outcome) if d is not wide]
+
+
 def validate(pack, old):
     def require(condition, message):
         if not condition:
@@ -59,7 +69,12 @@ def validate(pack, old):
     for enemy in pack['enemies']:
         require(enemy['family_id'] in family_ids, 'Unknown family')
         behaviour=enemy.get('behaviour',{})
-        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only','mixed_ranged','ranged_to_melee','ranged_bonus','poison_spell','poison_immune','drake_breath','wyvern_breath'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        require(type(enemy.get('wide_loot',False)) is bool, 'Invalid wide loot policy')
+        require(all(behaviour.get(k,1)==1 for k in ('airborne','magic_melee_only','mixed_ranged','ranged_to_melee','poison_immune','drake_breath','wyvern_breath')), 'Invalid behaviour flag')
+        require(behaviour.get('ranged_bonus',0)<=1000000, 'Invalid ranged attack bonus')
+        require(not (behaviour.get('mixed_ranged') and behaviour.get('ranged_to_melee')), 'Conflicting ranged behaviour')
+        require(not (behaviour.get('drake_breath') and behaviour.get('wyvern_breath')), 'Conflicting breath behaviour')
         if 'finisher_item' in behaviour:
             require(behaviour['finisher_item'] in {i['entry'] for i in items}, 'Unknown finisher item')
         precise=enemy.get('source_slayer_xp_tenths',0)
@@ -71,6 +86,7 @@ def validate(pack, old):
         require(len(enemy['stats']) == 6 and all(type(n) is int and (0 if i in (3,4) else 1) <= n <= 1000000 for i,n in enumerate(enemy['stats'])), 'Invalid combat stats')
         require(1 <= enemy['combat_level'] <= 255 and 1 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
         require(enemy['attack_style'] in ('stab', 'slash', 'crush', 'm_melee', 'ranged'), 'Unsupported melee style')
+        require(enemy.get('target_defence_style', 'stab') in ('stab','slash','crush'), 'Invalid target defence style')
         require(0 < enemy['scale'] <= 10 and type(enemy['aggressive']) is bool, 'Invalid model/aggression')
         require(all(-64 <= enemy[k] <= 1000000 for k in ('attack_bonus', 'strength_bonus', 'defence_bonus')), 'Invalid combat bonus')
         require(len(enemy.get('equipment', [0,0,0])) == 3 and all(type(i) is int and 0 <= i <= 0xFFFFFFFF for i in enemy.get('equipment', [])), 'Invalid equipment display items')
@@ -86,7 +102,11 @@ def validate(pack, old):
             require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
             drops = outcome_drops(enemy, outcome)
             require(len({d['item'] for d in drops}) == len(drops), 'Duplicate item in one outcome')
-            require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= (3600 if d['item'] in references and d['quantity'] == d.get('quantity_max', d['quantity']) else 255) for d in drops), 'Invalid loot item/count')
+            require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= (10000 if enemy.get('wide_loot',False) else 3600 if d['item'] in references and d['quantity'] == d.get('quantity_max', d['quantity']) else 255) for d in drops), 'Invalid loot item/count')
+            if enemy.get('wide_loot',False):
+                require(sum(d.get('quantity_max',d['quantity'])>255 for d in drops)<=1, 'At most one wide drop per outcome')
+                require(not wide_drop(enemy,outcome) or bool(native_outcome_drops(enemy,outcome)), 'Wide drop requires native guaranteed loot')
+                require(sum((d.get('quantity_max',d['quantity'])+(2147483646 if d['item']=='Coins' else 199))//(2147483647 if d['item']=='Coins' else 200) for d in drops)<=18, 'Native loot slot limit')
             if refs:
                 require(sum((d.get('quantity_max', d['quantity']) + 199)//200 for d in drops) <= 18, 'Native loot slot limit')
             loot = enemy['loot_base'] + i
@@ -98,30 +118,34 @@ def runtime_header(pack, old):
     enemies = [normalized_legacy(old)] + pack['enemies']
     families = {f['id']: f['name'] for f in pack['families']}
     pools, outcomes, metadata = [], [], []
+    item_ids = {i['name']:i['entry'] for i in old['items'] + pack.get('shared_items',[]) + pack.get('items',[])}
     for enemy in enemies:
         first = len(outcomes)
         for i, outcome in enumerate(enemy['outcomes']):
             has_items = bool(outcome_drops(enemy, outcome))
-            outcomes.append((outcome['weight'], enemy['loot_base'] + i if has_items else 0))
+            row = (outcome['weight'], enemy['loot_base'] + i if has_items else 0)
+            wide = wide_drop(enemy,outcome)
+            if wide: row += (item_ids[wide['item']],wide['quantity'],wide.get('quantity_max',wide['quantity']))
+            outcomes.append(row)
         pools.append((enemy['entry'], first, len(enemy['outcomes']), enemy['denominator']))
-        metadata.append((enemy['entry'], enemy['family_id'], families[enemy['family_id']], enemy['subcategory'], enemy['attack_style'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['native_attack_animation'], enemy['source_max_hit'], *[enemy.get('defence_bonuses', {}).get(lane, enemy.get('defence_bonus', 0)) for lane in ('stab', 'slash', 'crush')], ('stab','slash','crush','m_melee','ranged').index(enemy['attack_style']), enemy.get('source_combat_overrides', False), enemy.get('source_slayer_level',0), enemy.get('flat_armour',0),enemy.get('source_slayer_xp_tenths',0)))
+        metadata.append((enemy['entry'], enemy['family_id'], families[enemy['family_id']], enemy['subcategory'], enemy['attack_style'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['native_attack_animation'], enemy['source_max_hit'], *[enemy.get('defence_bonuses', {}).get(lane, enemy.get('defence_bonus', 0)) for lane in ('stab', 'slash', 'crush')], ('stab','slash','crush','m_melee','ranged').index(enemy.get('target_defence_style',enemy['attack_style'])), enemy.get('source_combat_overrides', False), enemy.get('source_slayer_level',0), enemy.get('flat_armour',0),enemy.get('source_slayer_xp_tenths',0)))
     text = '''// Generated by contrib/warscape/enemies/compile.py from immutable releases.
 #ifndef WARSCAPE_ENEMY_CATALOGUE_H
 #define WARSCAPE_ENEMY_CATALOGUE_H
 #include <array>
 #include <cstdint>
 namespace Warscape {
-struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; };
+struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; std::uint32_t ExtraItem = 0, ExtraMin = 0, ExtraMax = 0; };
 struct EnemyLootPool { std::uint32_t Entry, First, Count; std::uint64_t Total; };
 struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; std::uint8_t RequiredSlayerLevel; std::int32_t FlatArmour; std::uint32_t SourceSlayerXPTenths; };
 '''
-    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only")]) for e in enemies if e.get("behaviour")]
+    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only","mixed_ranged","ranged_to_melee","ranged_bonus","poison_spell","poison_immune","drake_breath","wyvern_breath")]) for e in enemies if e.get("behaviour")]
     def array(kind, name, rows):
         return f'inline constexpr std::array<{kind}, {len(rows)}> {name} = {{{{\n' + ',\n'.join('    {' + ', '.join((str(v)+'ULL' if type(v) is int and v>0x7FFFFFFFFFFFFFFF else json.dumps(v)) for v in row) + '}' for row in rows) + '\n}};\n'
     text += array('EnemyLootOutcome', 'EnemyLootOutcomes', outcomes)
     text += array('EnemyLootPool', 'EnemyLootPools', pools)
     text += array('EnemyVariant', 'EnemyVariants', metadata)
-    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly; };\n'
+    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath; };\n'
     text += array('EnemyBehaviour','EnemyBehaviours',behaviours)
     text += '''inline EnemyBehaviour const* FindEnemyBehaviour(std::uint32_t entry) {
     for (auto const& b : EnemyBehaviours) if (b.Entry == entry) return &b;
@@ -168,15 +192,19 @@ inline EnemyLootPool const* FindEnemyLootPool(std::uint32_t entry) {
     for (auto const& pool : EnemyLootPools) if (pool.Entry == entry) return &pool;
     return nullptr;
 }
-inline std::uint32_t SelectEnemyLoot(std::uint32_t entry, std::uint64_t roll) {
+inline EnemyLootOutcome const* SelectEnemyLootOutcome(std::uint32_t entry, std::uint64_t roll) {
     auto const* pool = FindEnemyLootPool(entry);
-    if (!pool || roll >= pool->Total) return 0;
+    if (!pool || roll >= pool->Total) return nullptr;
     for (std::uint32_t i = pool->First; i < pool->First + pool->Count; ++i) {
         auto const& outcome = EnemyLootOutcomes[i];
-        if (roll < outcome.Weight) return outcome.Loot;
+        if (roll < outcome.Weight) return &outcome;
         roll -= outcome.Weight;
     }
-    return 0;
+    return nullptr;
+}
+inline std::uint32_t SelectEnemyLoot(std::uint32_t entry, std::uint64_t roll) {
+    auto const* outcome=SelectEnemyLootOutcome(entry,roll);
+    return outcome ? outcome->Loot : 0;
 }
 }
 #endif
@@ -231,7 +259,7 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
 
         for i, outcome in enumerate(enemy['outcomes']):
             loot = enemy['loot_base'] + i
-            drops = outcome_drops(enemy, outcome)
+            drops = native_outcome_drops(enemy, outcome)
             expected_loot.append(loot)
             row_count = sum(1 + int(d['quantity'] % references[d['item']]['count'] > 0) if d['quantity'] > 255 else 1 for d in drops)
             checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={row_count}')

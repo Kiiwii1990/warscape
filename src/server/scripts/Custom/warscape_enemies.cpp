@@ -11,6 +11,7 @@
 #include "Chat.h"
 #include "WorldSession.h"
 #include "ObjectMgr.h"
+#include "ObjectAccessor.h"
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeEnemyMechanics.h"
 #include "WarscapeCombat.h"
@@ -30,15 +31,49 @@ void DealSourceSpellDamage(Unit* caster, Unit* target, uint32 spell, uint32 osrs
     caster->SendSpellNonMeleeDamageLog(&damage);
     caster->DealSpellDamage(&damage,true);
 }
+bool HasOffhand(Unit* target, uint32 entry)
+{
+    Player* player=target->ToPlayer();
+    Item* item=player ? player->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_OFFHAND) : nullptr;
+    return item && item->GetEntry()==entry;
+}
+void ApplyEnemyPoison(Unit* source, Unit* target)
+{
+    auto const* b=Warscape::FindEnemyBehaviour(source->GetEntry());
+    if (!b || !b->PoisonMaxHit || !target->IsAlive() || target->GetTypeId()!=TYPEID_PLAYER || !roll_chance_i(25)) return;
+    uint32 const spell=b->PoisonSpell ? b->PoisonSpell : ScarabPoison;
+    Aura* aura=target->GetAura(spell,source->GetGUID());
+    if (!aura)
+    {
+        source->CastSpell(target,spell,TRIGGERED_FULL_MASK);
+        aura=target->GetAura(spell,source->GetGUID());
+    }
+    if (aura)
+    {
+        aura->SetMaxDuration(Warscape::PoisonDuration(b->PoisonMaxHit));
+        aura->SetDuration(aura->GetMaxDuration());
+    }
+}
+
 }
 
 struct npc_warscape_enemy : ScriptedAI
 {
     explicit npc_warscape_enemy(Creature* creature) : ScriptedAI(creature) { }
     uint32 meleeWarningDelay = 0;
+    bool switchedToMelee = false;
+    Warscape::DrakeBreathSequence breath;
+    ObjectGuid breathTarget;
+    Position breathPosition;
+
     void Reset() override
     {
         meleeWarningDelay = 0;
+        switchedToMelee = false;
+        breath = {};
+        breathTarget.Clear();
+        if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->PoisonImmune)
+            me->ApplySpellImmune(0,IMMUNITY_DISPEL,DISPEL_POISON,true);
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->Airborne)
         {
             me->SetHoverHeight(1.5f);
@@ -47,6 +82,8 @@ struct npc_warscape_enemy : ScriptedAI
     }
     void JustDied(Unit*) override
     {
+        breath = {};
+        breathTarget.Clear();
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->Airborne)
             me->SetHover(false);
     }
@@ -75,29 +112,34 @@ struct npc_warscape_enemy : ScriptedAI
     }
     void DamageDealt(Unit* victim,uint32& damage,DamageEffectType type) override
     {
-        auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
-        if (!b || !b->PoisonMaxHit || type!=DIRECT_DAMAGE || !damage || victim->GetTypeId()!=TYPEID_PLAYER || !roll_chance_i(25))
-            return;
-        Aura* aura=victim->GetAura(ScarabPoison,me->GetGUID());
-        if (!aura)
-        {
-            me->CastSpell(victim,ScarabPoison,TRIGGERED_FULL_MASK);
-            aura=victim->GetAura(ScarabPoison,me->GetGUID());
-        }
-        if (aura)
-        {
-            // Refresh severity/duration without postponing the next 18-second tick.
-            aura->SetMaxDuration(Warscape::PoisonDuration(b->PoisonMaxHit));
-            aura->SetDuration(aura->GetMaxDuration());
-        }
+        if (type==DIRECT_DAMAGE && damage) ApplyEnemyPoison(me,victim);
     }
+
     void UpdateAI(uint32 diff) override
     {
         meleeWarningDelay=diff>=meleeWarningDelay ? 0 : meleeWarningDelay-diff;
-        if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_CASTING))
+        if (!UpdateVictim())
+        {
+            breath = {};
+            breathTarget.Clear();
             return;
-        auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
+        }
+        uint32 const pulses=breath.Advance(diff);
+        if (pulses)
+        {
+            Player* target=ObjectAccessor::GetPlayer(*me,breathTarget);
+            if (target && target->IsAlive() && me->IsValidAttackTarget(target) && target->IsInMap(me)
+                && target->GetExactDist2d(&breathPosition)<=2.5f && std::abs(target->GetPositionZ()-breathPosition.GetPositionZ())<4.f)
+            {
+                bool const protectedByShield=HasOffhand(target,Warscape::AntiDragonShield);
+                for (uint32 i=0;i<pulses && target->IsAlive() && me->IsAlive();++i)
+                    DealSourceSpellDamage(me,target,900725,urand(protectedByShield ? 0 : 6,Warscape::DrakeBreathMaximum(protectedByShield)));
+            }
+        }
+        if (!me->IsAlive() || me->HasUnitState(UNIT_STATE_CASTING)) return;
         Unit* victim=me->GetVictim();
+        if (!victim || !victim->IsAlive()) return; // A breath pulse may have killed/cleared the victim.
+        auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
         if (!b || (!b->MagicMaxHit && !b->RangedMaxHit))
         {
             DoMeleeAttackIfReady();
@@ -108,13 +150,47 @@ struct npc_warscape_enemy : ScriptedAI
         bool const lineOfSight=me->IsWithinLOSInMap(victim);
         if (b && b->RangedMaxHit)
         {
+            if (b->RangedToMelee && inMelee && !switchedToMelee && me->isAttackReady())
+            {
+                switchedToMelee=true;
+                me->GetMotionMaster()->MoveChase(victim);
+                me->resetAttackTimer(); // Source Xil spends a turn changing styles.
+                return;
+            }
+            if (b->RangedToMelee && switchedToMelee)
+            {
+                DoMeleeAttackIfReady();
+                return;
+            }
+            if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight
+                && ((b->DrakeBreath && breath.Ready()) || (b->WyvernBreath && roll_chance_i(33))))
+            {
+                me->StopMoving();
+                if (b->DrakeBreath)
+                {
+                    breathTarget=victim->GetGUID();
+                    breathPosition.Relocate(victim);
+                    breath.Launch();
+                    ChatHandler(victim->ToPlayer()->GetSession()).SendSysMessage("The Drake launches volcanic breath at your position. Move!");
+                    me->CastSpell(breathPosition,900725,TRIGGERED_FULL_MASK);
+                }
+                else me->CastSpell(victim,900727,TRIGGERED_FULL_MASK);
+                me->resetAttackTimer();
+                return;
+            }
+            if (b->MixedRanged && inMelee && roll_chance_i(50))
+            {
+                DoMeleeAttackIfReady();
+                return;
+            }
             if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
             {
                 me->StopMoving();
                 me->CastSpell(victim,b->AttackSpell,CastSpellExtraArgs(TRIGGERED_IGNORE_POWER_AND_REAGENT_COST));
+                if (b->DrakeBreath) ++breath.NormalAttacks;
                 me->resetAttackTimer();
             }
-            return; // Ranged-only enemies never fall back to melee.
+            return;
         }
         if (b && b->MagicMaxHit && victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady()
             && Warscape::MagicRangeAllowed(b->MagicMeleeOnly!=0,inMelee,inRange,lineOfSight)
@@ -180,7 +256,7 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         auto const equipment=target->GetWarscapeEquipmentBonuses();
         uint32 const style=target->GetWarscapeAttackStyle();
         bool const ranged=b->RangedMaxHit!=0;
-        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,profile.AttackBonus);
+        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,(ranged && b->RangedBonus) ? int32(b->RangedBonus) : profile.AttackBonus);
         uint32 const level=ranged ? Warscape::PlayerRangedDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Defence),style)
             : Warscape::PlayerMagicDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Magic),target->GetRSSkillLevel(Player::RS_Skill::Defence),style);
         uint64 const defence=Warscape::CombatRoll(level,ranged ? equipment.DefenceRanged : equipment.DefenceMagic);
@@ -188,6 +264,7 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         bool const ice=GetSpellInfo()->Id==900712;
         uint32 const hit=accurate ? (ice ? 10 : urand(0,ranged ? b->RangedMaxHit : b->MagicMaxHit)) : 0;
         DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,hit);
+        if (ranged && hit) ApplyEnemyPoison(GetCaster(),target);
         if (ice && accurate && target->IsAlive())
         {
             GetCaster()->CastSpell(target,900713,TRIGGERED_FULL_MASK);
@@ -199,6 +276,35 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         }
     }
     void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_ranged_hybrid::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
+};
+
+class spell_warscape_enemy_breath : public SpellScript
+{
+    PrepareSpellScript(spell_warscape_enemy_breath);
+    bool Load() override
+    {
+        auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry());
+        return GetCaster()->GetTypeId()==TYPEID_UNIT && b && (b->DrakeBreath || b->WyvernBreath);
+    }
+    void Hit(SpellEffIndex index)
+    {
+        PreventHitDefaultEffect(index);
+        if (GetSpellInfo()->Id!=900727) return; // Ground effect is visual; AI owns the four Drake pulses.
+        Player* target=GetHitPlayer();
+        if (!target || target->IsImmunedToDamage(GetSpellInfo())) return;
+        bool const protectedByShield=HasOffhand(target,Warscape::ElementalShield);
+        DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,urand(0,Warscape::WyvernBreathMaximum(protectedByShield)));
+        if (target->IsAlive() && Warscape::WyvernFreezes(protectedByShield,urand(0,6)))
+        {
+            GetCaster()->CastSpell(target,900728,TRIGGERED_FULL_MASK);
+            if (Aura* root=target->GetAura(900728,GetCaster()->GetGUID()))
+            {
+                root->SetMaxDuration(6600);
+                root->SetDuration(6600);
+            }
+        }
+    }
+    void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_breath::Hit,EFFECT_ALL,SPELL_EFFECT_SCHOOL_DAMAGE); }
 };
 
 class spell_warscape_enemy_poison : public AuraScript
@@ -225,7 +331,7 @@ class spell_warscape_enemy_poison : public AuraScript
         uint32 const hit=Warscape::PoisonHit(b->PoisonMaxHit,elapsed);
         // The aura's saved duration keeps decay after relog; no raw creature pointer is retained.
         Unit* source=GetCaster() ? GetCaster() : GetUnitOwner();
-        DealSourceSpellDamage(source,GetUnitOwner(),ScarabPoison,hit,true);
+        DealSourceSpellDamage(source,GetUnitOwner(),GetSpellInfo()->Id,hit,true);
     }
     void Register() override
     {
@@ -275,5 +381,6 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_magic);
     RegisterSpellScript(spell_warscape_enemy_ranged_hybrid);
     RegisterSpellScript(spell_warscape_enemy_poison);
+    RegisterSpellScript(spell_warscape_enemy_breath);
     new item_warscape_ice_cooler();
 }

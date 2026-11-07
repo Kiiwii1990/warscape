@@ -25,6 +25,11 @@ def append_spells(data,spells):
             for effect in set(range(3))-set(spell['keep_effects']):
                 for start in range(71,122,3):row[start+effect]=0
                 row[122+3*effect:125+3*effect]=[0]*3
+        if spell.get('pacify_root'):
+            # Second effect: pacify with the root's same target/duration; no periodic damage.
+            row[72]=6;row[87]=row[86];row[96]=25
+            row[32]=0;row[34]=0;row[35]=0;row[36]=0
+            row[208:212]=[0]*4 # No inherited Druid family procs or damage-break behaviour.
         for start,text in ((136,spell['name']),(153,''),(170,spell['description']),(187,'')):
             row[start:start+16]=[0]*16
             if text:

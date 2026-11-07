@@ -867,3 +867,15 @@ existing balances and other items remain intact. Native WoW money stays separate
 Currency conversion, vendor spending and a complete OSRS economy are not implied.
 See [Coin stack implementation and acceptance](WarscapeCoinStacks.md). Manual
 client acceptance remains pending until the user confirms it.
+
+
+### Enemy catalogue: Lizardman, TzHaar, Drake, Wyrm and Wyvern (7 November 2026)
+
+The user confirmed the preceding Elf/Aviansie/Hobgoblin/Suqah batch working with
+drops and requested these next five families in list order. Seven representative
+variants add Lizardman53/62, TzHaar-Ket149/Xil133, Drake192, Wyrm97 and Skeletal
+Wyvern140. Source stats/loot, large-quantity drops, poison, style switching and
+breath prototypes build on the shared catalogue. Other family variants remain
+future work. See [checkpoint](WarscapeDraconicTzHaarBatch.md) for source ambiguities,
+chosen policies, deployment checks and pending user acceptance. Only the user's
+observed earlier drop acceptance is recorded; this batch is not yet accepted.

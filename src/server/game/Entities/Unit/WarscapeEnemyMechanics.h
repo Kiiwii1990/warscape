@@ -30,5 +30,32 @@ inline bool RejectAirborneMelee(bool airborne,bool directAuto,bool meleeSpell) {
 inline bool MagicRangeAllowed(bool meleeOnly,bool inMelee,bool inRange,bool lineOfSight) {
     return inRange && lineOfSight && (!meleeOnly || inMelee);
 }
+constexpr std::uint32_t ElementalShield = 902379;
+constexpr std::uint32_t AntiDragonShield = 902380;
+inline std::uint32_t DrakeBreathMaximum(bool protectedByShield) { return protectedByShield ? 4 : 8; }
+inline std::uint32_t WyvernBreathMaximum(bool protectedByShield) { return protectedByShield ? 10 : 60; }
+inline bool WyvernFreezes(bool protectedByShield, std::uint32_t roll) { return !protectedByShield || roll == 0; }
+
+// One launch after seven normal attacks. Bounded to four pulses even after a lag spike.
+struct DrakeBreathSequence
+{
+    std::uint32_t NormalAttacks = 0, Pulses = 0, Delay = 0;
+    bool Ready() const { return NormalAttacks >= 7 && !Pulses; }
+    void Launch() { NormalAttacks = 0; Pulses = 4; Delay = 1200; }
+    std::uint32_t Advance(std::uint32_t diff)
+    {
+        std::uint32_t due = 0;
+        while (Pulses && diff >= Delay)
+        {
+            diff -= Delay;
+            --Pulses;
+            ++due;
+            Delay = 600;
+        }
+        if (Pulses) Delay -= diff;
+        return due;
+    }
+};
+
 }
 #endif

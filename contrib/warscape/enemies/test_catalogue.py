@@ -754,4 +754,130 @@ class ElfAvianSuqahTests(unittest.TestCase):
         for source,row in zip(sources,rows):self.assertEqual(after[source],row)
         self.assertTrue(after[900710][7]&0x40000)
 
+class DraconicTzHaarTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('draconic_tzhaar.json').read_text())
+        self.prior=prior_to('draconic_tzhaar.json')
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction
+        from family_catalogue import outcome_drops
+        e=self.e(entry)
+        return sum((Fraction(o['weight'],e['denominator']) for o in e['outcomes']
+            if any(d['item']==name and (quantity is None or d['quantity']==quantity) for d in outcome_drops(e,o))),Fraction())
+    def test_seven_variants_five_families_and_prior_preserved(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual(len(self.prior['enemies']),289)
+        self.assertEqual([e['entry'] for e in self.pack['enemies']],list(range(901800,901807)))
+        self.assertEqual([e['combat_level'] for e in self.pack['enemies']],[53,62,149,133,192,97,140])
+        self.assertEqual([f['id'] for f in self.pack['families']],list(range(59,64)))
+    def test_lizardman_independent_talisman_and_main_marginals(self):
+        from fractions import Fraction as F
+        for entry,den,fang in ((901800,87,10),(901801,78,14)):
+            self.assertEqual(self.chance(entry,"Xeric's talisman (inert)"),F(1,250))
+            self.assertEqual(self.chance(entry,'Lizardman fang'),F(fang,den))
+            self.assertEqual(self.chance(entry,'Bones'),1)
+            self.assertEqual(self.e(entry)['behaviour']['poison_max_hit'],3)
+            self.assertTrue(self.e(entry)['behaviour']['poison_immune'])
+    def test_drake_preroll_and_full_coin_ranges(self):
+        from fractions import Fraction as F
+        e=self.e(901804);main=1-2*F(1,2560)-2*F(1,10000)
+        self.assertEqual(self.chance(901804,"Drake's tooth"),F(1,2560))
+        self.assertEqual(self.chance(901804,'Dragon knife'),F(1,10000))
+        self.assertEqual(self.chance(901804,'Coins',5000),main/93)
+        self.assertEqual(self.chance(901804,'Coins',1000),main*4/93)
+        large=next(o for o in e['outcomes'] if o['item']=='Coins' and o['quantity']==5000)
+        self.assertEqual(large['quantity_max'],7000)
+        self.assertEqual(e['source_slayer_xp_tenths'],2306)
+        self.assertEqual(e['flat_armour'],2)
+        self.assertEqual(e['behaviour']['ranged_bonus'],40)
+    def test_wyrm_current_level_armour_and_essence_range(self):
+        e=self.e(901805)
+        self.assertEqual((e['combat_level'],e['flat_armour'],e['source_slayer_level']),(97,1,62))
+        essence=next(o for o in e['outcomes'] if o['item']=='Pure essence')
+        self.assertEqual((essence['quantity'],essence['quantity_max']),(200,300))
+        self.assertEqual(e['behaviour']['magic_max_hit'],13)
+        self.assertEqual(e['source_max_hit'],10)
+    def test_wyvern_independent_visage_and_three_herbs(self):
+        from fractions import Fraction as F
+        self.assertEqual(self.chance(901806,'Draconic visage'),F(1,10000))
+        self.assertEqual(self.chance(901806,'Granite legs'),F(1,512))
+        e=self.e(901806)
+        herbs=[o for o in e['outcomes'] if o['item'].startswith('Grimy ')]
+        self.assertTrue(herbs)
+        self.assertTrue(all(o['quantity']==3 and 'quantity_max' not in o for o in herbs))
+        self.assertEqual(self.chance(901806,'Wyvern bones'),1)
+        self.assertEqual(e['attack_style'],'slash')
+        self.assertEqual(e['target_defence_style'],'stab')
+    def test_tzhaar_empty_outcomes_and_no_invented_bones(self):
+        from fractions import Fraction as F
+        self.assertEqual(self.chance(901802,'Bones'),0)
+        self.assertEqual(self.chance(901803,'Bones'),0)
+        self.assertEqual(self.chance(901803,'Toktz-xil-ak'),F(3,2048))
+        self.assertTrue(self.e(901803)['behaviour']['ranged_to_melee'])
+        from family_catalogue import wide_drop,native_outcome_drops
+        for entry in (901802,901803):
+            empty=next(o for o in self.e(entry)['outcomes'] if o['item']=='Nothing')
+            self.assertIsNone(wide_drop(self.e(entry),empty))
+            self.assertEqual(native_outcome_drops(self.e(entry),empty),[])
+    def test_wide_loot_is_native_bones_plus_exact_runtime_range(self):
+        from family_catalogue import wide_drop,native_outcome_drops,runtime_header
+        e=self.e(901804);o=next(o for o in e['outcomes'] if o['item']=='Coins' and o['quantity']==5000)
+        self.assertEqual(wide_drop(e,o)['quantity_max'],7000)
+        self.assertEqual(native_outcome_drops(e,o),[{'item':'Drake bones','quantity':1}])
+        combined=dict(self.pack,families=self.prior['families']+self.pack['families'])
+        header=runtime_header(combined,json.loads(Path(__file__).with_name('goblins.json').read_text()))
+        self.assertIn('902006, 5000, 7000',header)
+        self.assertIn('ExtraItem = 0, ExtraMin = 0, ExtraMax = 0',header)
+    def test_invalid_multiple_wide_drops_and_oversized_ranges_refused(self):
+        import family_catalogue,copy
+        e=self.e(901804);o=next(o for o in e['outcomes'] if o['item']=='Coins')
+        original=copy.deepcopy(o)
+        o['additional']=[dict(item='Pure essence',quantity=300)]
+        with self.assertRaisesRegex(ValueError,'one wide'):family_catalogue.validate(self.pack,self.prior)
+        o.clear();o.update(original);o['quantity_max']=10001
+        with self.assertRaisesRegex(ValueError,'item/count'):family_catalogue.validate(self.pack,self.prior)
+    def test_additive_migration_native_shields_and_bindings(self):
+        from draconic_release import draconic_artifacts
+        result=draconic_artifacts(self.pack,self.prior)
+        sql=next(v for p,v in result.items() if p.suffix=='.sql')
+        spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        self.assertIn('class=4,subclass=6,InventoryType=14,stackable=1',sql)
+        self.assertIn("(900725,'spell_warscape_enemy_breath')",sql)
+        self.assertIn("(900721,'spell_warscape_enemy_poison')",sql)
+        self.assertNotIn('ALTER TABLE',sql)
+        self.assertNotIn('DELETE ',sql)
+        self.assertNotIn('UPDATE item_template SET stackable=',sql)
+        self.assertIn('source_slayer_xp_tenths=2306',spec['verify_sql'])
+    def test_invalid_runtime_policies_refused(self):
+        import family_catalogue,copy
+        original=copy.deepcopy(self.pack)
+        for edit in ('wide','flag','bonus','conflict'):
+            self.pack=copy.deepcopy(original);e=self.e(901804)
+            if edit=='wide':e['wide_loot']='yes'
+            if edit=='flag':e['behaviour']['drake_breath']=2
+            if edit=='bonus':e['behaviour']['ranged_bonus']=0xffffffff
+            if edit=='conflict':e['behaviour']['wyvern_breath']=1
+            with self.subTest(edit=edit),self.assertRaises(ValueError):family_catalogue.validate(self.pack,self.prior)
+
+    def test_freeze_is_root_and_pacify_without_dot(self):
+        import struct
+        from dbc_records import append_spells,dbc
+        spells=self.pack['client_spells'];sources=sorted({sp['source'] for sp in spells});rows=[]
+        for source in sources:
+            r=[0]*234;r[0]=source;r[71]=6;r[72]=6;r[95]=26;r[96]=3;r[86]=6;r[32]=0xffffffff;r[34]=123;r[208]=7;rows.append(r)
+        data=struct.pack('<4s4I',b'WDBC',len(rows),234,936,1)+b''.join(struct.pack('<234I',*r) for r in rows)+b'\0'
+        after,strings=dbc(append_spells(data,spells),234)
+        self.assertEqual(after[900728][71:74],[6,6,0])
+        self.assertEqual(after[900728][95:98],[26,25,0])
+        self.assertEqual(after[900728][86:89],[6,6,0])
+        self.assertEqual(after[900728][32],0)
+        self.assertEqual(after[900728][34:37],[0,0,0])
+        self.assertEqual(after[900728][208:212],[0,0,0,0])
+        self.assertEqual(after[900725][71:74],[6,0,0])
+        self.assertEqual(after[900721][71:74],[6,0,0])
+        for r in rows:self.assertEqual(after[r[0]],r)
+
+
 if __name__=='__main__':unittest.main()

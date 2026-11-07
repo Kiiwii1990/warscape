@@ -31,7 +31,7 @@ def append(data,items):
     rows,strings=dbc(data,8); extra=b''
     for item in items:
         if item['entry'] in rows: raise ValueError('Item.dbc ID collision')
-        row=rows[item['display_source']][:]; row[0]=item['entry'];row[1]=item.get('class',15);row[2]=0;row[6]=0;row[7]=0
+        row=rows[item['display_source']][:]; row[0]=item['entry'];row[1]=item.get('class',15);row[2]=item.get('subclass',0);row[6]=item.get('inventory_type',0);row[7]=0
         extra+=struct.pack('<8I',*row)
     result=struct.pack('<4s4I',b'WDBC',len(rows)+len(items),8,32,len(strings))+data[20:20+len(rows)*32]+extra+strings
     checked,st=dbc(result,8)
