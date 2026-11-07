@@ -237,3 +237,9 @@ Fresh verified world backup (integrity checked; restore not tested):
 Previous binary/PDB, server DBC and client patch:
 `C:\WarscapeBackups\Dungeon-20261107-deploy`.
 Prepared new assets: `C:\WarscapeBackups\Dungeon-20261107-prepared`.
+
+## User acceptance - next checkpoint
+
+The user confirmed this 39-variant batch working with drops and requested the
+next batch. This records the reported gameplay/drop result without inferring
+rare-drop probability, exhaustive navigation or statistical combat acceptance.

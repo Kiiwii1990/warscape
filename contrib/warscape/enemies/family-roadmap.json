@@ -115,7 +115,7 @@
       "family": "Bandit",
       "model_direction": "Defias human with leather armour and face covering",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Druid",
@@ -139,7 +139,7 @@
       "family": "Knight",
       "model_direction": "Human in full plate, dark armour for Black Knights",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Pirate",
@@ -151,13 +151,13 @@
       "family": "Rogue",
       "model_direction": "Defias cutpurse-style human with daggers",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Warrior",
       "model_direction": "Human infantry with weapons and armour varied by tier",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Aviansie",
@@ -181,7 +181,7 @@
       "family": "Hobgoblin",
       "model_direction": "Scaled-down orc with rough gear, or scaled-up goblin",
       "assessment": "Stand-in",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Lizardman",
@@ -199,7 +199,7 @@
       "family": "Ogre",
       "model_direction": "Classic ogre",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Suqah",
@@ -463,7 +463,7 @@
       "family": "Flesh Crawler",
       "model_direction": "Silithid grub",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Gargoyle",

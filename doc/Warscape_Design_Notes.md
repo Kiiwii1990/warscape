@@ -767,3 +767,14 @@ Native equipment templates supply visible weapons; source stats and exact
 main-table loot use the existing architecture. Source gaps and prototype policies
 are explicit in [dungeon/humanoid batch](WarscapeDungeonHumanoidBatch.md).
 These new entries await user gameplay acceptance.
+
+### Enemy catalogue: martial-family checkpoint (7 November 2026)
+
+Confirmed: the user accepted the dungeon/humanoid batch with drops and asked
+for the next batch. This checkpoint adds 53 melee variants across Warriors,
+Knights, Hobgoblins, Flesh Crawlers, Ogres, Bandits and Rogues. Shared authoring
+now supports the reviewed low-level general seed tier and uncommon seeds, with
+listed probabilities retained and the uncommon table's unlisted two slots
+explicitly modeled empty. See [martial-family batch](WarscapeMartialFamiliesBatch.md)
+for model approximations, source assumptions and acceptance steps. The new
+53 variants await user gameplay acceptance.

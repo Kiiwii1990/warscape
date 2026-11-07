@@ -37,3 +37,27 @@ def compile_weights(rows):
     denominator=lcm(*(chance.denominator for _,chance in rows))
     if denominator>0xFFFFFFFF: raise ValueError("Loot denominator exceeds runtime uint32")
     return [dict(drop,weight=int(chance*denominator)) for drop,chance in rows],denominator
+
+# Reviewed factual weights from Module:GeneralSeedDropLines and Template:UncommonSeedDropLines.
+LOW_LEVEL_SEEDS = (("Potato seed",4,368),("Onion seed",4,276),("Cabbage seed",4,184),
+                   ("Tomato seed",3,92),("Sweetcorn seed",3,46),("Strawberry seed",2,23),
+                   ("Watermelon seed",2,11),("Snape grass seed",2,8))
+UNCOMMON_SEEDS = (("Limpwurt seed",137),("Strawberry seed",131),("Marrentill seed",125),
+ ("Jangerberry seed",92),("Tarromin seed",85),("Wildblood seed",83),("Watermelon seed",63),
+ ("Harralander seed",56),("Snape grass seed",40),("Ranarr seed",39),("Whiteberry seed",34),
+ ("Mushroom spore",29),("Toadflax seed",27),("Belladonna seed",18),("Irit seed",18),
+ ("Poison ivy seed",13),("Avantoe seed",12),("Cactus seed",12),("Kwuarm seed",9),
+ ("Potato cactus seed",8),("Snapdragon seed",5),("Cadantine seed",4),("Lantadyme seed",3),
+ ("Dwarf weed seed",2),("Torstol seed",1))
+
+def general_seed_table(rate, combat_level):
+    """Reviewed first tier only: integer combat levels 1-48 never cross the 485 threshold."""
+    if type(combat_level) is not int or not 1 <= combat_level <= 48:
+        raise ValueError("Higher general-seed tiers need a reviewed extension")
+    return [(dict(item=name,quantity=count),Fraction(rate)*weight/1008)
+            for name,count,weight in LOW_LEVEL_SEEDS]
+
+def uncommon_seed_table(rate):
+    # The Wiki lists 1046/1048; the unlisted two slots are empty, not renormalized.
+    return [(dict(item=name,quantity=1),Fraction(rate)*weight/1048)
+            for name,weight in UNCOMMON_SEEDS] + [(dict(item='Nothing',quantity=1),Fraction(rate)*2/1048)]

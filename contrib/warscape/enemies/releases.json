@@ -12,5 +12,8 @@
   },
   {
     "data": "dungeon_humanoids.json"
+  },
+  {
+    "data": "martial_families.json"
   }
 ]

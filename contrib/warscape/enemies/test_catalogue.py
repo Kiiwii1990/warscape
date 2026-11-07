@@ -251,4 +251,91 @@ class DungeonTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'uint32'):compile_weights([({'item':'Nothing'},Fraction(1,0x100000001)),({'item':'Bones'},Fraction(0x100000000,0x100000001))])
         with self.assertRaises(ValueError):independent_bonus([],{'item':'Bones'},0)
 
+
+class MartialTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module=family_catalogue
+        self.pack=json.loads(Path(__file__).with_name('martial_families.json').read_text())
+        self.prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
+        self.prior['families']=[]
+        for n in ('farm_animals_rats.json','wildlife.json','coastal_wildlife.json','dungeon_humanoids.json'):
+            d=json.loads(Path(__file__).with_name(n).read_text())
+            for k in ('items','enemies','families'):self.prior[k].extend(d[k])
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction
+        e=self.e(entry)
+        return sum(Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']==name and (quantity is None or o['quantity']==quantity))
+    def test_53_variants_seven_families(self):
+        self.module.validate(self.pack,self.prior)
+        self.assertEqual(len(self.pack['enemies']),53)
+        self.assertEqual({e['family_id'] for e in self.pack['enemies']},set(range(24,31)))
+        self.assertEqual(sum(e['family_id']==24 for e in self.pack['enemies']),24)
+        self.assertEqual(len({e['source_npc_ids'] for e in self.pack['enemies']}),53)
+    def test_unsupported_source_roles_excluded(self):
+        ids={int(n) for e in self.pack['enemies'] for n in e['source_npc_ids'].split(',')}
+        self.assertTrue(ids.isdisjoint({3068,6605,6603}))
+        self.assertTrue(all(e['attack_style'] in ('stab','slash','crush') for e in self.pack['enemies']))
+    def test_town_warriors_and_pollnivneach_have_only_combat_bones(self):
+        for entry in (*range(901217,901223),901250,901251):
+            e=self.e(entry)
+            self.assertEqual(e['guaranteed'],[{'item':'Bones','quantity':1}])
+            self.assertEqual(e['denominator'],1)
+            self.assertEqual(e['outcomes'][0]['item'],'Nothing')
+    def test_general_seed_first_tier_exact_and_guarded(self):
+        from fractions import Fraction
+        from loot_tables import general_seed_table,compile_weights
+        rows=general_seed_table(Fraction(1),33)
+        self.assertEqual(sum(r for _,r in rows),1)
+        self.assertEqual(rows[0],({'item':'Potato seed','quantity':4},Fraction(368,1008)))
+        self.assertEqual(rows[-1],({'item':'Snape grass seed','quantity':2},Fraction(8,1008)))
+        for level in (0,49,True):
+            with self.assertRaises(ValueError):general_seed_table(1,level)
+        self.assertEqual(self.chance(901224,'Potato seed'),Fraction(18,128)*Fraction(368,1008))
+    def test_uncommon_seeds_preserve_listed_chances_and_explicit_gap(self):
+        from fractions import Fraction
+        from loot_tables import uncommon_seed_table
+        rows=uncommon_seed_table(1)
+        self.assertEqual(sum(r for _,r in rows),1)
+        self.assertEqual(next(r for d,r in rows if d['item']=='Limpwurt seed'),Fraction(137,1048))
+        self.assertEqual(next(r for d,r in rows if d['item']=='Nothing'),Fraction(2,1048))
+        self.assertEqual(self.chance(901246,'Torstol seed'),Fraction(19,128*1048))
+        self.assertEqual(self.chance(901237,'Torstol seed'),Fraction(12,128*1048))
+    def test_white_knight_members_substitutions_and_ranges(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901228,'Coins',8),Fraction(10,128))
+        self.assertEqual(self.chance(901230,'Coins',10),Fraction(10,128))
+        e=self.e(901234);o=next(o for o in e['outcomes'] if o['item']=='Water rune')
+        self.assertEqual((o['quantity'],o['quantity_max']),(40,47))
+        self.assertEqual(self.chance(901224,'Coins',1),Fraction(14,128))
+    def test_hobgoblin_members_rates_no_location_currency_stacking(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901236,'Coins',28),Fraction(12,128))
+        self.assertEqual(self.chance(901236,'Goblin mail'),Fraction(2,128))
+        self.assertEqual(self.chance(901237,'Coins',5),Fraction(12,128))
+        self.assertEqual(self.chance(901237,'Coins',1),Fraction(4,128))
+        self.assertFalse(any(o['item']=='Trading sticks' for e in self.pack['enemies'] for o in e['outcomes']))
+    def test_flesh_crawler_main_roll_not_guaranteed_ashes(self):
+        from fractions import Fraction
+        for entry in (901243,901244,901245):
+            self.assertFalse(self.e(entry)['guaranteed'])
+            self.assertEqual(self.e(entry)['source_max_hit'],1)
+            self.assertEqual(self.chance(entry,'Ashes'),Fraction(4,100))
+            self.assertEqual(self.chance(entry,'Bottom of sceptre'),Fraction(3,100))
+            self.assertEqual(self.chance(entry,'Grimy guam leaf'),Fraction(35*32,100*128))
+    def test_ogre_big_bones_and_human_shared_table(self):
+        from fractions import Fraction
+        for entry in (901246,901247,901248):self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Big bones','quantity':1}])
+        for entry in (901223,901252):
+            self.assertEqual(self.chance(entry,'Bronze bolts'),Fraction(22,128))
+            self.assertEqual(self.chance(entry,'Grimy guam leaf'),Fraction(23*32,128*128))
+    def test_unique_native_pool_reservations_and_equipment(self):
+        for e in self.pack['enemies']:
+            self.assertLess(len(e['outcomes']),100)
+            self.assertTrue(e['native_attack_animation'])
+        self.assertEqual(self.e(901237)['equipment'],[39202,0,0])
+        self.assertNotIn('equipment',self.e(901236))
+        self.assertEqual(self.e(901252)['equipment'],[2764,2764,0])
+
 if __name__=='__main__':unittest.main()
