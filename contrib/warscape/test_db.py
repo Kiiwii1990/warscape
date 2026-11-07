@@ -184,5 +184,49 @@ class SafetyTests(unittest.TestCase):
             self.assertEqual(str(error.exception), 'Database operation failed: ERROR 1045 (28000)')
 
 
+class VerificationRevisionTests(unittest.TestCase):
+    def test_coin_revision_retains_every_other_goblin_assertion(self):
+        directory = db.ROOT / 'contrib/warscape/verifications'
+        original = json.loads((directory / '2026_11_07_00_world.json').read_text())
+        revision = json.loads((directory / '2026_11_07_11_world.json').read_text())['supersedes'][0]
+        expected = original['verify_sql'].replace(
+            "entry=902006 AND name='Coins' AND class=15 AND stackable=200",
+            "entry=902006 AND name='Coins' AND class=15 AND stackable=2147483647")
+        self.assertNotEqual(expected, original['verify_sql'])
+        self.assertEqual(revision['verify_sql'], expected)
+        self.assertEqual(revision['original_verify_sha256'],
+                         db.hashlib.sha256(original['verify_sql'].encode()).hexdigest())
+
+    def resolve(self, status='applied', mismatch=None):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            directory = root / 'contrib/warscape/verifications'
+            directory.mkdir(parents=True)
+            spec = {'verify_sql': 'SELECT original'}
+            replacement = {'migration': 'old.sql', 'migration_sha1': 'ABC',
+                           'original_verify_sha256': db.hashlib.sha256(spec['verify_sql'].encode()).hexdigest(),
+                           'verify_sql': 'SELECT revised'}
+            candidate = {'sha1': 'DEF', 'supersedes': [replacement]}
+            if mismatch == 'migration': replacement['migration_sha1'] = 'wrong'
+            if mismatch == 'query': replacement['original_verify_sha256'] = 'wrong'
+            if mismatch == 'later': candidate['sha1'] = 'wrong'
+            (directory / 'z-new.json').write_text(json.dumps(candidate))
+            files = {'old.sql': {'hash': 'ABC', 'status': 'applied'},
+                     'z-new.sql': {'hash': 'DEF', 'status': status}}
+            with patch.object(db, 'ROOT', root), contextlib.redirect_stdout(io.StringIO()):
+                return db.current_verification('old.sql', files, spec)
+
+    def test_explicit_applied_revision(self):
+        self.assertEqual(self.resolve(), 'SELECT revised')
+
+    def test_pending_revision_does_not_relax_verification(self):
+        self.assertEqual(self.resolve('pending'), 'SELECT original')
+
+    def test_revision_hash_mismatches_refused(self):
+        for mismatch in ('migration', 'query', 'later'):
+            with self.subTest(mismatch=mismatch), self.assertRaises(db.SafeError):
+                self.resolve(mismatch=mismatch)
+
+
 if __name__ == '__main__':
     unittest.main()

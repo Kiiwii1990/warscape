@@ -2,10 +2,35 @@
 #include "WarscapeCombat.h"
 #include "WarscapeEnemyMechanics.h"
 #include "WarscapeEquipment.h"
+#include "WarscapeCurrency.h"
 #include <cassert>
 #include <map>
 #include <string_view>
 int main() {
+    assert(Warscape::ItemStackLimit(Warscape::CoinsItem, 2147483647) == 2147483647u);
+    assert(Warscape::ItemStackLimit(Warscape::CoinsItem, 200) == 200u);
+    assert(Warscape::ItemStackLimit(1, 2147483647) == 2147483646u);
+    assert(Warscape::ItemStackLimit(1, -1) == 2147483646u);
+    assert(Warscape::ItemStackLimit(1, 200) == 200u);
+    assert(Warscape::MergeCoinCount(200, 7000, Warscape::CoinStackLimit) == 7000u);
+    assert(Warscape::MergeCoinCount(Warscape::CoinStackLimit - 3, 7000, Warscape::CoinStackLimit) == 3u);
+    assert(Warscape::MergeCoinCount(Warscape::CoinStackLimit, 1, Warscape::CoinStackLimit) == 0u);
+    assert(Warscape::MergeCoinCount(0, 0xffffffffu, Warscape::CoinStackLimit) == Warscape::CoinStackLimit);
+    assert(Warscape::LootStackCount(7000, Warscape::CoinStackLimit) == 1u);
+    assert(Warscape::LootStackCount(0xffffffffu, Warscape::CoinStackLimit) == 3u);
+    // Reference-expanded piles conserve every coin and occupy one slot at normal sizes.
+    for (unsigned total : {255u, 256u, 3000u, 7000u}) {
+        unsigned pile = 0, remaining = total;
+        while (remaining) {
+            unsigned amount = std::min(remaining, 200u);
+            unsigned merged = Warscape::MergeCoinCount(pile, amount, Warscape::CoinStackLimit);
+            assert(merged == amount);
+            pile += merged;
+            remaining -= amount;
+        }
+        assert(pile == total);
+    }
+
     std::map<unsigned,unsigned> counts;
     for (unsigned r=0;r<128;++r) { auto id=Warscape::SelectEnemyLoot(901000,r); assert(id>=901000 && id<=901016); ++counts[id]; }
     assert(counts[901005]==28); // 15 coins, Wiki 28/128

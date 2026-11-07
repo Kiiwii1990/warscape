@@ -19,6 +19,7 @@
 #define _ITEMPROTOTYPE_H
 
 #include "Errors.h"
+#include "WarscapeCurrency.h"
 #include "SharedDefines.h"
 #include "WorldPacket.h"
 #include <vector>
@@ -742,7 +743,7 @@ struct TC_GAME_API ItemTemplate
 
     uint32 GetMaxStackSize() const
     {
-        return (Stackable == 2147483647 || Stackable <= 0) ? uint32(0x7FFFFFFF - 1) : uint32(Stackable);
+        return Warscape::ItemStackLimit(ItemId, Stackable);
     }
 
     float GetDPS() const;

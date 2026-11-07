@@ -208,6 +208,29 @@ def backup(db, directory):
     return final
 
 
+def current_verification(name, files, spec):
+    """Resolve explicit later, applied contracts without rewriting historical SQL."""
+    original_hash = hashlib.sha256(spec['verify_sql'].encode()).hexdigest()
+    query = spec['verify_sql']
+    for later, item in sorted(files.items()):
+        if later <= name or item['status'] != 'applied':
+            continue
+        path = ROOT / 'contrib/warscape/verifications' / (Path(later).stem + '.json')
+        if not path.is_file():
+            continue
+        candidate = json.loads(path.read_text(encoding='utf-8'))
+        for replacement in candidate.get('supersedes', []):
+            if replacement['migration'] != name:
+                continue
+            if (candidate['sha1'].upper() != item['hash']
+                or replacement['migration_sha1'].upper() != files[name]['hash']
+                or replacement['original_verify_sha256'] != original_hash):
+                raise SafeError('Superseding verification does not match the reviewed migration contract.')
+            query = replacement['verify_sql']
+            print('Current verification contract supplied by ' + later)
+    return query
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=['status', 'permissions', 'backup', 'verify', 'apply', 'recover'])
@@ -245,7 +268,7 @@ def main():
         if spec['sha1'].upper() != item['hash']:
             raise SafeError('Verification specification does not match migration contents.')
         if args.command == 'verify':
-            if db.query(spec['verify_sql']) != '1':
+            if db.query(current_verification(args.migration, files, spec)) != '1':
                 raise SafeError('Expected schema/data checks failed.')
             print('Expected schema/data checks passed; migration history unchanged.')
             return

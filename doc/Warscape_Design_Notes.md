@@ -856,3 +856,14 @@ metadata. No Slayer skill/training is added. Existing player ranged/magic paths
 remain in use. Native models, selected spell probabilities, a three-second freeze
 and deferred source exceptions are documented prototype choices. See the
 [checkpoint](WarscapeElvesAviansieSuqah.md) for exact scope and pending user tests.
+
+
+## OSRS Coin stacking — user-approved revision, 7 November 2026
+
+The user requested OSRS-style Gold stacking. Warscape's existing Coins item
+902006 now uses the OSRS maximum of 2,147,483,647 per stack instead of 200. This
+supersedes the earlier collectible-only 200-stack policy for Coins specifically;
+existing balances and other items remain intact. Native WoW money stays separate.
+Currency conversion, vendor spending and a complete OSRS economy are not implied.
+See [Coin stack implementation and acceptance](WarscapeCoinStacks.md). Manual
+client acceptance remains pending until the user confirms it.

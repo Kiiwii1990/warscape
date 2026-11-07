@@ -148,3 +148,15 @@ Setup inspection on 25 October 2026 found one pending world migration:
 and creates/seeds `warscape_monster_attack_speed`. The new column and new table
 are both absent. Auth and characters have no pending migrations. This is a
 point-in-time record; always rerun `status` and make a fresh backup.
+
+
+## Explicit revisions to historical verification contracts
+
+A later migration may intentionally supersede a historical postcondition without
+editing the old migration or specification. A `supersedes` entry names the old
+migration, its SHA-1, the SHA-256 of its original `verify_sql`, and the full revised
+read-only query. `db.py verify` resolves it only after the later migration is
+applied and its specification matches its migration hash. Pending replacements
+are ignored; hash mismatches are refused. Apply and recover continue using their
+original specifications. Review replacements as carefully as SQL and retain all
+unaffected assertions. This is used for the approved Coins stack-cap revision.

@@ -16,6 +16,7 @@
  */
 
 #include "Loot.h"
+#include "WarscapeCurrency.h"
 #include "Group.h"
 #include "ItemEnchantmentMgr.h"
 #include "ItemTemplate.h"
@@ -178,7 +179,23 @@ void Loot::AddItem(LootStoreItem const& item)
         return;
 
     uint32 count = urand(item.mincount, item.maxcount);
-    uint32 stacks = count / proto->GetMaxStackSize() + ((count % proto->GetMaxStackSize()) ? 1 : 0);
+    // Creature coin piles may exceed the old byte-sized count. Container generation
+    // keeps its original bounded path and persistence contract.
+    if (mergeWarscapeCoins && item.itemid == Warscape::CoinsItem && !item.needs_quest
+        && item.conditions.empty() && !proto->HasFlag(ITEM_FLAG_MULTI_DROP))
+    {
+        for (LootItem& prior : items)
+        {
+            if (prior.itemid != item.itemid || prior.is_looted || prior.freeforall || !prior.conditions.empty())
+                continue;
+            uint32 const merged = Warscape::MergeCoinCount(prior.count, count, proto->GetMaxStackSize());
+            prior.count += merged;
+            count -= merged;
+            if (!count)
+                return;
+        }
+    }
+    uint32 stacks = Warscape::LootStackCount(count, proto->GetMaxStackSize());
 
     std::vector<LootItem>& lootItems = item.needs_quest ? quest_items : items;
     uint32 limit = item.needs_quest ? MAX_NR_QUEST_ITEMS : MAX_NR_LOOT_ITEMS;
@@ -189,7 +206,7 @@ void Loot::AddItem(LootStoreItem const& item)
         generatedLoot.count = std::min(count, proto->GetMaxStackSize());
         generatedLoot.itemIndex = lootItems.size();
         lootItems.push_back(generatedLoot);
-        count -= proto->GetMaxStackSize();
+        count -= generatedLoot.count;
 
         // In some cases, a dropped item should be visible/lootable only for some players in group
         bool canSeeItemInLootWindow = false;
@@ -238,7 +255,9 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
     items.reserve(MAX_NR_LOOT_ITEMS);
     quest_items.reserve(MAX_NR_QUEST_ITEMS);
 
-    tab->Process(*this, store.IsRatesAllowed(), lootMode);          // Processing is done there, callback via Loot::AddItem()
+    mergeWarscapeCoins = &store == &LootTemplates_Creature;
+    tab->Process(*this, store.IsRatesAllowed(), lootMode);
+    mergeWarscapeCoins = false;
 
                                                                     // Setting access rights for group loot case
     Group* group = lootOwner->GetGroup();

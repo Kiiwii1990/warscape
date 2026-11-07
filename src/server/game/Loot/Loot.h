@@ -154,7 +154,7 @@ struct TC_GAME_API LootItem
     ConditionContainer conditions;                          // additional loot condition
     GuidSet allowedGUIDs;
     ObjectGuid rollWinnerGUID;                              // Stores the guid of person who won loot, if his bags are full only he can see the item in loot list!
-    uint8   count;
+    uint32  count;
     bool    is_looted         : 1;
     bool    is_blocked        : 1;
     bool    freeforall        : 1;                          // free for all
@@ -231,6 +231,7 @@ struct TC_GAME_API Loot
     std::vector<LootItem> items;
     std::vector<LootItem> quest_items;
     uint32 gold;
+    bool mergeWarscapeCoins = false; // Active only during creature-loot generation.
     uint8 unlootedCount;
     ObjectGuid roundRobinPlayer;                            // GUID of the player having the Round-Robin ownership for the loot. If 0, round robin owner has released.
     ObjectGuid lootOwnerGUID;
