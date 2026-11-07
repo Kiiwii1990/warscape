@@ -59,6 +59,7 @@ def validate(pack, old):
         require(enemy['attack_style'] in ('stab', 'slash', 'crush'), 'Unsupported melee style')
         require(0 < enemy['scale'] <= 10 and type(enemy['aggressive']) is bool, 'Invalid model/aggression')
         require(all(-64 <= enemy[k] <= 1000000 for k in ('attack_bonus', 'strength_bonus', 'defence_bonus')), 'Invalid combat bonus')
+        require(len(enemy.get('equipment', [0,0,0])) == 3 and all(type(i) is int and 0 <= i <= 0xFFFFFFFF for i in enemy.get('equipment', [])), 'Invalid equipment display items')
         # Existing OSRS max-hit formula, checked against the published source value.
         require(type(enemy.get('source_combat_overrides', False)) is bool, 'Invalid source combat policy')
         if enemy.get('source_combat_overrides', False):
@@ -66,7 +67,7 @@ def validate(pack, old):
             require(set(enemy['defence_bonuses']) == {'stab', 'slash', 'crush'} and all(type(v) is int and -64 <= v <= 1000000 for v in enemy['defence_bonuses'].values()), 'Invalid directional defence')
         else:
             require(((enemy['stats'][1] + 8) * (enemy['strength_bonus'] + 64) + 320) // 640 == enemy['source_max_hit'], 'Source maximum hit does not match combat formula')
-        require(enemy['denominator'] > 0 and sum(o['weight'] for o in enemy['outcomes']) == enemy['denominator'], 'Invalid loot distribution')
+        require(type(enemy['denominator']) is int and 0 < enemy['denominator'] <= 0xFFFFFFFF and sum(o['weight'] for o in enemy['outcomes']) == enemy['denominator'], 'Invalid loot distribution')
         for i, outcome in enumerate(enemy['outcomes']):
             require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
             drops = outcome_drops(enemy, outcome)
@@ -173,6 +174,12 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
         checks.append(f"(SELECT COUNT(*) FROM warscape_monster_profile WHERE id={profile} AND {stat_checks} AND attack_bonus={enemy['attack_bonus']} AND strength_bonus={enemy['strength_bonus']} AND defence_bonus={enemy['defence_bonus']})=1")
         checks.append(f'(SELECT COUNT(*) FROM warscape_monster_template WHERE entry={entry} AND profile_id={profile})=1')
         checks.append(f"(SELECT COUNT(*) FROM warscape_monster_attack_speed WHERE creature_entry={entry} AND attack_speed_ticks={enemy['attack_ticks']})=1")
+        if 'equipment' in enemy:
+            hand, offhand, ranged = enemy['equipment']
+            sql.append(f'INSERT INTO creature_equip_template (CreatureID,ID,ItemID1,ItemID2,ItemID3) VALUES ({entry},1,{hand},{offhand},{ranged});')
+            checks.append(f'(SELECT COUNT(*) FROM creature_equip_template WHERE CreatureID={entry})=1')
+            checks.append(f'(SELECT COUNT(*) FROM creature_equip_template WHERE CreatureID={entry} AND ID=1 AND ItemID1={hand} AND ItemID2={offhand} AND ItemID3={ranged})=1')
+
         for i, outcome in enumerate(enemy['outcomes']):
             loot = enemy['loot_base'] + i
             drops = outcome_drops(enemy, outcome)
@@ -203,6 +210,12 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
     pre.append('(SELECT COUNT(*) FROM creature_template WHERE entry=901000)=1')
     checks.append("(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('warscape_enemy_family','warscape_enemy_variant') AND engine='InnoDB')=2")
     text = '\n'.join(sql) + '\n'
+    equipped = [e for e in pack['enemies'] if 'equipment' in e]
+    if equipped:
+        pre.append('(SELECT COUNT(*) FROM creature_equip_template WHERE CreatureID IN (' + ids([e['entry'] for e in equipped]) + '))=0')
+        equipment_items = sorted({i for e in equipped for i in e['equipment'] if i})
+        if equipment_items:
+            pre.append('(SELECT COUNT(*) FROM item_template WHERE entry IN (' + ids(equipment_items) + '))=' + str(len(equipment_items)))
     spec = {'sha1': hashlib.sha1(text.encode()).hexdigest().upper(), 'precondition_sql': 'SELECT IF('+' AND '.join(pre)+',1,0)', 'verify_sql':'SELECT IF('+' AND '.join(checks)+',1,0)'}
     return {ROOT / f"sql/updates/world/3.3.5/{pack['release']}.sql":text,
             ROOT / f"contrib/warscape/verifications/{pack['release']}.json":json.dumps(spec,indent=2)+'\n'}

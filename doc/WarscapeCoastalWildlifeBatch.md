@@ -192,3 +192,10 @@ Fresh verified world backup (integrity checked, restore not tested):
 Previous binary/PDB/server DBC/client patch:
 `C:\WarscapeBackups\Coastal-20261107-deploy`.
 Prepared new assets: `C:\WarscapeBackups\Coastal-20261107-prepared`.
+
+## User acceptance - next checkpoint
+
+The user confirmed this 28-variant batch working with correct drops on
+7 November 2026 and requested the next large batch. This records the reported
+gameplay/drop result, without inferring statistical rare-drop or exhaustive
+visual/navigation acceptance.

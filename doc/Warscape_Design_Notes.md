@@ -757,3 +757,13 @@ uses exact rational chances, native quantity ranges and paired outcomes; quest,
 tertiary and special AI mechanics remain separately scoped. See
 [coastal wildlife checkpoint](WarscapeCoastalWildlifeBatch.md) for explicit policy
 choices and manual acceptance steps. New entries are pending user acceptance.
+
+### Enemy catalogue: dungeon/humanoid checkpoint (7 November 2026)
+
+Confirmed: the user accepted the entire coastal wildlife checkpoint with correct
+drops and authorized the next large batch. This checkpoint adds 39 variants in
+Dwarves, Pirates, Skeletons, Zombies, Ghosts, Ghouls, Hellhounds and Minotaurs.
+Native equipment templates supply visible weapons; source stats and exact
+main-table loot use the existing architecture. Source gaps and prototype policies
+are explicit in [dungeon/humanoid batch](WarscapeDungeonHumanoidBatch.md).
+These new entries await user gameplay acceptance.

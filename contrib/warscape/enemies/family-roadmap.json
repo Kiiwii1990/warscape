@@ -127,7 +127,7 @@
       "family": "Dwarf",
       "model_direction": "Ironforge dwarf",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Elf",
@@ -145,7 +145,7 @@
       "family": "Pirate",
       "model_direction": "Bloodsail human pirate",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Rogue",
@@ -193,7 +193,7 @@
       "family": "Minotaur",
       "model_direction": "Male tauren with large horns and minimal armour",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Ogre",
@@ -265,7 +265,7 @@
       "family": "Hellhound",
       "model_direction": "Felhound for lean variants, core hound for heavier ones",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Pyrefiend",
@@ -295,13 +295,13 @@
       "family": "Ghost",
       "model_direction": "Translucent human ghost from Karazhan",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Ghoul",
       "model_direction": "Scourge ghoul",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Revenant",
@@ -319,7 +319,7 @@
       "family": "Skeleton",
       "model_direction": "Classic human skeleton",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Vampyre",
@@ -331,7 +331,7 @@
       "family": "Zombie",
       "model_direction": "Plaguelands zombie",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Icefiend",

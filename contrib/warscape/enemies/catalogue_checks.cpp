@@ -59,7 +59,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==56);
+    assert(Warscape::EnemyVariants.size()==95);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -80,4 +80,20 @@ int main() {
     }
     assert(Warscape::SelectEnemyLoot(901068, 0) == 0);
     assert(Warscape::EnemyMeleeDefence(901075, 1, 999) == 12);
+    for (std::uint32_t entry = 901100; entry <= 901138; ++entry) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        auto const* variant = Warscape::FindEnemyVariant(entry);
+        assert(pool && variant && variant->SourceCombat && variant->NativeAttackAnimation);
+        // Exhaustive selection also covers the 1,638,400-slot composed Hellhound pool.
+        for (std::uint32_t roll = 0; roll < pool->Total; ++roll) {
+            auto const selected = Warscape::SelectEnemyLoot(entry, roll);
+            auto const first = 906000 + (entry - 901100) * 100;
+            assert(selected == 0 || (selected >= first && selected < first + pool->Count));
+        }
+    }
+    assert(Warscape::SelectEnemyLoot(901130, 0) == 0);
+    assert(Warscape::EnemyMeleeDefence(901137, 0, 999) == -21);
+    assert(Warscape::EnemyMeleeDefence(901138, 1, 999) == -10);
+    assert(Warscape::EnemyMaximumHit(901134, 0) == 11);
+    assert(Warscape::EnemyMaximumHit(901136, 0) == 13);
 }

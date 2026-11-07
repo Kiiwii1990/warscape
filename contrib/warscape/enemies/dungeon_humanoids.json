@@ -1,0 +1,6520 @@
+{
+  "release": "2026_11_07_04_world",
+  "loot_policy": "Members-style main loot for all players; no wealth ring, surface Nature talisman, pre-Legends. Tertiary/quest/faction behaviours deferred. Regular Hellhound stone treated as independent of new rune roll (documented assumption).",
+  "sources": {
+    "Dwarf": {
+      "url": "https://oldschool.runescape.wiki/w/Dwarf",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "eb52c68719b5e9ec9580154d6ee64bdbaebd00d8343c9ddc321b07fdf49a9fcc"
+    },
+    "Pirate": {
+      "url": "https://oldschool.runescape.wiki/w/Pirate",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "cb3c8b80cde64c2d5fda32863c8dadeab9519b8624c166a39624ef0d9f845a7e"
+    },
+    "Skeleton": {
+      "url": "https://oldschool.runescape.wiki/w/Skeleton",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "0840b38470b36b210399138c27dd901003f1023609f21b49de8a9100235c5bf5"
+    },
+    "Zombie": {
+      "url": "https://oldschool.runescape.wiki/w/Zombie",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "22cb70456c9441d9b57baa23d5db0c040b2ce5bf24a1e9216578483a151f4f69"
+    },
+    "Ghost": {
+      "url": "https://oldschool.runescape.wiki/w/Ghost",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "95bbd0585d6a005f44690ba96e1c0dc825f6d8f9ef5d9c63404422d92074f1b6"
+    },
+    "Ghoul": {
+      "url": "https://oldschool.runescape.wiki/w/Ghoul",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "f88708932c20dc9340ca40355219e709942e0a7da70c8262b5be04e6b775b5f2"
+    },
+    "Hellhound": {
+      "url": "https://oldschool.runescape.wiki/w/Hellhound",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "b4c9a79c8186f6b2216bcd107a3653611f3e969cd6a1d0ac0187e4ce38e41268"
+    },
+    "Minotaur": {
+      "url": "https://oldschool.runescape.wiki/w/Minotaur",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "1f2a72401ce8486caf9fe8763e43080789ec539f520a1c242c21f6fd7f6e795d"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    },
+    "Gem_drop_table": {
+      "url": "https://oldschool.runescape.wiki/w/Gem_drop_table",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "d7e54e63a55542bd18f8471f104c9dce2e05fae11b8f09f71417d8eee18a1073"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    }
+  },
+  "families": [
+    {
+      "id": 16,
+      "key": "dwarves",
+      "name": "Dwarves",
+      "model_note": "Ironforge mountaineer display 1598 with a Mining Pick; source level 20 deferred due rounded variant loot notes."
+    },
+    {
+      "id": 17,
+      "key": "pirates",
+      "name": "Pirates",
+      "model_note": "Defias/Bloodsail pirate displays 2347/793/796 with sword; quest pirates excluded."
+    },
+    {
+      "id": 18,
+      "key": "skeletons",
+      "name": "Skeletons",
+      "model_note": "Classic naked/armoured skeleton displays 11400/200, sword+shield for armed loot forms."
+    },
+    {
+      "id": 19,
+      "key": "zombies",
+      "name": "Zombies",
+      "model_note": "Plaguelands zombie/armed zombie displays 10973/1197."
+    },
+    {
+      "id": 20,
+      "key": "ghosts",
+      "name": "Ghosts",
+      "model_note": "Stock spectral Ghost model 11649; shrouded stand-in rather than custom translucent human."
+    },
+    {
+      "id": 21,
+      "key": "ghouls",
+      "name": "Ghouls",
+      "model_note": "Classic Scourge Ghoul display 137."
+    },
+    {
+      "id": 22,
+      "key": "hellhounds",
+      "name": "Hellhounds",
+      "model_note": "Stock Felhound display 1913, tier scales."
+    },
+    {
+      "id": 23,
+      "key": "minotaurs",
+      "name": "Minotaurs",
+      "model_note": "Male Grimtotem tauren displays 11874/11882 with axes as the horned humanoid stand-in."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bronze pickaxe",
+      "entry": 902024
+    },
+    {
+      "name": "Bronze bolts",
+      "entry": 902005
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Hammer",
+      "entry": 902007
+    },
+    {
+      "name": "Iron ore",
+      "entry": 902029
+    },
+    {
+      "name": "Tin ore",
+      "entry": 902028
+    },
+    {
+      "name": "Copper ore",
+      "entry": 902031
+    },
+    {
+      "name": "Coal",
+      "entry": 902030
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Chef's hat",
+      "entry": 902009
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Iron axe",
+      "entry": 902049
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Body rune",
+      "entry": 902003
+    },
+    {
+      "name": "Fishing bait",
+      "entry": 902035
+    }
+  ],
+  "items": [
+    {
+      "name": "Bronze med helm",
+      "entry": 902075,
+      "display_source": 4077
+    },
+    {
+      "name": "Bronze battleaxe",
+      "entry": 902076,
+      "display_source": 1416
+    },
+    {
+      "name": "Iron battleaxe",
+      "entry": 902077,
+      "display_source": 1416
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078,
+      "display_source": 6948
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079,
+      "display_source": 6948
+    },
+    {
+      "name": "Bronze bar",
+      "entry": 902080,
+      "display_source": 2840
+    },
+    {
+      "name": "Iron bar",
+      "entry": 902081,
+      "display_source": 3575
+    },
+    {
+      "name": "Iron dagger",
+      "entry": 902082,
+      "display_source": 2764
+    },
+    {
+      "name": "Bronze scimitar",
+      "entry": 902083,
+      "display_source": 2131
+    },
+    {
+      "name": "Iron platebody",
+      "entry": 902084,
+      "display_source": 847
+    },
+    {
+      "name": "Iron bolts",
+      "entry": 902085,
+      "display_source": 2512
+    },
+    {
+      "name": "Bronze arrow",
+      "entry": 902086,
+      "display_source": 2512
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087,
+      "display_source": 6948
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088,
+      "display_source": 6948
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089,
+      "display_source": 6948
+    },
+    {
+      "name": "Right eye patch",
+      "entry": 902090,
+      "display_source": 3345
+    },
+    {
+      "name": "Iron arrow",
+      "entry": 902091,
+      "display_source": 2512
+    },
+    {
+      "name": "Steel arrow",
+      "entry": 902092,
+      "display_source": 2512
+    },
+    {
+      "name": "Fire talisman",
+      "entry": 902093,
+      "display_source": 6948
+    },
+    {
+      "name": "Grain",
+      "entry": 902094,
+      "display_source": 4540
+    },
+    {
+      "name": "Iron med helm",
+      "entry": 902095,
+      "display_source": 4077
+    },
+    {
+      "name": "Iron shortsword",
+      "entry": 902096,
+      "display_source": 2131
+    },
+    {
+      "name": "Iron scimitar",
+      "entry": 902097,
+      "display_source": 2131
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098,
+      "display_source": 6948
+    },
+    {
+      "name": "Bronze longsword",
+      "entry": 902099,
+      "display_source": 2131
+    },
+    {
+      "name": "Mind rune",
+      "entry": 902100,
+      "display_source": 6948
+    },
+    {
+      "name": "Iron mace",
+      "entry": 902101,
+      "display_source": 2028
+    },
+    {
+      "name": "Bronze kiteshield",
+      "entry": 902102,
+      "display_source": 2133
+    },
+    {
+      "name": "Mithril arrow",
+      "entry": 902103,
+      "display_source": 2512
+    },
+    {
+      "name": "Tinderbox",
+      "entry": 902104,
+      "display_source": 4470
+    },
+    {
+      "name": "Eye of newt",
+      "entry": 902105,
+      "display_source": 1705
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106,
+      "display_source": 6948
+    },
+    {
+      "name": "Smouldering stone",
+      "entry": 902107,
+      "display_source": 4402
+    },
+    {
+      "name": "Vile ashes",
+      "entry": 902108,
+      "display_source": 2835
+    },
+    {
+      "name": "Bronze spear",
+      "entry": 902109,
+      "display_source": 2512
+    },
+    {
+      "name": "Bronze full helm",
+      "entry": 902110,
+      "display_source": 4077
+    },
+    {
+      "name": "Bronze dagger",
+      "entry": 902111,
+      "display_source": 2764
+    },
+    {
+      "name": "Pure essence",
+      "entry": 902112,
+      "display_source": 1705
+    },
+    {
+      "name": "Cooked meat",
+      "entry": 902113,
+      "display_source": 2679
+    },
+    {
+      "name": "Right skull half",
+      "entry": 902114,
+      "display_source": 2843
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901100,
+      "profile_id": 1100,
+      "family_id": 16,
+      "subcategory": "variant_1",
+      "name": "Dwarf (OSRS variant_1)",
+      "source": "Dwarf",
+      "source_npc_ids": "290",
+      "combat_level": 10,
+      "stats": [
+        8,
+        8,
+        6,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906000,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901101,
+      "profile_id": 1101,
+      "family_id": 16,
+      "subcategory": "variant_3",
+      "name": "Dwarf (OSRS variant_3)",
+      "source": "Dwarf",
+      "source_npc_ids": "294",
+      "combat_level": 11,
+      "stats": [
+        12,
+        5,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906100,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901102,
+      "profile_id": 1102,
+      "family_id": 16,
+      "subcategory": "variant_4",
+      "name": "Dwarf (OSRS variant_4)",
+      "source": "Dwarf",
+      "source_npc_ids": "295",
+      "combat_level": 11,
+      "stats": [
+        8,
+        5,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906200,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901103,
+      "profile_id": 1103,
+      "family_id": 16,
+      "subcategory": "variant_5",
+      "name": "Dwarf (OSRS variant_5)",
+      "source": "Dwarf",
+      "source_npc_ids": "296",
+      "combat_level": 10,
+      "stats": [
+        8,
+        8,
+        10,
+        1,
+        1,
+        12
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "stab",
+      "slayer_xp": 12,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906300,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901104,
+      "profile_id": 1104,
+      "family_id": 16,
+      "subcategory": "variant_6",
+      "name": "Dwarf (OSRS variant_6)",
+      "source": "Dwarf",
+      "source_npc_ids": "1401",
+      "combat_level": 11,
+      "stats": [
+        8,
+        8,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906400,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901105,
+      "profile_id": 1105,
+      "family_id": 16,
+      "subcategory": "variant_7",
+      "name": "Dwarf (OSRS variant_7)",
+      "source": "Dwarf",
+      "source_npc_ids": "1402",
+      "combat_level": 11,
+      "stats": [
+        8,
+        8,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906500,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901106,
+      "profile_id": 1106,
+      "family_id": 16,
+      "subcategory": "variant_8",
+      "name": "Dwarf (OSRS variant_8)",
+      "source": "Dwarf",
+      "source_npc_ids": "1403",
+      "combat_level": 11,
+      "stats": [
+        8,
+        8,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 10,
+        "crush": 10
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906600,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901107,
+      "profile_id": 1107,
+      "family_id": 16,
+      "subcategory": "variant_9",
+      "name": "Dwarf (OSRS variant_9)",
+      "source": "Dwarf",
+      "source_npc_ids": "1404",
+      "combat_level": 11,
+      "stats": [
+        8,
+        8,
+        8,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 6,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906700,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901108,
+      "profile_id": 1108,
+      "family_id": 16,
+      "subcategory": "variant_10",
+      "name": "Dwarf (OSRS variant_10)",
+      "source": "Dwarf",
+      "source_npc_ids": "1405",
+      "combat_level": 10,
+      "stats": [
+        8,
+        8,
+        8,
+        1,
+        1,
+        12
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 6,
+      "attack_style": "stab",
+      "slayer_xp": 12,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906800,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901109,
+      "profile_id": 1109,
+      "family_id": 16,
+      "subcategory": "variant_11",
+      "name": "Dwarf (OSRS variant_11)",
+      "source": "Dwarf",
+      "source_npc_ids": "1406",
+      "combat_level": 11,
+      "stats": [
+        8,
+        6,
+        10,
+        1,
+        1,
+        18
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 16,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 906900,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901110,
+      "profile_id": 1110,
+      "family_id": 16,
+      "subcategory": "variant_12",
+      "name": "Dwarf (OSRS variant_12)",
+      "source": "Dwarf",
+      "source_npc_ids": "1407",
+      "combat_level": 11,
+      "stats": [
+        10,
+        8,
+        8,
+        1,
+        1,
+        13
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 13,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907000,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901111,
+      "profile_id": 1111,
+      "family_id": 16,
+      "subcategory": "variant_13",
+      "name": "Dwarf (OSRS variant_13)",
+      "source": "Dwarf",
+      "source_npc_ids": "1408",
+      "combat_level": 7,
+      "stats": [
+        6,
+        6,
+        6,
+        1,
+        1,
+        10
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 10,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907100,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901112,
+      "profile_id": 1112,
+      "family_id": 16,
+      "subcategory": "variant_14",
+      "name": "Dwarf (OSRS variant_14)",
+      "source": "Dwarf",
+      "source_npc_ids": "8496",
+      "combat_level": 11,
+      "stats": [
+        8,
+        6,
+        10,
+        1,
+        1,
+        18
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 18,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1598,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Dwarf\\Male\\DwarfMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907200,
+      "outcomes": [
+        {
+          "item": "Bronze pickaxe",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze battleaxe",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron battleaxe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 896
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2944
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2901,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901113,
+      "profile_id": 1113,
+      "family_id": 17,
+      "subcategory": "brimhaven",
+      "name": "Pirate (OSRS brimhaven)",
+      "source": "Pirate",
+      "source_npc_ids": "522,6994",
+      "combat_level": 23,
+      "stats": [
+        21,
+        21,
+        21,
+        1,
+        1,
+        20
+      ],
+      "attack_bonus": 8,
+      "strength_bonus": 10,
+      "defence_bonus": 3,
+      "defence_bonuses": {
+        "stab": 3,
+        "slash": 2,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 5,
+      "attack_style": "slash",
+      "slayer_xp": 20,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 793,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Creature\\HumanMalePirateCrewman\\HumanMalePirateCrewman.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907300,
+      "outcomes": [
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Bronze scimitar",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Iron platebody",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 768
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 9,
+          "weight": 384
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 1664
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 55,
+          "weight": 128
+        },
+        {
+          "item": "Right eye patch",
+          "quantity": 1,
+          "weight": 1536
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2131,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901114,
+      "profile_id": 1114,
+      "family_id": 17,
+      "subcategory": "port_sarim",
+      "name": "Pirate (OSRS port_sarim)",
+      "source": "Pirate",
+      "source_npc_ids": "1447",
+      "combat_level": 23,
+      "stats": [
+        20,
+        20,
+        20,
+        1,
+        1,
+        20
+      ],
+      "attack_bonus": 10,
+      "strength_bonus": 9,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 20,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 2347,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Character\\Human\\Male\\HumanMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907400,
+      "outcomes": [
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Bronze scimitar",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Iron platebody",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 768
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 9,
+          "weight": 384
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 1664
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 55,
+          "weight": 128
+        },
+        {
+          "item": "Right eye patch",
+          "quantity": 1,
+          "weight": 1536
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2131,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901115,
+      "profile_id": 1115,
+      "family_id": 17,
+      "subcategory": "pirates_cove",
+      "name": "Pirate (OSRS pirates_cove)",
+      "source": "Pirate",
+      "source_npc_ids": "521,6993",
+      "combat_level": 23,
+      "stats": [
+        20,
+        20,
+        20,
+        1,
+        1,
+        20
+      ],
+      "attack_bonus": 10,
+      "strength_bonus": 9,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 20,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 796,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Creature\\HumanMalePirateSwashbuckler\\HumanMalePirateSwashbuckler.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907500,
+      "outcomes": [
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Bronze scimitar",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Iron platebody",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 768
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 9,
+          "weight": 384
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 1664
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 55,
+          "weight": 128
+        },
+        {
+          "item": "Right eye patch",
+          "quantity": 1,
+          "weight": 1536
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2131,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901116,
+      "profile_id": 1116,
+      "family_id": 17,
+      "subcategory": "ice_dungeon",
+      "name": "Pirate (OSRS ice_dungeon)",
+      "source": "Pirate",
+      "source_npc_ids": "523",
+      "combat_level": 26,
+      "stats": [
+        23,
+        23,
+        23,
+        1,
+        1,
+        23
+      ],
+      "attack_bonus": 8,
+      "strength_bonus": 10,
+      "defence_bonus": 3,
+      "defence_bonuses": {
+        "stab": 3,
+        "slash": 2,
+        "crush": 0
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 5,
+      "attack_style": "slash",
+      "slayer_xp": 20,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 793,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Creature\\HumanMalePirateCrewman\\HumanMalePirateCrewman.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907600,
+      "outcomes": [
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Bronze scimitar",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Iron platebody",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 768
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 9,
+          "weight": 384
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 1664
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 55,
+          "weight": 128
+        },
+        {
+          "item": "Right eye patch",
+          "quantity": 1,
+          "weight": 1536
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2131,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901117,
+      "profile_id": 1117,
+      "family_id": 17,
+      "subcategory": "piscarilius",
+      "name": "Pirate (OSRS piscarilius)",
+      "source": "Pirate",
+      "source_npc_ids": "524,6995",
+      "combat_level": 23,
+      "stats": [
+        20,
+        20,
+        20,
+        1,
+        1,
+        20
+      ],
+      "attack_bonus": 10,
+      "strength_bonus": 9,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 0
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 20,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 796,
+      "scale": 1,
+      "creature_type": 7,
+      "model_path": "Creature\\HumanMalePirateSwashbuckler\\HumanMalePirateSwashbuckler.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907700,
+      "outcomes": [
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Bronze scimitar",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Iron platebody",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bolts",
+          "quantity": 2,
+          "quantity_max": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 768
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 640
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 9,
+          "weight": 384
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 12,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 3712
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 1664
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 55,
+          "weight": 128
+        },
+        {
+          "item": "Right eye patch",
+          "quantity": 1,
+          "weight": 1536
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384,
+      "equipment": [
+        2131,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901118,
+      "profile_id": 1118,
+      "family_id": 18,
+      "subcategory": "unarmed_21",
+      "name": "Skeleton (OSRS unarmed_21)",
+      "source": "Skeleton",
+      "source_npc_ids": "74",
+      "combat_level": 21,
+      "stats": [
+        17,
+        17,
+        17,
+        1,
+        1,
+        24
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": -5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 24,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907800,
+      "outcomes": [
+        {
+          "item": "Bronze arrow",
+          "quantity": 2,
+          "weight": 896
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 5,
+          "weight": 512
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 3,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 2,
+          "weight": 256
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 256
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 3,
+          "weight": 128
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 2,
+          "weight": 2304
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 896
+        },
+        {
+          "item": "Coins",
+          "quantity": 16,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 33,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 48,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2304
+        },
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Fire talisman",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grain",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 672
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 504
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 378
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 294
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 231
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 168
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 126
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 105
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 84
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901119,
+      "profile_id": 1119,
+      "family_id": 18,
+      "subcategory": "plain_21",
+      "name": "Skeleton (OSRS plain_21)",
+      "source": "Skeleton",
+      "source_npc_ids": "75,76",
+      "combat_level": 21,
+      "stats": [
+        17,
+        17,
+        17,
+        1,
+        1,
+        24
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": -5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 24,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 907900,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901120,
+      "profile_id": 1120,
+      "family_id": 18,
+      "subcategory": "unarmed_22",
+      "name": "Skeleton (OSRS unarmed_22)",
+      "source": "Skeleton",
+      "source_npc_ids": "70",
+      "combat_level": 22,
+      "stats": [
+        15,
+        18,
+        17,
+        1,
+        1,
+        29
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": -5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 29,
+      "respawn_ticks": 70,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908000,
+      "outcomes": [
+        {
+          "item": "Bronze arrow",
+          "quantity": 2,
+          "weight": 896
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 5,
+          "weight": 512
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 256
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 3,
+          "weight": 256
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 2,
+          "weight": 256
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 256
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 3,
+          "weight": 128
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 2,
+          "weight": 2304
+        },
+        {
+          "item": "Coins",
+          "quantity": 12,
+          "weight": 1920
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 896
+        },
+        {
+          "item": "Coins",
+          "quantity": 16,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 33,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 48,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 2304
+        },
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Fire talisman",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grain",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 672
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 504
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 378
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 294
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 231
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 168
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 126
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 105
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 84
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901121,
+      "profile_id": 1121,
+      "family_id": 18,
+      "subcategory": "plain_22",
+      "name": "Skeleton (OSRS plain_22)",
+      "source": "Skeleton",
+      "source_npc_ids": "71,72,73",
+      "combat_level": 22,
+      "stats": [
+        15,
+        18,
+        17,
+        1,
+        1,
+        29
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": -5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 29,
+      "respawn_ticks": 70,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908100,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901122,
+      "profile_id": 1122,
+      "family_id": 18,
+      "subcategory": "armed_25",
+      "name": "Skeleton (OSRS armed_25)",
+      "source": "Skeleton",
+      "source_npc_ids": "77",
+      "combat_level": 25,
+      "stats": [
+        24,
+        24,
+        24,
+        1,
+        1,
+        17
+      ],
+      "attack_bonus": 15,
+      "strength_bonus": 14,
+      "defence_bonus": 9,
+      "defence_bonuses": {
+        "stab": 9,
+        "slash": 11,
+        "crush": -2
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 17,
+      "respawn_ticks": 60,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 200,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Skeleton\\Skeleton.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908200,
+      "outcomes": [
+        {
+          "item": "Iron med helm",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron shortsword",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron axe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron scimitar",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Air rune",
+          "quantity": 12,
+          "weight": 96
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 96
+        },
+        {
+          "item": "Water rune",
+          "quantity": 9,
+          "weight": 192
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 5,
+          "weight": 192
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 12,
+          "weight": 128
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 64
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1536
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "weight": 1600
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 65,
+          "weight": 192
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 320
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 180
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 140
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 110
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 50
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 8192,
+      "equipment": [
+        2131,
+        2129,
+        0
+      ]
+    },
+    {
+      "entry": 901123,
+      "profile_id": 1123,
+      "family_id": 18,
+      "subcategory": "plain_25",
+      "name": "Skeleton (OSRS plain_25)",
+      "source": "Skeleton",
+      "source_npc_ids": "78,79,80,81",
+      "combat_level": 25,
+      "stats": [
+        24,
+        24,
+        24,
+        1,
+        1,
+        17
+      ],
+      "attack_bonus": 15,
+      "strength_bonus": 14,
+      "defence_bonus": 9,
+      "defence_bonuses": {
+        "stab": 9,
+        "slash": 11,
+        "crush": -2
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 17,
+      "respawn_ticks": 60,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908300,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901124,
+      "profile_id": 1124,
+      "family_id": 18,
+      "subcategory": "plain_29",
+      "name": "Skeleton (OSRS plain_29)",
+      "source": "Skeleton",
+      "source_npc_ids": "14426,14427,14428",
+      "combat_level": 29,
+      "stats": [
+        24,
+        24,
+        24,
+        1,
+        1,
+        30
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": -5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 30,
+      "respawn_ticks": 41,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908400,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901125,
+      "profile_id": 1125,
+      "family_id": 18,
+      "subcategory": "armed_45",
+      "name": "Skeleton (OSRS armed_45)",
+      "source": "Skeleton",
+      "source_npc_ids": "82",
+      "combat_level": 45,
+      "stats": [
+        32,
+        35,
+        36,
+        1,
+        1,
+        59
+      ],
+      "attack_bonus": 15,
+      "strength_bonus": 14,
+      "defence_bonus": 9,
+      "defence_bonuses": {
+        "stab": 9,
+        "slash": 11,
+        "crush": -2
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 59,
+      "respawn_ticks": 60,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 200,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Skeleton\\Skeleton.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908500,
+      "outcomes": [
+        {
+          "item": "Iron med helm",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron shortsword",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Iron axe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron scimitar",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Air rune",
+          "quantity": 12,
+          "weight": 96
+        },
+        {
+          "item": "Air rune",
+          "quantity": 15,
+          "weight": 96
+        },
+        {
+          "item": "Water rune",
+          "quantity": 9,
+          "weight": 192
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 5,
+          "weight": 192
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 12,
+          "weight": 128
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 64
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1536
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "weight": 1600
+        },
+        {
+          "item": "Coins",
+          "quantity": 25,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 65,
+          "weight": 192
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 320
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 180
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 140
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 110
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 80
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 50
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 40
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 8192,
+      "equipment": [
+        2131,
+        2129,
+        0
+      ]
+    },
+    {
+      "entry": 901126,
+      "profile_id": 1126,
+      "family_id": 18,
+      "subcategory": "plain_45",
+      "name": "Skeleton (OSRS plain_45)",
+      "source": "Skeleton",
+      "source_npc_ids": "83",
+      "combat_level": 45,
+      "stats": [
+        32,
+        35,
+        36,
+        1,
+        1,
+        59
+      ],
+      "attack_bonus": 15,
+      "strength_bonus": 14,
+      "defence_bonus": 9,
+      "defence_bonuses": {
+        "stab": 9,
+        "slash": 11,
+        "crush": -2
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 59,
+      "respawn_ticks": 60,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11400,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\SkeletonNaked\\SkeletonNaked.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908600,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901127,
+      "profile_id": 1127,
+      "family_id": 19,
+      "subcategory": "regular_13",
+      "name": "Zombie (OSRS regular_13)",
+      "source": "Zombie",
+      "source_npc_ids": "26,27,28,29,30,31,32,34,37,38,39,40,41",
+      "combat_level": 13,
+      "stats": [
+        8,
+        9,
+        10,
+        1,
+        1,
+        22
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 22,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 10973,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Zombie\\Zombie.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908700,
+      "outcomes": [
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Bronze longsword",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron axe",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 5,
+          "weight": 896
+        },
+        {
+          "item": "Body rune",
+          "quantity": 6,
+          "weight": 640
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 5,
+          "weight": 640
+        },
+        {
+          "item": "Air rune",
+          "quantity": 13,
+          "weight": 512
+        },
+        {
+          "item": "Iron arrow",
+          "quantity": 8,
+          "weight": 512
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 5,
+          "weight": 256
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 6,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1408
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 512
+        },
+        {
+          "item": "Coins",
+          "quantity": 18,
+          "weight": 384
+        },
+        {
+          "item": "Coins",
+          "quantity": 13,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 28,
+          "weight": 256
+        },
+        {
+          "item": "Fishing bait",
+          "quantity": 5,
+          "weight": 4736
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 800
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 600
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 450
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 350
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 275
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 200
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 150
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 125
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 100
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 75
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 75
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901128,
+      "profile_id": 1128,
+      "family_id": 19,
+      "subcategory": "regular_18",
+      "name": "Zombie (OSRS regular_18)",
+      "source": "Zombie",
+      "source_npc_ids": "42,43,44",
+      "combat_level": 18,
+      "stats": [
+        13,
+        13,
+        18,
+        1,
+        1,
+        24
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 5,
+      "attack_style": "slash",
+      "slayer_xp": 24,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1197,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Zombie\\ZombieArm.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908800,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901129,
+      "profile_id": 1129,
+      "family_id": 19,
+      "subcategory": "regular_24",
+      "name": "Zombie (OSRS regular_24)",
+      "source": "Zombie",
+      "source_npc_ids": "49,50,51,52,54,55,56,57,58",
+      "combat_level": 24,
+      "stats": [
+        19,
+        21,
+        16,
+        1,
+        1,
+        30
+      ],
+      "attack_bonus": 5,
+      "strength_bonus": 7,
+      "defence_bonus": 9,
+      "defence_bonuses": {
+        "stab": 9,
+        "slash": 8,
+        "crush": 12
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 5,
+      "attack_style": "slash",
+      "slayer_xp": 30,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1197,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Zombie\\ZombieArm.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 908900,
+      "outcomes": [
+        {
+          "item": "Iron mace",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Iron dagger",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Bronze kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Mithril arrow",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Body rune",
+          "quantity": 3,
+          "weight": 256
+        },
+        {
+          "item": "Air rune",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 4,
+          "weight": 128
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 128
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 7,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1280
+        },
+        {
+          "item": "Coins",
+          "quantity": 18,
+          "weight": 2688
+        },
+        {
+          "item": "Coins",
+          "quantity": 26,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 35,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Fishing bait",
+          "quantity": 7,
+          "weight": 3328
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Tinderbox",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 960
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 720
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 540
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 420
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 330
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 240
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 180
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 150
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 90
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901130,
+      "profile_id": 1130,
+      "family_id": 20,
+      "subcategory": "level_1",
+      "name": "Ghost (OSRS level_1)",
+      "source": "Ghost",
+      "source_npc_ids": "85,86,87,88,89,90,91,92,93,95,97,99,472,473,474,505,506,507,7263,7264",
+      "combat_level": 19,
+      "stats": [
+        13,
+        13,
+        18,
+        1,
+        1,
+        25
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 5,
+      "defence_bonuses": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 5
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 25,
+      "respawn_ticks": 40,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11649,
+      "scale": 0.9,
+      "creature_type": 6,
+      "model_path": "Creature\\Ghost\\Ghost.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 909000,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901131,
+      "profile_id": 1131,
+      "family_id": 20,
+      "subcategory": "level_2",
+      "name": "Ghost (OSRS level_2)",
+      "source": "Ghost",
+      "source_npc_ids": "2531,2532,2533,2534",
+      "combat_level": 76,
+      "stats": [
+        63,
+        63,
+        68,
+        1,
+        1,
+        75
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 45,
+      "defence_bonuses": {
+        "stab": 45,
+        "slash": 45,
+        "crush": 5
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 75,
+      "respawn_ticks": 40,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11649,
+      "scale": 1.0,
+      "creature_type": 6,
+      "model_path": "Creature\\Ghost\\Ghost.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 909100,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901132,
+      "profile_id": 1132,
+      "family_id": 20,
+      "subcategory": "level_3",
+      "name": "Ghost (OSRS level_3)",
+      "source": "Ghost",
+      "source_npc_ids": "2527,2528,2529,2530",
+      "combat_level": 77,
+      "stats": [
+        63,
+        63,
+        68,
+        1,
+        1,
+        80
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 55,
+      "defence_bonuses": {
+        "stab": 55,
+        "slash": 55,
+        "crush": 5
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 80,
+      "respawn_ticks": 40,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 11649,
+      "scale": 1.1,
+      "creature_type": 6,
+      "model_path": "Creature\\Ghost\\Ghost.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 909200,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901133,
+      "profile_id": 1133,
+      "family_id": 21,
+      "subcategory": "regular_42",
+      "name": "Ghoul (OSRS regular_42)",
+      "source": "Ghoul",
+      "source_npc_ids": "289",
+      "combat_level": 42,
+      "stats": [
+        30,
+        40,
+        30,
+        1,
+        1,
+        50
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 50,
+      "respawn_ticks": 35,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 137,
+      "scale": 1,
+      "creature_type": 6,
+      "model_path": "Creature\\Ghoul\\Ghoul.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909300,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901134,
+      "profile_id": 1134,
+      "family_id": 22,
+      "subcategory": "level_1",
+      "name": "Hellhound (OSRS level_1)",
+      "source": "Hellhound",
+      "source_npc_ids": "104,105,7256",
+      "combat_level": 122,
+      "stats": [
+        105,
+        104,
+        102,
+        1,
+        1,
+        116
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 116,
+      "respawn_ticks": 89,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1913,
+      "scale": 1.1,
+      "creature_type": 3,
+      "model_path": "Creature\\Felhound\\FelHound.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Vile ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909400,
+      "outcomes": [
+        {
+          "item": "Death rune",
+          "quantity": 10,
+          "weight": 196602
+        },
+        {
+          "item": "Death rune",
+          "quantity": 10,
+          "additional": [
+            {
+              "item": "Smouldering stone",
+              "quantity": 1
+            }
+          ],
+          "weight": 6
+        },
+        {
+          "item": "Death rune",
+          "quantity": 20,
+          "weight": 98301
+        },
+        {
+          "item": "Death rune",
+          "quantity": 20,
+          "additional": [
+            {
+              "item": "Smouldering stone",
+              "quantity": 1
+            }
+          ],
+          "weight": 3
+        },
+        {
+          "item": "Death rune",
+          "quantity": 50,
+          "weight": 32767
+        },
+        {
+          "item": "Death rune",
+          "quantity": 50,
+          "additional": [
+            {
+              "item": "Smouldering stone",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1310680
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Smouldering stone",
+              "quantity": 1
+            }
+          ],
+          "weight": 40
+        }
+      ],
+      "denominator": 1638400
+    },
+    {
+      "entry": 901135,
+      "profile_id": 1135,
+      "family_id": 22,
+      "subcategory": "level_2",
+      "name": "Hellhound (OSRS level_2)",
+      "source": "Hellhound",
+      "source_npc_ids": "3133",
+      "combat_level": 127,
+      "stats": [
+        107,
+        116,
+        106,
+        1,
+        1,
+        116
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 13,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 116,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1913,
+      "scale": 1.2,
+      "creature_type": 3,
+      "model_path": "Creature\\Felhound\\FelHound.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Vile ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909500,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    },
+    {
+      "entry": 901136,
+      "profile_id": 1136,
+      "family_id": 22,
+      "subcategory": "level_3",
+      "name": "Hellhound (OSRS level_3)",
+      "source": "Hellhound",
+      "source_npc_ids": "7877",
+      "combat_level": 136,
+      "stats": [
+        105,
+        120,
+        102,
+        1,
+        1,
+        150
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 13,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 150,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1913,
+      "scale": 1.3,
+      "creature_type": 3,
+      "model_path": "Creature\\Felhound\\FelHound.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Vile ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909600,
+      "outcomes": [
+        {
+          "item": "Smouldering stone",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 16383
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 901137,
+      "profile_id": 1137,
+      "family_id": 23,
+      "subcategory": "level_1",
+      "name": "Minotaur (OSRS level_1)",
+      "source": "Minotaur",
+      "source_npc_ids": "2481",
+      "combat_level": 12,
+      "stats": [
+        12,
+        10,
+        10,
+        1,
+        1,
+        10
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": -21,
+      "defence_bonuses": {
+        "stab": -21,
+        "slash": -21,
+        "crush": -21
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 10,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 11874,
+      "scale": 1.0,
+      "creature_type": 7,
+      "model_path": "Character\\Tauren\\Male\\TaurenMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909700,
+      "outcomes": [
+        {
+          "item": "Iron arrow",
+          "quantity": 5,
+          "quantity_max": 14,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze spear",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze full helm",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Bronze dagger",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 2,
+          "weight": 1408
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 84,
+          "weight": 896
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Cooked meat",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Right skull half",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 128
+        }
+      ],
+      "denominator": 12928,
+      "equipment": [
+        1416,
+        0,
+        0
+      ]
+    },
+    {
+      "entry": 901138,
+      "profile_id": 1138,
+      "family_id": 23,
+      "subcategory": "level_2",
+      "name": "Minotaur (OSRS level_2)",
+      "source": "Minotaur",
+      "source_npc_ids": "2483",
+      "combat_level": 27,
+      "stats": [
+        23,
+        25,
+        25,
+        1,
+        1,
+        22
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": -10,
+      "defence_bonuses": {
+        "stab": -10,
+        "slash": -10,
+        "crush": -10
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 22,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 11882,
+      "scale": 1.1,
+      "creature_type": 7,
+      "model_path": "Character\\Tauren\\Male\\TaurenMale.m2",
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 909800,
+      "outcomes": [
+        {
+          "item": "Iron arrow",
+          "quantity": 5,
+          "quantity_max": 14,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze spear",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze full helm",
+          "quantity": 1,
+          "weight": 1280
+        },
+        {
+          "item": "Bronze arrow",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Bronze dagger",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 2,
+          "weight": 1408
+        },
+        {
+          "item": "Coins",
+          "quantity": 7,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 84,
+          "weight": 896
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Cooked meat",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Right skull half",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 128
+        }
+      ],
+      "denominator": 12928,
+      "equipment": [
+        1416,
+        0,
+        0
+      ]
+    }
+  ]
+}

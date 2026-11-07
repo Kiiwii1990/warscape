@@ -16,8 +16,12 @@ def audit(client):
             return dbc(data, struct.unpack_from('<I', data, 8)[0])
         displays, _ = table('CreatureDisplayInfo')
         models, strings = table('CreatureModelData')
+        items, _ = table('Item')
         checked = set()
         for enemy in enemies:
+            for equipped in enemy.get('equipment', []):
+                if equipped and (equipped not in items or items[equipped][6] not in {13,14,15,17,21,22,23,25,26}):
+                    raise ValueError('Enemy equipment is absent from Item.dbc or not hand-equipable')
             display = enemy['model']
             if display in checked:
                 continue

@@ -163,4 +163,92 @@ class CoastalTests(unittest.TestCase):
         self.assertEqual(sum(o['weight'] for o in herbs)*20,e['denominator'])
         self.assertEqual(next(o['weight'] for o in herbs if o['item']=='Grimy guam leaf'),32)
 
+
+class DungeonTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module=family_catalogue
+        self.pack=json.loads(Path(__file__).with_name('dungeon_humanoids.json').read_text())
+        self.prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
+        self.prior['families']=[]
+        for name in ('farm_animals_rats.json','wildlife.json','coastal_wildlife.json'):
+            old=json.loads(Path(__file__).with_name(name).read_text())
+            for key in ('enemies','items','families'):self.prior[key].extend(old[key])
+    def enemy(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,e,name,quantity=None):
+        from fractions import Fraction
+        return sum(Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if (o['item']==name and (quantity is None or o['quantity']==quantity)) or (quantity is None and any(d['item']==name for d in o.get('additional',[]))))
+    def test_39_variants_eight_families_and_prior_release_preserved(self):
+        self.module.validate(self.pack,self.prior)
+        self.assertEqual(len(self.pack['enemies']),39)
+        self.assertEqual({e['family_id'] for e in self.pack['enemies']},set(range(16,24)))
+        self.assertEqual(len({e['source_npc_ids'] for e in self.pack['enemies']}),39)
+    def test_dwarf_timing_and_source_defence_variants(self):
+        self.assertEqual([self.enemy(i)['attack_ticks'] for i in (901100,901104,901107)],[5,4,6])
+        self.assertEqual(self.enemy(901106)['defence_bonuses'],{'stab':0,'slash':10,'crush':10})
+        self.assertNotIn('292',[e['source_npc_ids'] for e in self.pack['enemies']])
+    def test_skeleton_loot_flavours_and_negative_crush(self):
+        from fractions import Fraction
+        for entry in (901119,901121,901123,901124,901126):
+            self.assertEqual(self.enemy(entry)['denominator'],1)
+            self.assertEqual(self.enemy(entry)['outcomes'][0]['item'],'Nothing')
+        self.assertEqual(self.enemy(901118)['defence_bonuses']['crush'],-5)
+        self.assertEqual(self.chance(self.enemy(901118),'Grimy guam leaf'),Fraction(21*32,128*128))
+        self.assertEqual(self.chance(self.enemy(901122),'Air rune',12),Fraction(3,256))
+        self.assertEqual(self.chance(self.enemy(901122),'Air rune',15),Fraction(3,256))
+    def test_zombie_member_coins_and_herbs(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(self.enemy(901127),'Coins',10),Fraction(11,128))
+        self.assertEqual(self.chance(self.enemy(901129),'Coins',10),Fraction(10,128))
+        self.assertEqual(self.chance(self.enemy(901127),'Grimy guam leaf'),Fraction(25*32,128*128))
+        self.assertEqual(self.enemy(901128)['denominator'],1)
+    def test_ghosts_empty_ghoul_bones(self):
+        for i in (901130,901131,901132):
+            self.assertFalse(self.enemy(i)['guaranteed'])
+            self.assertEqual(self.enemy(i)['outcomes'][0]['item'],'Nothing')
+        self.assertEqual(self.enemy(901133)['guaranteed'],[{'item':'Bones','quantity':1}])
+    def test_hellhound_independent_stone_and_rune_marginals(self):
+        from fractions import Fraction
+        e=self.enemy(901134)
+        self.assertEqual(self.chance(e,'Smouldering stone'),Fraction(1,32768))
+        for q,rate in ((10,6),(20,3),(50,1)):self.assertEqual(self.chance(e,'Death rune',q),Fraction(rate,50))
+        self.assertTrue(any(o['item']=='Death rune' and o.get('additional') for o in e['outcomes']))
+        self.assertEqual(self.chance(self.enemy(901136),'Smouldering stone'),Fraction(1,16384))
+        self.assertEqual(self.enemy(901135)['denominator'],1)
+        for i in (901134,901135,901136):self.assertEqual(self.enemy(i)['guaranteed'],[{'item':'Vile ashes','quantity':1}])
+    def test_minotaur_101_table_and_explicit_unlisted_slot(self):
+        from fractions import Fraction
+        e=self.enemy(901137)
+        self.assertEqual(e['defence_bonuses']['stab'],-21)
+        self.assertEqual(self.chance(e,'Right skull half'),Fraction(3,101))
+        self.assertEqual(self.chance(e,'Pure essence'),Fraction(5,101))
+        self.assertEqual(self.chance(e,'Nature talisman'),Fraction(4,101*128))
+        self.assertTrue(any(o['item']=='Nothing' and Fraction(o['weight'],e['denominator'])==Fraction(1,101) for o in e['outcomes']))
+    def test_equipment_rows_are_additive_and_verified(self):
+        from expansion_release import artifacts
+        result=artifacts(self.pack,self.prior)
+        sql=next(v for k,v in result.items() if k.suffix=='.sql')
+        spec=json.loads(next(v for k,v in result.items() if k.suffix=='.json'))
+        self.assertIn('VALUES (901122,1,2131,2129,0)',sql)
+        self.assertIn('creature_equip_template WHERE CreatureID IN',spec['precondition_sql'])
+        self.assertIn('CreatureID=901122 AND ID=1 AND ItemID1=2131 AND ItemID2=2129 AND ItemID3=0',spec['verify_sql'])
+    def test_explicit_empty_hands_do_not_generate_empty_sql_list(self):
+        from expansion_release import artifacts
+        for e in self.pack['enemies']:
+            if 'equipment' in e:e['equipment']=[0,0,0]
+        result=artifacts(self.pack,self.prior)
+        spec=json.loads(next(v for k,v in result.items() if k.suffix=='.json'))
+        self.assertNotIn('IN ()',spec['precondition_sql'])
+    def test_runtime_weight_bounds_and_equipment_shape_rejected(self):
+        e=self.pack['enemies'][0];e['denominator']=0x100000000
+        with self.assertRaisesRegex(ValueError,'distribution'):self.module.validate(self.pack,self.prior)
+        e['denominator']=16384;e['equipment']=[2901,0]
+        with self.assertRaisesRegex(ValueError,'equipment'):self.module.validate(self.pack,self.prior)
+    def test_exact_probability_helpers_reject_invalid_tables(self):
+        from loot_tables import compile_weights,independent_bonus
+        from fractions import Fraction
+        with self.assertRaises(ValueError):compile_weights([({'item':'Nothing'},Fraction(1,2))])
+        with self.assertRaisesRegex(ValueError,'uint32'):compile_weights([({'item':'Nothing'},Fraction(1,0x100000001)),({'item':'Bones'},Fraction(0x100000000,0x100000001))])
+        with self.assertRaises(ValueError):independent_bonus([],{'item':'Bones'},0)
+
 if __name__=='__main__':unittest.main()
