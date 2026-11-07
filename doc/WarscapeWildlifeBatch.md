@@ -183,3 +183,9 @@ Verified world backup:
 `C:\WarscapeBackups\world_20261107T073840_558106Z_fddc91ab.sql`.
 Binary/PDB, server DBC and client-patch backups:
 `C:\WarscapeBackups\Wildlife-20261107-deploy`.
+
+## User acceptance - next checkpoint
+
+The user confirmed this complete 21-variant batch working with correct drops on
+7 November 2026. This records the reported gameplay/drop result; no statistical
+drop-rate, audio or exhaustive navigation acceptance is inferred.

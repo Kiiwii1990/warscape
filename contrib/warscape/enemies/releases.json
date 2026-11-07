@@ -1,4 +1,13 @@
 [
-  {"data": "farm_animals_rats.json", "creates_family_schema": true},
-  {"data": "wildlife.json", "adds_source_combat_columns": true}
+  {
+    "data": "farm_animals_rats.json",
+    "creates_family_schema": true
+  },
+  {
+    "data": "wildlife.json",
+    "adds_source_combat_columns": true
+  },
+  {
+    "data": "coastal_wildlife.json"
+  }
 ]

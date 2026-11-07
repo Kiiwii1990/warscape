@@ -1,7 +1,8 @@
 # Enemy families: Cows and Rats release
 
-Current expansion: [21-variant wildlife batch](WarscapeWildlifeBatch.md). The user
-confirmed the Cow/Rat release working with correct drops. The stock Cow attack-clip
+Current expansion: [28-variant coastal wildlife batch](WarscapeCoastalWildlifeBatch.md).
+The user confirmed both the Cow/Rat release and the
+[previous 21-variant wildlife batch](WarscapeWildlifeBatch.md) with correct drops. The stock Cow attack-clip
 gap remains documented; no custom animation was added.
 
 ## Confirmed design

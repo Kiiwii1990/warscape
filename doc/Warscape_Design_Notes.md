@@ -746,3 +746,14 @@ there is no membership gate. Conditional/tertiary loot and the poisonous Scorpio
 remain separate work. See `WarscapeWildlifeBatch.md` for source snapshots,
 validation, deployment and manual test steps. Source-backed model directions remain
 a roadmap for unimplemented families, not a claim of complete bestiary support.
+
+### Enemy catalogue: larger coastal/wildlife checkpoint (7 November 2026)
+
+Confirmed: the user accepted the previous Bats/Bears/Wolves/Spiders/Scorpions batch
+with correct drops and authorized an even larger batch, choosing families from
+the updated supplied list. The next implementation adds 28 distinct variants in
+Birds, Crabs, Crocodiles, Dogs, Monkeys, Snakes and Terrorbirds. Main-table loot
+uses exact rational chances, native quantity ranges and paired outcomes; quest,
+tertiary and special AI mechanics remain separately scoped. See
+[coastal wildlife checkpoint](WarscapeCoastalWildlifeBatch.md) for explicit policy
+choices and manual acceptance steps. New entries are pending user acceptance.

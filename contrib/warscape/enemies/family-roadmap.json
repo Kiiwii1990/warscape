@@ -18,7 +18,7 @@
       "family": "Bird",
       "model_direction": "Carrion bird for vultures, kaliri for birds of prey",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Cow",
@@ -31,19 +31,19 @@
       "family": "Crab",
       "model_direction": "Crawler crab from Darkshore",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Crocodile",
       "model_direction": "Classic crocolisk",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Dog",
       "model_direction": "Scarlet Tracking Hound or Old World mastiff-style hound",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Lizard",
@@ -61,7 +61,7 @@
       "family": "Monkey",
       "model_direction": "Scaled-down Stranglethorn gorilla",
       "assessment": "Stand-in. Ape silhouette.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Rat",
@@ -85,7 +85,7 @@
       "family": "Snake",
       "model_direction": "Adder for small snakes, Wailing Caverns serpent for large ones",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Spider",
@@ -97,7 +97,7 @@
       "family": "Terrorbird",
       "model_direction": "Mulgore plainstrider",
       "assessment": "Close. Tall flightless bird.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Tortoise",

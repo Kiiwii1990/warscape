@@ -59,5 +59,25 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==28);
+    assert(Warscape::EnemyVariants.size()==56);
+    // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
+    for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        assert(pool && pool->Total == 128);
+        auto const first = Warscape::SelectEnemyLoot(entry, 0);
+        for (std::uint32_t roll = 0; roll < 128; ++roll)
+            assert(Warscape::SelectEnemyLoot(entry, roll) == first + (roll < 64 ? 0 : roll < 96 ? 1 : 2));
+        assert(Warscape::EnemyMaximumHit(entry, 99) == 0);
+    }
+    for (std::uint32_t entry : {901071u, 901072u, 901073u, 901074u}) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        assert(pool && pool->Total == 16384);
+        for (std::uint32_t roll = 0; roll < pool->Total; ++roll) {
+            auto const loot = Warscape::SelectEnemyLoot(entry, roll);
+            auto const first = 903000 + (entry - 901060) * 100;
+            assert(loot == 0 || (loot >= first && loot < first + pool->Count));
+        }
+    }
+    assert(Warscape::SelectEnemyLoot(901068, 0) == 0);
+    assert(Warscape::EnemyMeleeDefence(901075, 1, 999) == 12);
 }

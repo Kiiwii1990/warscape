@@ -26,6 +26,11 @@ def normalized_legacy(old):
     return enemy
 
 
+def outcome_drops(enemy, outcome):
+    """One selected outcome can contain paired items; native loot rolls quantity ranges."""
+    return enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome]) + outcome.get('additional', [])
+
+
 def validate(pack, old):
     def require(condition, message):
         if not condition:
@@ -64,9 +69,9 @@ def validate(pack, old):
         require(enemy['denominator'] > 0 and sum(o['weight'] for o in enemy['outcomes']) == enemy['denominator'], 'Invalid loot distribution')
         for i, outcome in enumerate(enemy['outcomes']):
             require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
-            drops = enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome])
+            drops = outcome_drops(enemy, outcome)
             require(len({d['item'] for d in drops}) == len(drops), 'Duplicate item in one outcome')
-            require(all(d['item'] in names and type(d['quantity']) is int and 1 <= d['quantity'] <= 255 for d in drops), 'Invalid loot item/count')
+            require(all(d['item'] in names and type(d['quantity']) is int and type(d.get('quantity_max', d['quantity'])) is int and 1 <= d['quantity'] <= d.get('quantity_max', d['quantity']) <= 255 for d in drops), 'Invalid loot item/count')
             loot = enemy['loot_base'] + i
             require(loot not in used_loot, 'Loot ID collision')
             used_loot.add(loot)
@@ -79,7 +84,7 @@ def runtime_header(pack, old):
     for enemy in enemies:
         first = len(outcomes)
         for i, outcome in enumerate(enemy['outcomes']):
-            has_items = enemy['guaranteed'] or outcome['item'] != 'Nothing'
+            has_items = bool(outcome_drops(enemy, outcome))
             outcomes.append((outcome['weight'], enemy['loot_base'] + i if has_items else 0))
         pools.append((enemy['entry'], first, len(enemy['outcomes']), enemy['denominator']))
         metadata.append((enemy['entry'], enemy['family_id'], families[enemy['family_id']], enemy['subcategory'], enemy['attack_style'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['native_attack_animation'], enemy['source_max_hit'], *[enemy.get('defence_bonuses', {}).get(lane, enemy.get('defence_bonus', 0)) for lane in ('stab', 'slash', 'crush')], ('stab','slash','crush').index(enemy['attack_style']), enemy.get('source_combat_overrides', False)))
@@ -157,7 +162,7 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
     for enemy in pack['enemies']:
         entry, profile = enemy['entry'], enemy['profile_id']
         faction = 14 if enemy['aggressive'] else 31
-        loot_id = enemy['loot_base'] if enemy['guaranteed'] or enemy['outcomes'][0]['item'] != 'Nothing' else 0
+        loot_id = enemy['loot_base'] if outcome_drops(enemy, enemy['outcomes'][0]) else 0
         sql.append(f"INSERT INTO creature_template (entry,modelid1,name,minlevel,maxlevel,faction,scale,speed_walk,speed_run,BaseAttackTime,RangeAttackTime,unit_class,type,lootid,AIName,ExperienceModifier,RegenHealth) VALUES ({entry},{enemy['model']},{quote(enemy['name'])},{enemy['combat_level']},{enemy['combat_level']},{faction},{enemy['scale']},1,1.14286,{enemy['attack_ticks']*600},2400,1,{enemy['creature_type']},{loot_id},'AggressorAI',0,1);")
         stats = ','.join(map(str, enemy['stats']))
         sql.append(f"INSERT INTO warscape_monster_profile (id,name,base_attack,base_strength,base_defence,base_ranged,base_magic,base_hitpoints,growth_attack,growth_strength,growth_defence,growth_ranged,growth_magic,growth_hitpoints,attack_bonus,strength_bonus,defence_bonus) VALUES ({profile},{quote(enemy['name'])},{stats},0,0,0,0,0,0,{enemy['attack_bonus']},{enemy['strength_bonus']},{enemy['defence_bonus']});")
@@ -170,13 +175,14 @@ def release_artifacts(pack, old, *, create_schema=True, include_legacy=True):
         checks.append(f"(SELECT COUNT(*) FROM warscape_monster_attack_speed WHERE creature_entry={entry} AND attack_speed_ticks={enemy['attack_ticks']})=1")
         for i, outcome in enumerate(enemy['outcomes']):
             loot = enemy['loot_base'] + i
-            drops = enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome])
+            drops = outcome_drops(enemy, outcome)
             expected_loot.append(loot)
             checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={len(drops)}')
             for drop in drops:
                 item, count = items[drop['item']]['entry'], drop['quantity']
-                sql.append(f"INSERT INTO creature_loot_template (Entry,Item,Chance,MinCount,MaxCount,Comment) VALUES ({loot},{item},100,{count},{count},'OSRS family catalogue guaranteed outcome');")
-                checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item={item} AND Chance=100 AND MinCount={count} AND MaxCount={count})=1')
+                maximum = drop.get('quantity_max', count)
+                sql.append(f"INSERT INTO creature_loot_template (Entry,Item,Chance,MinCount,MaxCount,Comment) VALUES ({loot},{item},100,{count},{maximum},'OSRS family catalogue guaranteed outcome');")
+                checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item={item} AND Chance=100 AND MinCount={count} AND MaxCount={maximum})=1')
     for enemy in metadata_enemies:
         source = sources[enemy['source']]
         values = [enemy['entry'], enemy['family_id'], enemy['subcategory'], source['url'], enemy['source_npc_ids'], source['raw_sha256'], enemy['attack_style'], enemy['source_max_hit'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['source_poison_resistance']]

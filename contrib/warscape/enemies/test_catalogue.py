@@ -91,4 +91,76 @@ class WildlifeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'maximum hit'):
             self.module.validate(self.pack,self.prior)
 
+
+class CoastalTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module = family_catalogue
+        self.pack = json.loads(Path(__file__).with_name('coastal_wildlife.json').read_text())
+        self.prior = json.loads(Path(__file__).with_name('goblins.json').read_text())
+        self.prior['families'] = []
+        for name in ('farm_animals_rats.json', 'wildlife.json'):
+            old = json.loads(Path(__file__).with_name(name).read_text())
+            for key in ('enemies', 'items', 'families'):
+                self.prior[key].extend(old[key])
+    def enemy(self, entry):
+        return next(e for e in self.pack['enemies'] if e['entry'] == entry)
+    def test_batch_has_28_distinct_variants_seven_families(self):
+        self.module.validate(self.pack, self.prior)
+        self.assertEqual(len(self.pack['enemies']), 28)
+        self.assertEqual({e['family_id'] for e in self.pack['enemies']}, set(range(9,16)))
+        self.assertEqual(len({e['source_npc_ids'] for e in self.pack['enemies']}), 28)
+    def test_chicken_exact_feather_chances(self):
+        e = self.enemy(901062)
+        self.assertEqual(e['denominator'], 128)
+        self.assertEqual([(o['item'], o['quantity'], o['weight']) for o in e['outcomes']], [('Feather',5,64),('Feather',15,32),('Nothing',1,32)])
+        self.assertEqual([d['item'] for d in e['guaranteed']], ['Bones','Raw chicken'])
+        self.assertEqual(e['source_max_hit'], 0)
+    def test_ducks_no_loot(self):
+        for entry in (901068,901069):
+            e = self.enemy(entry)
+            self.assertFalse(e['guaranteed'])
+            self.assertEqual(e['outcomes'][0]['item'], 'Nothing')
+    def test_gem_chances_and_pre_quest_talisman(self):
+        from fractions import Fraction
+        for entry in range(901071,901075):
+            e = self.enemy(entry)
+            chances = lambda n: sum(Fraction(o['weight'],e['denominator']) for o in e['outcomes'] if o['item']==n)
+            self.assertEqual(chances('Uncut sapphire'), Fraction(32,16384))
+            self.assertEqual(chances('Nature talisman'), Fraction(4,16384))
+            self.assertEqual(chances('Rune javelin'), Fraction(1,16384))
+    def test_ammonite_minerals_are_one_paired_roll(self):
+        e=self.enemy(901074)
+        mineral=[o for o in e['outcomes'] if o['item']=='Calcite']
+        self.assertEqual(len(mineral),1)
+        self.assertEqual(mineral[0]['additional'],[{'item':'Pyrophosphite','quantity':1}])
+        self.assertEqual(mineral[0]['weight']*128,e['denominator'])
+        self.assertFalse(any(o['item']=='Pyrophosphite' for o in e['outcomes']))
+    def test_quantity_ranges_emitted_without_probability_expansion(self):
+        from expansion_release import artifacts
+        sql=next(v for k,v in artifacts(self.pack,self.prior).items() if k.suffix=='.sql')
+        e=self.enemy(901073)
+        row=next(o for o in e['outcomes'] if o['item']=='Coins' and o['quantity']==4)
+        self.assertEqual(row['quantity_max'],10)
+        loot=e['loot_base']+e['outcomes'].index(row)
+        self.assertIn(f'VALUES ({loot},902006,100,4,10,',sql)
+    def test_bad_range_and_duplicate_paired_items_refused(self):
+        e=self.enemy(901074)
+        o=next(o for o in e['outcomes'] if o['item']=='Calcite')
+        o['additional'][0]['quantity_max']=0
+        with self.assertRaisesRegex(ValueError,'count'):self.module.validate(self.pack,self.prior)
+        o['additional']=[{'item':'Calcite','quantity':1}]
+        with self.assertRaisesRegex(ValueError,'Duplicate item'):self.module.validate(self.pack,self.prior)
+    def test_swamp_bloom_and_monkey_quest_drops_not_unconditional(self):
+        self.assertFalse(self.enemy(901073)['guaranteed'])
+        for entry in (901080,901081):
+            self.assertEqual(self.enemy(entry)['guaranteed'],[{'item':'Monkey bones','quantity':1}])
+    def test_land_crocodile_herb_table(self):
+        e=self.enemy(901075)
+        self.assertEqual(e['source_npc_ids'],'11582')
+        self.assertEqual(e['defence_bonuses'],{'stab':20,'slash':12,'crush':22})
+        herbs=[o for o in e['outcomes'] if o['item']!='Nothing']
+        self.assertEqual(sum(o['weight'] for o in herbs)*20,e['denominator'])
+        self.assertEqual(next(o['weight'] for o in herbs if o['item']=='Grimy guam leaf'),32)
+
 if __name__=='__main__':unittest.main()
