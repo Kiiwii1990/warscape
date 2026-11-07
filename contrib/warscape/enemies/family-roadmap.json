@@ -1,0 +1,583 @@
+{
+  "source": "Kieran enemy notes supplied by user 2026-11-07",
+  "policy": "Shared family identity, subcategory-specific combat/loot and model variants. Slayer task assignment is by family; task system not yet implemented.",
+  "families": [
+    {
+      "family": "Bat",
+      "model_direction": "Duskbat",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Bear",
+      "model_direction": "Grizzly bear from Grizzly Hills",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Bird",
+      "model_direction": "Carrion bird for vultures, kaliri for birds of prey",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Cow",
+      "model_direction": "Bess-style farm cow",
+      "assessment": "Direct",
+      "status": "prototype",
+      "implementation_note": "Bess model retained; native model has no attack clip. Prototype combat is mechanical until animation work."
+    },
+    {
+      "family": "Crab",
+      "model_direction": "Crawler crab from Darkshore",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Crocodile",
+      "model_direction": "Classic crocolisk",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Dog",
+      "model_direction": "Scarlet Tracking Hound or Old World mastiff-style hound",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Lizard",
+      "model_direction": "Thunder lizard scaled down",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Mammoth",
+      "model_direction": "Wooly Mammoth from Howling Fjord",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Monkey",
+      "model_direction": "Scaled-down Stranglethorn gorilla",
+      "assessment": "Stand-in. Ape silhouette.",
+      "status": "planned"
+    },
+    {
+      "family": "Rat",
+      "model_direction": "Black Rat, scaled up for giant rats",
+      "assessment": "Direct",
+      "status": "prototype"
+    },
+    {
+      "family": "Scarab",
+      "model_direction": "Ahn\u2019Qiraj scarab beetle",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Scorpion",
+      "model_direction": "Durotar scorpid",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Snake",
+      "model_direction": "Adder for small snakes, Wailing Caverns serpent for large ones",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Spider",
+      "model_direction": "Duskwood widow spider",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Terrorbird",
+      "model_direction": "Mulgore plainstrider",
+      "assessment": "Close. Tall flightless bird.",
+      "status": "planned"
+    },
+    {
+      "family": "Tortoise",
+      "model_direction": "Snapjaw turtle from Hillsbrad",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Wolf",
+      "model_direction": "Old World timber wolf",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Bandit",
+      "model_direction": "Defias human with leather armour and face covering",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Druid",
+      "model_direction": "Night elf druid in robes, or human caster for Chaos Druids",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Dwarf",
+      "model_direction": "Ironforge dwarf",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Elf",
+      "model_direction": "Blood elf",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Knight",
+      "model_direction": "Human in full plate, dark armour for Black Knights",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Pirate",
+      "model_direction": "Bloodsail human pirate",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Rogue",
+      "model_direction": "Defias cutpurse-style human with daggers",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Warrior",
+      "model_direction": "Human infantry with weapons and armour varied by tier",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Aviansie",
+      "model_direction": "Terokkar arakkoa",
+      "assessment": "Close. Hunched avian humanoid.",
+      "status": "planned"
+    },
+    {
+      "family": "Giant",
+      "model_direction": "Mountain giant or scaled-up human for flesh and clothing",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Goblin",
+      "model_direction": "Old World Ratchet or Booty Bay goblin",
+      "assessment": "Direct",
+      "status": "prototype"
+    },
+    {
+      "family": "Hobgoblin",
+      "model_direction": "Scaled-down orc with rough gear, or scaled-up goblin",
+      "assessment": "Stand-in",
+      "status": "planned"
+    },
+    {
+      "family": "Lizardman",
+      "model_direction": "Barrens thunder lizard or Zangarmarsh naga",
+      "assessment": "Stand-in. Naga has a tail instead of legs.",
+      "status": "planned"
+    },
+    {
+      "family": "Minotaur",
+      "model_direction": "Male tauren with large horns and minimal armour",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Ogre",
+      "model_direction": "Classic ogre",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Suqah",
+      "model_direction": "Feral yeti from Winterspring or Alterac",
+      "assessment": "Stand-in. Similar bulk, furrier silhouette.",
+      "status": "planned"
+    },
+    {
+      "family": "Troll",
+      "model_direction": "Ice troll for frozen variants, forest troll for others",
+      "assessment": "Close. WoW trolls are leaner.",
+      "status": "planned"
+    },
+    {
+      "family": "TzHaar",
+      "model_direction": "Molten Core fire elemental or Obsidian Destroyer",
+      "assessment": "Stand-in. Neither combines a rocky humanoid body with molten detailing.",
+      "status": "planned"
+    },
+    {
+      "family": "Werewolf",
+      "model_direction": "Classic Duskwood worgen",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Dragon",
+      "model_direction": "Classic dragon, whelps for babies",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Drake",
+      "model_direction": "WoW drake, grounded where possible",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Wyrm",
+      "model_direction": "Northrend jormungar",
+      "assessment": "Close. Serpentine, with a heavier worm-like head.",
+      "status": "planned"
+    },
+    {
+      "family": "Wyvern",
+      "model_direction": "Proto-drake, or frost wyrm for skeletal variants",
+      "assessment": "Close. WoW\u2019s named wyvern is a furred wind rider.",
+      "status": "planned"
+    },
+    {
+      "family": "Abyssal Demon",
+      "model_direction": "Dark red or purple felguard",
+      "assessment": "Close. Upright horned demon.",
+      "status": "planned"
+    },
+    {
+      "family": "Demon",
+      "model_direction": "Felguard for greater demons, satyr for smaller demons",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Hellhound",
+      "model_direction": "Felhound for lean variants, core hound for heavier ones",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Pyrefiend",
+      "model_direction": "Fel imp or scaled-down fire elemental",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Waterfiend",
+      "model_direction": "Northrend water revenant",
+      "assessment": "Close. Humanoid water spirit.",
+      "status": "planned"
+    },
+    {
+      "family": "Ankou",
+      "model_direction": "Hooded Scourge wraith",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Banshee",
+      "model_direction": "Classic Warcraft banshee",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Ghost",
+      "model_direction": "Translucent human ghost from Karazhan",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Ghoul",
+      "model_direction": "Scourge ghoul",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Revenant",
+      "model_direction": "Northrend armoured revenant or translucent base creatures",
+      "assessment": "Close. Translucent base creatures preserve variant identity.",
+      "status": "planned"
+    },
+    {
+      "family": "Shade",
+      "model_direction": "Floating shadow shade",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Skeleton",
+      "model_direction": "Classic human skeleton",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Vampyre",
+      "model_direction": "Darkfallen blood elf from Icecrown or the Crimson Hall",
+      "assessment": "Close. Winged vyres need a separate stand-in.",
+      "status": "planned"
+    },
+    {
+      "family": "Zombie",
+      "model_direction": "Plaguelands zombie",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Icefiend",
+      "model_direction": "Scaled-down ice elemental or ice revenant",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Killerwatt",
+      "model_direction": "Storm revenant or lightning elemental",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Nagua",
+      "model_direction": "Fire, frost or earth revenant by variant",
+      "assessment": "Close. Elemental and armoured silhouette.",
+      "status": "planned"
+    },
+    {
+      "family": "Possessed Tool",
+      "model_direction": "Kael\u2019thas Tempest Keep animated weapon, Devastation for magic axe",
+      "assessment": "Direct for the animated axe. The reference item ID differs from the creature display ID.",
+      "status": "planned"
+    },
+    {
+      "family": "Aberrant Spectre",
+      "model_direction": "Plague-green wraith or spectre",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Aquanite",
+      "model_direction": "Zangarmarsh sporebat",
+      "assessment": "Stand-in. Hovering silhouette. Distinctive head and body need custom work.",
+      "status": "planned"
+    },
+    {
+      "family": "Araxyte",
+      "model_direction": "Large dark Northrend spider",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Basilisk",
+      "model_direction": "Classic Warcraft basilisk",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Bloodveld",
+      "model_direction": "Red felhound",
+      "assessment": "Stand-in. Fleshy demonic quadruped. Signature tongue needs custom work.",
+      "status": "planned"
+    },
+    {
+      "family": "Catablepon",
+      "model_direction": "Scaled-down horned clefthoof",
+      "assessment": "Stand-in. Low, stocky build.",
+      "status": "planned"
+    },
+    {
+      "family": "Cave Bug",
+      "model_direction": "Small beetle or silithid scarab",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Cave Crawler",
+      "model_direction": "Scaled-down Outland ravager",
+      "assessment": "Stand-in. Low, spiny cave predator.",
+      "status": "planned"
+    },
+    {
+      "family": "Cave Horror",
+      "model_direction": "Dark-furred worgen",
+      "assessment": "Close. Hunched, clawed silhouette.",
+      "status": "planned"
+    },
+    {
+      "family": "Cave Slime",
+      "model_direction": "Classic green ooze",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Cockatrice",
+      "model_direction": "Hawkstrider, unsaddled if a suitable display exists",
+      "assessment": "Close. Crested bird silhouette with fewer reptilian features.",
+      "status": "planned"
+    },
+    {
+      "family": "Crawling Hand",
+      "model_direction": "No close stock model identified",
+      "assessment": "Custom. Needs a severed hand that walks on its fingers.",
+      "status": "planned"
+    },
+    {
+      "family": "Custodian Stalker",
+      "model_direction": "Northrend shoveltusk",
+      "assessment": "Close. Similar antlers, different body shape.",
+      "status": "planned"
+    },
+    {
+      "family": "Dagannoth",
+      "model_direction": "Outland ravager for low forms, bulky makrura for upright forms",
+      "assessment": "Stand-in",
+      "status": "planned"
+    },
+    {
+      "family": "Dark Beast",
+      "model_direction": "Dark Outland ravager",
+      "assessment": "Stand-in. Low, spined, more insect-like.",
+      "status": "planned"
+    },
+    {
+      "family": "Dust Devil",
+      "model_direction": "Tan air elemental with dust effect if needed",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Ent",
+      "model_direction": "Treant",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Flesh Crawler",
+      "model_direction": "Silithid grub",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Gargoyle",
+      "model_direction": "Scourge gargoyle",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Gryphon",
+      "model_direction": "Classic gryphon, unsaddled for wild enemies",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Harpie Bug Swarm",
+      "model_direction": "Silithid wasp or flying insect with swarm effect",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Hydra",
+      "model_direction": "Classic Warcraft hydra with a normal skin",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Infernal Mage",
+      "model_direction": "Hooded human or Forsaken caster in dark robes",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Jelly",
+      "model_direction": "Translucent ooze",
+      "assessment": "Close. Use colour to distinguish it from Cave Slime.",
+      "status": "planned"
+    },
+    {
+      "family": "Kalphite",
+      "model_direction": "Silithid beetle for workers, larger Qiraji insect for soldiers or guardians",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Kraken",
+      "model_direction": "Lurker Below-style aquatic monster",
+      "assessment": "Stand-in. Recognisable octopus body and spread tentacles need custom work.",
+      "status": "planned"
+    },
+    {
+      "family": "Kurask",
+      "model_direction": "Rhino",
+      "assessment": "Close. Heavy build and prominent horn.",
+      "status": "planned"
+    },
+    {
+      "family": "Molanisk",
+      "model_direction": "Dark jormungar or carrion grub",
+      "assessment": "Stand-in. Crawling cave-creature profile.",
+      "status": "planned"
+    },
+    {
+      "family": "Nechryael",
+      "model_direction": "Dark satyr or felguard for larger variants",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Otherworldly Being",
+      "model_direction": "Voidwalker",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Rockslug",
+      "model_direction": "Stone-coloured carrion grub",
+      "assessment": "Stand-in. Segmented grub silhouette.",
+      "status": "planned"
+    },
+    {
+      "family": "Smoke Devil",
+      "model_direction": "Dark air elemental with smoke effect",
+      "assessment": "Close",
+      "status": "planned"
+    },
+    {
+      "family": "Sourhog",
+      "model_direction": "Classic boar with sickly or bristly skin",
+      "assessment": "Direct",
+      "status": "planned"
+    },
+    {
+      "family": "Terror Dog",
+      "model_direction": "Dark worg or felhound",
+      "assessment": "Close. Monstrous dog or demonic look.",
+      "status": "planned"
+    },
+    {
+      "family": "Turoth",
+      "model_direction": "Clefthoof scaled smaller than the Kurask\u2019s rhino",
+      "assessment": "Stand-in. Stocky, horned profile.",
+      "status": "planned"
+    },
+    {
+      "family": "Wall Beast",
+      "model_direction": "Clawed rock flayer partly concealed in a wall",
+      "assessment": "Stand-in. No close stock model for the wall ambush.",
+      "status": "planned"
+    },
+    {
+      "family": "Zygomite",
+      "model_direction": "Zangarmarsh fungal giant or bog lord",
+      "assessment": "Close. Fungal theme, bulkier mushroom profile.",
+      "status": "planned"
+    }
+  ]
+}

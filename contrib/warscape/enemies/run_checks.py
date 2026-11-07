@@ -11,4 +11,4 @@ run([sys.executable,'-m','unittest','discover','-s',HERE,'-p','test_catalogue.py
 run(['cmake','-S',out,'-B',out/'build'])
 run(['cmake','--build',out/'build','--config','Debug'])
 run([out/'build/Debug/EnemyChecks.exe'])
-print('PASS: source validation, exhaustive 128-slot selection, fallback and Goblin combat formula checks')
+print('PASS: source validation, family tiers, empty loot, exhaustive Goblin selection and combat formula checks')

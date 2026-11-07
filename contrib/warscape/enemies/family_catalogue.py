@@ -1,0 +1,177 @@
+"""Second immutable enemy release and combined runtime catalogue.
+Native combat/loot remain authoritative; JSON supplies reviewed family metadata.
+"""
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+DATA = Path(__file__).with_name('farm_animals_rats.json')
+HEADER = ROOT / 'src/server/game/Entities/Unit/WarscapeEnemyCatalogue.h'
+
+
+def quote(value):
+    return "'" + str(value).replace("'", "''") + "'"
+
+
+def normalized_legacy(old):
+    enemy = dict(old['enemies'][0])
+    variant = old['variants'][0]
+    enemy.update(family_id=1, subcategory='regular_2', source='Goblin',
+                 source_npc_ids=variant['source_npc_ids'], combat_level=2,
+                 attack_style='crush', slayer_xp=5, respawn_ticks=35,
+                 source_poison_resistance=0, source_max_hit=1, native_attack_animation=True,
+                 guaranteed=[{'item': 'Bones', 'quantity': 1}])
+    return enemy
+
+
+def validate(pack, old):
+    def require(condition, message):
+        if not condition:
+            raise ValueError(message)
+    items = pack['shared_items'] + pack['items']
+    for key in ('entry', 'name'):
+        require(len({x[key] for x in items}) == len(items), 'Duplicate item identity')
+    old_items = {x['name']: x['entry'] for x in old['items']}
+    for item in pack['shared_items']:
+        require(old_items.get(item['name']) == item['entry'], 'Shared item differs from deployed release')
+    require(not ({x['entry'] for x in pack['items']} & set(old_items.values())), 'New item collides with deployed item')
+    family_ids = {f['id'] for f in pack['families']}
+    require(len(family_ids) == len(pack['families']), 'Duplicate family ID')
+    require(len({f['key'] for f in pack['families']}) == len(family_ids), 'Duplicate family key')
+    names = {x['name'] for x in items}
+    used_loot = {old['enemies'][0]['loot_base'] + i for i in range(len(old['enemies'][0]['outcomes']))}
+    for key in ('entry', 'profile_id'):
+        require(len({e[key] for e in pack['enemies']}) == len(pack['enemies']), 'Duplicate enemy/profile ID')
+        require(not ({e[key] for e in pack['enemies']} & {e[key] for e in old['enemies']}), 'Enemy/profile collides with deployed release')
+    for enemy in pack['enemies']:
+        require(enemy['family_id'] in family_ids, 'Unknown family')
+        require(enemy['source'] in pack['sources'], 'Missing Wiki source')
+        require(pack['sources'][enemy['source']]['url'].startswith('https://oldschool.runescape.wiki/w/'), 'Invalid Wiki provenance')
+        require(len(enemy['stats']) == 6 and all(type(n) is int and 1 <= n <= 1000000 for n in enemy['stats']), 'Invalid combat stats')
+        require(1 <= enemy['combat_level'] <= 255 and 2 <= enemy['attack_ticks'] <= 12, 'Unsupported level/speed')
+        require(enemy['attack_style'] in ('stab', 'slash', 'crush'), 'Unsupported melee style')
+        require(0 < enemy['scale'] <= 10 and type(enemy['aggressive']) is bool, 'Invalid model/aggression')
+        require(all(-64 <= enemy[k] <= 1000000 for k in ('attack_bonus', 'strength_bonus', 'defence_bonus')), 'Invalid combat bonus')
+        # Existing OSRS max-hit formula, checked against the published source value.
+        require(((enemy['stats'][1] + 8) * (enemy['strength_bonus'] + 64) + 320) // 640 == enemy['source_max_hit'], 'Source maximum hit does not match combat formula')
+        require(enemy['denominator'] > 0 and sum(o['weight'] for o in enemy['outcomes']) == enemy['denominator'], 'Invalid loot distribution')
+        for i, outcome in enumerate(enemy['outcomes']):
+            require(type(outcome['weight']) is int and 0 < outcome['weight'] <= enemy['denominator'], 'Invalid weight')
+            drops = enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome])
+            require(len({d['item'] for d in drops}) == len(drops), 'Duplicate item in one outcome')
+            require(all(d['item'] in names and type(d['quantity']) is int and 1 <= d['quantity'] <= 255 for d in drops), 'Invalid loot item/count')
+            loot = enemy['loot_base'] + i
+            require(loot not in used_loot, 'Loot ID collision')
+            used_loot.add(loot)
+
+
+def runtime_header(pack, old):
+    enemies = [normalized_legacy(old)] + pack['enemies']
+    families = {f['id']: f['name'] for f in pack['families']}
+    pools, outcomes, metadata = [], [], []
+    for enemy in enemies:
+        first = len(outcomes)
+        for i, outcome in enumerate(enemy['outcomes']):
+            has_items = enemy['guaranteed'] or outcome['item'] != 'Nothing'
+            outcomes.append((outcome['weight'], enemy['loot_base'] + i if has_items else 0))
+        pools.append((enemy['entry'], first, len(enemy['outcomes']), enemy['denominator']))
+        metadata.append((enemy['entry'], enemy['family_id'], families[enemy['family_id']], enemy['subcategory'], enemy['attack_style'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['native_attack_animation']))
+    text = '''// Generated by contrib/warscape/enemies/compile.py from immutable releases.
+#ifndef WARSCAPE_ENEMY_CATALOGUE_H
+#define WARSCAPE_ENEMY_CATALOGUE_H
+#include <array>
+#include <cstdint>
+namespace Warscape {
+struct EnemyLootOutcome { std::uint32_t Weight, Loot; };
+struct EnemyLootPool { std::uint32_t Entry, First, Count, Total; };
+struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; };
+'''
+    def array(kind, name, rows):
+        return f'inline constexpr std::array<{kind}, {len(rows)}> {name} = {{{{\n' + ',\n'.join('    {' + ', '.join(json.dumps(v) for v in row) + '}' for row in rows) + '\n}};\n'
+    text += array('EnemyLootOutcome', 'EnemyLootOutcomes', outcomes)
+    text += array('EnemyLootPool', 'EnemyLootPools', pools)
+    text += array('EnemyVariant', 'EnemyVariants', metadata)
+    text += '''inline EnemyVariant const* FindEnemyVariant(std::uint32_t entry) {
+    for (auto const& variant : EnemyVariants) if (variant.Entry == entry) return &variant;
+    return nullptr;
+}
+inline EnemyLootPool const* FindEnemyLootPool(std::uint32_t entry) {
+    for (auto const& pool : EnemyLootPools) if (pool.Entry == entry) return &pool;
+    return nullptr;
+}
+inline std::uint32_t SelectEnemyLoot(std::uint32_t entry, std::uint32_t roll) {
+    auto const* pool = FindEnemyLootPool(entry);
+    if (!pool || roll >= pool->Total) return 0;
+    for (std::uint32_t i = pool->First; i < pool->First + pool->Count; ++i) {
+        auto const& outcome = EnemyLootOutcomes[i];
+        if (roll < outcome.Weight) return outcome.Loot;
+        roll -= outcome.Weight;
+    }
+    return 0;
+}
+}
+#endif
+'''
+    return text
+
+
+def release_artifacts(pack, old):
+    validate(pack, old)
+    items = {x['name']: x for x in pack['shared_items'] + pack['items']}
+    metadata_enemies = [normalized_legacy(old)] + pack['enemies']
+    sources = dict(pack['sources'], Goblin=old['source'])
+    sql = ['-- Generated enemy families release 2. Additive; release 1 is immutable.',
+           'CREATE TABLE `warscape_enemy_family` (`id` INT UNSIGNED NOT NULL, `family_key` VARCHAR(64) NOT NULL, `name` VARCHAR(80) NOT NULL, `model_direction` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY (`family_key`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;',
+           'CREATE TABLE `warscape_enemy_variant` (`creature_entry` INT UNSIGNED NOT NULL, `family_id` INT UNSIGNED NOT NULL, `subcategory` VARCHAR(64) NOT NULL, `source_url` VARCHAR(255) NOT NULL, `source_npc_ids` VARCHAR(255) NOT NULL, `source_sha256` CHAR(64) NOT NULL, `attack_style` VARCHAR(8) NOT NULL, `source_max_hit` INT UNSIGNED NOT NULL, `slayer_xp` INT UNSIGNED NOT NULL, `respawn_ticks` INT UNSIGNED NOT NULL, `source_poison_resistance` INT UNSIGNED NOT NULL, PRIMARY KEY (`creature_entry`), KEY (`family_id`, `subcategory`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;']
+    checks = []
+    for family in pack['families']:
+        sql.append(f"INSERT INTO warscape_enemy_family VALUES ({family['id']},{quote(family['key'])},{quote(family['name'])},{quote(family['model_note'])});")
+        checks.append(f"(SELECT COUNT(*) FROM warscape_enemy_family WHERE id={family['id']} AND family_key={quote(family['key'])} AND name={quote(family['name'])})=1")
+    for item in pack['items']:
+        sql.append(f"INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,description,Material) SELECT {item['entry']},15,0,{quote(item['name'])},displayid,1,1,200,-1,-1,'OSRS enemy catalogue collectible; gameplay use is not implemented.',Material FROM item_template WHERE entry={item['display_source']};")
+        checks.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['entry']} AND name={quote(item['name'])} AND class=15 AND stackable=200 AND displayid=(SELECT displayid FROM item_template WHERE entry={item['display_source']}))=1")
+    expected_loot = []
+    for enemy in pack['enemies']:
+        entry, profile = enemy['entry'], enemy['profile_id']
+        faction = 14 if enemy['aggressive'] else 31
+        loot_id = enemy['loot_base'] if enemy['guaranteed'] or enemy['outcomes'][0]['item'] != 'Nothing' else 0
+        sql.append(f"INSERT INTO creature_template (entry,modelid1,name,minlevel,maxlevel,faction,scale,speed_walk,speed_run,BaseAttackTime,RangeAttackTime,unit_class,type,lootid,AIName,ExperienceModifier,RegenHealth) VALUES ({entry},{enemy['model']},{quote(enemy['name'])},{enemy['combat_level']},{enemy['combat_level']},{faction},{enemy['scale']},1,1.14286,{enemy['attack_ticks']*600},2400,1,{enemy['creature_type']},{loot_id},'AggressorAI',0,1);")
+        stats = ','.join(map(str, enemy['stats']))
+        sql.append(f"INSERT INTO warscape_monster_profile (id,name,base_attack,base_strength,base_defence,base_ranged,base_magic,base_hitpoints,growth_attack,growth_strength,growth_defence,growth_ranged,growth_magic,growth_hitpoints,attack_bonus,strength_bonus,defence_bonus) VALUES ({profile},{quote(enemy['name'])},{stats},0,0,0,0,0,0,{enemy['attack_bonus']},{enemy['strength_bonus']},{enemy['defence_bonus']});")
+        sql.append(f'INSERT INTO warscape_monster_template (entry,profile_id) VALUES ({entry},{profile});')
+        sql.append(f"INSERT INTO warscape_monster_attack_speed VALUES ({entry},{enemy['attack_ticks']});")
+        checks.append(f"(SELECT COUNT(*) FROM creature_template WHERE entry={entry} AND modelid1={enemy['model']} AND minlevel={enemy['combat_level']} AND maxlevel={enemy['combat_level']} AND faction={faction} AND ABS(scale-{enemy['scale']})<0.001 AND type={enemy['creature_type']} AND lootid={loot_id} AND AIName='AggressorAI' AND mingold=0 AND maxgold=0)=1")
+        stat_checks = ' AND '.join(f'base_{key}={value} AND growth_{key}=0' for key, value in zip(('attack','strength','defence','ranged','magic','hitpoints'), enemy['stats']))
+        checks.append(f"(SELECT COUNT(*) FROM warscape_monster_profile WHERE id={profile} AND {stat_checks} AND attack_bonus={enemy['attack_bonus']} AND strength_bonus={enemy['strength_bonus']} AND defence_bonus={enemy['defence_bonus']})=1")
+        checks.append(f'(SELECT COUNT(*) FROM warscape_monster_template WHERE entry={entry} AND profile_id={profile})=1')
+        checks.append(f"(SELECT COUNT(*) FROM warscape_monster_attack_speed WHERE creature_entry={entry} AND attack_speed_ticks={enemy['attack_ticks']})=1")
+        for i, outcome in enumerate(enemy['outcomes']):
+            loot = enemy['loot_base'] + i
+            drops = enemy['guaranteed'] + ([] if outcome['item'] == 'Nothing' else [outcome])
+            expected_loot.append(loot)
+            checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={len(drops)}')
+            for drop in drops:
+                item, count = items[drop['item']]['entry'], drop['quantity']
+                sql.append(f"INSERT INTO creature_loot_template (Entry,Item,Chance,MinCount,MaxCount,Comment) VALUES ({loot},{item},100,{count},{count},'OSRS family catalogue guaranteed outcome');")
+                checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item={item} AND Chance=100 AND MinCount={count} AND MaxCount={count})=1')
+    for enemy in metadata_enemies:
+        source = sources[enemy['source']]
+        values = [enemy['entry'], enemy['family_id'], enemy['subcategory'], source['url'], enemy['source_npc_ids'], source['raw_sha256'], enemy['attack_style'], enemy['source_max_hit'], enemy['slayer_xp'], enemy['respawn_ticks'], enemy['source_poison_resistance']]
+        sql.append('INSERT INTO warscape_enemy_variant VALUES (' + ','.join(str(x) if isinstance(x, int) else quote(x) for x in values) + ');')
+        columns = ['creature_entry','family_id','subcategory','source_url','source_npc_ids','source_sha256','attack_style','source_max_hit','slayer_xp','respawn_ticks','source_poison_resistance']
+        checks.append('(SELECT COUNT(*) FROM warscape_enemy_variant WHERE ' + ' AND '.join(k+'='+ (str(v) if isinstance(v,int) else quote(v)) for k,v in zip(columns,values)) + ')=1')
+    pre = ["(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('warscape_enemy_family','warscape_enemy_variant'))=0"]
+    def ids(values): return ','.join(map(str, values))
+    for table, key, values in [('creature_template','entry',[e['entry'] for e in pack['enemies']]),('creature','id',[e['entry'] for e in pack['enemies']]),('warscape_monster_profile','id',[e['profile_id'] for e in pack['enemies']]),('warscape_monster_template','entry',[e['entry'] for e in pack['enemies']]),('warscape_monster_attack_speed','creature_entry',[e['entry'] for e in pack['enemies']]),('item_template','entry',[i['entry'] for i in pack['items']]),('creature_loot_template','Entry',expected_loot)]:
+        pre.append(f'(SELECT COUNT(*) FROM {table} WHERE {key} IN ({ids(values)}))=0')
+    for item in pack['shared_items']:
+        pre.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['entry']} AND name={quote(item['name'])})=1")
+    for item in pack['items']:
+        pre.append(f"(SELECT COUNT(*) FROM item_template WHERE entry={item['display_source']})=1")
+    pre.append('(SELECT COUNT(*) FROM creature_template WHERE entry=901000)=1')
+    checks.append("(SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('warscape_enemy_family','warscape_enemy_variant') AND engine='InnoDB')=2")
+    text = '\n'.join(sql) + '\n'
+    spec = {'sha1': hashlib.sha1(text.encode()).hexdigest().upper(), 'precondition_sql': 'SELECT IF('+' AND '.join(pre)+',1,0)', 'verify_sql':'SELECT IF('+' AND '.join(checks)+',1,0)'}
+    return {ROOT / f"sql/updates/world/3.3.5/{pack['release']}.sql":text,
+            ROOT / f"contrib/warscape/verifications/{pack['release']}.json":json.dumps(spec,indent=2)+'\n'}

@@ -47,8 +47,8 @@ def append(data,items):
     return result
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--client',type=Path,required=True);p.add_argument('--server-data',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
-    c=json.loads(Path(__file__).with_name('goblins.json').read_text());assets=ClientAssets(a.client)
+    p=argparse.ArgumentParser();p.add_argument('--client',type=Path,required=True);p.add_argument('--server-data',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--catalogue',type=Path,default=Path(__file__).with_name('goblins.json'));a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+    c=json.loads(a.catalogue.read_text(encoding='utf-8'));assets=ClientAssets(a.client)
     try:
         client=assets.get(r'DBFilesClient\Item.dbc')[0];server=(a.server_data/'dbc/Item.dbc').read_bytes()
         cr,_=dbc(client,8);sr,_=dbc(server,8)
@@ -60,7 +60,7 @@ def main():
         if patch.exists():merge(patch,{r'DBFilesClient\Item.dbc':newclient},target)
         else:archive(target,{r'DBFilesClient\Item.dbc':newclient})
         manifest={'client':str(a.client),'server_data':str(a.server_data),'server_original_sha256':hashlib.sha256(server).hexdigest(),'client_original_sha256':hashlib.sha256(client).hexdigest(),'items':len(c['items']),'server_prepared_sha256':hashlib.sha256(newserver).hexdigest(),'patch_sha256':hashlib.sha256(target.read_bytes()).hexdigest()}
-        (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print('Prepared 15 additive collectible items; original DBC rows/strings preserved.')
+        (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(f"Prepared {len(c['items'])} additive collectible items; original DBC rows/strings preserved.")
     finally:
         for _,f in assets.archives:f.file.close()
 if __name__=='__main__':main()

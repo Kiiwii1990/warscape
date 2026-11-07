@@ -25,6 +25,7 @@
 #include "CreatureAI.h"
 #include "TemporarySummon.h"
 #include "WarscapeTrainingDummy.h"
+#include "WarscapeEnemyCatalogue.h"
 #include "DatabaseEnv.h"
 #include "DisableMgr.h"
 #include "GridNotifiers.h"
@@ -340,6 +341,28 @@ public:
             return true;
         }
 
+        if (StringEqualI(style, "enemy"))
+        {
+            Creature* creature = handler->getSelectedCreature();
+            auto const* variant = creature ? Warscape::FindEnemyVariant(creature->GetEntry()) : nullptr;
+            if (!variant)
+            {
+                handler->SendSysMessage("Select a registered OSRS catalogue enemy first.");
+                return true;
+            }
+            auto const stats = sObjectMgr->GetWarscapeMonsterStats(creature->GetEntry());
+            handler->PSendSysMessage("Enemy family: %s (ID %u); subcategory: %s; creature entry: %u",
+                variant->Family, variant->FamilyId, variant->Subcategory, variant->Entry);
+            handler->PSendSysMessage("Attack %u / Strength %u / Defence %u / Ranged %u / Magic %u / Hitpoints %u",
+                stats[0], stats[1], stats[2], stats[3], stats[4], stats[5]);
+            handler->PSendSysMessage("Source melee style: %s; interval: %u ticks; source respawn: %u ticks",
+                variant->AttackStyle, sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry()), variant->RespawnTicks);
+            handler->PSendSysMessage("Slayer XP reference: %u (Slayer tasks/rewards are not enabled)", variant->SlayerXP);
+            if (!variant->NativeAttackAnimation)
+                handler->SendSysMessage("This stock model has no attack animation; combat damage is server-controlled.");
+            return true;
+        }
+
         if (StringEqualI(style, "monsterspeed"))
         {
             Unit* selected = player->GetSelectedUnit();
@@ -438,7 +461,7 @@ public:
             selected = 3;
         else if (!style.empty())
         {
-            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs addxp, .rs addhalfxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
+            handler->SendSysMessage("Warscape: Use .rs stats, .rs bonuses, .rs enemy, .rs monsterspeed, .rs dummy, .rs attacktest, .rs setlevel, .rs setxp, .rs addxp, .rs addhalfxp, .rs accurate, .rs aggressive, .rs defensive or .rs controlled.");
             return true;
         }
 

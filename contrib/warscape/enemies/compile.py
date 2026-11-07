@@ -87,8 +87,7 @@ inline std::uint32_t SelectEnemyLoot(std::uint32_t entry, std::uint32_t roll) {
 '''
     return '\n'.join(sql)+'\n',header
 
-def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--write',action='store_true',help='Create initial release artifacts; existing release changes are refused');args=parser.parse_args()
+def legacy_release_artifacts():
     c=json.loads(DATA.read_text());sql,header=compile_data(c)
     variants={v['key']:v for v in c['variants']};items={x['name']:x for x in c['items']}
     enemy_ids=[e['entry'] for e in c['enemies']];profile_ids=[e['profile_id'] for e in c['enemies']]
@@ -116,11 +115,34 @@ def main():
             checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot})={len(drops)}')
             for item,n in drops:checks.append(f'(SELECT COUNT(*) FROM creature_loot_template WHERE Entry={loot} AND Item={item} AND Chance=100 AND MinCount={n} AND MaxCount={n})=1')
     spec=json.dumps({'sha1':hashlib.sha1(sql.encode()).hexdigest().upper(),'precondition_sql':pre,'verify_sql':'SELECT IF('+ ' AND '.join(checks)+',1,0)'},indent=2)+'\n'
-    for p,text in [(SQL,sql),(HEADER,header),(SPEC,spec)]:
-        if not args.write:
-            if p.read_text()!=text: raise ValueError(f'Stale generated file: {p}; create a new release migration rather than rewriting applied SQL')
-        elif p.exists() and p.read_text()!=text:
-            raise ValueError(f'Release artifact already exists: {p}; new data requires a new migration release')
-        elif not p.exists(): p.write_text(text,encoding='utf-8')
-    print('Catalogue and exact 128-slot pool validated; generated artifacts '+('written' if args.write else 'match'))
-if __name__=='__main__': main()
+    return {SQL: sql, SPEC: spec}
+
+
+def main():
+    from family_catalogue import DATA as FAMILY_DATA, release_artifacts, runtime_header
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true')
+    parser.add_argument('--write', action='store_true', help='Create new release artifacts and update generated runtime header')
+    args = parser.parse_args()
+    old = json.loads(DATA.read_text(encoding='utf-8'))
+    pack = json.loads(FAMILY_DATA.read_text(encoding='utf-8'))
+    artifacts = legacy_release_artifacts()
+    artifacts.update(release_artifacts(pack, old))
+    for path, text in artifacts.items():
+        if path.exists():
+            if path.read_text(encoding='utf-8') != text:
+                raise ValueError(f'Immutable release differs: {path}; add a new release instead')
+        elif args.write:
+            path.write_text(text, encoding='utf-8')
+        else:
+            raise ValueError(f'Missing release artifact: {path}')
+    header = runtime_header(pack, old)
+    if args.write:
+        HEADER.write_text(header, encoding='utf-8')
+    elif HEADER.read_text(encoding='utf-8') != header:
+        raise ValueError('Stale combined runtime header')
+    print('PASS: immutable releases, family metadata and combined runtime catalogue agree')
+
+
+if __name__ == '__main__':
+    main()

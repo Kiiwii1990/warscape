@@ -1,5 +1,9 @@
 # OSRS enemy catalogue: first Goblin milestone
 
+Current family expansion: see [Enemy families](WarscapeEnemyFamilies.md). The user
+confirmed on 7 November that the Goblin works and drops Bones. This confirms that
+observed path; the complete drop distribution remains covered by automated checks.
+
 ## Implemented scope
 
 The approved catalogue direction is OSRS Wiki enemy variants, stats and drop
@@ -86,7 +90,8 @@ source guard tests and exhaustive C++ checks passed, and all 15 installed
 client/server DBC records matched SQL displays. Original server Item.dbc rows and
 strings were compared byte-for-byte and preserved. Both servers reached ready state.
 Existing item-900500/Mining reference warnings remain; no new catalogue warnings
-appeared. No manual combat or visual acceptance has been performed.
+appeared. At that deployment, manual combat/visual acceptance was pending; the
+later user confirmation is recorded above.
 
 Verified world backup: `C:\WarscapeBackups\world_20261107T003547_837084Z_5f3e0d47.sql`.
 Deployment backup: `C:\WarscapeBackups\OSRSEnemies-20261107-deploy`.

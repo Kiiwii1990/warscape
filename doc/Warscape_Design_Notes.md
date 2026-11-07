@@ -721,3 +721,15 @@ consumable/currency functionality, conditional tertiary drops and other Goblin
 variants remain future work. See `WarscapeOSRSEnemies.md` for the verified scope,
 deployment record and manual acceptance steps. Do not treat the rest of the
 bestiary as implemented or approved balancing data without per-variant sourcing.
+
+## Kieran enemy-family notes - approved direction, 7 November 2026
+
+The user supplied Kieran's family/model list and confirmed that the first Goblin
+works and drops Bones. Families have shared Slayer identity, with separately
+defined level/role subcategories and loot. The model directions are preserved
+in `contrib/warscape/enemies/family-roadmap.json`; planned entries are not active
+content. The next implemented release adds Cows, ordinary/Stronghold Rats and
+three Giant Rat tiers, plus shared family metadata and `.rs enemy` diagnostics.
+See `WarscapeEnemyFamilies.md` for sources, contributor workflow, validation and
+known limitations, including the stock Bess model's missing attack animation.
+Slayer task assignment/rewards and global world spawning remain future work.

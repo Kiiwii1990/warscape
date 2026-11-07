@@ -1,0 +1,364 @@
+{
+  "release": "2026_11_07_01_world",
+  "sources": {
+    "Cow": {
+      "url": "https://oldschool.runescape.wiki/w/Cow",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "f013842a1e915546168bc49eea30cc42e906aae4be1f5d3d9cf8523b9f2e856d"
+    },
+    "Rat": {
+      "url": "https://oldschool.runescape.wiki/w/Rat",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "bfcaf49947ae079e8570a06febf9ba3a7e71d8dab8cd6cde67dbed454c89cf68"
+    },
+    "Giant_rat": {
+      "url": "https://oldschool.runescape.wiki/w/Giant_rat",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "c793c28135dd3c1e40a636917c32093e5aad0a33785332c0f3496a762fc167d1"
+    }
+  },
+  "families": [
+    {
+      "id": 1,
+      "key": "goblins",
+      "name": "Goblins",
+      "model_note": "Old World Ratchet or Booty Bay goblin; Goblin Engineer display retained for confirmed prototype."
+    },
+    {
+      "id": 2,
+      "key": "cows",
+      "name": "Cows",
+      "model_note": "Bess-style farm cow, display 1060."
+    },
+    {
+      "id": 3,
+      "key": "rats",
+      "name": "Rats",
+      "model_note": "Black Rat display 1141; scaled up for giant subcategories."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bones",
+      "entry": 902000
+    }
+  ],
+  "items": [
+    {
+      "name": "Cowhide",
+      "entry": 902015,
+      "display_source": 2318
+    },
+    {
+      "name": "Raw beef",
+      "entry": 902016,
+      "display_source": 2672
+    },
+    {
+      "name": "Raw rat meat",
+      "entry": 902017,
+      "display_source": 769
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901010,
+      "profile_id": 1010,
+      "family_id": 2,
+      "subcategory": "regular",
+      "name": "Cow (OSRS level 2)",
+      "source": "Cow",
+      "source_npc_ids": "2790",
+      "combat_level": 2,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        8
+      ],
+      "attack_bonus": -15,
+      "strength_bonus": -15,
+      "defence_bonus": -21,
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 8,
+      "respawn_ticks": 45,
+      "source_poison_resistance": 100,
+      "aggressive": false,
+      "model": 1060,
+      "scale": 1,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Cowhide",
+          "quantity": 1
+        },
+        {
+          "item": "Raw beef",
+          "quantity": 1
+        },
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901100,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": false,
+      "model_path": "Creature\\Cow\\Cow.m2"
+    },
+    {
+      "entry": 901020,
+      "profile_id": 1020,
+      "family_id": 3,
+      "subcategory": "regular",
+      "name": "Rat (OSRS level 1)",
+      "source": "Rat",
+      "source_npc_ids": "2854,2855",
+      "combat_level": 1,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "attack_bonus": -47,
+      "strength_bonus": -53,
+      "defence_bonus": -42,
+      "source_max_hit": 0,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 2,
+      "respawn_ticks": 2,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1141,
+      "scale": 1,
+      "creature_type": 1,
+      "guaranteed": [],
+      "loot_base": 901110,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "model_path": "Creature\\Rat\\Rat.m2"
+    },
+    {
+      "entry": 901021,
+      "profile_id": 1021,
+      "family_id": 3,
+      "subcategory": "stronghold",
+      "name": "Stronghold rat (OSRS level 1)",
+      "source": "Rat",
+      "source_npc_ids": "2492,2513",
+      "combat_level": 1,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "attack_bonus": -47,
+      "strength_bonus": -53,
+      "defence_bonus": -42,
+      "source_max_hit": 0,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 2,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": false,
+      "model": 1141,
+      "scale": 1,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901120,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "model_path": "Creature\\Rat\\Rat.m2"
+    },
+    {
+      "entry": 901022,
+      "profile_id": 1022,
+      "family_id": 3,
+      "subcategory": "giant_3",
+      "name": "Giant rat (OSRS level 3)",
+      "source": "Giant_rat",
+      "source_npc_ids": "2856,2857,2858,2859,2860,2861",
+      "combat_level": 3,
+      "stats": [
+        2,
+        3,
+        2,
+        1,
+        1,
+        5
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 5,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1141,
+      "scale": 1.5,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Raw rat meat",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901130,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "model_path": "Creature\\Rat\\Rat.m2"
+    },
+    {
+      "entry": 901023,
+      "profile_id": 1023,
+      "family_id": 3,
+      "subcategory": "giant_6",
+      "name": "Giant rat (OSRS level 6)",
+      "source": "Giant_rat",
+      "source_npc_ids": "2862,2863,2864",
+      "combat_level": 6,
+      "stats": [
+        6,
+        5,
+        2,
+        1,
+        1,
+        10
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 10,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1141,
+      "scale": 2,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        },
+        {
+          "item": "Raw rat meat",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901140,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "model_path": "Creature\\Rat\\Rat.m2"
+    },
+    {
+      "entry": 901024,
+      "profile_id": 1024,
+      "family_id": 3,
+      "subcategory": "giant_26",
+      "name": "Giant rat (OSRS level 26)",
+      "source": "Giant_rat",
+      "source_npc_ids": "2510,2511,2512",
+      "combat_level": 26,
+      "stats": [
+        22,
+        23,
+        22,
+        1,
+        1,
+        25
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 25,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "aggressive": true,
+      "model": 1141,
+      "scale": 2.7,
+      "creature_type": 1,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 901150,
+      "denominator": 1,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 1
+        }
+      ],
+      "native_attack_animation": true,
+      "model_path": "Creature\\Rat\\Rat.m2"
+    }
+  ]
+}

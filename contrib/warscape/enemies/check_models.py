@@ -1,0 +1,49 @@
+"""Read-only WotLK model capability audit; known Cow animation gap is explicit."""
+import argparse
+import json
+import struct
+from pathlib import Path
+from build_assets import ClientAssets, dbc
+
+
+def audit(client):
+    catalogue = json.loads(Path(__file__).with_name('farm_animals_rats.json').read_text(encoding='utf-8'))
+    assets = ClientAssets(client)
+    try:
+        def table(name):
+            data = assets.get('DBFilesClient\\' + name + '.dbc')[0]
+            return dbc(data, struct.unpack_from('<I', data, 8)[0])
+        displays, _ = table('CreatureDisplayInfo')
+        models, strings = table('CreatureModelData')
+        checked = set()
+        for enemy in catalogue['enemies']:
+            display = enemy['model']
+            if display in checked:
+                continue
+            checked.add(display)
+            model = models[displays[display][1]]
+            offset = model[2]
+            path = strings[offset:strings.index(b'\0', offset)].decode().replace('.mdx', '.m2')
+            if path.lower() != enemy['model_path'].lower():
+                raise ValueError('Model display resolves to unexpected asset')
+            raw = assets.get(path)[0]
+            if raw[:4] != b'MD20':
+                raise ValueError('Unexpected model format')
+            count, offset = struct.unpack_from('<II', raw, 28)
+            if offset + count * 64 > len(raw):
+                raise ValueError('Model sequence array is out of bounds')
+            ids = {struct.unpack_from('<H', raw, offset + i * 64)[0] for i in range(count)}
+            has_attack = bool(ids & {16, 17, 18})
+            if not {0, 1, 4, 5}.issubset(ids) or has_attack != enemy['native_attack_animation']:
+                raise ValueError('Model animation capability differs from reviewed expectation')
+            print(f"Display {display}: {path}; movement/death verified; native attack: {has_attack}")
+        print('Known limitation: stock Cow lacks an attack clip; Rat attack clips are present.')
+    finally:
+        for _, archive in assets.archives:
+            archive.file.close()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--client', type=Path, required=True)
+    audit(parser.parse_args().client)

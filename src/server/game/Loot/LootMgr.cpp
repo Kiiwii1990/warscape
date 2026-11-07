@@ -806,6 +806,8 @@ void LoadLootTemplates_Creature()
             for (uint32 i = pool.First; i < pool.First + pool.Count; ++i)
             {
                 uint32 const id = Warscape::EnemyLootOutcomes[i].Loot;
+                if (!id) // Explicit empty outcome: ordinary OSRS rats have no unconditional loot.
+                    continue;
                 if (!lootIdSet.count(id))
                     LootTemplates_Creature.ReportNonExistingId(id, "OSRS enemy", pool.Entry);
                 else
