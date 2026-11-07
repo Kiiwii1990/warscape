@@ -16,6 +16,7 @@
  */
 
 #include "LootMgr.h"
+#include "WarscapeEnemyCatalogue.h"
 #include "Containers.h"
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
@@ -798,6 +799,18 @@ void LoadLootTemplates_Creature()
                 lootIdSetUsed.insert(lootid);
         }
     }
+
+    // OSRS categorical outcomes are selected before native corpse-loot generation.
+    for (auto const& pool : Warscape::EnemyLootPools)
+        if (sObjectMgr->GetCreatureTemplate(pool.Entry))
+            for (uint32 i = pool.First; i < pool.First + pool.Count; ++i)
+            {
+                uint32 const id = Warscape::EnemyLootOutcomes[i].Loot;
+                if (!lootIdSet.count(id))
+                    LootTemplates_Creature.ReportNonExistingId(id, "OSRS enemy", pool.Entry);
+                else
+                    lootIdSetUsed.insert(id);
+            }
 
     for (LootIdSet::const_iterator itr = lootIdSetUsed.begin(); itr != lootIdSetUsed.end(); ++itr)
         lootIdSet.erase(*itr);

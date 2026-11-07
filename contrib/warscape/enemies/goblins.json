@@ -1,0 +1,282 @@
+{
+  "source": {
+    "url": "https://oldschool.runescape.wiki/w/Goblin",
+    "retrieved": "2026-11-07",
+    "raw_sha256": "35b18ad314d5eb5217ae290f945051c0cb5f53b57a214961b4da4476917e4584",
+    "mode": "free-to-play main table 1; tertiary drops deferred"
+  },
+  "variants": [
+    {
+      "key": "goblin_1",
+      "label": "Level 2",
+      "combat_level": 2,
+      "stats": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        5
+      ],
+      "attack_bonus": -21,
+      "strength_bonus": -15,
+      "defence_bonuses": {
+        "dstab": -15,
+        "dslash": -15,
+        "dcrush": -15
+      },
+      "attack_ticks": 4,
+      "source_npc_ids": "3028,3029,3030,3031,3032,3033,3034,3035,3036,3037,3038,3039,3040,3041,3042,3043,3044,3051,3052,3053,3054,5195,5196,5197,5198,5199,5200,5201,5202,5203",
+      "enabled": true,
+      "drop_table": "Drop table 1"
+    },
+    {
+      "key": "goblin_2",
+      "label": "Level 2 (armed)",
+      "combat_level": 2,
+      "stats": [
+        3,
+        1,
+        4,
+        1,
+        1,
+        5
+      ],
+      "attack_bonus": -21,
+      "strength_bonus": -15,
+      "defence_bonuses": {
+        "dstab": -15,
+        "dslash": -15,
+        "dcrush": -15
+      },
+      "attack_ticks": 4,
+      "source_npc_ids": "5192,5193,5204,5205,5206,5207,5208",
+      "enabled": false,
+      "drop_table": "Drop table 2"
+    },
+    {
+      "key": "goblin_3",
+      "label": "Level 5",
+      "combat_level": 5,
+      "stats": [
+        3,
+        1,
+        4,
+        1,
+        1,
+        12
+      ],
+      "attack_bonus": 12,
+      "strength_bonus": 12,
+      "defence_bonuses": {
+        "dstab": 0,
+        "dslash": 0,
+        "dcrush": 0
+      },
+      "attack_ticks": 6,
+      "source_npc_ids": "3045,3073,3074,3075,3076",
+      "enabled": false,
+      "drop_table": "Drop table 2"
+    },
+    {
+      "key": "goblin_4",
+      "label": "Level 13",
+      "combat_level": 13,
+      "stats": [
+        12,
+        13,
+        7,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonuses": {
+        "dstab": 4,
+        "dslash": 6,
+        "dcrush": 8
+      },
+      "attack_ticks": 4,
+      "source_npc_ids": "3046",
+      "enabled": false,
+      "drop_table": "Drop table 2"
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 901000,
+      "profile_id": 1000,
+      "variant": "goblin_1",
+      "name": "Goblin (OSRS level 2)",
+      "model": 7109,
+      "loot_base": 901000,
+      "always": "Bones",
+      "outcomes": [
+        {
+          "item": "Bronze sq shield",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Water rune",
+          "quantity": 6,
+          "weight": 6
+        },
+        {
+          "item": "Body rune",
+          "quantity": 7,
+          "weight": 5
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 4,
+          "weight": 3
+        },
+        {
+          "item": "Bronze bolts",
+          "quantity": 8,
+          "weight": 3
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 28
+        },
+        {
+          "item": "Coins",
+          "quantity": 20,
+          "weight": 2
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 0,
+          "weight": 44
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 15
+        },
+        {
+          "item": "Goblin mail",
+          "quantity": 1,
+          "weight": 5
+        },
+        {
+          "item": "Chef's hat",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Energy potion(3)",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Beer",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Brass necklace",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Air talisman",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 128
+    }
+  ],
+  "items": [
+    {
+      "name": "Bones",
+      "entry": 902000,
+      "display_source": 2843
+    },
+    {
+      "name": "Bronze sq shield",
+      "entry": 902001,
+      "display_source": 2133
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002,
+      "display_source": 6948
+    },
+    {
+      "name": "Body rune",
+      "entry": 902003,
+      "display_source": 6948
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004,
+      "display_source": 6948
+    },
+    {
+      "name": "Bronze bolts",
+      "entry": 902005,
+      "display_source": 2512
+    },
+    {
+      "name": "Coins",
+      "entry": 902006,
+      "display_source": 19698
+    },
+    {
+      "name": "Hammer",
+      "entry": 902007,
+      "display_source": 2028
+    },
+    {
+      "name": "Goblin mail",
+      "entry": 902008,
+      "display_source": 847
+    },
+    {
+      "name": "Chef's hat",
+      "entry": 902009,
+      "display_source": 3345
+    },
+    {
+      "name": "Energy potion(3)",
+      "entry": 902010,
+      "display_source": 2459
+    },
+    {
+      "name": "Energy potion(4)",
+      "entry": 902011,
+      "display_source": 2459
+    },
+    {
+      "name": "Beer",
+      "entry": 902012,
+      "display_source": 19222
+    },
+    {
+      "name": "Brass necklace",
+      "entry": 902013,
+      "display_source": 1714
+    },
+    {
+      "name": "Air talisman",
+      "entry": 902014,
+      "display_source": 6948
+    }
+  ]
+}

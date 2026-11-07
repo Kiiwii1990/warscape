@@ -16,6 +16,7 @@
  */
 
 #include "Unit.h"
+#include "WarscapeEnemyCatalogue.h"
 #include "AbstractFollower.h"
 #include "Battlefield.h"
 #include "BattlefieldMgr.h"
@@ -11154,7 +11155,10 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
             Loot* loot = &creature->loot;
             loot->clear();
 
-            if (uint32 lootid = creature->GetCreatureTemplate()->lootid)
+            uint32 lootid = creature->GetCreatureTemplate()->lootid;
+            if (auto const* pool = Warscape::FindEnemyLootPool(creature->GetEntry()))
+                lootid = Warscape::SelectEnemyLoot(pool->Entry, urand(0, pool->Total - 1));
+            if (lootid)
                 loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, creature->GetLootMode());
 
             if (creature->GetLootMode() > 0)

@@ -709,3 +709,15 @@ opening/validating interaction, menu refresh and batch cancellation; the native
 spell-focus candidate search remains 10 yards. The chosen radius is an initial
 geometry-based value. Screenshot-distance acceptance remains pending manual
 in-game testing; no gameplay result is claimed.
+
+## OSRS enemy catalogue - approved direction, 7 November 2026
+
+The user approved OSRS Wiki bestiary data as the source for enemy variants,
+combat stats and drop chances, with suitable WoW models/animations/sounds.
+The first implemented milestone is an additive ordinary level-2 Goblin entry,
+using existing monster profiles/combat XP and an exact integer-weighted F2P
+main loot pool. Drops are currently collectible item identities; equipment,
+consumable/currency functionality, conditional tertiary drops and other Goblin
+variants remain future work. See `WarscapeOSRSEnemies.md` for the verified scope,
+deployment record and manual acceptance steps. Do not treat the rest of the
+bestiary as implemented or approved balancing data without per-variant sourcing.
