@@ -248,7 +248,7 @@ class DungeonTests(unittest.TestCase):
         from loot_tables import compile_weights,independent_bonus
         from fractions import Fraction
         with self.assertRaises(ValueError):compile_weights([({'item':'Nothing'},Fraction(1,2))])
-        with self.assertRaisesRegex(ValueError,'uint32'):compile_weights([({'item':'Nothing'},Fraction(1,0x100000001)),({'item':'Bones'},Fraction(0x100000000,0x100000001))])
+        with self.assertRaisesRegex(ValueError,'uint64'):compile_weights([({'item':'Nothing'},Fraction(1,0x10000000000000001)),({'item':'Bones'},Fraction(0x10000000000000000,0x10000000000000001))])
         with self.assertRaises(ValueError):independent_bonus([],{'item':'Bones'},0)
 
 
@@ -290,7 +290,7 @@ class MartialTests(unittest.TestCase):
         self.assertEqual(sum(r for _,r in rows),1)
         self.assertEqual(rows[0],({'item':'Potato seed','quantity':4},Fraction(368,1008)))
         self.assertEqual(rows[-1],({'item':'Snape grass seed','quantity':2},Fraction(8,1008)))
-        for level in (0,49,True):
+        for level in (0,256,True):
             with self.assertRaises(ValueError):general_seed_table(1,level)
         self.assertEqual(self.chance(901224,'Potato seed'),Fraction(18,128)*Fraction(368,1008))
     def test_uncommon_seeds_preserve_listed_chances_and_explicit_gap(self):
@@ -420,5 +420,115 @@ class GiantDemonTests(unittest.TestCase):
         self.assertEqual(self.chance(901351,'Potato seed'),Fraction(30,640))
         self.assertEqual(self.chance(901351,'Papaya tree seed'),Fraction(1,640))
         self.assertEqual(self.e(901351)['guaranteed'],[{'item':'Big bones','quantity':1}])
+
+
+
+class SlayerPrototypeTests(unittest.TestCase):
+    def setUp(self):
+        import family_catalogue
+        self.module=family_catalogue
+        self.pack=json.loads(Path(__file__).with_name('slayer_prototypes.json').read_text())
+        self.prior=json.loads(Path(__file__).with_name('goblins.json').read_text())
+        self.prior['families']=[]
+        for release in json.loads(Path(__file__).with_name('releases.json').read_text())[:-1]:
+            old=json.loads(Path(__file__).with_name(release['data']).read_text())
+            for key in ('enemies','items','families'):self.prior[key].extend(old[key])
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name):
+        from fractions import Fraction
+        e=self.e(entry)
+        return sum((Fraction(o['weight'],e['denominator']) for o in e['outcomes']
+                    if o['item']==name or any(a['item']==name for a in o.get('additional',[]))),Fraction())
+    def test_batch_and_existing_family_references(self):
+        from expansion_release import artifacts
+        self.module.validate(self.pack,self.prior)
+        self.assertEqual(len(self.pack['enemies']),70)
+        self.assertEqual(len(self.pack['items']),85)
+        self.assertEqual([f['id'] for f in self.pack['families'] if f.get('existing')],[31,32])
+        result=artifacts(self.pack,self.prior,add_slayer_column=True)
+        sql=next(v for p,v in result.items() if p.suffix=='.sql')
+        self.assertEqual(sql.count('INSERT INTO warscape_enemy_family '),14)
+        f=self.pack['families'][-1];f['name']='Different identity'
+        with self.assertRaisesRegex(ValueError,'identity'):artifacts(self.pack,self.prior)
+    def test_implicit_existing_family_collision_rejected(self):
+        from expansion_release import artifacts
+        del self.pack['families'][-1]['existing']
+        with self.assertRaisesRegex(ValueError,'overlaps'):artifacts(self.pack,self.prior)
+    def test_uint64_weight_compiler_and_guard(self):
+        from fractions import Fraction
+        from loot_tables import compile_weights
+        rows,total=compile_weights([(dict(item='a'),Fraction(1,2**32+1)),(dict(item='b'),Fraction(2**32,2**32+1))])
+        self.assertEqual(total,2**32+1);self.assertEqual(rows[1]['weight'],2**32)
+        with self.assertRaisesRegex(ValueError,'uint64'):
+            compile_weights([(dict(item='a'),Fraction(1,2**64+1)),(dict(item='b'),Fraction(2**64,2**64+1))])
+        self.assertGreater(self.e(901405)['denominator'],2**32)
+        self.assertGreater(self.e(901409)['denominator'],2**32)
+    def test_full_general_and_rare_seed_tiers(self):
+        from fractions import Fraction
+        from loot_tables import general_seed_table,rare_seed_table
+        rows=general_seed_table(1,79)
+        self.assertEqual(sum(p for _,p in rows),1)
+        self.assertEqual(sum(p for d,p in rows if d['item']=='Potato seed'),Fraction(485*368,790*1008))
+        self.assertEqual(sum(p for d,p in rows if d['item']=='Barley seed'),Fraction(243*229,790*1000))
+        self.assertEqual(sum(p for d,p in rows if d['item']=='Marigold seed'),Fraction(62*376,790*1000))
+        for level in (1,48,79,100,255):self.assertEqual(sum(p for _,p in general_seed_table(1,level)),1)
+        self.assertEqual(sum(p for _,p in rare_seed_table(1)),1)
+        self.assertEqual(next((d['quantity'],p) for d,p in rare_seed_table(1) if d['item']=='Snape grass seed'),(3,Fraction(20,1090)))
+    def test_tortoise_paired_loot_marginals(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901405,'Steel arrow'),Fraction(20,128))
+        self.assertEqual(self.chance(901405,'Cabbage'),Fraction(20,128))
+        for o in self.e(901405)['outcomes']:
+            if 'seed' in o['item'] and 'additional' in o:self.assertEqual(o['additional'],[{'item':'Steel arrow','quantity':12,'quantity_max':23}])
+            if o['item'].startswith('Grimy'):self.assertEqual(o['additional'],[{'item':'Cabbage','quantity':20,'quantity_max':59}])
+    def test_ankou_location_specific_tables(self):
+        from fractions import Fraction
+        self.assertEqual(self.chance(901400,'Left skull half'),Fraction(3,100))
+        self.assertEqual(self.chance(901403,'Left skull half'),0)
+        self.assertEqual(self.chance(901404,'Dark fishing bait'),Fraction(38,100))
+        self.assertEqual(self.chance(901400,'Law rune'),Fraction(4,100))
+        self.assertEqual(self.chance(901403,'Law rune'),Fraction(7,100))
+        self.assertEqual(self.chance(901404,'Law rune'),Fraction(3,100))
+    def test_abyssal_independent_rare_marginals(self):
+        from fractions import Fraction
+        for entry in (901409,901410,901411):
+            self.assertEqual(self.chance(entry,'Abyssal whip'),Fraction(1,512))
+            self.assertEqual(self.chance(entry,'Abyssal dagger'),Fraction(1,32000))
+            self.assertEqual(self.e(entry)['source_slayer_level'],85)
+        # The native 3000-coin outcome plus both bonuses and ash fits all 18 slots.
+        o=next(o for o in self.e(901409)['outcomes'] if o['item']=='Coins' and o['quantity']==3000 and len(o.get('additional',[]))==2)
+        self.assertEqual(15+len(o['additional'])+len(self.e(901409)['guaranteed']),18)
+    def test_magical_melee_and_bloodveld_paired_bones(self):
+        from fractions import Fraction
+        for entry in (*range(901416,901432),):self.assertEqual(self.e(entry)['attack_style'],'m_melee')
+        e=self.e(901423)
+        self.assertEqual(e['guaranteed'],[{'item':'Vile ashes','quantity':1}])
+        self.assertEqual(self.chance(901423,'Bones'),Fraction(10,128))
+        for o in e['outcomes']:
+            if o['item']=='Big bones':self.assertEqual(o['additional'],[{'item':'Bones','quantity':1}])
+        self.assertEqual(self.e(901416)['source_slayer_level'],52)
+        self.assertEqual(e['source_slayer_level'],50)
+    def test_slayer_schema_is_additive_with_prior_defaults(self):
+        from expansion_release import artifacts
+        result=artifacts(self.pack,self.prior,add_slayer_column=True)
+        sql=next(v for p,v in result.items() if p.suffix=='.sql')
+        spec=json.loads(next(v for p,v in result.items() if p.suffix=='.json'))
+        self.assertIn('ADD COLUMN source_slayer_level TINYINT UNSIGNED NOT NULL DEFAULT 0',sql)
+        self.assertIn("column_name='source_slayer_level')=0",spec['precondition_sql'])
+        self.assertIn("is_nullable='NO' AND column_default='0'",spec['verify_sql'])
+        self.assertIn('AND source_slayer_level=0)=205',spec['verify_sql'])
+        self.assertNotIn('DELETE ',sql);self.assertNotIn('TRUNCATE ',sql)
+    def test_simple_bones_ashes_keys_and_dust(self):
+        from fractions import Fraction
+        for entry in range(901442,901455):self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Baby dragon bones','quantity':1}])
+        for entry in range(901455,901468):self.assertEqual(self.chance(entry,'Giant key'),Fraction(1,128))
+        for entry in (901435,901436):
+            self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Vampyre dust','quantity':1}])
+            self.assertEqual(self.chance(entry,'Nothing'),1)
+        for entry in (901468,901469):self.assertEqual(self.e(entry)['guaranteed'],[{'item':'Fiendish ashes','quantity':1}])
+    def test_invalid_slayer_requirement_rejected(self):
+        for value in (-1,100,True):
+            self.pack['enemies'][0]['source_slayer_level']=value
+            with self.assertRaisesRegex(ValueError,'Slayer reference'):self.module.validate(self.pack,self.prior)
 
 if __name__=='__main__':unittest.main()

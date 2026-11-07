@@ -279,3 +279,10 @@ Fresh verified world backup (integrity checked; restore not tested):
 Previous binary/PDB, server DBC and client patch:
 `C:\WarscapeBackups\Giants-20261107-deploy`.
 Prepared assets: `C:\WarscapeBackups\Giants-20261107-prepared`.
+
+## User acceptance - next checkpoint
+
+On 7 November 2026 the user confirmed this batch working with drops and authorized
+an even larger next batch. This records that reported gameplay result; it does
+not establish exhaustive rare probabilities or all special mechanics. See the
+[next 70-variant checkpoint](WarscapeSlayerPrototypesBatch.md).

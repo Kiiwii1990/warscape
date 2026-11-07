@@ -138,11 +138,14 @@ def main():
         if release.get('creates_family_schema', False):
             artifacts.update(release_artifacts(pack, old))
         else:
-            artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False)))
+            artifacts.update(expansion_artifacts(pack, prior, add_combat_columns=release.get('adds_source_combat_columns', False), add_slayer_column=release.get('adds_slayer_reference_column', False)))
         for key in ('families', 'enemies'):
-            combined[key].extend(pack[key])
+            if key == 'families':
+                combined[key].extend(f for f in pack[key] if f['id'] not in {old['id'] for old in combined[key]})
+            else:
+                combined[key].extend(pack[key])
         combined['sources'].update(pack['sources'])
-        prior['families'].extend(pack['families'])
+        prior['families'].extend(f for f in pack['families'] if f['id'] not in {old['id'] for old in prior['families']})
         prior['enemies'].extend(pack['enemies'])
         prior['items'].extend(pack['items'])
         prior.setdefault('native_references', []).extend(pack.get('native_references', []))

@@ -17,20 +17,21 @@ def audit(client):
         displays, _ = table('CreatureDisplayInfo')
         models, strings = table('CreatureModelData')
         items, _ = table('Item')
-        checked = set()
+        checked = {}
         for enemy in enemies:
             for equipped in enemy.get('equipment', []):
                 if equipped and (equipped not in items or items[equipped][6] not in {13,14,15,17,21,22,23,25,26}):
                     raise ValueError('Enemy equipment is absent from Item.dbc or not hand-equipable')
             display = enemy['model']
-            if display in checked:
-                continue
-            checked.add(display)
             model = models[displays[display][1]]
             offset = model[2]
             path = strings[offset:strings.index(b'\0', offset)].decode().replace('.mdx', '.m2')
             if path.lower() != enemy['model_path'].lower():
-                raise ValueError('Model display resolves to unexpected asset')
+                raise ValueError(f"Display {display}: expected {enemy['model_path']}; found {path}")
+            if display in checked:
+                if checked[display] != enemy['native_attack_animation']:
+                    raise ValueError('Repeated display has inconsistent animation metadata')
+                continue
             raw = assets.get(path)[0]
             if raw[:4] != b'MD20':
                 raise ValueError('Unexpected model format')
@@ -41,6 +42,7 @@ def audit(client):
             has_attack = bool(ids & {16, 17, 18})
             if not {0, 1, 4, 5}.issubset(ids) or has_attack != enemy['native_attack_animation']:
                 raise ValueError('Model animation capability differs from reviewed expectation')
+            checked[display] = has_attack
             print(f"Display {display}: {path}; movement/death verified; native attack: {has_attack}")
         print('Known limitation: stock Cow lacks an attack clip; Rat attack clips are present.')
     finally:

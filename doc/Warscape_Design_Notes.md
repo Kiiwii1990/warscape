@@ -788,3 +788,22 @@ Tools. Native loot references support fixed quantities above 255 without
 changing existing item stacks; monster-only zero Ranged/Magic stats preserve
 the published Mountain troll stats. See [giants/demons checkpoint](WarscapeGiantsDemonsBatch.md)
 for scope, assumptions, model approximations and pending acceptance.
+
+
+### Enemy catalogue: Slayer and melee prototypes checkpoint (7 November 2026)
+
+Confirmed: the user accepted the 57-variant giants/demons batch with drops and
+asked for an even larger next batch from the updated Kieran list and OSRS Wiki.
+The preceding 205 catalogue entries now have reported gameplay acceptance.
+This checkpoint adds 70 variants, bringing the prototype catalogue to 275 across
+50 families. See [Slayer/melee checkpoint](WarscapeSlayerPrototypesBatch.md) for
+all spawn IDs, verified deployment and pending manual acceptance.
+
+Implementation decisions under the user's delegated judgment: select non-poison
+melee forms and baby dragons, implement magical melee using Magic equipment
+resistance and the separately truncated 70% Magic / 30% Defence level blend,
+and retain source Slayer requirements as explicit reference metadata. Warscape
+has no Slayer skill; gating, task assignment and Slayer XP remain future work.
+These are combat/loot prototypes with native WoW models and AI, rather than a
+claim that original special mechanics or the entire enemy family are complete.
+The new 70 entries await the user's gameplay/visual/drop acceptance.

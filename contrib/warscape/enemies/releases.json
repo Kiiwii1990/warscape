@@ -18,5 +18,9 @@
   },
   {
     "data": "giants_demons.json"
+  },
+  {
+    "data": "slayer_prototypes.json",
+    "adds_slayer_reference_column": true
   }
 ]

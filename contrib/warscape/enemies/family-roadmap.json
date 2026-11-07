@@ -103,7 +103,7 @@
       "family": "Tortoise",
       "model_direction": "Snapjaw turtle from Hillsbrad",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Wolf",
@@ -229,7 +229,7 @@
       "family": "Dragon",
       "model_direction": "Classic dragon, whelps for babies",
       "assessment": "Direct",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Drake",
@@ -253,7 +253,7 @@
       "family": "Abyssal Demon",
       "model_direction": "Dark red or purple felguard",
       "assessment": "Close. Upright horned demon.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Demon",
@@ -271,7 +271,7 @@
       "family": "Pyrefiend",
       "model_direction": "Fel imp or scaled-down fire elemental",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Waterfiend",
@@ -283,7 +283,7 @@
       "family": "Ankou",
       "model_direction": "Hooded Scourge wraith",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Banshee",
@@ -325,7 +325,7 @@
       "family": "Vampyre",
       "model_direction": "Darkfallen blood elf from Icecrown or the Crimson Hall",
       "assessment": "Close. Winged vyres need a separate stand-in.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Zombie",
@@ -337,7 +337,7 @@
       "family": "Icefiend",
       "model_direction": "Scaled-down ice elemental or ice revenant",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Killerwatt",
@@ -385,7 +385,7 @@
       "family": "Bloodveld",
       "model_direction": "Red felhound",
       "assessment": "Stand-in. Fleshy demonic quadruped. Signature tongue needs custom work.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Catablepon",
@@ -397,7 +397,7 @@
       "family": "Cave Bug",
       "model_direction": "Small beetle or silithid scarab",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Cave Crawler",
@@ -439,7 +439,7 @@
       "family": "Dagannoth",
       "model_direction": "Outland ravager for low forms, bulky makrura for upright forms",
       "assessment": "Stand-in",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Dark Beast",
@@ -499,13 +499,13 @@
       "family": "Jelly",
       "model_direction": "Translucent ooze",
       "assessment": "Close. Use colour to distinguish it from Cave Slime.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Kalphite",
       "model_direction": "Silithid beetle for workers, larger Qiraji insect for soldiers or guardians",
       "assessment": "Close",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Kraken",
@@ -523,7 +523,7 @@
       "family": "Molanisk",
       "model_direction": "Dark jormungar or carrion grub",
       "assessment": "Stand-in. Crawling cave-creature profile.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Nechryael",
@@ -559,7 +559,7 @@
       "family": "Terror Dog",
       "model_direction": "Dark worg or felhound",
       "assessment": "Close. Monstrous dog or demonic look.",
-      "status": "planned"
+      "status": "prototype"
     },
     {
       "family": "Turoth",

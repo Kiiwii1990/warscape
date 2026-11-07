@@ -27,7 +27,7 @@ int main() {
     assert(Warscape::SelectEnemyLoot(901024,0)==901150);
     for (auto const& pool: Warscape::EnemyLootPools) {
         assert(pool.Total>0 && pool.First+pool.Count<=Warscape::EnemyLootOutcomes.size());
-        unsigned total=0;
+        std::uint64_t total=0;
         for(unsigned i=pool.First;i<pool.First+pool.Count;++i) total+=Warscape::EnemyLootOutcomes[i].Weight;
         assert(total==pool.Total);
         assert(Warscape::SelectEnemyLoot(pool.Entry,pool.Total)==0);
@@ -59,7 +59,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==205);
+    assert(Warscape::EnemyVariants.size()==275);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);
@@ -138,4 +138,32 @@ int main() {
         }
         assert(cursor == pool->Total);
     }
+
+    for (std::uint32_t entry = 901400; entry <= 901469; ++entry) {
+        auto const* pool = Warscape::FindEnemyLootPool(entry);
+        assert(pool && Warscape::FindEnemyVariant(entry)->SourceCombat);
+        std::uint64_t cursor = 0;
+        for (std::uint32_t i = 0; i < pool->Count; ++i) {
+            auto const& o = Warscape::EnemyLootOutcomes[pool->First+i];
+            assert(Warscape::SelectEnemyLoot(entry,cursor) == o.Loot);
+            assert(Warscape::SelectEnemyLoot(entry,cursor+o.Weight-1) == o.Loot);
+            cursor += o.Weight;
+        }
+        assert(cursor == pool->Total);
+        assert(Warscape::SelectEnemyLoot(entry,cursor) == 0);
+    }
+    assert(Warscape::EnemyDefenceLevel(901416,99,1) == 29);
+    assert(Warscape::EnemyDefenceLevel(901416,1,99) == 69);
+    assert(Warscape::EnemyDefenceLevel(901300,99,1) == 99);
+    assert(Warscape::EnemyDefenceLevel(0,99,1) == 99);
+    assert(Warscape::FindEnemyVariant(901409)->RequiredSlayerLevel == 85);
+    std::array<std::uint32_t,4> draws = {0,0,0xFFFFFFFF,0xFFFFFFFF};
+    std::size_t drawIndex = 0;
+    // Reject the incomplete bottom range before applying modulo.
+    assert(Warscape::DrawEnemyLootRoll(10,[&] {return draws.at(drawIndex++);}) == 5);
+    assert(drawIndex == 4);
+    assert(Warscape::DrawEnemyLootRoll(0,[] {assert(false);return 0u;}) == 0);
+    auto const largeTotal = Warscape::FindEnemyLootPool(901409)->Total;
+    assert(largeTotal > 0xFFFFFFFFULL);
+    assert(Warscape::DrawEnemyLootRoll(largeTotal,[] {return 0xFFFFFFFFu;}) == 0xFFFFFFFFFFFFFFFFULL%largeTotal);
 }

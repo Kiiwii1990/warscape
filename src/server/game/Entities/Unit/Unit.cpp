@@ -2314,10 +2314,13 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
                 case 0: defenceBonus = equipment.DefenceStab; break;
                 case 1: defenceBonus = equipment.DefenceSlash; break;
                 case 2: defenceBonus = equipment.DefenceCrush; break;
+                case 3: defenceBonus = equipment.DefenceMagic; break;
                 default: break;
             }
         }
-        uint64 const defenceRoll = Warscape::CombatRoll(defender->GetRSSkillLevel(Player::RS_Skill::Defence) + 8, defenceBonus);
+        uint32 const defenceLevel = Warscape::EnemyDefenceLevel(GetEntry(),
+            defender->GetRSSkillLevel(Player::RS_Skill::Defence), defender->GetRSSkillLevel(Player::RS_Skill::Magic));
+        uint64 const defenceRoll = Warscape::CombatRoll(defenceLevel + 8, defenceBonus);
         double const hitChance = Warscape::HitChance(attackRoll, defenceRoll);
         return double(urand(0, 999999)) < hitChance * 1000000.0 ? MELEE_HIT_NORMAL : MELEE_HIT_MISS;
     }
@@ -11173,7 +11176,12 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
 
             uint32 lootid = creature->GetCreatureTemplate()->lootid;
             if (auto const* pool = Warscape::FindEnemyLootPool(creature->GetEntry()))
-                lootid = Warscape::SelectEnemyLoot(pool->Entry, urand(0, pool->Total - 1));
+            {
+                uint64 const roll = pool->Total <= 0xFFFFFFFFULL
+                    ? uint64(urand(0, uint32(pool->Total - 1)))
+                    : Warscape::DrawEnemyLootRoll(pool->Total, [] { return rand32(); });
+                lootid = Warscape::SelectEnemyLoot(pool->Entry, roll);
+            }
             if (lootid)
                 loot->FillLoot(lootid, LootTemplates_Creature, looter, false, false, creature->GetLootMode());
 

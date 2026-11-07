@@ -356,11 +356,13 @@ public:
             handler->PSendSysMessage("Attack %u / Strength %u / Defence %u / Ranged %u / Magic %u / Hitpoints %u",
                 stats[0], stats[1], stats[2], stats[3], stats[4], stats[5]);
             handler->PSendSysMessage("Source melee style: %s; interval: %u ticks; source respawn: %u ticks",
-                variant->AttackStyle, sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry()), variant->RespawnTicks);
+                (variant->MeleeLane == 3 ? "Magical melee" : variant->AttackStyle), sObjectMgr->GetWarscapeMonsterAttackSpeedTicks(creature->GetEntry()), variant->RespawnTicks);
             handler->PSendSysMessage("Slayer XP reference: %u (Slayer tasks/rewards are not enabled)", variant->SlayerXP);
             if (variant->SourceCombat)
                 handler->PSendSysMessage("Source max hit: %u; melee defence Stab %d / Slash %d / Crush %d",
                     variant->MaximumHit, variant->DefenceStab, variant->DefenceSlash, variant->DefenceCrush);
+            if (variant->RequiredSlayerLevel)
+                handler->PSendSysMessage("Source Slayer requirement: %u (prototype reference; Slayer skill/gating is not enabled)", variant->RequiredSlayerLevel);
             if (!variant->NativeAttackAnimation)
                 handler->SendSysMessage("This stock model has no attack animation; combat damage is server-controlled.");
             return true;

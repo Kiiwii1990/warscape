@@ -36,7 +36,7 @@ def compile_weights(rows):
     if not rows or any(chance<=0 for _,chance in rows) or sum(c for _,c in rows)!=1:
         raise ValueError("Loot probabilities must be positive and sum to one")
     denominator=lcm(*(chance.denominator for _,chance in rows))
-    if denominator>0xFFFFFFFF: raise ValueError("Loot denominator exceeds runtime uint32")
+    if denominator>0xFFFFFFFFFFFFFFFF: raise ValueError("Loot denominator exceeds runtime uint64")
     return [dict(drop,weight=int(chance*denominator)) for drop,chance in rows],denominator
 
 # Reviewed factual weights from Module:GeneralSeedDropLines and Template:UncommonSeedDropLines.
@@ -51,12 +51,38 @@ UNCOMMON_SEEDS = (("Limpwurt seed",137),("Strawberry seed",131),("Marrentill see
  ("Potato cactus seed",8),("Snapdragon seed",5),("Cadantine seed",4),("Lantadyme seed",3),
  ("Dwarf weed seed",2),("Torstol seed",1))
 
+GENERAL_SEED_GROUPS = (
+ (485,1008,LOW_LEVEL_SEEDS),
+ (728,1000,(("Barley seed",4,229),("Hammerstone seed",3,228),("Asgarnian seed",3,172),
+            ("Jute seed",2,171),("Yanillian seed",2,114),("Krandorian seed",2,57),("Wildblood seed",1,29))),
+ (850,1000,(("Marigold seed",1,376),("Nasturtium seed",1,249),("Rosemary seed",1,161),("Woad seed",1,119),("Limpwurt seed",1,95))),
+ (947,1000,(("Redberry seed",1,400),("Cadavaberry seed",1,280),("Dwellberry seed",1,200),("Jangerberry seed",1,80),("Whiteberry seed",1,29),("Poison ivy seed",1,11))),
+ (995,1000,(("Guam seed",1,320),("Marrentill seed",1,218),("Tarromin seed",1,149),("Harralander seed",1,101),
+            ("Ranarr seed",1,69),("Toadflax seed",1,47),("Irit seed",1,32),("Avantoe seed",1,22),("Kwuarm seed",1,15),
+            ("Snapdragon seed",1,10),("Cadantine seed",1,7),("Lantadyme seed",1,5),("Dwarf weed seed",1,3),("Torstol seed",1,2))),
+ (99999,1100,(("Mushroom spore",1,500),("Belladonna seed",1,300),("Cactus seed",1,200),("Potato cactus seed",1,100))))
+
 def general_seed_table(rate, combat_level):
-    """Reviewed first tier only: integer combat levels 1-48 never cross the 485 threshold."""
-    if type(combat_level) is not int or not 1 <= combat_level <= 48:
-        raise ValueError("Higher general-seed tiers need a reviewed extension")
-    return [(dict(item=name,quantity=count),Fraction(rate)*weight/1008)
-            for name,count,weight in LOW_LEVEL_SEEDS]
+    """Exact tier selection from the Wiki module, without rounded displayed denominators."""
+    if type(combat_level) is not int or not 1 <= combat_level <= 255:
+        raise ValueError("Invalid general-seed combat level")
+    size=combat_level*10;previous=0;rows=[]
+    for threshold,denominator,seeds in GENERAL_SEED_GROUPS:
+        width=min(threshold,size)-previous
+        if width>0:
+            rows.extend((dict(item=name,quantity=count),Fraction(rate)*width*weight/(size*denominator))
+                        for name,count,weight in seeds)
+        if threshold>=size:break
+        previous=threshold
+    return rows
+
+def rare_seed_table(rate):
+    seeds=(("Toadflax seed",216),("Irit seed",148),("Belladonna seed",143),("Poison ivy seed",103),
+       ("Avantoe seed",101),("Cactus seed",96),("Potato cactus seed",70),("Kwuarm seed",69),
+       ("Snapdragon seed",46),("Cadantine seed",32),("Lantadyme seed",23),("Snape grass seed",20),
+       ("Dwarf weed seed",14),("Torstol seed",9))
+    return [(dict(item=name,quantity=3 if name=="Snape grass seed" else 1),Fraction(rate)*weight/1090) for name,weight in seeds]
+
 
 def uncommon_seed_table(rate):
     # The Wiki lists 1046/1048; the unlisted two slots are empty, not renormalized.
