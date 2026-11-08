@@ -1124,4 +1124,23 @@ class CaveFamilyTests(unittest.TestCase):
         self.assertEqual(slime['guaranteed'],[dict(item='Swamp tar',quantity=1,quantity_max=6)])
         self.assertEqual(pack['enemies'][6]['bonus_pools'][0]['denominator'],1000)
 
+class StalkerGargoyleTests(unittest.TestCase):
+    def test_source_tiers_and_no_invented_ent_loot(self):
+        pack=json.loads((Path(__file__).parent/'stalkers_gargoyles.json').read_text())
+        self.assertEqual([e['combat_level'] for e in pack['enemies']],[93,117,142,182,93,110,86,101,111])
+        for e in pack['enemies']:
+            self.assertEqual(sum(o['weight'] for o in e['outcomes']),e['denominator'])
+        for e in pack['enemies'][6:8]:
+            self.assertEqual(e['guaranteed'],[])
+            self.assertTrue(all(o['item']=='Nothing' for o in e['outcomes']))
+        self.assertEqual(pack['enemies'][2]['bonus_pools'][0]['denominator'],650)
+        self.assertEqual(pack['enemies'][8]['defence_bonuses'],dict(stab=50,slash=60,crush=-20))
+    def test_reusable_hammer_keeps_existing_cooler(self):
+        code=(Path(__file__).resolve().parents[3]/'src/server/scripts/Custom/warscape_enemies.cpp').read_text()
+        hammer=code.split('class item_warscape_rock_hammer',1)[1].split('void AddSC_',1)[0]
+        self.assertNotIn('DestroyItemCount',hammer)
+        self.assertIn('CanSmashGargoyle',hammer)
+        self.assertIn('!target->isTappedBy(player)',hammer)
+        self.assertIn('player->DestroyItemCount(entry,1,true)',code)
+
 if __name__=='__main__':unittest.main()

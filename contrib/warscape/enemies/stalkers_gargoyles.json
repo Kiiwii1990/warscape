@@ -1,0 +1,2771 @@
+{
+  "release": "2026_11_08_02_world",
+  "loot_policy": "Members/no wealth/pre-Legends, off-task uniques, conditional main after pre-roll. Explicit residual empty probability; quest/Slayer tertiary excluded.",
+  "sources": {
+    "Juvenile_custodian_stalker": {
+      "url": "https://oldschool.runescape.wiki/w/Juvenile_custodian_stalker",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "1f6b012d6c875346128379d14d6a972bc09a873c58b6e2d35c408241e0c4c218"
+    },
+    "Mature_custodian_stalker": {
+      "url": "https://oldschool.runescape.wiki/w/Mature_custodian_stalker",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "d181369d4d36853b492705f8933ec4410e2e61d3213d39eeb392745e2d532b30"
+    },
+    "Elder_custodian_stalker": {
+      "url": "https://oldschool.runescape.wiki/w/Elder_custodian_stalker",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "a68c8f5dd8233c93476833db05dba1284463a27f557e22115dbd58cb6bbafe88"
+    },
+    "Dark_beast": {
+      "url": "https://oldschool.runescape.wiki/w/Dark_beast",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "f086d9774c1a561e836bedc1f00e8eb7dc6ef445036da8eecd0749df438a7c09"
+    },
+    "Dust_devil": {
+      "url": "https://oldschool.runescape.wiki/w/Dust_devil",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "2e2588190ef629503b34e65cf2794a584d66d7985c295bcfade64e332fcc8a8c"
+    },
+    "Ent": {
+      "url": "https://oldschool.runescape.wiki/w/Ent",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "148a70cf039ebd33619862be78d702b46c3810b5af0082ba88f5dd4af98d33f2"
+    },
+    "Gargoyle": {
+      "url": "https://oldschool.runescape.wiki/w/Gargoyle",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "5865f481904af213249253da14edc3dec85eac16028a5e26270cf89469f04f18"
+    }
+  },
+  "families": [
+    {
+      "id": 78,
+      "key": "custodian_stalkers",
+      "name": "Custodian Stalkers",
+      "model_note": "Native horned humanoid stand-in at tiered scales."
+    },
+    {
+      "id": 79,
+      "key": "dark_beasts",
+      "name": "Dark Beasts",
+      "model_note": "Native FelBeast10193 dark horned quadruped stand-in."
+    },
+    {
+      "id": 80,
+      "key": "dust_devils",
+      "name": "Dust Devils",
+      "model_note": "Native air elemental stand-in."
+    },
+    {
+      "id": 81,
+      "key": "ents",
+      "name": "Ents",
+      "model_note": "Native treant."
+    },
+    {
+      "id": 82,
+      "key": "gargoyles",
+      "name": "Gargoyles",
+      "model_note": "Native gargoyle."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Big bones",
+      "entry": 902172
+    },
+    {
+      "name": "Steel cannonball",
+      "entry": 902479
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Rune arrow",
+      "entry": 902199
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106
+    },
+    {
+      "name": "Pure essence",
+      "entry": 902112
+    },
+    {
+      "name": "Swordfish",
+      "entry": 902376
+    },
+    {
+      "name": "Raw beef",
+      "entry": 902016
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Adamant scimitar",
+      "entry": 902317
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Runite bar",
+      "entry": 902202
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Rune 2h sword",
+      "entry": 902203
+    },
+    {
+      "name": "Rune battleaxe",
+      "entry": 902204
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Steel arrow",
+      "entry": 902092
+    },
+    {
+      "name": "Adamant javelin",
+      "entry": 902205
+    },
+    {
+      "name": "Rune sq shield",
+      "entry": 902206
+    },
+    {
+      "name": "Dragonstone",
+      "entry": 902207
+    },
+    {
+      "name": "Silver ore",
+      "entry": 902208
+    },
+    {
+      "name": "Rune kiteshield",
+      "entry": 902209
+    },
+    {
+      "name": "Dragon med helm",
+      "entry": 902210
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Rune spear",
+      "entry": 902211
+    },
+    {
+      "name": "Shield left half",
+      "entry": 902212
+    },
+    {
+      "name": "Dragon spear",
+      "entry": 902213
+    },
+    {
+      "name": "Mithril bar",
+      "entry": 902323
+    },
+    {
+      "name": "Shark",
+      "entry": 902373
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Adamant sq shield",
+      "entry": 902188
+    },
+    {
+      "name": "Rune chainbody",
+      "entry": 902235
+    },
+    {
+      "name": "Rune med helm",
+      "entry": 902217
+    },
+    {
+      "name": "Rune full helm",
+      "entry": 902226
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Adamantite bar",
+      "entry": 902236
+    },
+    {
+      "name": "Adamantite ore",
+      "entry": 902240
+    },
+    {
+      "name": "Runite ore",
+      "entry": 902456
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Adamant axe",
+      "entry": 902231
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Black d'hide vambraces",
+      "entry": 902397
+    },
+    {
+      "name": "Air battlestaff",
+      "entry": 902440
+    },
+    {
+      "name": "Earth battlestaff",
+      "entry": 902410
+    },
+    {
+      "name": "Mystic earth staff",
+      "entry": 902398
+    },
+    {
+      "name": "Dragon dagger",
+      "entry": 902411
+    },
+    {
+      "name": "Dust rune",
+      "entry": 902168
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Soul rune",
+      "entry": 902320
+    },
+    {
+      "name": "Adamant platelegs",
+      "entry": 902225
+    },
+    {
+      "name": "Rune platelegs",
+      "entry": 902452
+    },
+    {
+      "name": "Gold ore",
+      "entry": 902218
+    },
+    {
+      "name": "Steel bar",
+      "entry": 902123
+    },
+    {
+      "name": "Gold bar",
+      "entry": 902228
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    }
+  ],
+  "items": [
+    {
+      "name": "Broken antler",
+      "entry": 902518,
+      "display_source": 2843
+    },
+    {
+      "name": "Monkfish",
+      "entry": 902519,
+      "display_source": 2679
+    },
+    {
+      "name": "Huasca seed",
+      "entry": 902520,
+      "display_source": 17034
+    },
+    {
+      "name": "Antler guard",
+      "entry": 902521,
+      "display_source": 2133
+    },
+    {
+      "name": "Alchemist's signet",
+      "entry": 902522,
+      "display_source": 1714
+    },
+    {
+      "name": "Dark bow",
+      "entry": 902523,
+      "display_source": 2504
+    },
+    {
+      "name": "Black battleaxe",
+      "entry": 902524,
+      "display_source": 1416
+    },
+    {
+      "name": "Death talisman",
+      "entry": 902525,
+      "display_source": 6948
+    },
+    {
+      "name": "Red d'hide vambraces",
+      "entry": 902526,
+      "display_source": 2318
+    },
+    {
+      "name": "Mystic air staff",
+      "entry": 902527,
+      "display_source": 854
+    },
+    {
+      "name": "Dragon chainbody",
+      "entry": 902528,
+      "display_source": 847
+    },
+    {
+      "name": "Ugthanki kebab",
+      "entry": 902529,
+      "display_source": 2679
+    },
+    {
+      "name": "Dust battlestaff",
+      "entry": 902530,
+      "display_source": 854
+    },
+    {
+      "name": "Rock hammer",
+      "entry": 902531,
+      "display_source": 2028,
+      "class": 0
+    },
+    {
+      "name": "Granite maul",
+      "entry": 902532,
+      "display_source": 2028
+    },
+    {
+      "name": "Mystic robe top (dark)",
+      "entry": 902533,
+      "display_source": 9748
+    },
+    {
+      "name": "Adamant boots",
+      "entry": 902534,
+      "display_source": 2967
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902200,
+      "profile_id": 2200,
+      "family_id": 78,
+      "subcategory": "juvenile",
+      "name": "Juvenile custodian stalker (OSRS juvenile)",
+      "source": "Juvenile_custodian_stalker",
+      "source_npc_ids": "14702",
+      "combat_level": 93,
+      "stats": [
+        95,
+        55,
+        45,
+        1,
+        25,
+        135
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 30,
+      "defence_bonuses": {
+        "stab": 30,
+        "slash": -10,
+        "crush": 50
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 135,
+      "source_slayer_xp_tenths": 1350,
+      "source_slayer_level": 54,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 927,
+      "model_path": "Creature\\Wendigo\\Wendigo.m2",
+      "scale": 0.7,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1390000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 2688
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 640
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 384
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 256
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 256
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 256
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 256
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 49644
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 25216
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 12608
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 6304
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 3152
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 1576
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 788
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1695
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Steel cannonball",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 327680
+        },
+        {
+          "item": "Air rune",
+          "quantity": 100,
+          "weight": 327680
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 50,
+          "weight": 327680
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 5,
+          "quantity_max": 20,
+          "weight": 196608
+        },
+        {
+          "item": "Death rune",
+          "quantity": 10,
+          "quantity_max": 26,
+          "weight": 163840
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 196608
+        },
+        {
+          "item": "Broken antler",
+          "quantity": 1,
+          "weight": 180224
+        },
+        {
+          "item": "Swordfish",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 131072
+        },
+        {
+          "item": "Raw beef",
+          "quantity": 1,
+          "weight": 65536
+        },
+        {
+          "item": "Coins",
+          "quantity": 400,
+          "quantity_max": 750,
+          "weight": 327680
+        },
+        {
+          "item": "Adamant scimitar",
+          "quantity": 1,
+          "weight": 262144
+        }
+      ],
+      "denominator": 2621440,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902201,
+      "profile_id": 2201,
+      "family_id": 78,
+      "subcategory": "mature",
+      "name": "Mature custodian stalker (OSRS mature)",
+      "source": "Mature_custodian_stalker",
+      "source_npc_ids": "14703",
+      "combat_level": 117,
+      "stats": [
+        105,
+        75,
+        45,
+        1,
+        40,
+        190
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 30,
+      "defence_bonuses": {
+        "stab": 30,
+        "slash": -10,
+        "crush": 50
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 190,
+      "source_slayer_xp_tenths": 1900,
+      "source_slayer_level": 67,
+      "respawn_ticks": 10,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 927,
+      "model_path": "Creature\\Wendigo\\Wendigo.m2",
+      "scale": 0.8999999999999999,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1400000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 2688
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 640
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 384
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 256
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 256
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 256
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 256
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 49644
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 25216
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 12608
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 6304
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 3152
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 1576
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 788
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1695
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Steel cannonball",
+          "quantity": 15,
+          "quantity_max": 20,
+          "weight": 245760
+        },
+        {
+          "item": "Air rune",
+          "quantity": 150,
+          "weight": 196608
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 100,
+          "weight": 196608
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 10,
+          "quantity_max": 25,
+          "weight": 163840
+        },
+        {
+          "item": "Death rune",
+          "quantity": 25,
+          "quantity_max": 40,
+          "weight": 98304
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 20,
+          "weight": 163840
+        },
+        {
+          "item": "Monkfish",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 131072
+        },
+        {
+          "item": "Broken antler",
+          "quantity": 1,
+          "weight": 114688
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 81920
+        },
+        {
+          "item": "Raw beef",
+          "quantity": 1,
+          "weight": 65536
+        },
+        {
+          "item": "Huasca seed",
+          "quantity": 1,
+          "weight": 16384
+        },
+        {
+          "item": "Coins",
+          "quantity": 800,
+          "quantity_max": 1050,
+          "weight": 163840
+        }
+      ],
+      "denominator": 1753088,
+      "behaviour": {
+        "poison_immune": 1
+      },
+      "bonus_pools": [
+        {
+          "key": "Antler guard",
+          "outcomes": [
+            {
+              "item": "Antler guard",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 799
+            }
+          ],
+          "denominator": 800
+        }
+      ]
+    },
+    {
+      "entry": 902202,
+      "profile_id": 2202,
+      "family_id": 78,
+      "subcategory": "elder",
+      "name": "Elder custodian stalker (OSRS elder)",
+      "source": "Elder_custodian_stalker",
+      "source_npc_ids": "14704",
+      "combat_level": 142,
+      "stats": [
+        120,
+        90,
+        45,
+        1,
+        75,
+        250
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 30,
+      "defence_bonuses": {
+        "stab": 30,
+        "slash": -10,
+        "crush": 50
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 250,
+      "source_slayer_xp_tenths": 2500,
+      "source_slayer_level": 76,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 927,
+      "model_path": "Creature\\Wendigo\\Wendigo.m2",
+      "scale": 1.1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1410000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 2688
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2560
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 640
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 384
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 256
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 256
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 256
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 256
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 256
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 49644
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 25216
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 12608
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 6304
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 3152
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 1576
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 788
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 788
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1695
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 45
+        },
+        {
+          "item": "Steel cannonball",
+          "quantity": 20,
+          "quantity_max": 30,
+          "weight": 245760
+        },
+        {
+          "item": "Air rune",
+          "quantity": 200,
+          "weight": 196608
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 150,
+          "weight": 196608
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 20,
+          "quantity_max": 35,
+          "weight": 196608
+        },
+        {
+          "item": "Death rune",
+          "quantity": 40,
+          "quantity_max": 50,
+          "weight": 98304
+        },
+        {
+          "item": "Shark",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 196608
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 30,
+          "weight": 196608
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 98304
+        },
+        {
+          "item": "Broken antler",
+          "quantity": 1,
+          "weight": 65536
+        },
+        {
+          "item": "Raw beef",
+          "quantity": 1,
+          "weight": 65536
+        },
+        {
+          "item": "Huasca seed",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 16384
+        },
+        {
+          "item": "Coins",
+          "quantity": 1180,
+          "quantity_max": 1300,
+          "weight": 311296
+        },
+        {
+          "item": "Alchemist's signet",
+          "quantity": 1,
+          "weight": 32768
+        }
+      ],
+      "denominator": 2031616,
+      "behaviour": {
+        "poison_immune": 1
+      },
+      "bonus_pools": [
+        {
+          "key": "Antler guard",
+          "outcomes": [
+            {
+              "item": "Antler guard",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 649
+            }
+          ],
+          "denominator": 650
+        }
+      ]
+    },
+    {
+      "entry": 902203,
+      "profile_id": 2203,
+      "family_id": 79,
+      "subcategory": "regular_182",
+      "name": "Dark beast (OSRS regular_182)",
+      "source": "Dark_beast",
+      "source_npc_ids": "4005,7250",
+      "combat_level": 182,
+      "stats": [
+        140,
+        160,
+        120,
+        1,
+        160,
+        220
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 30,
+      "defence_bonuses": {
+        "stab": 30,
+        "slash": 40,
+        "crush": 100
+      },
+      "source_max_hit": 17,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 225,
+      "source_slayer_xp_tenths": 2254,
+      "source_slayer_level": 90,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 10193,
+      "model_path": "Creature\\FelBeast\\FelBeast.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1420000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Dark bow",
+          "quantity": 1,
+          "weight": 1142947840
+        },
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 2245783680
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2138841600
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2138841600
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 534710400
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 320826240
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 320826240
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 320826240
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 213884160
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 213884160
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 213884160
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 213884160
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 213884160
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 213884160
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 213884160
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 213884160
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 106942080
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 106942080
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 7790062140
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 3956856960
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 1978428480
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 989214240
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 494607120
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 247303560
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 123651780
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 123651780
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 123651780
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1416147075
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 100258200
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 50129100
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 37596825
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Black battleaxe",
+          "quantity": 1,
+          "weight": 13688586240
+        },
+        {
+          "item": "Adamant sq shield",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Rune chainbody",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Rune med helm",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Death rune",
+          "quantity": 20,
+          "weight": 36502896640
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 30,
+          "weight": 31940034560
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 15,
+          "weight": 18251448320
+        },
+        {
+          "item": "Coins",
+          "quantity": 152,
+          "weight": 182514483200
+        },
+        {
+          "item": "Coins",
+          "quantity": 64,
+          "weight": 27377172480
+        },
+        {
+          "item": "Coins",
+          "quantity": 95,
+          "weight": 27377172480
+        },
+        {
+          "item": "Coins",
+          "quantity": 220,
+          "weight": 22814310400
+        },
+        {
+          "item": "Shark",
+          "quantity": 1,
+          "weight": 13688586240
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 3,
+          "weight": 9125724160
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 5,
+          "weight": 4562862080
+        },
+        {
+          "item": "Death talisman",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Runite ore",
+          "quantity": 1,
+          "weight": 4562862080
+        },
+        {
+          "item": "Shark",
+          "quantity": 2,
+          "weight": 4562862080
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 21673594880
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 16255196160
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 12191397120
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 9482197760
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 7450298240
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 5418398720
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 4063799040
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 3386499200
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 2709199360
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 2031899520
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 2031899520
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 5703577600
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 4277683200
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 3208262400
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 2495315200
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 1960604800
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 1425894400
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 1069420800
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 891184000
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 712947200
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 534710400
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 534710400
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 2712600576
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 1858633728
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 1795842048
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 1293508608
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 1268391936
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 1205600256
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 879083520
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 866525184
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 577683456
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 401866752
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 288841728
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 251166720
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 175816704
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 113025024
+        }
+      ],
+      "denominator": 585189294080,
+      "behaviour": {
+        "magic_max_hit": 8,
+        "magic_melee_only": 1,
+        "attack_spell": 900701
+      }
+    },
+    {
+      "entry": 902204,
+      "profile_id": 2204,
+      "family_id": 80,
+      "subcategory": "regular_93",
+      "name": "Dust devil (OSRS regular_93)",
+      "source": "Dust_devil",
+      "source_npc_ids": "423",
+      "combat_level": 93,
+      "stats": [
+        105,
+        70,
+        40,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 105,
+      "source_slayer_xp_tenths": 1050,
+      "source_slayer_level": 65,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 5187,
+      "model_path": "Creature\\AirElemental\\AirElemental.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1430000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant axe",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Red d'hide vambraces",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Black d'hide vambraces",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Air battlestaff",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Earth battlestaff",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mystic air staff",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Mystic earth staff",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragon dagger",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragon chainbody",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Dust rune",
+          "quantity": 200,
+          "weight": 2560
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 300,
+          "weight": 2560
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 300,
+          "weight": 2560
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 50,
+          "weight": 256
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 65,
+          "weight": 1792
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 15,
+          "weight": 1024
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 50,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 255
+        },
+        {
+          "item": "Coins",
+          "quantity": 2000,
+          "quantity_max": 4000,
+          "weight": 7168
+        },
+        {
+          "item": "Ugthanki kebab",
+          "quantity": 4,
+          "weight": 512
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 10,
+          "weight": 768
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "weight": 256
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 1216
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 912
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 684
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 532
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 418
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 304
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 228
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 190
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 152
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 114
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 114
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1386
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 704
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 352
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 176
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 88
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 44
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 22
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 22
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 22
+        }
+      ],
+      "denominator": 32768,
+      "bonus_pools": [
+        {
+          "key": "Dust battlestaff",
+          "outcomes": [
+            {
+              "item": "Dust battlestaff",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 3999
+            }
+          ],
+          "denominator": 4000
+        }
+      ]
+    },
+    {
+      "entry": 902205,
+      "profile_id": 2205,
+      "family_id": 80,
+      "subcategory": "regular_110",
+      "name": "Dust devil (OSRS regular_110)",
+      "source": "Dust_devil",
+      "source_npc_ids": "7249",
+      "combat_level": 110,
+      "stats": [
+        120,
+        90,
+        40,
+        1,
+        1,
+        130
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 130,
+      "source_slayer_xp_tenths": 1300,
+      "source_slayer_level": 65,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 5187,
+      "model_path": "Creature\\AirElemental\\AirElemental.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1440000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant axe",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Red d'hide vambraces",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Black d'hide vambraces",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Air battlestaff",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Earth battlestaff",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Mystic air staff",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Mystic earth staff",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragon dagger",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Dragon chainbody",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Dust rune",
+          "quantity": 200,
+          "weight": 2560
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 300,
+          "weight": 2560
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 300,
+          "weight": 2560
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 50,
+          "weight": 256
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 65,
+          "weight": 1792
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 12,
+          "weight": 1280
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 15,
+          "weight": 1024
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 50,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 255
+        },
+        {
+          "item": "Coins",
+          "quantity": 2000,
+          "quantity_max": 4000,
+          "weight": 7168
+        },
+        {
+          "item": "Ugthanki kebab",
+          "quantity": 4,
+          "weight": 512
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 10,
+          "weight": 768
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 4,
+          "weight": 256
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 1216
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 912
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 684
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 532
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 418
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 304
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 228
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 190
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 152
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 114
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 114
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1386
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 704
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 352
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 176
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 88
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 44
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 22
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 22
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 22
+        }
+      ],
+      "denominator": 32768,
+      "bonus_pools": [
+        {
+          "key": "Dust battlestaff",
+          "outcomes": [
+            {
+              "item": "Dust battlestaff",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 3999
+            }
+          ],
+          "denominator": 4000
+        }
+      ]
+    },
+    {
+      "entry": 902206,
+      "profile_id": 2206,
+      "family_id": 81,
+      "subcategory": "guild_86",
+      "name": "Ent (OSRS guild_86)",
+      "source": "Ent",
+      "source_npc_ids": "7234",
+      "combat_level": 86,
+      "stats": [
+        75,
+        75,
+        75,
+        1,
+        1,
+        75
+      ],
+      "attack_bonus": 35,
+      "strength_bonus": 65,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 17,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 75,
+      "source_slayer_xp_tenths": 750,
+      "source_slayer_level": 0,
+      "respawn_ticks": 151,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 864,
+      "model_path": "Creature\\Ent\\Ent.m2",
+      "scale": 1,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1450000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902207,
+      "profile_id": 2207,
+      "family_id": 81,
+      "subcategory": "wilderness_101",
+      "name": "Ent (OSRS wilderness_101)",
+      "source": "Ent",
+      "source_npc_ids": "6594",
+      "combat_level": 101,
+      "stats": [
+        80,
+        95,
+        75,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 70,
+        "crush": 70
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 107,
+      "source_slayer_xp_tenths": 1075,
+      "source_slayer_level": 0,
+      "respawn_ticks": 116,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 864,
+      "model_path": "Creature\\Ent\\Ent.m2",
+      "scale": 1,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1460000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902208,
+      "profile_id": 2208,
+      "family_id": 82,
+      "subcategory": "upstairs_111",
+      "name": "Gargoyle (OSRS upstairs_111)",
+      "source": "Gargoyle",
+      "source_npc_ids": "412,413",
+      "combat_level": 111,
+      "stats": [
+        75,
+        105,
+        107,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 60,
+        "crush": -20
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 105,
+      "source_slayer_xp_tenths": 1050,
+      "source_slayer_level": 75,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": -2,
+      "aggressive": true,
+      "model": 7533,
+      "model_path": "Creature\\Gargoyle\\Gargoyle.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1470000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Granite maul",
+          "quantity": 1,
+          "weight": 32768
+        },
+        {
+          "item": "Mystic robe top (dark)",
+          "quantity": 1,
+          "weight": 16384
+        },
+        {
+          "item": "Adamant platelegs",
+          "quantity": 1,
+          "weight": 260608
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 195456
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 130304
+        },
+        {
+          "item": "Adamant boots",
+          "quantity": 1,
+          "weight": 65152
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 65152
+        },
+        {
+          "item": "Rune platelegs",
+          "quantity": 1,
+          "weight": 65152
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 75,
+          "weight": 651520
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 30,
+          "weight": 521216
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 150,
+          "weight": 390912
+        },
+        {
+          "item": "Death rune",
+          "quantity": 15,
+          "weight": 325760
+        },
+        {
+          "item": "Gold ore",
+          "quantity": 10,
+          "quantity_max": 20,
+          "weight": 651520
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 150,
+          "weight": 390912
+        },
+        {
+          "item": "Steel bar",
+          "quantity": 15,
+          "weight": 390912
+        },
+        {
+          "item": "Gold bar",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 195456
+        },
+        {
+          "item": "Mithril bar",
+          "quantity": 15,
+          "weight": 130304
+        },
+        {
+          "item": "Runite ore",
+          "quantity": 1,
+          "weight": 130304
+        },
+        {
+          "item": "Coins",
+          "quantity": 400,
+          "quantity_max": 800,
+          "weight": 1824256
+        },
+        {
+          "item": "Coins",
+          "quantity": 500,
+          "quantity_max": 1000,
+          "weight": 1303040
+        },
+        {
+          "item": "Coins",
+          "quantity": 10000,
+          "weight": 325760
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 160335
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 81440
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 40720
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 20360
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 10180
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 5090
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2545
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2545
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2545
+        }
+      ],
+      "denominator": 8388608,
+      "behaviour": {
+        "finisher_item": 902531
+      }
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900750,
+      "source": 30455,
+      "name": "Rock hammer",
+      "description": "Smash a gargoyle at 8 Hitpoints or lower. Reusable."
+    }
+  ],
+  "source_assumptions": [
+    "Members main loot, no wealth, pre-Legends. Source-linked regular variants; no superior/boss/quest forms or task/Slayer gates.",
+    "Stalker bleed is deferred: Wiki itself notes uncertainty about its damage. Antler guard tertiary independent mature1/800 and elder1/650. Broken antler remains main-table, not guaranteed.",
+    "Dark beast double herb outcome gives two of the same selected herb; independent herb identity rolls deferred. Magic-melee-only prototype reuses existing spell logic; exact source switching deferred.",
+    "Dust devil uses ordinary melee prototype; ranged-based defence, facemask protection and temporary stat drains deferred. Existing character XP never drained.",
+    "Ent has no combat loot: post-kill trunk chopping, Woodcutting-dependent log distribution and nests require a separate harvesting checkpoint.",
+    "Gargoyle damage stops at1HP until reusable rock hammer is used within5 yards at8 source HP or lower. Auto-smash perk, thrownhammer, granite hammer and golembane effects deferred.",
+    "Dark beast and Gargoyle uniques are conditional prerolls; main probabilities preserved after preroll. Wilderness/task/quest/clue tertiary excluded. Source missing mass remains Nothing."
+  ]
+}

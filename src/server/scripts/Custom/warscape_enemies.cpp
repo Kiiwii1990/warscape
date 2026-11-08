@@ -585,6 +585,38 @@ public:
     }
 };
 
+class item_warscape_rock_hammer : public ItemScript
+{
+public:
+    item_warscape_rock_hammer() : ItemScript("item_warscape_rock_hammer") { }
+    bool OnUse(Player* player,Item* item,SpellCastTargets const& targets) override
+    {
+        // Complete every scripted item-use path so the stock client releases its item cursor.
+        player->SendEquipError(EQUIP_ERR_OK,item,nullptr);
+        Unit* unit=targets.GetUnitTarget();
+        Creature* target=unit ? unit->ToCreature() : nullptr;
+        auto const* b=target ? Warscape::FindEnemyBehaviour(target->GetEntry()) : nullptr;
+        if (!player->IsAlive() || !target || !b || b->FinisherItem!=item->GetEntry() || !target->IsAlive() || target->IsInEvadeMode()
+            || !player->IsValidAttackTarget(target) || !player->IsWithinDistInMap(target,5.f) || !player->IsWithinLOSInMap(target)
+            || (target->GetLootRecipient() && !target->isTappedBy(player)))
+        {
+            ChatHandler(player->GetSession()).SendSysMessage("Select a living gargoyle within 5 yards that you may loot.");
+            return true;
+        }
+        bool const ready=Warscape::CanSmashGargoyle(target->GetHealth());
+        if (!ready)
+        {
+            ChatHandler(player->GetSession()).SendSysMessage("The gargoyle must have 8 Hitpoints or lower.");
+            return true;
+        }
+        if (!target->GetLootRecipient()) target->SetLootRecipient(player);
+        target->LowerPlayerDamageReq(target->GetHealth());
+        Unit::Kill(player,target);
+        ChatHandler(player->GetSession()).SendSysMessage("The rock hammer smashes the gargoyle.");
+        return true;
+    }
+};
+
 void AddSC_warscape_enemies()
 {
     RegisterCreatureAI(npc_warscape_enemy);
@@ -596,4 +628,5 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_double);
     RegisterSpellScript(spell_warscape_enemy_venom);
     new item_warscape_ice_cooler();
+    new item_warscape_rock_hammer();
 }

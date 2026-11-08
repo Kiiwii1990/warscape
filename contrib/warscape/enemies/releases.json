@@ -50,5 +50,9 @@
   {
     "data": "cave_families.json",
     "adds_elemental_encounters": true
+  },
+  {
+    "data": "stalkers_gargoyles.json",
+    "adds_stalker_encounters": true
   }
 ]

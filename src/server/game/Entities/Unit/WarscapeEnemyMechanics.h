@@ -7,6 +7,7 @@ namespace Warscape {
 inline std::uint32_t NonFinishingDamage(std::uint32_t health, std::uint32_t damage) {
     return std::min(damage,health > 10 ? health-10 : 0);
 }
+inline bool CanSmashGargoyle(std::uint32_t health) { return health > 0 && health <= 80; }
 inline bool CanCoolLizard(std::uint32_t health) { return health > 0 && health < 50; }
 constexpr std::uint32_t PoisonPeriod = 18000;
 inline std::uint32_t PoisonDuration(std::uint32_t initial) { return initial*5*PoisonPeriod; }
