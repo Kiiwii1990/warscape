@@ -10,15 +10,16 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 - Refillable ten-charge Fungicide spray902585 accepted, including user confirmation after deployment. Original dose902570 and refill902584 preserved.
 - Gargoyle manual reusable hammer, salt finisher, source poison, ranged/magic carriers, Hydra three-attack cycle, Aquanite lure cut, Nagua double-hit and Earthen reinforcement already implemented. Do not redo these as if absent.
 
-## Current milestone
+## Current milestones
 
+- Harpie equipped lit lantern: implemented; deployment/acceptance recorded in WarscapeHarpieLantern.md. Lighting/Firemaking remains future work.
 - Nechryael owned Death spawns: implemented/deployed; manual acceptance pending. See WarscapeDeathSpawns.md. Two active GUIDs at most,60-second native lifetime, target binding and cleanup. Native WoW auto-retaliate/logout/prayer exceptions remain unlike exact OSRS behaviour.
 
 ## Queued enemy mechanics
 
 | Area | Remaining work | Reference |
 |---|---|---|
-| Protection gear | Smoke/Dust Devil facemask; Sourhog goggles; Turoth/Kurask leaf/broad/Magic Dart gates; Harpie lit lantern | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
+| Protection gear | Smoke/Dust Devil facemask; Sourhog goggles; Turoth/Kurask leaf/broad/Magic Dart gates; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
 | Temporary stats/gaze | Basilisk/Cockatrice mirror protection and gaze; Spectre/other temporary drains; implement temporary combat stats without changing stored XP | SlayerElementals, CaveFamilies |
 | Wall Beast | Wall-hole placement/trigger, grab/Spiny helmet, linked respawn; free-standing model currently a stand-in | NechryaelsZygomites |
 | Ent | Defeated trunk/chopping, Woodcutting-dependent logs and nests; no kill loot substitute | StalkersGargoyles |

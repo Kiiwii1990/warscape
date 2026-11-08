@@ -1,4 +1,5 @@
 #include "WarscapeEnemyCatalogue.h"
+#include "WarscapeEnemyRequirements.h"
 #include "WarscapeCombat.h"
 #include "WarscapeEnemyMechanics.h"
 #include "WarscapeEquipment.h"
@@ -7,6 +8,10 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::MeetsEnemyOffhandRequirement(902301,0));
+    assert(!Warscape::MeetsEnemyOffhandRequirement(902301,902476));
+    assert(Warscape::MeetsEnemyOffhandRequirement(902301,902586));
+    assert(Warscape::MeetsEnemyOffhandRequirement(902300,0));
     assert(Warscape::CanSummonDeathSpawn(0,true) && Warscape::CanSummonDeathSpawn(1,true));
     assert(!Warscape::CanSummonDeathSpawn(2,true) && !Warscape::CanSummonDeathSpawn(0,false));
     assert(Warscape::DeathSpawnCanRemain(true,true,21.f));

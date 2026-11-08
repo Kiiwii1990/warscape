@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "entry": 902586,
+      "name": "Lit bug lantern",
+      "display_source": 5323,
+      "class": 4,
+      "subclass": 0,
+      "inventory_type": 23
+    }
+  ],
+  "client_spells": []
+}

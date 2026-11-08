@@ -912,3 +912,5 @@ this new batch remains pending.
 8 November 2026: prior five-family checkpoint confirmed working. Nechryael/Rockslug/Smoke Devil/Sourhog/Turoth/Wall Beast/Zygomite checkpoint adds eleven regular variants. Salt finisher and single-dose fungicide prototype implemented; refills, summons, environmental interactions and equipment restrictions remain pending. See WarscapeNechryaelsZygomites.md.
 
 8 November2026: user confirmed refillable spray and requested review of unfinished conversation work. Central backlog: WarscapePendingWork.md. First reviewed milestone adds owned Nechryael Death spawns with cap/timer/cleanup; native WoW retaliation/logout exceptions remain explicit. See WarscapeDeathSpawns.md; gameplay acceptance pending.
+
+8 November2026 backlog milestone: Harpie902301 equipped Lit bug lantern902586 requirement uses generic off-hand rule and current player/owner equipment at damage time. Stats/loot unchanged. Lighting/Firemaking remains future work; manual gameplay acceptance pending. See WarscapeHarpieLantern.md.

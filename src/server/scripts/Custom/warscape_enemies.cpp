@@ -14,6 +14,7 @@
 #include "ObjectAccessor.h"
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeEnemyMechanics.h"
+#include "WarscapeEnemyRequirements.h"
 #include "WarscapeCombat.h"
 #include "WarscapeEquipment.h"
 
@@ -124,6 +125,18 @@ struct npc_warscape_enemy : ScriptedAI
     void DamageTaken(Unit* attacker,uint32& damage,DamageEffectType type,SpellInfo const* spell) override
     {
         auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
+        Player* owner=attacker ? attacker->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr;
+        if (auto const* rule=Warscape::FindEnemyOffhandRequirement(me->GetEntry()); rule && owner) {
+            Item* offhand=owner->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_OFFHAND);
+            if (!Warscape::MeetsEnemyOffhandRequirement(me->GetEntry(),offhand ? offhand->GetEntry() : 0)) {
+                damage=0;
+                if (!meleeWarningDelay) {
+                    ChatHandler(owner->GetSession()).SendSysMessage(rule->Message);
+                    meleeWarningDelay=3000;
+                }
+                return;
+            }
+        }
         if (b && attacker && attacker->GetTypeId()==TYPEID_PLAYER && Warscape::RejectAirborneMelee(
             b->Airborne!=0,type==DIRECT_DAMAGE,spell && spell->DmgClass==SPELL_DAMAGE_CLASS_MELEE))
         {
