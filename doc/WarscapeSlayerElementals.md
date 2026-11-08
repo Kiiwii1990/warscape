@@ -231,3 +231,5 @@ All previous DBC rows/string offsets and unrelated MPQ entries were preserved;
 all ten models resolve to native M2 assets. No character persistence, client
 executable/object-layout or terrain changes. New manual gameplay/drop/aura/
 interruption acceptance is pending; only prior user-reported acceptance is recorded.
+
+User acceptance8 November2026: all six families confirmed working with drops. This does not establish every rare drop, venom persistence or deferred mechanic.

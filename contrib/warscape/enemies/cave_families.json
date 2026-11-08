@@ -1,0 +1,2427 @@
+{
+  "release": "2026_11_08_01_world",
+  "loot_policy": "Members/no wealth/pre-Legends, off-task uniques, conditional main after pre-roll. Explicit residual empty probability; quest/Slayer tertiary excluded.",
+  "sources": {
+    "Catablepon": {
+      "url": "https://oldschool.runescape.wiki/w/Catablepon",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "a9da925ea289080baa3c841ad582acdb2a452e66cc8344989deb40b739c969d2"
+    },
+    "Cave_crawler": {
+      "url": "https://oldschool.runescape.wiki/w/Cave_crawler",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "e38d7ccf8600c5367de68ff60b5748c221313a67b526745465a1d0c8f4adfca6"
+    },
+    "Cave_horror": {
+      "url": "https://oldschool.runescape.wiki/w/Cave_horror",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "34902731646a4c3edd515778072d60ae0a35262817eb6662d3f20a8daae2357b"
+    },
+    "Cave_slime": {
+      "url": "https://oldschool.runescape.wiki/w/Cave_slime",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "5cdf13d26c7ed8d12175c71d0adc4eb020723c929857ae5930d3c33dffaf900b"
+    },
+    "Cockatrice": {
+      "url": "https://oldschool.runescape.wiki/w/Cockatrice",
+      "retrieved": "2026-11-07",
+      "raw_sha256": "0bc23d51b25b324beafa85d61537a9cf734654d4b114d23084df0329913b2b45"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    },
+    "Template:AllotmentSeedDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:AllotmentSeedDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "02135f37b1802254ece33a898d8323c83dcf7d348b0751d5a87961dad47a014c"
+    },
+    "Template:RareSeedDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:RareSeedDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "3fb3e39a60a881cd2258d771552962a114cce33ee23a0bb5e82c65c407c8b503"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    }
+  },
+  "families": [
+    {
+      "id": 73,
+      "key": "catablepon",
+      "name": "Catablepon",
+      "model_note": "Kodo cow/reptilian stand-in."
+    },
+    {
+      "id": 74,
+      "key": "cave_crawlers",
+      "name": "Cave Crawlers",
+      "model_note": "Native crab979 crawling stand-in; not bespoke OSRS mesh."
+    },
+    {
+      "id": 75,
+      "key": "cave_horrors",
+      "name": "Cave Horrors",
+      "model_note": "Native gorilla stand-in."
+    },
+    {
+      "id": 76,
+      "key": "cave_slimes",
+      "name": "Cave Slimes",
+      "model_note": "Native green ooze."
+    },
+    {
+      "id": 77,
+      "key": "cockatrices",
+      "name": "Cockatrices",
+      "model_note": "Native cockatrice/basilisk stand-in."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Adamant med helm",
+      "entry": 902245
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098
+    },
+    {
+      "name": "Mithril arrow",
+      "entry": 902103
+    },
+    {
+      "name": "Pure essence",
+      "entry": 902112
+    },
+    {
+      "name": "Eye of newt",
+      "entry": 902105
+    },
+    {
+      "name": "Coal",
+      "entry": 902030
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Potato seed",
+      "entry": 902126
+    },
+    {
+      "name": "Onion seed",
+      "entry": 902127
+    },
+    {
+      "name": "Cabbage seed",
+      "entry": 902128
+    },
+    {
+      "name": "Tomato seed",
+      "entry": 902129
+    },
+    {
+      "name": "Sweetcorn seed",
+      "entry": 902130
+    },
+    {
+      "name": "Strawberry seed",
+      "entry": 902131
+    },
+    {
+      "name": "Watermelon seed",
+      "entry": 902132
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Energy potion(3)",
+      "entry": 902010
+    },
+    {
+      "name": "Energy potion(4)",
+      "entry": 902011
+    },
+    {
+      "name": "Vial of water",
+      "entry": 902437
+    },
+    {
+      "name": "Unicorn horn dust",
+      "entry": 902303
+    },
+    {
+      "name": "Red spiders' eggs",
+      "entry": 902305
+    },
+    {
+      "name": "Limpwurt root",
+      "entry": 902144
+    },
+    {
+      "name": "Snape grass",
+      "entry": 902304
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    },
+    {
+      "name": "Big bones",
+      "entry": 902172
+    },
+    {
+      "name": "Mithril axe",
+      "entry": 902183
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Adamant full helm",
+      "entry": 902301
+    },
+    {
+      "name": "Mithril kiteshield",
+      "entry": 902224
+    },
+    {
+      "name": "Teak logs",
+      "entry": 902283
+    },
+    {
+      "name": "Mahogany logs",
+      "entry": 902282
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Bronze axe",
+      "entry": 902048
+    },
+    {
+      "name": "Iron shortsword",
+      "entry": 902096
+    },
+    {
+      "name": "Bronze full helm",
+      "entry": 902110
+    },
+    {
+      "name": "Iron kiteshield",
+      "entry": 902334
+    },
+    {
+      "name": "Gold bar",
+      "entry": 902228
+    },
+    {
+      "name": "Steel dagger",
+      "entry": 902140
+    },
+    {
+      "name": "Iron javelin",
+      "entry": 902145
+    },
+    {
+      "name": "Steel longsword",
+      "entry": 902143
+    },
+    {
+      "name": "Energy potion(2)",
+      "entry": 902364
+    }
+  ],
+  "items": [
+    {
+      "name": "Trout",
+      "entry": 902507,
+      "display_source": 2679
+    },
+    {
+      "name": "Unlit torch",
+      "entry": 902508,
+      "display_source": 4470
+    },
+    {
+      "name": "Top of sceptre",
+      "entry": 902509,
+      "display_source": 2843
+    },
+    {
+      "name": "Bronze boots",
+      "entry": 902510,
+      "display_source": 2967
+    },
+    {
+      "name": "White berries",
+      "entry": 902511,
+      "display_source": 2447
+    },
+    {
+      "name": "Black mask (10)",
+      "entry": 902512,
+      "display_source": 4077
+    },
+    {
+      "name": "Swamp tar",
+      "entry": 902513,
+      "display_source": 2835
+    },
+    {
+      "name": "Iron boots",
+      "entry": 902514,
+      "display_source": 2967
+    },
+    {
+      "name": "Oil lantern frame",
+      "entry": 902515,
+      "display_source": 4470
+    },
+    {
+      "name": "Mystic boots (light)",
+      "entry": 902516,
+      "display_source": 2967
+    },
+    {
+      "name": "Cockatrice head",
+      "entry": 902517,
+      "display_source": 2843
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902100,
+      "profile_id": 2100,
+      "family_id": 73,
+      "subcategory": "regular_49",
+      "name": "Catablepon (OSRS regular_49)",
+      "source": "Catablepon",
+      "source_npc_ids": "2474",
+      "combat_level": 49,
+      "stats": [
+        45,
+        40,
+        40,
+        1,
+        60,
+        40
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 40,
+      "defence_bonuses": {
+        "stab": 40,
+        "slash": 30,
+        "crush": 20
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 40,
+      "source_slayer_xp_tenths": 400,
+      "source_slayer_level": 0,
+      "respawn_ticks": 20,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 1230,
+      "model_path": "Creature\\Kodobeast\\KodoBeast.m2",
+      "scale": 0.65,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1320000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 15,
+          "weight": 896
+        },
+        {
+          "item": "Water rune",
+          "quantity": 7,
+          "weight": 768
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 7,
+          "weight": 128
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 384
+        },
+        {
+          "item": "Mithril arrow",
+          "quantity": 5,
+          "quantity_max": 14,
+          "weight": 512
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Coal",
+          "quantity": 3,
+          "quantity_max": 7,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 1536
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 104,
+          "weight": 1280
+        },
+        {
+          "item": "Trout",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Unlit torch",
+          "quantity": 1,
+          "weight": 1152
+        },
+        {
+          "item": "Top of sceptre",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 72
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 54
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 42
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 18
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 15
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 126
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 64
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 32
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 16
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 8
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 4
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1664
+        }
+      ],
+      "denominator": 12928
+    },
+    {
+      "entry": 902101,
+      "profile_id": 2101,
+      "family_id": 73,
+      "subcategory": "regular_64",
+      "name": "Catablepon (OSRS regular_64)",
+      "source": "Catablepon",
+      "source_npc_ids": "2475",
+      "combat_level": 64,
+      "stats": [
+        55,
+        50,
+        50,
+        1,
+        45,
+        70
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 40,
+        "crush": 30
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 70,
+      "source_slayer_xp_tenths": 700,
+      "source_slayer_level": 0,
+      "respawn_ticks": 20,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 1230,
+      "model_path": "Creature\\Kodobeast\\KodoBeast.m2",
+      "scale": 0.65,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1330000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 15,
+          "weight": 896
+        },
+        {
+          "item": "Water rune",
+          "quantity": 7,
+          "weight": 768
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 7,
+          "weight": 128
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 384
+        },
+        {
+          "item": "Mithril arrow",
+          "quantity": 5,
+          "quantity_max": 14,
+          "weight": 512
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Coal",
+          "quantity": 3,
+          "quantity_max": 7,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 1536
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 104,
+          "weight": 1280
+        },
+        {
+          "item": "Trout",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Unlit torch",
+          "quantity": 1,
+          "weight": 1152
+        },
+        {
+          "item": "Top of sceptre",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 72
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 54
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 42
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 18
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 15
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 126
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 64
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 32
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 16
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 8
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 4
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1664
+        }
+      ],
+      "denominator": 12928
+    },
+    {
+      "entry": 902102,
+      "profile_id": 2102,
+      "family_id": 73,
+      "subcategory": "regular_68",
+      "name": "Catablepon (OSRS regular_68)",
+      "source": "Catablepon",
+      "source_npc_ids": "2476",
+      "combat_level": 68,
+      "stats": [
+        65,
+        60,
+        60,
+        1,
+        60,
+        50
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 40,
+        "crush": 30
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 50,
+      "source_slayer_xp_tenths": 500,
+      "source_slayer_level": 0,
+      "respawn_ticks": 20,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 1230,
+      "model_path": "Creature\\Kodobeast\\KodoBeast.m2",
+      "scale": 0.65,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1340000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 15,
+          "weight": 896
+        },
+        {
+          "item": "Water rune",
+          "quantity": 7,
+          "weight": 768
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 7,
+          "weight": 128
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 512
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 384
+        },
+        {
+          "item": "Mithril arrow",
+          "quantity": 5,
+          "quantity_max": 14,
+          "weight": 512
+        },
+        {
+          "item": "Pure essence",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 896
+        },
+        {
+          "item": "Coal",
+          "quantity": 3,
+          "quantity_max": 7,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 768
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 1536
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 104,
+          "weight": 1280
+        },
+        {
+          "item": "Trout",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Unlit torch",
+          "quantity": 1,
+          "weight": 1152
+        },
+        {
+          "item": "Top of sceptre",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 72
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 54
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 42
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 33
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 18
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 15
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 9
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 126
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 64
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 32
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 16
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 8
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 4
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1664
+        }
+      ],
+      "denominator": 12928
+    },
+    {
+      "entry": 902103,
+      "profile_id": 2103,
+      "family_id": 74,
+      "subcategory": "regular_23",
+      "name": "Cave crawler (OSRS regular_23)",
+      "source": "Cave_crawler",
+      "source_npc_ids": "406",
+      "combat_level": 23,
+      "stats": [
+        22,
+        18,
+        18,
+        1,
+        1,
+        22
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 5
+      },
+      "source_max_hit": 3,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 22,
+      "source_slayer_xp_tenths": 220,
+      "source_slayer_level": 10,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 979,
+      "model_path": "Creature\\Crab\\Crab.m2",
+      "scale": 0.6,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1350000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Bronze boots",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 3,
+          "weight": 768
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 12,
+          "weight": 640
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 9,
+          "weight": 256
+        },
+        {
+          "item": "Coins",
+          "quantity": 29,
+          "weight": 384
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 3584
+        },
+        {
+          "item": "Energy potion(3)",
+          "quantity": 1,
+          "weight": 1664
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 640
+        },
+        {
+          "item": "White berries",
+          "quantity": 1,
+          "weight": 640
+        },
+        {
+          "item": "Vial of water",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Unicorn horn dust",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Red spiders' eggs",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Snape grass",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 736
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 552
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 414
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 322
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 253
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 184
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 138
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 115
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 92
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 69
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 69
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 1664
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 832
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 416
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 208
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 104
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 52
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 26
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 26
+        }
+      ],
+      "denominator": 16384,
+      "behaviour": {
+        "poison_max_hit": 8,
+        "poison_spell": 900702
+      }
+    },
+    {
+      "entry": 902104,
+      "profile_id": 2104,
+      "family_id": 75,
+      "subcategory": "worker_80",
+      "name": "Cave horror (OSRS worker_80)",
+      "source": "Cave_horror",
+      "source_npc_ids": "1047",
+      "combat_level": 80,
+      "stats": [
+        80,
+        77,
+        62,
+        1,
+        80,
+        55
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 9,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 55,
+      "source_slayer_xp_tenths": 550,
+      "source_slayer_level": 58,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 3186,
+      "model_path": "Creature\\Gorilla\\Gorilla.m2",
+      "scale": 0.85,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1360000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Black mask (10)",
+          "quantity": 1,
+          "weight": 17440
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 6,
+          "weight": 418560
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 4,
+          "weight": 348800
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 3,
+          "weight": 69760
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 1953280
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 837120
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 69760
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 488320
+        },
+        {
+          "item": "Teak logs",
+          "quantity": 4,
+          "weight": 488320
+        },
+        {
+          "item": "Mahogany logs",
+          "quantity": 2,
+          "weight": 209280
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 226720
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 170040
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 127530
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 99190
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 77935
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 56680
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 42510
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 35425
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 28340
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 21255
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 21255
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 248832
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 170496
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 164736
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 118656
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 116352
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 110592
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 80640
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 79488
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 52992
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 36864
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 26496
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 23040
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 16128
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 10368
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 171675
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 87200
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 43600
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 21800
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 10900
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 5450
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2725
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2725
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2725
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 523200
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 261600
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 130800
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 65400
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 32700
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 16350
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 8175
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 8175
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 52320
+        }
+      ],
+      "denominator": 8929280
+    },
+    {
+      "entry": 902105,
+      "profile_id": 2105,
+      "family_id": 76,
+      "subcategory": "regular_23",
+      "name": "Cave slime (OSRS regular_23)",
+      "source": "Cave_slime",
+      "source_npc_ids": "480",
+      "combat_level": 23,
+      "stats": [
+        13,
+        13,
+        35,
+        1,
+        13,
+        25
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 25,
+      "source_slayer_xp_tenths": 250,
+      "source_slayer_level": 17,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 12349,
+      "model_path": "Creature\\Slime\\SlimeLesser.m2",
+      "scale": 0.65,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Swamp tar",
+          "quantity": 1,
+          "quantity_max": 6
+        }
+      ],
+      "loot_base": 1370000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Bronze axe",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Iron shortsword",
+          "quantity": 1,
+          "weight": 224
+        },
+        {
+          "item": "Bronze full helm",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Iron kiteshield",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Iron boots",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Water rune",
+          "quantity": 15,
+          "weight": 160
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 5,
+          "weight": 96
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 224
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 960
+        },
+        {
+          "item": "Coins",
+          "quantity": 10,
+          "weight": 1248
+        },
+        {
+          "item": "Coins",
+          "quantity": 22,
+          "weight": 320
+        },
+        {
+          "item": "Coins",
+          "quantity": 46,
+          "weight": 64
+        },
+        {
+          "item": "Unlit torch",
+          "quantity": 1,
+          "weight": 352
+        },
+        {
+          "item": "Oil lantern frame",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Gold bar",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 4096,
+      "behaviour": {
+        "poison_max_hit": 3,
+        "poison_spell": 900702
+      }
+    },
+    {
+      "entry": 902106,
+      "profile_id": 2106,
+      "family_id": 77,
+      "subcategory": "regular_37",
+      "name": "Cockatrice (OSRS regular_37)",
+      "source": "Cockatrice",
+      "source_npc_ids": "419",
+      "combat_level": 37,
+      "stats": [
+        22,
+        37,
+        37,
+        1,
+        1,
+        37
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 0
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 37,
+      "source_slayer_xp_tenths": 370,
+      "source_slayer_level": 25,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 601,
+      "model_path": "Creature\\Basilisk\\Basilisk.m2",
+      "scale": 0.7,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1380000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic boots (light)",
+          "quantity": 1,
+          "weight": 8192
+        },
+        {
+          "item": "Iron shortsword",
+          "quantity": 1,
+          "weight": 98112
+        },
+        {
+          "item": "Steel dagger",
+          "quantity": 1,
+          "weight": 98112
+        },
+        {
+          "item": "Iron boots",
+          "quantity": 1,
+          "weight": 32704
+        },
+        {
+          "item": "Iron javelin",
+          "quantity": 5,
+          "weight": 32704
+        },
+        {
+          "item": "Steel longsword",
+          "quantity": 1,
+          "weight": 32704
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 196224
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 4,
+          "weight": 130816
+        },
+        {
+          "item": "Law rune",
+          "quantity": 2,
+          "weight": 98112
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 6,
+          "weight": 65408
+        },
+        {
+          "item": "Water rune",
+          "quantity": 2,
+          "weight": 65408
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 7,
+          "weight": 65408
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 523264
+        },
+        {
+          "item": "Coins",
+          "quantity": 28,
+          "weight": 392448
+        },
+        {
+          "item": "Coins",
+          "quantity": 62,
+          "weight": 130816
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 686784
+        },
+        {
+          "item": "Energy potion(2)",
+          "quantity": 1,
+          "weight": 392448
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 32704
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 81760
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 61320
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 45990
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 35770
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 28105
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 20440
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 15330
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 12775
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 10220
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 7665
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 7665
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 32193
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 16352
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 8176
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 4088
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 2044
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 1022
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 511
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 4,
+          "weight": 214912
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 4,
+          "weight": 161184
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 4,
+          "weight": 107456
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 3,
+          "weight": 53728
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 3,
+          "weight": 26864
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 2,
+          "weight": 13432
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 2,
+          "weight": 6424
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 2,
+          "weight": 4672
+        }
+      ],
+      "denominator": 4194304,
+      "bonus_pools": [
+        {
+          "key": "Cockatrice head",
+          "outcomes": [
+            {
+              "item": "Cockatrice head",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 999
+            }
+          ],
+          "denominator": 1000
+        }
+      ]
+    }
+  ],
+  "client_spells": [],
+  "source_assumptions": [
+    "Members main loot, no wealth, pre-Legends; Catablepon excludes F2P-only alternatives. Allotment and herb templates expanded. Explicit missing mass stays Nothing.",
+    "Regular representatives only; no superior, icy or quest variants. Slayer levels and XP reference only.",
+    "Catablepon temporary Strength drain; Cave Horror scream, magic-melee hybrid accuracy and witchwood protection; Cockatrice gaze/stat drains and mirror shield enforcement are deferred. Cave Horror uses existing magic melee lane prototype.",
+    "Crawler and slime reuse existing 25-percent poison-on-positive-melee-hit with source initial severity8/3. Slime adjacency/zero-damage application and crawler rapid regeneration remain deferred.",
+    "Native models/animations/sounds are stand-ins. No permanent player XP drains; no new character schema.",
+    "Quest/clue/ensouled/long-bone tertiary excluded. Cockatrice head independent1/1000; Mystic boots light preroll1/512. Black mask is ordinary main-table1/512 collectible."
+  ]
+}

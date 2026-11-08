@@ -46,5 +46,9 @@
   {
     "data": "slayer_elementals.json",
     "adds_elemental_encounters": true
+  },
+  {
+    "data": "cave_families.json",
+    "adds_elemental_encounters": true
   }
 ]

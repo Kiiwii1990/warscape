@@ -902,3 +902,5 @@ double hits, venom and per-encounter lure/reinforcement defences. Stat drains,
 Basilisk gaze/mirror enforcement and several quest/prayer specials are explicitly
 unimplemented; see [checkpoint](WarscapeSlayerElementals.md). User acceptance of
 this new batch remains pending.
+
+8 November 2026 enemy checkpoint: user confirmed prior six families working with drops. Added Catablepon, Cave Crawler, Cave Horror, Cave Slime and Cockatrice; seven representative entries, source-backed stats/loot, existing poison prototype. Temporary drains, gaze and Cave Horror scream remain future work. See WarscapeCaveFamilies.md; new in-game acceptance pending.

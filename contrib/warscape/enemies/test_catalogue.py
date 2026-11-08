@@ -1110,4 +1110,18 @@ class SlayerElementalTests(unittest.TestCase):
         for r in rows:self.assertEqual(after[r[0]],r)
 
 
+class CaveFamilyTests(unittest.TestCase):
+    def test_cave_sources_stats_and_probabilities(self):
+        pack=json.loads((Path(__file__).parent/'cave_families.json').read_text())
+        self.assertEqual(len(pack['families']),5)
+        self.assertEqual([e['combat_level'] for e in pack['enemies']],[49,64,68,23,80,23,37])
+        self.assertEqual([e['stats'][5] for e in pack['enemies']],[40,70,50,22,55,25,37])
+        for e in pack['enemies']:
+            self.assertEqual(sum(o['weight'] for o in e['outcomes']),e['denominator'])
+        horror=pack['enemies'][4]
+        self.assertEqual(sum(o['weight'] for o in horror['outcomes'] if o['item']=='Black mask (10)')*512,horror['denominator'])
+        slime=pack['enemies'][5]
+        self.assertEqual(slime['guaranteed'],[dict(item='Swamp tar',quantity=1,quantity_max=6)])
+        self.assertEqual(pack['enemies'][6]['bonus_pools'][0]['denominator'],1000)
+
 if __name__=='__main__':unittest.main()
