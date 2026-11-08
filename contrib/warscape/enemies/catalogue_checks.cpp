@@ -7,6 +7,28 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(Warscape::StatefulDefence(0,60,true,false,0)==60);
+    assert(Warscape::StatefulDefence(0,60,true,false,Warscape::LureCutState)==10);
+    assert(Warscape::StatefulDefence(1,80,true,false,Warscape::LureCutState)==80);
+    assert(Warscape::StatefulDefence(0,30,false,true,Warscape::ReinforcedState)==50);
+    assert(Warscape::StatefulDefence(1,50,false,true,Warscape::ReinforcedState)==70);
+    assert(Warscape::StatefulDefence(2,50,false,true,Warscape::ReinforcedState)==10);
+    unsigned venom=6;
+    for(unsigned i=0;i<20;++i) { assert(Warscape::VenomDamage(venom*10)==std::min(6+2*i,20u));venom=Warscape::NextVenomDamage(venom); }
+    assert(Warscape::VenomDamage(-100)==6 && Warscape::VenomDamage(10000)==20);
+    assert(Warscape::EnemyFlatArmour(902001)==-4 && Warscape::EnemyFlatArmour(902003)==-4);
+    for(unsigned entry=902000;entry<=902009;++entry) {
+        auto const* pool=Warscape::FindEnemyLootPool(entry); assert(pool);
+        std::uint64_t cursor=0;
+        for(unsigned i=pool->First;i<pool->First+pool->Count;++i) {
+            auto const& o=Warscape::EnemyLootOutcomes[i];
+            assert(Warscape::SelectEnemyLootOutcome(entry,cursor)==&o);
+            assert(Warscape::SelectEnemyLootOutcome(entry,cursor+o.Weight-1)==&o);
+            cursor+=o.Weight;
+        }
+        assert(cursor==pool->Total);
+    }
+
     Warscape::MonsterProfile noMelee;
     noMelee.Base={0,0,128,105,105,128}; noMelee.Growth.fill(0);
     assert(noMelee.Scale(1)==noMelee.Base);
@@ -35,7 +57,7 @@ int main() {
         assert(found);
     }
     for (auto const& pool:Warscape::EnemyBonusPools) {
-        assert(pool.Entry==901903 || pool.Entry==901904);
+        assert((pool.Entry>=901903 && pool.Entry<=901904) || (pool.Entry>=902000 && pool.Entry<=902009));
         std::uint64_t cursor=0;
         for (unsigned i=pool.First;i<pool.First+pool.Count;++i) {
             auto const& o=Warscape::EnemyBonusDrops[i];
@@ -164,7 +186,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==301);
+    assert(Warscape::EnemyVariants.size()==311);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);

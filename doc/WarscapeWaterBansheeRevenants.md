@@ -241,3 +241,10 @@ levels115/126), the pre-existing item900500 and unbound Mining scripts remain;
 Warscape uses its own profiles for these enemies. Those warnings are not reported
 as fixed. Manual appearance/combat, group loot and interruption acceptance remains
 pending. No client executable/object layout or character persistence format changed.
+
+
+## User acceptance update, 8 November 2026
+
+The user confirmed this batch all working before requesting the next six families.
+This records the reported gameplay/drop acceptance, not exhaustive tests of every
+rare outcome, aura, interruption, group-loot or balancing edge case.

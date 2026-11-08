@@ -44,6 +44,13 @@ bool HasHearingProtection(Unit* target, uint32 entry)
     return head && head->GetEntry()==entry;
 }
 
+bool HasObstacleProtection(Unit* target, Warscape::EnemyBehaviour const& b)
+{
+    Player* p=target->ToPlayer();
+    Item* item=p && b.ProtectionSlot ? p->GetItemByPos(INVENTORY_SLOT_BAG_0,uint8(b.ProtectionSlot-1)) : nullptr;
+    return item && item->GetEntry()==b.ProtectionItem;
+}
+
 void ApplyEnemyPoison(Unit* source, Unit* target)
 {
     auto const* b=Warscape::FindEnemyBehaviour(source->GetEntry());
@@ -74,11 +81,15 @@ struct npc_warscape_enemy : ScriptedAI
     Position breathPosition;
     Warscape::RevenantRecovery recovery;
     bool revenantOpened = false;
+    uint32 encounterState = 0;
+    uint32 GetData(uint32 key) const override { return key==Warscape::EncounterStateData ? encounterState : 0; }
+    void SetData(uint32 key,uint32 value) override { if (key==Warscape::EncounterStateData) encounterState|=value; }
 
     void Reset() override
     {
         meleeWarningDelay = 0;
         switchedToMelee = false;
+        encounterState = 0;
         revenantOpened = false;
         recovery = {};
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->TriStyle)
@@ -103,7 +114,7 @@ struct npc_warscape_enemy : ScriptedAI
     }
     void AttackStart(Unit* who) override
     {
-        if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->RangedMaxHit)
+        if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && (b->CastOnly || (b->RangedMaxHit && !b->Killerwatt)))
             AttackStartCaster(who,20.f);
         else
             ScriptedAI::AttackStart(who);
@@ -121,12 +132,33 @@ struct npc_warscape_enemy : ScriptedAI
                 meleeWarningDelay=3000;
             }
         }
+        if (b && b->EarthenArmour && !(encounterState & Warscape::ReinforcedState) && damage
+            && type!=DOT && uint64(me->GetHealth())*100 < uint64(me->GetMaxHealth())*60)
+        {
+            encounterState|=Warscape::ReinforcedState;
+            if (attacker && attacker->GetTypeId()==TYPEID_PLAYER)
+                ChatHandler(attacker->ToPlayer()->GetSession()).SendSysMessage("The nagua reinforces its outer body to protect itself.");
+        }
         if (b && b->FinisherItem)
             damage=Warscape::NonFinishingDamage(me->GetHealth(),damage);
     }
     void DamageDealt(Unit* victim,uint32& damage,DamageEffectType type) override
     {
-        if (type==DIRECT_DAMAGE && damage) ApplyEnemyPoison(me,victim);
+        if (type==DIRECT_DAMAGE && damage)
+        {
+            ApplyEnemyPoison(me,victim);
+            auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
+            if (b && b->VenomSpell && victim->IsAlive() && victim->GetTypeId()==TYPEID_PLAYER
+                && !victim->HasAura(b->VenomSpell) && roll_chance_i(25))
+            {
+                me->CastSpell(victim,b->VenomSpell,TRIGGERED_FULL_MASK);
+                if (Aura* venom=victim->GetAura(b->VenomSpell,me->GetGUID()))
+                {
+                    venom->SetMaxDuration(-1);
+                    venom->SetDuration(-1);
+                }
+            }
+        }
     }
 
     void UpdateAI(uint32 diff) override
@@ -169,6 +201,17 @@ struct npc_warscape_enemy : ScriptedAI
             }
             return;
         }
+        if (b && b->DoubleFirst)
+        {
+            bool const reach=b->DoubleMagic ? me->IsWithinDistInMap(victim,30.f) : me->IsWithinMeleeRange(victim);
+            if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && reach && me->IsWithinLOSInMap(victim))
+            {
+                me->StopMoving();
+                me->CastSpell(victim,b->AttackSpell,TRIGGERED_FULL_MASK);
+                me->resetAttackTimer();
+            }
+            return;
+        }
         if (!b || (!b->MagicMaxHit && !b->RangedMaxHit))
         {
             DoMeleeAttackIfReady();
@@ -177,6 +220,16 @@ struct npc_warscape_enemy : ScriptedAI
         bool const inMelee=me->IsWithinMeleeRange(victim);
         bool const inRange=me->IsWithinDistInMap(victim,30.f);
         bool const lineOfSight=me->IsWithinLOSInMap(victim);
+        if (b && b->CastOnly)
+        {
+            if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
+            {
+                me->StopMoving();
+                me->CastSpell(victim,b->AttackSpell,TRIGGERED_FULL_MASK);
+                me->resetAttackTimer();
+            }
+            return;
+        }
         if (b && b->TriStyle)
         {
             if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
@@ -224,6 +277,7 @@ struct npc_warscape_enemy : ScriptedAI
         }
         if (b && b->RangedMaxHit)
         {
+            if (b->Killerwatt && inMelee) { DoMeleeAttackIfReady(); return; }
             if (b->RangedToMelee && inMelee && !switchedToMelee && me->isAttackReady())
             {
                 switchedToMelee=true;
@@ -330,14 +384,15 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         auto const equipment=target->GetWarscapeEquipmentBonuses();
         uint32 const style=target->GetWarscapeAttackStyle();
         bool const ranged=b->RangedMaxHit && (!b->MagicMaxHit || GetSpellInfo()->Id==b->AlternateSpell);
-        bool const magicDefence=!ranged || b->MagicRanged;
-        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,ranged ? (b->RangedBonus ? int32(b->RangedBonus) : profile.AttackBonus) : (b->MagicBonus ? int32(b->MagicBonus) : profile.AttackBonus));
+        bool const magicDefence=!ranged || b->MagicRanged || b->RangedMagicDefence;
+        uint64 const attack=Warscape::CombatRoll(stats[ranged ? Warscape::Ranged : Warscape::Magic]+9,ranged ? ((b->SeparateBonuses || b->RangedBonus) ? int32(b->RangedBonus) : profile.AttackBonus) : (b->MagicBonus ? int32(b->MagicBonus) : profile.AttackBonus));
         uint32 const level=!magicDefence ? Warscape::PlayerRangedDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Defence),style)
             : Warscape::PlayerMagicDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Magic),target->GetRSSkillLevel(Player::RS_Skill::Defence),style);
         uint64 const defence=Warscape::CombatRoll(level,magicDefence ? equipment.DefenceMagic : equipment.DefenceRanged);
-        bool const accurate=double(urand(0,999999))<Warscape::HitChance(attack,defence)*1000000.0;
+        bool const unprotected=b->ProtectionItem && !HasObstacleProtection(target,*b);
+        bool const accurate=(unprotected && !b->Killerwatt) || double(urand(0,999999))<Warscape::HitChance(attack,defence)*1000000.0;
         bool const ice=GetSpellInfo()->Id==900712;
-        uint32 const hit=accurate ? (ice ? 10 : urand(0,ranged ? b->RangedMaxHit : b->MagicMaxHit)) : 0;
+        uint32 const hit=accurate ? (ice ? 10 : urand(0,unprotected ? b->UnprotectedHit : ranged ? b->RangedMaxHit : b->MagicMaxHit)) : 0;
         DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,hit);
         if (ranged && hit) ApplyEnemyPoison(GetCaster(),target);
         if (!ranged && b->TriStyle && b->RootSpell && hit && target->IsAlive() && roll_chance_i(25))
@@ -360,6 +415,58 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         }
     }
     void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_ranged_hybrid::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
+};
+
+class spell_warscape_enemy_double : public SpellScript
+{
+    PrepareSpellScript(spell_warscape_enemy_double);
+    bool Load() override { auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry()); return GetCaster()->GetTypeId()==TYPEID_UNIT && b && b->DoubleFirst; }
+    void Hit(SpellEffIndex index)
+    {
+        PreventHitDefaultEffect(index);
+        Player* target=GetHitPlayer();auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry());
+        if (!target || !b || (!b->DoubleMagic && !GetCaster()->IsWithinMeleeRange(target))) return;
+        auto stats=sObjectMgr->GetWarscapeMonsterStats(GetCaster()->GetEntry());
+        auto const& profile=sObjectMgr->GetWarscapeMonsterProfile(GetCaster()->GetEntry());
+        auto eq=target->GetWarscapeEquipmentBonuses();auto const* variant=Warscape::FindEnemyVariant(GetCaster()->GetEntry());
+        uint64 const attack=Warscape::CombatRoll(stats[b->DoubleMagic ? Warscape::Magic : Warscape::Attack]+(b->DoubleMagic ? 9 : 8),b->DoubleMagic ? int32(b->MagicBonus) : profile.AttackBonus);
+        uint32 const level=b->DoubleMagic ? Warscape::PlayerMagicDefenceLevel(target->GetRSSkillLevel(Player::RS_Skill::Magic),target->GetRSSkillLevel(Player::RS_Skill::Defence),target->GetWarscapeAttackStyle()) : target->GetRSSkillLevel(Player::RS_Skill::Defence)+8;
+        int32 const bonus=b->DoubleMagic ? eq.DefenceMagic : variant && variant->MeleeLane==1 ? eq.DefenceSlash : eq.DefenceStab;
+        uint64 const defence=Warscape::CombatRoll(level,bonus);
+        for (uint32 max : {b->DoubleFirst,b->DoubleSecond})
+        {
+            if (!target->IsAlive() || !GetCaster()->IsAlive()) break;
+            bool const accurate=double(urand(0,999999))<Warscape::HitChance(attack,defence)*1000000.0;
+            DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,accurate ? urand(0,max) : 0);
+        }
+    }
+    void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_enemy_double::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
+};
+class spell_warscape_enemy_venom : public AuraScript
+{
+    PrepareAuraScript(spell_warscape_enemy_venom);
+    bool Load() override
+    {
+        if (!GetCasterGUID().IsCreature() || GetUnitOwner()->GetTypeId()!=TYPEID_PLAYER) return false;
+        auto const* b=Warscape::FindEnemyBehaviour(GetCasterGUID().GetEntry());
+        return b && b->VenomSpell==GetSpellInfo()->Id;
+    }
+    void Period(AuraEffect const*,bool& periodic,int32& period) { periodic=true;period=18000; }
+    void Amount(AuraEffect const*,int32& amount,bool& recalculate) { amount=60;recalculate=false; }
+    void Tick(AuraEffect const* effect)
+    {
+        PreventDefaultAction();
+        uint32 const hit=Warscape::VenomDamage(effect->GetAmount());
+        Unit* caster=GetCaster() ? GetCaster() : GetUnitOwner();
+        const_cast<AuraEffect*>(effect)->SetAmount(Warscape::NextVenomDamage(hit)*10);
+        DealSourceSpellDamage(caster,GetUnitOwner(),GetSpellInfo()->Id,hit,true);
+    }
+    void Register() override
+    {
+        DoEffectCalcPeriodic += AuraEffectCalcPeriodicFn(spell_warscape_enemy_venom::Period,EFFECT_0,SPELL_AURA_PERIODIC_DAMAGE);
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_warscape_enemy_venom::Amount,EFFECT_0,SPELL_AURA_PERIODIC_DAMAGE);
+        OnEffectPeriodic += AuraEffectPeriodicFn(spell_warscape_enemy_venom::Tick,EFFECT_0,SPELL_AURA_PERIODIC_DAMAGE);
+    }
 };
 
 class spell_warscape_enemy_scream : public SpellScript
@@ -486,5 +593,7 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_poison);
     RegisterSpellScript(spell_warscape_enemy_breath);
     RegisterSpellScript(spell_warscape_enemy_scream);
+    RegisterSpellScript(spell_warscape_enemy_double);
+    RegisterSpellScript(spell_warscape_enemy_venom);
     new item_warscape_ice_cooler();
 }

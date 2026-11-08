@@ -42,5 +42,9 @@
   {
     "data": "water_banshee_revenants.json",
     "adds_spirit_encounters": true
+  },
+  {
+    "data": "slayer_elementals.json",
+    "adds_elemental_encounters": true
   }
 ]

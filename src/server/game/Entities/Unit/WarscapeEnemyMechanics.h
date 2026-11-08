@@ -79,5 +79,18 @@ struct RevenantRecovery
     }
 };
 
+constexpr std::uint32_t EncounterStateData = 0x57534501;
+constexpr std::uint32_t LureCutState = 1, ReinforcedState = 2;
+inline std::int32_t StatefulDefence(std::uint8_t lane, std::int32_t fallback,
+    bool cutLure, bool earthen, std::uint32_t state)
+{
+    if (cutLure && (state & LureCutState) && lane==0) return 10;
+    if (earthen && (state & ReinforcedState))
+        return lane==0 ? 50 : lane==1 ? 70 : lane==2 ? 10 : fallback;
+    return fallback;
+}
+inline std::uint32_t VenomDamage(std::int32_t scaledAmount) { return std::uint32_t(std::clamp(scaledAmount/10,6,20)); }
+inline std::uint32_t NextVenomDamage(std::uint32_t current) { return std::min(current+2,20u); }
+
 }
 #endif

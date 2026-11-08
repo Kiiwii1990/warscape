@@ -1,0 +1,4224 @@
+{
+  "release": "2026_11_08_00_world",
+  "loot_policy": "Members/no wealth/pre-Legends, off-task uniques, conditional main after pre-roll. Explicit residual empty probability; quest/Slayer tertiary excluded.",
+  "sources": {
+    "Killerwatt": {
+      "url": "https://oldschool.runescape.wiki/w/Killerwatt",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "348e9aa69bf4e5ede6775e7067716bb7a0c9fbc4c64484430453e65a007a3215"
+    },
+    "Sulphur_Nagua": {
+      "url": "https://oldschool.runescape.wiki/w/Sulphur_Nagua",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "bc5c0d7aae220078282327746ebc6aef384db39d6cc1629d3cdd50f94e70f7a4"
+    },
+    "Frost_Nagua": {
+      "url": "https://oldschool.runescape.wiki/w/Frost_Nagua",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "b9a6b5728d884e15a506cccd3a0d66aa524fb270e7821b3fa31ba90e5d822182"
+    },
+    "Earthen_Nagua": {
+      "url": "https://oldschool.runescape.wiki/w/Earthen_Nagua",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "d7e025940e553f00ef38872b65e9ac3175ed7dcb50fe386c37c578ca63cfb614"
+    },
+    "Aberrant_spectre": {
+      "url": "https://oldschool.runescape.wiki/w/Aberrant_spectre",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "686cef131db17021265ede44d90cbe96bd8b48752fa9a1297b152a25766089fc"
+    },
+    "Deviant_spectre": {
+      "url": "https://oldschool.runescape.wiki/w/Deviant_spectre",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "42b41f1c6c4482f5a26e7a368b2b10c5f18f5a24af2d85a4147823c1307377f6"
+    },
+    "Aquanite": {
+      "url": "https://oldschool.runescape.wiki/w/Aquanite",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "80d264eb4d3609401fb39f7d486afa9ae851c899f233651e51e6631e2b897e93"
+    },
+    "Araxyte": {
+      "url": "https://oldschool.runescape.wiki/w/Araxyte",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "6e508824cbd8a304309c9bffe6bd64a705c5f13bf8d3fb41c8d36951590c0ad6"
+    },
+    "Basilisk": {
+      "url": "https://oldschool.runescape.wiki/w/Basilisk",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "3ba3279135f15a4ea1f4e0d2972c75c7a9f6402f4967538ca7011d71dd6a25c6"
+    },
+    "Nagua": {
+      "url": "https://oldschool.runescape.wiki/w/Nagua",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "61b543718bb19f9df897f046ea15eba2d15e597310953248b44be8659e55060b"
+    },
+    "Insulated_boots": {
+      "url": "https://oldschool.runescape.wiki/w/Insulated_boots",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "b0576eda50a47ee759d416cbda3170a70081b09a72d2e630739eb429eb39cd3f"
+    },
+    "Nose_peg": {
+      "url": "https://oldschool.runescape.wiki/w/Nose_peg",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "ea22aab8746e100c3a3b4175d008cd519217d309a0576871d5e4b8e5dff6b57f"
+    },
+    "Mirror_shield": {
+      "url": "https://oldschool.runescape.wiki/w/Mirror_shield",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "796023a2dcac13819b7ed9f9c397378c8e78497f0ea9bd09cbf32d7d38d79a68"
+    },
+    "Template:HerbDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:HerbDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "c2f6beeff9a74c94249c8cd9fb09b07bc8292498aa12621d5a9e1af3e568df7e"
+    },
+    "Template:RareSeedDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:RareSeedDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "3fb3e39a60a881cd2258d771552962a114cce33ee23a0bb5e82c65c407c8b503"
+    },
+    "Template:UncommonSeedDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Template:UncommonSeedDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "bda7ba43a21cfc1e554ca11528435e81265f8c87a3652046a5686ddb2e2893b7"
+    },
+    "Module:GemDropLines": {
+      "url": "https://oldschool.runescape.wiki/w/Module:GemDropLines",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "c49c68484c5ee2812299b38bd966bff3a8578fdde7b3d3aed15998c75d8486f1"
+    }
+  },
+  "families": [
+    {
+      "id": 67,
+      "key": "killerwatts",
+      "name": "Killerwatts",
+      "model_note": "Storm Revenant26382 lightning spirit stand-in."
+    },
+    {
+      "id": 68,
+      "key": "nagua",
+      "name": "Nagua",
+      "model_note": "Flame25680, Ice26177 and Earthbound27392 Revenants; lesser forms only."
+    },
+    {
+      "id": 69,
+      "key": "aberrant_spectres",
+      "name": "Aberrant Spectres",
+      "model_note": "Tainted Arcane Wraith15406 and Doom Wraith14703 plague/spectral stand-ins."
+    },
+    {
+      "id": 70,
+      "key": "aquanites",
+      "name": "Aquanites",
+      "model_note": "Zangarmarsh Sporebat17751; hovering silhouette without bespoke lure asset."
+    },
+    {
+      "id": 71,
+      "key": "araxytes",
+      "name": "Araxytes",
+      "model_note": "Dreadfang Lurker8271, separate scales for both tiers."
+    },
+    {
+      "id": 72,
+      "key": "basilisks",
+      "name": "Basilisks",
+      "model_note": "Classic Crystal Spine Basilisk601; regular variant."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Ashes",
+      "entry": 902170
+    },
+    {
+      "name": "Staff of fire",
+      "entry": 902325
+    },
+    {
+      "name": "Fire battlestaff",
+      "entry": 902197
+    },
+    {
+      "name": "Air battlestaff",
+      "entry": 902440
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106
+    },
+    {
+      "name": "Steam rune",
+      "entry": 902435
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Energy potion(4)",
+      "entry": 902011
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Coal",
+      "entry": 902030
+    },
+    {
+      "name": "Copper ore",
+      "entry": 902031
+    },
+    {
+      "name": "Iron ore",
+      "entry": 902029
+    },
+    {
+      "name": "Silver ore",
+      "entry": 902208
+    },
+    {
+      "name": "Tin ore",
+      "entry": 902028
+    },
+    {
+      "name": "Mithril ore",
+      "entry": 902181
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Gold ore",
+      "entry": 902218
+    },
+    {
+      "name": "Water orb",
+      "entry": 902436
+    },
+    {
+      "name": "Prayer potion(1)",
+      "entry": 902264
+    },
+    {
+      "name": "Water talisman",
+      "entry": 902438
+    },
+    {
+      "name": "Jug of water",
+      "entry": 902350
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Adamantite ore",
+      "entry": 902240
+    },
+    {
+      "name": "Earth talisman",
+      "entry": 902119
+    },
+    {
+      "name": "Steel axe",
+      "entry": 902174
+    },
+    {
+      "name": "Mithril kiteshield",
+      "entry": 902224
+    },
+    {
+      "name": "Adamant platelegs",
+      "entry": 902225
+    },
+    {
+      "name": "Rune full helm",
+      "entry": 902226
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    },
+    {
+      "name": "Battlestaff",
+      "entry": 902418
+    },
+    {
+      "name": "Mithril battleaxe",
+      "entry": 902266
+    },
+    {
+      "name": "Rune chainbody",
+      "entry": 902235
+    },
+    {
+      "name": "Limpwurt seed",
+      "entry": 902146
+    },
+    {
+      "name": "Big bones",
+      "entry": 902172
+    },
+    {
+      "name": "Ranarr seed",
+      "entry": 902152
+    },
+    {
+      "name": "Watermelon seed",
+      "entry": 902132
+    },
+    {
+      "name": "Pineapple seed",
+      "entry": 902261
+    },
+    {
+      "name": "Snape grass",
+      "entry": 902304
+    },
+    {
+      "name": "Seaweed",
+      "entry": 902026
+    },
+    {
+      "name": "Shark lure",
+      "entry": 902401
+    },
+    {
+      "name": "Water battlestaff",
+      "entry": 902308
+    },
+    {
+      "name": "Adamant longsword",
+      "entry": 902319
+    },
+    {
+      "name": "Adamant battleaxe",
+      "entry": 902232
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Rune med helm",
+      "entry": 902217
+    },
+    {
+      "name": "Rune platelegs",
+      "entry": 902452
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Soul rune",
+      "entry": 902320
+    },
+    {
+      "name": "Strawberry seed",
+      "entry": 902131
+    },
+    {
+      "name": "Marrentill seed",
+      "entry": 902147
+    },
+    {
+      "name": "Jangerberry seed",
+      "entry": 902148
+    },
+    {
+      "name": "Tarromin seed",
+      "entry": 902149
+    },
+    {
+      "name": "Wildblood seed",
+      "entry": 902150
+    },
+    {
+      "name": "Harralander seed",
+      "entry": 902151
+    },
+    {
+      "name": "Whiteberry seed",
+      "entry": 902153
+    },
+    {
+      "name": "Mushroom spore",
+      "entry": 902154
+    },
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Mithril axe",
+      "entry": 902183
+    },
+    {
+      "name": "Mithril spear",
+      "entry": 902195
+    },
+    {
+      "name": "Steel battleaxe",
+      "entry": 902223
+    },
+    {
+      "name": "Adamant full helm",
+      "entry": 902301
+    }
+  ],
+  "items": [
+    {
+      "name": "Insulated boots",
+      "entry": 902474,
+      "display_source": 2967,
+      "class": 4,
+      "subclass": 1,
+      "inventory_type": 8
+    },
+    {
+      "name": "Nose peg",
+      "entry": 902475,
+      "display_source": 10504,
+      "class": 4,
+      "subclass": 1,
+      "inventory_type": 1
+    },
+    {
+      "name": "Mirror shield",
+      "entry": 902476,
+      "display_source": 1200,
+      "class": 4,
+      "subclass": 6,
+      "inventory_type": 14
+    },
+    {
+      "name": "Mystic fire staff",
+      "entry": 902477,
+      "display_source": 854
+    },
+    {
+      "name": "Staff of air",
+      "entry": 902478,
+      "display_source": 854
+    },
+    {
+      "name": "Steel cannonball",
+      "entry": 902479,
+      "display_source": 2512
+    },
+    {
+      "name": "Fire orb",
+      "entry": 902480,
+      "display_source": 1705
+    },
+    {
+      "name": "Soda ash",
+      "entry": 902481,
+      "display_source": 2835
+    },
+    {
+      "name": "Air diamond",
+      "entry": 902482,
+      "display_source": 818
+    },
+    {
+      "name": "Sulphur blades",
+      "entry": 902483,
+      "display_source": 2131
+    },
+    {
+      "name": "Sulphurous essence",
+      "entry": 902484,
+      "display_source": 1705
+    },
+    {
+      "name": "Soft clay",
+      "entry": 902485,
+      "display_source": 2835
+    },
+    {
+      "name": "Rune mace",
+      "entry": 902486,
+      "display_source": 2028
+    },
+    {
+      "name": "Blessed bone shards",
+      "entry": 902487,
+      "display_source": 2843
+    },
+    {
+      "name": "Frozen tear",
+      "entry": 902488,
+      "display_source": 1705
+    },
+    {
+      "name": "Pendant of Ates (inert)",
+      "entry": 902489,
+      "display_source": 1714
+    },
+    {
+      "name": "Glacial temotli",
+      "entry": 902490,
+      "display_source": 2028
+    },
+    {
+      "name": "Earth orb",
+      "entry": 902491,
+      "display_source": 1705
+    },
+    {
+      "name": "Earthbound tecpatl",
+      "entry": 902492,
+      "display_source": 2764
+    },
+    {
+      "name": "Lava battlestaff",
+      "entry": 902493,
+      "display_source": 854
+    },
+    {
+      "name": "Mystic robe bottom (dark)",
+      "entry": 902494,
+      "display_source": 9748
+    },
+    {
+      "name": "Black platelegs",
+      "entry": 902495,
+      "display_source": 847
+    },
+    {
+      "name": "Aquanite tendon",
+      "entry": 902496,
+      "display_source": 2318
+    },
+    {
+      "name": "Rune cannonball",
+      "entry": 902497,
+      "display_source": 2512
+    },
+    {
+      "name": "Dragon cannonball",
+      "entry": 902498,
+      "display_source": 2512
+    },
+    {
+      "name": "Elkhorn frag",
+      "entry": 902499,
+      "display_source": 3820
+    },
+    {
+      "name": "Pillar frag",
+      "entry": 902500,
+      "display_source": 3820
+    },
+    {
+      "name": "Umbral frag",
+      "entry": 902501,
+      "display_source": 3820
+    },
+    {
+      "name": "Araxyte venom sac",
+      "entry": 902502,
+      "display_source": 4632
+    },
+    {
+      "name": "Araxyte head",
+      "entry": 902503,
+      "display_source": 2843
+    },
+    {
+      "name": "Aranea boots",
+      "entry": 902504,
+      "display_source": 2967
+    },
+    {
+      "name": "Mystic hat (light)",
+      "entry": 902505,
+      "display_source": 4077
+    },
+    {
+      "name": "Basilisk head",
+      "entry": 902506,
+      "display_source": 2843
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902000,
+      "profile_id": 2000,
+      "family_id": 67,
+      "subcategory": "regular_55",
+      "name": "Killerwatt (OSRS regular_55)",
+      "source": "Killerwatt",
+      "source_npc_ids": "470",
+      "combat_level": 55,
+      "stats": [
+        50,
+        50,
+        40,
+        67,
+        67,
+        51
+      ],
+      "attack_bonus": 30,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 10
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 2,
+      "attack_style": "stab",
+      "slayer_xp": 51,
+      "source_slayer_xp_tenths": 510,
+      "source_slayer_level": 37,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 26382,
+      "model_path": "Creature\\RevenantAir\\RevenantAir.m2",
+      "scale": 0.8,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1220000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic fire staff",
+          "quantity": 1,
+          "weight": 17792
+        },
+        {
+          "item": "Staff of fire",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Staff of air",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Fire battlestaff",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Air battlestaff",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 8,
+          "weight": 719488
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 4,
+          "weight": 588672
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 45,
+          "weight": 523264
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 18,
+          "weight": 327040
+        },
+        {
+          "item": "Air rune",
+          "quantity": 5,
+          "weight": 196224
+        },
+        {
+          "item": "Death rune",
+          "quantity": 2,
+          "weight": 196224
+        },
+        {
+          "item": "Air rune",
+          "quantity": 17,
+          "weight": 130816
+        },
+        {
+          "item": "Steam rune",
+          "quantity": 2,
+          "weight": 130816
+        },
+        {
+          "item": "Steel cannonball",
+          "quantity": 3,
+          "weight": 130816
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 65408
+        },
+        {
+          "item": "Coins",
+          "quantity": 200,
+          "weight": 719488
+        },
+        {
+          "item": "Coins",
+          "quantity": 11,
+          "weight": 196224
+        },
+        {
+          "item": "Coins",
+          "quantity": 127,
+          "weight": 65408
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 1896832
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 10,
+          "weight": 65408
+        },
+        {
+          "item": "Fire orb",
+          "quantity": 2,
+          "weight": 65408
+        },
+        {
+          "item": "Soda ash",
+          "quantity": 4,
+          "weight": 65408
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 572320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 429240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 321930
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 250390
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 196735
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 143080
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 107310
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 89425
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 71540
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 53655
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 53655
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 160965
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 81760
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 40880
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 20440
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 10220
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 5110
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2555
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2555
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2555
+        }
+      ],
+      "denominator": 9109504,
+      "behaviour": {
+        "killerwatt": 1,
+        "ranged_max_hit": 8,
+        "ranged_magic_defence": 1,
+        "separate_bonuses": 1,
+        "attack_spell": 900740,
+        "protection_item": 902474,
+        "protection_slot": 8,
+        "unprotected_hit": 15
+      },
+      "bonus_pools": [
+        {
+          "key": "Air diamond",
+          "outcomes": [
+            {
+              "item": "Air diamond",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 63
+            }
+          ],
+          "denominator": 64
+        }
+      ]
+    },
+    {
+      "entry": 902001,
+      "profile_id": 2001,
+      "family_id": 68,
+      "subcategory": "sulphur_98",
+      "name": "Sulphur Nagua (OSRS sulphur_98)",
+      "source": "Sulphur_Nagua",
+      "source_npc_ids": "13033",
+      "combat_level": 98,
+      "stats": [
+        90,
+        105,
+        40,
+        1,
+        50,
+        100
+      ],
+      "attack_bonus": 90,
+      "strength_bonus": 0,
+      "defence_bonus": 50,
+      "defence_bonuses": {
+        "stab": 50,
+        "slash": 50,
+        "crush": 10
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 105,
+      "source_slayer_xp_tenths": 1050,
+      "source_slayer_level": 48,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": -4,
+      "aggressive": true,
+      "model": 25680,
+      "model_path": "Creature\\RevenantFire\\RevenantFire.m2",
+      "scale": 1,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1230000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Sulphur blades",
+          "quantity": 1,
+          "weight": 16384
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 40,
+          "quantity_max": 60,
+          "weight": 229888
+        },
+        {
+          "item": "Death rune",
+          "quantity": 40,
+          "quantity_max": 60,
+          "weight": 57472
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 10,
+          "quantity_max": 40,
+          "weight": 1494272
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 40,
+          "quantity_max": 60,
+          "weight": 57472
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 229888
+        },
+        {
+          "item": "Sulphurous essence",
+          "quantity": 6,
+          "quantity_max": 10,
+          "weight": 229888
+        },
+        {
+          "item": "Coal",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 747136
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 1206912
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 172416
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 1551744
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 689664
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 287360
+        },
+        {
+          "item": "Mithril ore",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 57472
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 84861
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 43104
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 21552
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 10776
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 5388
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2694
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1347
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1347
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1347
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 172416
+        }
+      ],
+      "denominator": 7372800,
+      "behaviour": {
+        "double_first": 6,
+        "double_second": 5,
+        "attack_spell": 900741
+      }
+    },
+    {
+      "entry": 902002,
+      "profile_id": 2002,
+      "family_id": 68,
+      "subcategory": "frost_104",
+      "name": "Frost Nagua (OSRS frost_104)",
+      "source": "Frost_Nagua",
+      "source_npc_ids": "13728,13787,13788",
+      "combat_level": 104,
+      "stats": [
+        1,
+        1,
+        40,
+        1,
+        90,
+        120
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 50,
+        "crush": 10
+      },
+      "source_max_hit": 12,
+      "attack_ticks": 5,
+      "attack_style": "magic",
+      "slayer_xp": 120,
+      "source_slayer_xp_tenths": 1200,
+      "source_slayer_level": 48,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": -4,
+      "aggressive": true,
+      "model": 26177,
+      "model_path": "Creature\\RevenantEarth\\RevenantEarth.m2",
+      "scale": 1,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1240000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Water rune",
+          "quantity": 10,
+          "quantity_max": 30,
+          "weight": 384
+        },
+        {
+          "item": "Water rune",
+          "quantity": 30,
+          "quantity_max": 100,
+          "weight": 384
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 10,
+          "quantity_max": 40,
+          "weight": 384
+        },
+        {
+          "item": "Death rune",
+          "quantity": 10,
+          "quantity_max": 30,
+          "weight": 256
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 10,
+          "quantity_max": 20,
+          "weight": 256
+        },
+        {
+          "item": "Coal",
+          "quantity": 10,
+          "quantity_max": 15,
+          "weight": 384
+        },
+        {
+          "item": "Gold ore",
+          "quantity": 10,
+          "quantity_max": 20,
+          "weight": 384
+        },
+        {
+          "item": "Soft clay",
+          "quantity": 10,
+          "quantity_max": 20,
+          "weight": 384
+        },
+        {
+          "item": "Mithril ore",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 256
+        },
+        {
+          "item": "Water orb",
+          "quantity": 2,
+          "quantity_max": 6,
+          "weight": 384
+        },
+        {
+          "item": "Prayer potion(1)",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Rune mace",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Water talisman",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Blessed bone shards",
+          "quantity": 30,
+          "quantity_max": 50,
+          "weight": 128
+        },
+        {
+          "item": "Jug of water",
+          "quantity": 10,
+          "quantity_max": 30,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 4352,
+      "behaviour": {
+        "double_first": 6,
+        "double_second": 6,
+        "double_magic": 1,
+        "magic_bonus": 70,
+        "cast_only": 1,
+        "attack_spell": 900742
+      },
+      "bonus_pools": [
+        {
+          "key": "Frozen tear",
+          "outcomes": [
+            {
+              "item": "Frozen tear",
+              "quantity": 5,
+              "quantity_max": 10,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 9
+            }
+          ],
+          "denominator": 10
+        },
+        {
+          "key": "Pendant of Ates (inert)",
+          "outcomes": [
+            {
+              "item": "Pendant of Ates (inert)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 99
+            }
+          ],
+          "denominator": 100
+        },
+        {
+          "key": "Glacial temotli",
+          "outcomes": [
+            {
+              "item": "Glacial temotli",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 499
+            }
+          ],
+          "denominator": 500
+        }
+      ]
+    },
+    {
+      "entry": 902003,
+      "profile_id": 2003,
+      "family_id": 68,
+      "subcategory": "earthen_128",
+      "name": "Earthen Nagua (OSRS earthen_128)",
+      "source": "Earthen_Nagua",
+      "source_npc_ids": "14420",
+      "combat_level": 128,
+      "stats": [
+        120,
+        120,
+        40,
+        1,
+        40,
+        160
+      ],
+      "attack_bonus": 100,
+      "strength_bonus": 0,
+      "defence_bonus": 30,
+      "defence_bonuses": {
+        "stab": 30,
+        "slash": 50,
+        "crush": 50
+      },
+      "source_max_hit": 13,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 165,
+      "source_slayer_xp_tenths": 1650,
+      "source_slayer_level": 48,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": -4,
+      "aggressive": true,
+      "model": 27392,
+      "model_path": "Creature\\RevenantEarth\\RevenantEarth.m2",
+      "scale": 1,
+      "creature_type": 4,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1250000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Chaos rune",
+          "quantity": 8,
+          "quantity_max": 20,
+          "weight": 30336
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 8,
+          "quantity_max": 15,
+          "weight": 20224
+        },
+        {
+          "item": "Death rune",
+          "quantity": 8,
+          "quantity_max": 13,
+          "weight": 20224
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 10,
+          "quantity_max": 19,
+          "weight": 19200
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 20,
+          "quantity_max": 30,
+          "weight": 28416
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 31,
+          "quantity_max": 50,
+          "weight": 13056
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 8,
+          "quantity_max": 15,
+          "weight": 40448
+        },
+        {
+          "item": "Coal",
+          "quantity": 8,
+          "quantity_max": 15,
+          "weight": 30336
+        },
+        {
+          "item": "Gold ore",
+          "quantity": 4,
+          "quantity_max": 8,
+          "weight": 20224
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 20224
+        },
+        {
+          "item": "Soft clay",
+          "quantity": 5,
+          "quantity_max": 10,
+          "weight": 30336
+        },
+        {
+          "item": "Blessed bone shards",
+          "quantity": 20,
+          "quantity_max": 40,
+          "weight": 20224
+        },
+        {
+          "item": "Earth orb",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 10112
+        },
+        {
+          "item": "Earth talisman",
+          "quantity": 1,
+          "weight": 10112
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 4977
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 2528
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 1264
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 632
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 316
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 158
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 79
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 79
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 79
+        }
+      ],
+      "denominator": 323584,
+      "behaviour": {
+        "double_first": 7,
+        "double_second": 6,
+        "earthen_armour": 1,
+        "attack_spell": 900741
+      },
+      "bonus_pools": [
+        {
+          "key": "Earthbound tecpatl",
+          "outcomes": [
+            {
+              "item": "Earthbound tecpatl",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 399
+            }
+          ],
+          "denominator": 400
+        }
+      ]
+    },
+    {
+      "entry": 902004,
+      "profile_id": 2004,
+      "family_id": 69,
+      "subcategory": "regular_96",
+      "name": "Aberrant spectre (OSRS regular_96)",
+      "source": "Aberrant_spectre",
+      "source_npc_ids": "2,3,4,5,6,7",
+      "combat_level": 96,
+      "stats": [
+        1,
+        1,
+        90,
+        1,
+        105,
+        90
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 20,
+      "defence_bonuses": {
+        "stab": 20,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 90,
+      "source_slayer_xp_tenths": 900,
+      "source_slayer_level": 60,
+      "respawn_ticks": 14,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 15406,
+      "model_path": "Creature\\ManafiendGreen\\ManaFiendGreen.m2",
+      "scale": 1,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1260000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic robe bottom (dark)",
+          "quantity": 1,
+          "weight": 8929280
+        },
+        {
+          "item": "Steel axe",
+          "quantity": 1,
+          "weight": 106942080
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 35647360
+        },
+        {
+          "item": "Lava battlestaff",
+          "quantity": 1,
+          "weight": 35647360
+        },
+        {
+          "item": "Adamant platelegs",
+          "quantity": 1,
+          "weight": 35647360
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 35647360
+        },
+        {
+          "item": "Coins",
+          "quantity": 460,
+          "weight": 35647360
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 641652480
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 294090720
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 294090720
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 106942080
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 220568040
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 220568040
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 80206560
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 165426030
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 165426030
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 60154920
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 128664690
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 128664690
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 46787160
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 101093685
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 101093685
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 36761340
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 73522680
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 73522680
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 26735520
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 55142010
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 55142010
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 20051640
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 45951675
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 45951675
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 16709700
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 36761340
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 36761340
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 13367760
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 27571005
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 27571005
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 10025820
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 27571005
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 27571005
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 10025820
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 134217216
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 91963648
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 88856768
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 64001728
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 62758976
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 59652096
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 43496320
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 42874944
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 28583296
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 19884032
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 14291648
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 12427520
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 8699264
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 5592384
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 87725925
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 44559200
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 22279600
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 11139800
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 5569900
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2784950
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1392475
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1392475
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1392475
+        }
+      ],
+      "denominator": 4571791360,
+      "behaviour": {
+        "magic_max_hit": 8,
+        "cast_only": 1,
+        "attack_spell": 900743,
+        "protection_item": 902475,
+        "protection_slot": 1,
+        "unprotected_hit": 14
+      }
+    },
+    {
+      "entry": 902005,
+      "profile_id": 2005,
+      "family_id": 69,
+      "subcategory": "regular_169",
+      "name": "Deviant spectre (OSRS regular_169)",
+      "source": "Deviant_spectre",
+      "source_npc_ids": "7279",
+      "combat_level": 169,
+      "stats": [
+        1,
+        1,
+        90,
+        1,
+        205,
+        190
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 80,
+      "defence_bonuses": {
+        "stab": 80,
+        "slash": 80,
+        "crush": 80
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 194,
+      "source_slayer_xp_tenths": 1945,
+      "source_slayer_level": 60,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 14703,
+      "model_path": "Creature\\Shade\\Shade.m2",
+      "scale": 1.2,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1270000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Battlestaff",
+          "quantity": 1,
+          "weight": 348800
+        },
+        {
+          "item": "Black platelegs",
+          "quantity": 1,
+          "weight": 348800
+        },
+        {
+          "item": "Mithril battleaxe",
+          "quantity": 1,
+          "weight": 348800
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 139520
+        },
+        {
+          "item": "Lava battlestaff",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Rune chainbody",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 3,
+          "quantity_max": 11,
+          "weight": 697600
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 1,
+          "weight": 348800
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 505760
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 296480
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 379320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 222360
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 284490
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 166770
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 221270
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 129710
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 173855
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 101915
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 126440
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 74120
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 94830
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 55590
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 79025
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 46325
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 63220
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 37060
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 47415
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 27795
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 47415
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 27795
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 221184
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 151552
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 146432
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 105472
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 103424
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 98304
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 71680
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 70656
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 47104
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 32768
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 23552
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 20480
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 14336
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 9216
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1098720
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 558080
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 279040
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 139520
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 34880
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 17440
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 17440
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 17440
+        }
+      ],
+      "denominator": 8929280,
+      "behaviour": {
+        "magic_max_hit": 8,
+        "cast_only": 1,
+        "attack_spell": 900743,
+        "protection_item": 902475,
+        "protection_slot": 1,
+        "unprotected_hit": 14
+      },
+      "bonus_pools": [
+        {
+          "key": "Mystic robe bottom (dark)",
+          "outcomes": [
+            {
+              "item": "Mystic robe bottom (dark)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 511
+            }
+          ],
+          "denominator": 512
+        }
+      ]
+    },
+    {
+      "entry": 902006,
+      "profile_id": 2006,
+      "family_id": 70,
+      "subcategory": "lure_145",
+      "name": "Aquanite (OSRS lure_145)",
+      "source": "Aquanite",
+      "source_npc_ids": "15497",
+      "combat_level": 145,
+      "stats": [
+        1,
+        1,
+        70,
+        1,
+        170,
+        180
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 60,
+      "defence_bonuses": {
+        "stab": 60,
+        "slash": 80,
+        "crush": 80
+      },
+      "source_max_hit": 18,
+      "attack_ticks": 5,
+      "attack_style": "magic",
+      "slayer_xp": 180,
+      "source_slayer_xp_tenths": 1800,
+      "source_slayer_level": 78,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 17751,
+      "model_path": "Creature\\sporebat\\SporeBat.m2",
+      "scale": 1.15,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1280000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Aquanite tendon",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Water rune",
+          "quantity": 150,
+          "quantity_max": 350,
+          "weight": 34990
+        },
+        {
+          "item": "Rune cannonball",
+          "quantity": 14,
+          "quantity_max": 22,
+          "weight": 6998
+        },
+        {
+          "item": "Dragon cannonball",
+          "quantity": 9,
+          "quantity_max": 15,
+          "weight": 3499
+        },
+        {
+          "item": "Ranarr seed",
+          "quantity": 1,
+          "weight": 27992
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 27992
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 27992
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 27992
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 27992
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 20994
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 3,
+          "quantity_max": 5,
+          "weight": 20994
+        },
+        {
+          "item": "Pineapple seed",
+          "quantity": 1,
+          "weight": 20994
+        },
+        {
+          "item": "Elkhorn frag",
+          "quantity": 2,
+          "quantity_max": 4,
+          "weight": 20994
+        },
+        {
+          "item": "Pillar frag",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 20994
+        },
+        {
+          "item": "Umbral frag",
+          "quantity": 1,
+          "weight": 20994
+        },
+        {
+          "item": "Snape grass",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 34990
+        },
+        {
+          "item": "Seaweed",
+          "quantity": 1,
+          "weight": 34990
+        },
+        {
+          "item": "Shark lure",
+          "quantity": 3,
+          "quantity_max": 5,
+          "weight": 20994
+        },
+        {
+          "item": "Water battlestaff",
+          "quantity": 1,
+          "weight": 20994
+        },
+        {
+          "item": "Coins",
+          "quantity": 100,
+          "quantity_max": 200,
+          "weight": 13996
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 10497
+        }
+      ],
+      "denominator": 448000,
+      "behaviour": {
+        "magic_max_hit": 18,
+        "magic_bonus": 50,
+        "cast_only": 1,
+        "cut_lure": 1,
+        "attack_spell": 900744
+      }
+    },
+    {
+      "entry": 902007,
+      "profile_id": 2007,
+      "family_id": 71,
+      "subcategory": "regular_96",
+      "name": "Araxyte (OSRS regular_96)",
+      "source": "Araxyte",
+      "source_npc_ids": "11175,13666",
+      "combat_level": 96,
+      "stats": [
+        80,
+        125,
+        60,
+        1,
+        60,
+        60
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 60,
+      "defence_bonuses": {
+        "stab": 60,
+        "slash": 30,
+        "crush": 20
+      },
+      "source_max_hit": 13,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 60,
+      "source_slayer_xp_tenths": 600,
+      "source_slayer_level": 92,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 8271,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2",
+      "scale": 0.85,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1290000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant longsword",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Adamant battleaxe",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 25152
+        },
+        {
+          "item": "Rune med helm",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 16768
+        },
+        {
+          "item": "Rune platelegs",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 16768
+        },
+        {
+          "item": "Air rune",
+          "quantity": 120,
+          "quantity_max": 140,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Water rune",
+          "quantity": 120,
+          "quantity_max": 140,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 120,
+          "quantity_max": 140,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 120,
+          "quantity_max": 140,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 7,
+          "quantity_max": 12,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 10,
+          "quantity_max": 15,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "quantity_max": 20,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Death rune",
+          "quantity": 20,
+          "quantity_max": 25,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Law rune",
+          "quantity": 12,
+          "quantity_max": 15,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 15,
+          "quantity_max": 18,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 9,
+          "quantity_max": 12,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Araxyte venom sac",
+          "quantity": 3,
+          "weight": 41920
+        },
+        {
+          "item": "Coins",
+          "quantity": 800,
+          "quantity_max": 1200,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 20960
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 15720
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 11790
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 9170
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 7205
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 5240
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3930
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3275
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2620
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1965
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1965
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10960
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10480
+        },
+        {
+          "item": "Marrentill seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10000
+        },
+        {
+          "item": "Jangerberry seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 7360
+        },
+        {
+          "item": "Tarromin seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 6800
+        },
+        {
+          "item": "Wildblood seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 6640
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 5040
+        },
+        {
+          "item": "Harralander seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 4480
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3200
+        },
+        {
+          "item": "Ranarr seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3120
+        },
+        {
+          "item": "Whiteberry seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2720
+        },
+        {
+          "item": "Mushroom spore",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2320
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2160
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1440
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1440
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1040
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 960
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 960
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 720
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 640
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 400
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 320
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 240
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 160
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 80
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 160
+        }
+      ],
+      "denominator": 1064768,
+      "behaviour": {
+        "venom_spell": 900745
+      },
+      "bonus_pools": [
+        {
+          "key": "Araxyte head",
+          "outcomes": [
+            {
+              "item": "Araxyte head",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 1999
+            }
+          ],
+          "denominator": 2000
+        },
+        {
+          "key": "Aranea boots",
+          "outcomes": [
+            {
+              "item": "Aranea boots",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 3999
+            }
+          ],
+          "denominator": 4000
+        }
+      ]
+    },
+    {
+      "entry": 902008,
+      "profile_id": 2008,
+      "family_id": 71,
+      "subcategory": "regular_146",
+      "name": "Araxyte (OSRS regular_146)",
+      "source": "Araxyte",
+      "source_npc_ids": "11176,13667",
+      "combat_level": 146,
+      "stats": [
+        160,
+        160,
+        70,
+        1,
+        80,
+        100
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 60,
+      "defence_bonuses": {
+        "stab": 60,
+        "slash": 30,
+        "crush": 20
+      },
+      "source_max_hit": 17,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 100,
+      "source_slayer_xp_tenths": 1000,
+      "source_slayer_level": 92,
+      "respawn_ticks": 50,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 8271,
+      "model_path": "Creature\\MineSpider\\MineSpider.m2",
+      "scale": 1.35,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1300000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Adamant longsword",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Adamant battleaxe",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 25152
+        },
+        {
+          "item": "Rune med helm",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 16768
+        },
+        {
+          "item": "Rune platelegs",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 16768
+        },
+        {
+          "item": "Air rune",
+          "quantity": 240,
+          "quantity_max": 280,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Water rune",
+          "quantity": 240,
+          "quantity_max": 280,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 240,
+          "quantity_max": 280,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 240,
+          "quantity_max": 280,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 14,
+          "quantity_max": 24,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 20,
+          "quantity_max": 30,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 30,
+          "quantity_max": 40,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Death rune",
+          "quantity": 40,
+          "quantity_max": 50,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Law rune",
+          "quantity": 24,
+          "quantity_max": 30,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 30,
+          "quantity_max": 36,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 18,
+          "quantity_max": 24,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 41920
+        },
+        {
+          "item": "Araxyte venom sac",
+          "quantity": 5,
+          "weight": 41920
+        },
+        {
+          "item": "Coins",
+          "quantity": 1600,
+          "quantity_max": 2400,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 83840
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 20960
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 15720
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 11790
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 9170
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 7205
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 5240
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3930
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3275
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2620
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1965
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1965
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10960
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10480
+        },
+        {
+          "item": "Marrentill seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 10000
+        },
+        {
+          "item": "Jangerberry seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 7360
+        },
+        {
+          "item": "Tarromin seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 6800
+        },
+        {
+          "item": "Wildblood seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 6640
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 5040
+        },
+        {
+          "item": "Harralander seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 4480
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3200
+        },
+        {
+          "item": "Ranarr seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 3120
+        },
+        {
+          "item": "Whiteberry seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2720
+        },
+        {
+          "item": "Mushroom spore",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2320
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 2160
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1440
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1440
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 1040
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 960
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 960
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 720
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 640
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 400
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 320
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 240
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 160
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 80
+        },
+        {
+          "item": "Nothing",
+          "quantity": 2,
+          "additional": [
+            {
+              "item": "Araxyte venom sac",
+              "quantity": 1
+            }
+          ],
+          "weight": 160
+        }
+      ],
+      "denominator": 1064768,
+      "behaviour": {
+        "venom_spell": 900745
+      },
+      "bonus_pools": [
+        {
+          "key": "Araxyte head",
+          "outcomes": [
+            {
+              "item": "Araxyte head",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 1999
+            }
+          ],
+          "denominator": 2000
+        },
+        {
+          "key": "Aranea boots",
+          "outcomes": [
+            {
+              "item": "Aranea boots",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 1999
+            }
+          ],
+          "denominator": 2000
+        }
+      ]
+    },
+    {
+      "entry": 902009,
+      "profile_id": 2009,
+      "family_id": 72,
+      "subcategory": "regular_61",
+      "name": "Basilisk (OSRS regular_61)",
+      "source": "Basilisk",
+      "source_npc_ids": "417",
+      "combat_level": 61,
+      "stats": [
+        30,
+        45,
+        75,
+        1,
+        1,
+        75
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 20,
+      "defence_bonuses": {
+        "stab": 20,
+        "slash": 20,
+        "crush": 0
+      },
+      "source_max_hit": 5,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 75,
+      "source_slayer_xp_tenths": 750,
+      "source_slayer_level": 40,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 601,
+      "model_path": "Creature\\Basilisk\\Basilisk.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1310000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic hat (light)",
+          "quantity": 1,
+          "weight": 16384
+        },
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 196224
+        },
+        {
+          "item": "Mithril spear",
+          "quantity": 1,
+          "weight": 130816
+        },
+        {
+          "item": "Steel battleaxe",
+          "quantity": 1,
+          "weight": 196224
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Water rune",
+          "quantity": 75,
+          "weight": 523264
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 327040
+        },
+        {
+          "item": "Law rune",
+          "quantity": 3,
+          "weight": 196224
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 65408
+        },
+        {
+          "item": "Adamantite ore",
+          "quantity": 1,
+          "weight": 196224
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 1896832
+        },
+        {
+          "item": "Coins",
+          "quantity": 200,
+          "weight": 1111936
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 327040
+        },
+        {
+          "item": "Coins",
+          "quantity": 11,
+          "weight": 327040
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 65408
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 572320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 429240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 321930
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 250390
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 196735
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 143080
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 107310
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 89425
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 71540
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 53655
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 53655
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 160965
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 81760
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 40880
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 20440
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 10220
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 5110
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 2555
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 2555
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 2555
+        }
+      ],
+      "denominator": 8388608,
+      "bonus_pools": [
+        {
+          "key": "Basilisk head",
+          "outcomes": [
+            {
+              "item": "Basilisk head",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 1999
+            }
+          ],
+          "denominator": 2000
+        }
+      ]
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900740,
+      "source": 403,
+      "name": "Killerwatt discharge",
+      "description": "Killerwatt discharge.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900741,
+      "source": 6660,
+      "name": "Nagua double strike",
+      "description": "Nagua double strike.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_double",
+      "range_source": 30455
+    },
+    {
+      "entry": 900742,
+      "source": 30455,
+      "name": "Frost Nagua double strike",
+      "description": "Frost Nagua double strike.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_double"
+    },
+    {
+      "entry": 900743,
+      "source": 686,
+      "name": "Spectre corruption",
+      "description": "Spectre corruption.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900744,
+      "source": 31707,
+      "name": "Aquanite water magic",
+      "description": "Aquanite water magic.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900745,
+      "source": 2818,
+      "name": "Araxyte venom",
+      "description": "Araxyte venom.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_venom",
+      "keep_effects": [
+        0
+      ]
+    }
+  ],
+  "source_assumptions": [
+    "Representative lesser monsters; no superior/bosses, quest/task gates or Slayer training. Metadata retains required levels and precise XP only.",
+    "Killerwatt approaches melee and uses ranged when out of reach. Exact click/limb transformation and attack-mode exploit not reproduced; native30-yard range. Boots reduce max15 to melee6/ranged8.",
+    "Nagua hit components roll independent accuracy/damage in one server attack event; source timing/correlation unspecified. Negative flat armour uses existing player melee pipeline. Frost icicle/prayer special deferred. Earthen reinforcement below60% supported; crush-special weakening/burn clearing deferred.",
+    "Spectre nose protection restores max8 source magic; without it hit always accurate and max14. Persistent XP is never drained to simulate temporary skills. Basilisk stat drains/gaze and mirror requirement deferred; mirror shield is equipable but has no scripted gaze benefit yet.",
+    "Aquanite slash auto-attacks sever the lure even on a miss, reducing Stab defence60 to10 until reset. Stock Sporebat has no removable lure model. Only existing equipment melee-lane definitions apply.",
+    "Araxyte venom starts6, rises2 each18-second tick to20, remains until native poison dispel/death;25% application after positive melee damage is prototype choice. WoW poison dispels cure fully; no OSRS antivenom/inventory consumable system.",
+    "Sulphur gem roll once/twice distribution not published: one gem subroll is retained in this checkpoint. Frost rates labelled approximate remain approximate. Source missing mass stays Nothing. Herb quantity policies follow stated distributions with one selected herb type, not independently selected multiple herbs.",
+    "Off-task Araxyte boots1/4000 and1/2000, head1/2000 independent. Guaranteed venom sac adds1 to both source tiers, including main sac drops. Unconditional uniques/tertiaries included where practical; quest keys/clues/rare long bones excluded.",
+    "Mirror/Nose/Boot item display stand-ins use native equipment. No player stat/progression or previous catalogue records changed."
+  ]
+}

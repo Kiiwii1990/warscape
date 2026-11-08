@@ -1015,4 +1015,99 @@ class SpiritEnemyTests(unittest.TestCase):
         for r in rows:self.assertEqual(after[r[0]],r)
 
 
+class SlayerElementalTests(unittest.TestCase):
+    def setUp(self):
+        self.pack=json.loads(Path(__file__).with_name('slayer_elementals.json').read_text());self.prior=prior_to('slayer_elementals.json')
+    def e(self,entry):return next(e for e in self.pack['enemies'] if e['entry']==entry)
+    def chance(self,entry,name,quantity=None):
+        from fractions import Fraction as F
+        from family_catalogue import outcome_drops
+        e=self.e(entry)
+        return sum((F(o['weight'],e['denominator']) for o in e['outcomes'] if any(d['item']==name and (quantity is None or d['quantity']==quantity) for d in outcome_drops(e,o))),F())
+    def test_ten_variants_six_families_and_previous_catalogue(self):
+        import family_catalogue
+        family_catalogue.validate(self.pack,self.prior)
+        self.assertEqual(len(self.prior['enemies']),301)
+        self.assertEqual([e['entry'] for e in self.pack['enemies']],list(range(902000,902010)))
+        self.assertEqual([e['combat_level'] for e in self.pack['enemies']],[55,98,104,128,96,169,145,96,146,61])
+        self.assertEqual([f['id'] for f in self.pack['families']],list(range(67,73)))
+    def test_killerwatt_boots_and_current_energy_loot(self):
+        from fractions import Fraction as F
+        e=self.e(902000)
+        self.assertEqual((e['source_max_hit'],e['behaviour']['ranged_max_hit'],e['behaviour']['unprotected_hit']),(6,8,15))
+        self.assertEqual(e['behaviour']['protection_item'],902474)
+        self.assertEqual(self.chance(902000,'Mystic fire staff'),F(1,512))
+        self.assertEqual(self.chance(902000,'Energy potion(4)',10),F(511,512)*F(1,139))
+        self.assertEqual(self.chance(902000,'Ashes'),1)
+        p=e['bonus_pools'][0];self.assertEqual(p['key'],'Air diamond');self.assertEqual(p['denominator'],64)
+    def test_nagua_component_hits_flat_armour_and_mage_bonus(self):
+        for entry,first,second in ((902001,6,5),(902002,6,6),(902003,7,6)):
+            e=self.e(entry);self.assertEqual(e['flat_armour'],-4)
+            self.assertEqual((e['behaviour']['double_first'],e['behaviour']['double_second']),(first,second))
+            self.assertEqual(e['source_max_hit'],first+second)
+        self.assertEqual(self.e(902002)['behaviour']['magic_bonus'],70)
+        self.assertEqual(self.e(902003)['behaviour']['earthen_armour'],1)
+    def test_spectre_exact_herb_quantity_distribution(self):
+        from fractions import Fraction as F
+        for entry,expected in ((902004,{1:F(11,26),2:F(11,26),3:F(4,26)}),(902005,{2:F(29,46),3:F(17,46)})):
+            e=self.e(entry);herbs=[o for o in e['outcomes'] if o['item'].startswith('Grimy ')]
+            total=sum(F(o['weight'],e['denominator']) for o in herbs)
+            for qty,rate in expected.items():
+                mass=sum(F(o['weight'],e['denominator']) for o in herbs if o['quantity']==qty)
+                self.assertEqual(mass/total,rate)
+            self.assertEqual(e['behaviour']['unprotected_hit'],14)
+            self.assertEqual(e['behaviour']['protection_item'],902475)
+        self.assertEqual(self.e(902005)['source_slayer_xp_tenths'],1945)
+    def test_aquanite_current_stats_lure_and_full_rune_range(self):
+        from fractions import Fraction as F
+        e=self.e(902006);self.assertEqual(e['stats'],[1,1,70,1,170,180])
+        self.assertEqual(e['behaviour']['magic_bonus'],50);self.assertEqual(e['behaviour']['cut_lure'],1)
+        self.assertEqual(e['defence_bonuses'],{'stab':60,'slash':80,'crush':80})
+        self.assertEqual(self.chance(902006,'Aquanite tendon'),F(1,3500))
+        water=next(o for o in e['outcomes'] if o['item']=='Water rune');self.assertEqual((water['quantity'],water['quantity_max']),(150,350))
+    def test_araxyte_tiers_full_ranges_and_guaranteed_sac(self):
+        for entry,quantity,maximum in ((902007,120,140),(902008,240,280)):
+            e=self.e(entry);self.assertEqual(self.chance(entry,'Araxyte venom sac'),1)
+            water=next(o for o in e['outcomes'] if o['item']=='Water rune')
+            self.assertEqual((water['quantity'],water['quantity_max']),(quantity,maximum))
+            sac=next(o for o in e['outcomes'] if o['item']=='Araxyte venom sac')
+            self.assertEqual(sac['quantity'],3 if entry==902007 else 5)
+            self.assertEqual(e['behaviour']['venom_spell'],900745)
+            p=next(p for p in e['bonus_pools'] if p['key']=='Aranea boots')
+            self.assertEqual(p['denominator'],4000 if entry==902007 else 2000)
+    def test_basilisk_guaranteed_bones_and_fixed_large_coins(self):
+        from fractions import Fraction as F
+        self.assertEqual(self.chance(902009,'Bones'),1)
+        self.assertEqual(self.chance(902009,'Mystic hat (light)'),F(1,512))
+        self.assertEqual(self.chance(902009,'Coins',440),F(511,512)*F(1,128))
+    def test_equipment_migration_and_new_bindings_are_additive(self):
+        from elemental_release import elemental_artifacts
+        r=elemental_artifacts(self.pack,self.prior);sql=next(v for p,v in r.items() if p.suffix=='.sql')
+        self.assertIn('class=4,subclass=1,InventoryType=8,stackable=1',sql)
+        self.assertIn('class=4,subclass=1,InventoryType=1,stackable=1',sql)
+        self.assertIn('class=4,subclass=6,InventoryType=14,stackable=1',sql)
+        self.assertIn("(900745,'spell_warscape_enemy_venom')",sql)
+        self.assertNotIn('ALTER TABLE',sql);self.assertNotIn('DELETE ',sql)
+    def test_invalid_protection_and_double_hit_policies_rejected(self):
+        import family_catalogue,copy
+        original=copy.deepcopy(self.pack)
+        for edit in ('slot','item','double'):
+            self.pack=copy.deepcopy(original)
+            if edit=='slot':self.e(902000)['behaviour']['protection_slot']=99
+            if edit=='item':self.e(902000)['behaviour']['protection_item']=1
+            if edit=='double':self.e(902001)['behaviour']['double_second']=10
+            with self.subTest(edit=edit),self.assertRaises(ValueError):family_catalogue.validate(self.pack,self.prior)
+    def test_venom_carrier_keeps_only_periodic_damage_and_old_rows(self):
+        from dbc_records import dbc,append_spells
+        import struct
+        sources=sorted({sp['source'] for sp in self.pack['client_spells']}|{30455});rows=[]
+        for i in sources:
+            r=[0]*234;r[0]=i;r[71]=6;r[72]=6;r[73]=6;r[95]=3;r[96]=197;r[46]=i;rows.append(r)
+        data=struct.pack('<4s4I',b'WDBC',len(rows),234,936,1)+b''.join(struct.pack('<234I',*r) for r in rows)+b'\0'
+        after,strings=dbc(append_spells(data,self.pack['client_spells']),234)
+        self.assertEqual(after[900745][71:74],[6,0,0]);self.assertEqual(after[900745][95:98],[3,0,0])
+        self.assertEqual(after[900741][46],after[30455][46])
+        for r in rows:self.assertEqual(after[r[0]],r)
+
+
 if __name__=='__main__':unittest.main()

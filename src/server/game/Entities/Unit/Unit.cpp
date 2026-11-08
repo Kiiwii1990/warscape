@@ -27,6 +27,7 @@
 #include "CellImpl.h"
 #include "CharacterCache.h"
 #include "ChatPackets.h"
+#include "Chat.h"
 #include "ChatTextBuilder.h"
 #include "CombatLogPackets.h"
 #include "CombatPackets.h"
@@ -1288,7 +1289,14 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
             auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(GetEntry());
             uint32 const maximumHit = Warscape::EnemyMaximumHit(GetEntry(),
                 Warscape::MaxHit(stats[Warscape::Strength], profile.StrengthBonus));
-            warscapeOSRSDamage = urand(0, maximumHit);
+            uint32 maximum=maximumHit;
+            if (auto const* b=Warscape::FindEnemyBehaviour(GetEntry()); b && b->Killerwatt)
+            {
+                Player const* target=victim->ToPlayer();
+                Item* boots=target->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_FEET);
+                if (!boots || boots->GetEntry()!=b->ProtectionItem) maximum=b->UnprotectedHit;
+            }
+            warscapeOSRSDamage = urand(0, maximum);
         }
 
         warscapeDamage = Warscape::ScaleHealthOrDamage(warscapeOSRSDamage);
@@ -2314,8 +2322,19 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackTy
         auto const& profile = sObjectMgr->GetWarscapeMonsterProfile(victim->GetEntry());
         // WoW hit rating, item level and attributes are not Warscape bonuses.
         uint64 attackRoll = Warscape::PlayerAttackRoll(attacker->GetRSSkillLevel(Player::RS_Skill::Attack), style, attacker->GetWarscapeMeleeAttackBonus(attType));
-        int32 const defenceBonus = Warscape::EnemyMeleeDefence(victim->GetEntry(),
-            static_cast<uint8>(attacker->GetWarscapeMeleeDamageType(attType)), profile.DefenceBonus);
+        uint8 const lane=static_cast<uint8>(attacker->GetWarscapeMeleeDamageType(attType));
+        int32 defenceBonus = Warscape::EnemyMeleeDefence(victim->GetEntry(),lane,profile.DefenceBonus);
+        if (auto const* b=Warscape::FindEnemyBehaviour(victim->GetEntry()); b && victim->GetAI() && (b->CutLure || b->EarthenArmour))
+        {
+            uint32 state=victim->GetAI()->GetData(Warscape::EncounterStateData);
+            if (b->CutLure && lane==1 && !(state & Warscape::LureCutState))
+            {
+                victim->GetAI()->SetData(Warscape::EncounterStateData,Warscape::LureCutState);
+                state|=Warscape::LureCutState;
+                ChatHandler(attacker->GetSession()).SendSysMessage("Your attack cuts off the aquanite's lure!");
+            }
+            defenceBonus=Warscape::StatefulDefence(lane,defenceBonus,b->CutLure!=0,b->EarthenArmour!=0,state);
+        }
         uint64 defenceRoll = Warscape::CombatRoll(stats[Warscape::Defence] + 8, defenceBonus);
         if (Warscape::IsTrainingDummyEntry(victim->GetEntry()))
         {

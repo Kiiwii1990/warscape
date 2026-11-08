@@ -890,3 +890,15 @@ magical-Ranged defence, equipable ear protection, finite Revenant healing and
 independent stepped loot pools. Source ambiguities, chosen prototype mechanics
 and unimplemented stat drains/charged-bracelet effects are explicit in the
 [checkpoint](WarscapeWaterBansheeRevenants.md). Manual acceptance is pending.
+
+
+### Enemy catalogue: Killerwatt through Basilisk (8 November 2026)
+
+The user confirmed Waterfiend/Banshee/Revenant working and requested Killerwatt,
+Nagua, Aberrant Spectre, Aquanite, Araxyte and Basilisk in that order. Ten variants
+cover all lesser Nagua, regular/Deviant Spectres, both ordinary Araxyte tiers and
+representatives of the other families. Shared additions cover gear damage caps,
+double hits, venom and per-encounter lure/reinforcement defences. Stat drains,
+Basilisk gaze/mirror enforcement and several quest/prayer specials are explicitly
+unimplemented; see [checkpoint](WarscapeSlayerElementals.md). User acceptance of
+this new batch remains pending.
