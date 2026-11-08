@@ -924,3 +924,5 @@ this new batch remains pending.
 8 November2026 backlog milestone: Cave Crawler902103 and Kurask902304 replace native regeneration with one source HP each3seconds, including combat. Native percentage regen disabled for only those entries. Turoth source rate not verified, unchanged. See WarscapeNaturalRegeneration.md; runtime timing acceptance pending.
 
 8 November2026 finisher backlog milestone: Rockslug902401 at1 source HP stops retaliation/chase and uses native local random movement while remaining saltable. Loot ownership retained, native regen paused for finish window and restored on reset; owner abandonment triggers normal evade. Autosalt/brine sabre remain pending. See WarscapeRockslugWander.md; manual acceptance pending.
+
+8 November2026 weapon/finisher backlog milestone: new Brine sabre902589 uses existing source item bonus/speed profile and permanent40 Attack equip guard; main-hand usable player melee auto hits bypass Rockslug salt floor. Other finishers unchanged. Liquify/acquisition remain pending. See WarscapeBrineSabre.md; manual acceptance pending.

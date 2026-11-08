@@ -15,6 +15,7 @@
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeEnemyMechanics.h"
 #include "WarscapeEnemyRequirements.h"
+#include "WarscapeSpecialWeapons.h"
 #include "WarscapeCombat.h"
 #include "WarscapeEquipment.h"
 
@@ -169,8 +170,14 @@ struct npc_warscape_enemy : ScriptedAI
             if (attacker && attacker->GetTypeId()==TYPEID_PLAYER)
                 ChatHandler(attacker->ToPlayer()->GetSession()).SendSysMessage("The nagua reinforces its outer body to protect itself.");
         }
-        if (b && b->FinisherItem)
-            damage=Warscape::NonFinishingDamage(me->GetHealth(),damage);
+        if (b && b->FinisherItem) {
+            Player* player=attacker ? attacker->ToPlayer() : nullptr;
+            Item* weapon=player ? player->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_MAINHAND) : nullptr;
+            bool const bypass=Warscape::CanBypassRockslugSalt(me->GetEntry(),weapon ? weapon->GetEntry() : 0,
+                player ? player->GetRSSkillLevel(Player::RS_Skill::Attack) : 0,
+                player && type==DIRECT_DAMAGE && !spell,weapon && !weapon->IsBroken());
+            if (!bypass) damage=Warscape::NonFinishingDamage(me->GetHealth(),damage);
+        }
     }
     void DamageDealt(Unit* victim,uint32& damage,DamageEffectType type) override
     {

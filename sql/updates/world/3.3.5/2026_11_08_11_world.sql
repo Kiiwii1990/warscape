@@ -1,0 +1,3 @@
+-- Source Brine sabre weapon through existing native item and Warscape bonus architecture.
+INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,InventoryType,RequiredLevel,description,Material,delay,dmg_min1,dmg_max1,Sheath) SELECT 902589,2,7,'Brine sabre',displayid,1,1,1,-1,-1,13,1,'Requires 40 OSRS Attack. Main-hand melee attacks can finish Rockslugs without salt.',Material,2400,1,2,Sheath FROM item_template WHERE entry=2027;
+INSERT INTO warscape_item_bonus (item_id,archetype,tier,attack_stab,attack_slash,attack_crush,melee_strength,attack_speed_ticks) VALUES (902589,2,6,7,47,-2,46,4);

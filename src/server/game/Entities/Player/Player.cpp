@@ -70,6 +70,7 @@
 #include "InstanceSaveMgr.h"
 #include "InstanceScript.h"
 #include "Item.h"
+#include "WarscapeSpecialWeapons.h"
 #include "ItemPackets.h"
 #include "KillRewarder.h"
 #include "Language.h"
@@ -11646,6 +11647,9 @@ InventoryResult Player::CanUseItem(ItemTemplate const* proto) const
 
     if (!proto)
         return EQUIP_ERR_ITEM_NOT_FOUND;
+
+    if (!Warscape::CanUseSpecialWeapon(proto->GetId(),GetRSSkillLevel(RS_Skill::Attack)))
+        return EQUIP_ERR_CANT_EQUIP_LEVEL_I;
 
     if (proto->HasFlag(ITEM_FLAG2_FACTION_HORDE) && GetTeam() != HORDE)
         return EQUIP_ERR_CANT_EQUIP_EVER;

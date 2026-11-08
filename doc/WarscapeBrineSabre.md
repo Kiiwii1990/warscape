@@ -1,0 +1,23 @@
+# Brine sabre / Rockslug salt bypass
+
+Adds source weapon902589 Brine sabre and closes the Rockslug brine-sabre finishing exception. Source: [Brine sabre](https://oldschool.runescape.wiki/w/Brine_sabre), [Rockslug](https://oldschool.runescape.wiki/w/Rockslug), reviewed8 November2026. One-handed scimitar,40 OSRS Attack,4ticks, attack Stab+7/Slash+47/Crush-2, melee Strength+46; all remaining source bonuses zero.
+
+Native item is new, stack1, class2/sword7/InventoryType13 using native Scimitar2027 display/material/sheath. RequiredLevel1 is the native WoW level; separate server CanUseItem checks permanent OSRS Attack40. Existing RS skills load before inventory during login. Native weapon proficiency/class rules remain; item description states40 OSRS Attack, while the native failure packet is the generic level error. No existing collectible/stacked weapon is modified. Native fallback damage1-2 and delay2400 are not a separate combat formula: the existing warscape_item_bonus profile supplies exact source bonuses, Scimitar archetype2 and4ticks. Normal player stats/UI/persistence paths reused. build_assets optionally preserves specified native sheath for this new weapon; older item defaults/rows unchanged.
+
+Rockslug's shared DamageTaken finisher path permits ordinary lethal damage only for direct player melee auto-attack damage with this usable, unbroken weapon in main hand and Attack>=40. This can finish normally from above the salt threshold or kill an already wandering1HP Rockslug after switching weapons. It uses normal damage/kill/loot credit and consumes no salt. Ordinary weapons, a sabre carried in bags or only off-hand, pets, DOTs and spells retain the floor. In native dual-wield, an auto-hit while the sabre is main-hand satisfies the wielded check; OSRS has no off-hand weapon attacks. Other finishing targets still require their own items.
+
+Underwater Liquify special attack, lobstrosity interaction, quest/vendor/acquisition and Brine Rat drop integration remain pending. No Slayer/quest/mining system is invented. No client executable/memory-layout-sensitive code changed.
+
+## Manual acceptance
+
+Restart verified Wrath client. Use an eligible character with40+ OSRS Attack and native sword proficiency; `.rs stats` confirms skills. `.additem 902589 1`; equip main hand. `.gm off`; `.npc add temp loot 902401`. It should die normally to sabre auto-attacks without salt and retain ordinary loot/XP. Check4-tick cadence, `.rs bonuses`/UI source bonuses (account for other gear). Equip an off-hand lantern/shield to confirm one-handed use.
+
+Use an ordinary weapon on another Rockslug: floor10 displayed HP/wander and manual salt remain. At that floor, switch to Brine sabre and attack: normal death without consuming any902569 salt. Sabre in bags/only off-hand, another finisher target, spell/DOT/pet damage must not bypass. Relog with sabre equipped and repeat. A separate below40 test character must fail to equip; do not change the user's stored XP merely to automate this test. Existing GM skill commands alter XP and are not run by this implementation.
+
+## Checks and operations
+
+140 Python catalogue tests, Debug C++ required-level/bypass matrix and RelWithDebInfo worldserver build passed. Cases include39/40 Attack, unrelated item/target, non-melee and unusable weapon. Native source profile and all zero bonuses covered by migration verification. Item creation/save/load and RS-skill-before-inventory ordering inspected; actual equip/relog/gameplay acceptance remains manual.
+
+Migration2026_11_08_11_world.sql adds one item and one warscape_item_bonus row only, through db.py after permissions/status, zero players, stopped writers and fresh verified backup. No character schema/data or prior profiles/loot changes. Preserve world/profile/XP/inventory/wallet hashes. Back up EXE/PDB, runtime Item.dbc and client patch; append one item row only. No spell records. Rollback uses stopped services and coordinated previous binary/DBC/patch, leaves new rows dormant while players hold weapons; never restore character data. Full world restore requires separate review; backup restore untested.
+
+Deployment8 November2026: fresh verified backup C:\WarscapeBackups\world_20261108T124956_927293Z_8ae0030a.sql; restore untested. Previous runtime files C:\WarscapeBackups\BrineSabre-20261108-deploy. Source profile verification passed, existing profiles/world/character preservation hashes match. EXE/PDB match build, one correct sword/sheath Item.dbc row appended; old DBC/MPQ content preserved. Optional-sheath fixture covers old default0/new3 and old row/string preservation. Both services listening/ready without new weapon/profile errors; existing unrelated native warnings remain. Gameplay/equip/relog acceptance pending.

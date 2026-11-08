@@ -1,5 +1,6 @@
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeEnemyRequirements.h"
+#include "WarscapeSpecialWeapons.h"
 #include "WarscapeCombat.h"
 #include "WarscapeEnemyMechanics.h"
 #include "WarscapeEquipment.h"
@@ -8,6 +9,15 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::CanUseSpecialWeapon(Warscape::BrineSabre,39));
+    assert(Warscape::CanUseSpecialWeapon(Warscape::BrineSabre,40));
+    assert(Warscape::CanUseSpecialWeapon(2131,1));
+    assert(Warscape::CanBypassRockslugSalt(902401,Warscape::BrineSabre,40,true,true));
+    assert(!Warscape::CanBypassRockslugSalt(902409,Warscape::BrineSabre,40,true,true));
+    assert(!Warscape::CanBypassRockslugSalt(902401,2131,40,true,true));
+    assert(!Warscape::CanBypassRockslugSalt(902401,Warscape::BrineSabre,39,true,true));
+    assert(!Warscape::CanBypassRockslugSalt(902401,Warscape::BrineSabre,40,false,true));
+    assert(!Warscape::CanBypassRockslugSalt(902401,Warscape::BrineSabre,40,true,false));
     assert(!Warscape::RockslugShouldWander(902401,0));
     assert(Warscape::RockslugShouldWander(902401,1));
     assert(Warscape::RockslugShouldWander(902401,10));

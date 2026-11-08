@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "entry": 902589,
+      "name": "Brine sabre",
+      "display_source": 2027,
+      "class": 2,
+      "subclass": 7,
+      "inventory_type": 13,
+      "sheath": 3
+    }
+  ],
+  "client_spells": []
+}
