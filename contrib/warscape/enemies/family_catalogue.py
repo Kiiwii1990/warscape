@@ -69,7 +69,7 @@ def validate(pack, old):
     for enemy in pack['enemies']:
         require(enemy['family_id'] in family_ids, 'Unknown family')
         behaviour=enemy.get('behaviour',{})
-        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only','mixed_ranged','ranged_to_melee','ranged_bonus','poison_spell','poison_immune','drake_breath','wyvern_breath','magic_ranged','tri_style','magic_bonus','scream_hit','hearing_item','root_spell','heal_visual','killerwatt','ranged_magic_defence','separate_bonuses','protection_item','protection_slot','unprotected_hit','double_first','double_second','double_magic','cast_only','earthen_armour','cut_lure','venom_spell'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
+        require(set(behaviour).issubset({'finisher_item','magic_max_hit','poison_max_hit','ranged_max_hit','airborne','attack_spell','alternate_spell','magic_melee_only','mixed_ranged','ranged_to_melee','ranged_bonus','poison_spell','poison_immune','drake_breath','wyvern_breath','magic_ranged','tri_style','magic_bonus','scream_hit','hearing_item','root_spell','heal_visual','killerwatt','ranged_magic_defence','separate_bonuses','protection_item','protection_slot','unprotected_hit','double_first','double_second','double_magic','cast_only','earthen_armour','cut_lure','venom_spell','cycle_three'}) and all(type(v) is int and 1 <= v <= 0xFFFFFFFF for v in behaviour.values()), 'Invalid enemy behaviour')
         require(type(enemy.get('non_melee',False)) is bool and (not enemy.get('non_melee') or behaviour.get('magic_ranged')==1), 'Invalid non-melee policy')
         require(type(enemy.get('wide_loot',False)) is bool, 'Invalid wide loot policy')
         require(all(behaviour.get(k,1)==1 for k in ('airborne','magic_melee_only','mixed_ranged','ranged_to_melee','poison_immune','drake_breath','wyvern_breath','magic_ranged','tri_style','killerwatt','ranged_magic_defence','separate_bonuses','double_magic','cast_only','earthen_armour','cut_lure')), 'Invalid behaviour flag')
@@ -78,6 +78,8 @@ def validate(pack, old):
         require(not (behaviour.get('drake_breath') and behaviour.get('wyvern_breath')), 'Conflicting breath behaviour')
         if behaviour.get('tri_style') or behaviour.get('magic_ranged'):
             require(all(behaviour.get(k,0)>0 for k in ('magic_max_hit','ranged_max_hit','attack_spell','alternate_spell')), 'Incomplete hybrid behaviour')
+        if behaviour.get('cycle_three'):
+            require(behaviour.get('cycle_three')==1 and behaviour.get('magic_ranged')==1,'Three-attack cycle requires hybrid')
         if behaviour.get('tri_style'):
             require(behaviour.get('root_spell',0)>0 and behaviour.get('heal_visual',0)>0, 'Incomplete Revenant behaviour')
         if behaviour.get('scream_hit'):
@@ -160,13 +162,13 @@ struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; std::uint32_
 struct EnemyLootPool { std::uint32_t Entry, First, Count; std::uint64_t Total; };
 struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; std::uint8_t RequiredSlayerLevel; std::int32_t FlatArmour; std::uint32_t SourceSlayerXPTenths; };
 '''
-    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only","mixed_ranged","ranged_to_melee","ranged_bonus","poison_spell","poison_immune","drake_breath","wyvern_breath","magic_ranged","tri_style","magic_bonus","scream_hit","hearing_item","root_spell","heal_visual","killerwatt","ranged_magic_defence","separate_bonuses","protection_item","protection_slot","unprotected_hit","double_first","double_second","double_magic","cast_only","earthen_armour","cut_lure","venom_spell")]) for e in enemies if e.get("behaviour")]
+    behaviours = [(e["entry"],*[e.get("behaviour",{}).get(k,0) for k in ("finisher_item","magic_max_hit","poison_max_hit","ranged_max_hit","airborne","attack_spell","alternate_spell","magic_melee_only","mixed_ranged","ranged_to_melee","ranged_bonus","poison_spell","poison_immune","drake_breath","wyvern_breath","magic_ranged","tri_style","magic_bonus","scream_hit","hearing_item","root_spell","heal_visual","killerwatt","ranged_magic_defence","separate_bonuses","protection_item","protection_slot","unprotected_hit","double_first","double_second","double_magic","cast_only","earthen_armour","cut_lure","venom_spell","cycle_three")]) for e in enemies if e.get("behaviour")]
     def array(kind, name, rows):
         return f'inline constexpr std::array<{kind}, {len(rows)}> {name} = {{{{\n' + ',\n'.join('    {' + ', '.join((str(v)+'ULL' if type(v) is int and v>0x7FFFFFFFFFFFFFFF else json.dumps(v)) for v in row) + '}' for row in rows) + '\n}};\n'
     text += array('EnemyLootOutcome', 'EnemyLootOutcomes', outcomes)
     text += array('EnemyLootPool', 'EnemyLootPools', pools)
     text += array('EnemyVariant', 'EnemyVariants', metadata)
-    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath, MagicRanged, TriStyle, MagicBonus, ScreamHit, HearingItem, RootSpell, HealVisual, Killerwatt, RangedMagicDefence, SeparateBonuses, ProtectionItem, ProtectionSlot, UnprotectedHit, DoubleFirst, DoubleSecond, DoubleMagic, CastOnly, EarthenArmour, CutLure, VenomSpell; };\n'
+    text += 'struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath, MagicRanged, TriStyle, MagicBonus, ScreamHit, HearingItem, RootSpell, HealVisual, Killerwatt, RangedMagicDefence, SeparateBonuses, ProtectionItem, ProtectionSlot, UnprotectedHit, DoubleFirst, DoubleSecond, DoubleMagic, CastOnly, EarthenArmour, CutLure, VenomSpell, CycleThree; };\n'
     text += array('EnemyBehaviour','EnemyBehaviours',behaviours)
     bonus_outcomes,bonus_pools=[],[]
     for enemy in enemies:

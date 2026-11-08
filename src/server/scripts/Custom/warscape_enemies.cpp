@@ -82,6 +82,7 @@ struct npc_warscape_enemy : ScriptedAI
     Warscape::RevenantRecovery recovery;
     bool revenantOpened = false;
     uint32 encounterState = 0;
+    uint32 attackCycle = 0;
     uint32 GetData(uint32 key) const override { return key==Warscape::EncounterStateData ? encounterState : 0; }
     void SetData(uint32 key,uint32 value) override { if (key==Warscape::EncounterStateData) encounterState|=value; }
 
@@ -90,6 +91,7 @@ struct npc_warscape_enemy : ScriptedAI
         meleeWarningDelay = 0;
         switchedToMelee = false;
         encounterState = 0;
+        attackCycle = urand(0,1)*3;
         revenantOpened = false;
         recovery = {};
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && b->TriStyle)
@@ -270,7 +272,9 @@ struct npc_warscape_enemy : ScriptedAI
             if (victim->GetTypeId()==TYPEID_PLAYER && me->isAttackReady() && inRange && lineOfSight)
             {
                 me->StopMoving();
-                me->CastSpell(victim,roll_chance_i(50) ? b->AttackSpell : b->AlternateSpell,TRIGGERED_FULL_MASK);
+                bool const magic=b->CycleThree ? Warscape::CycleUsesMagic(attackCycle) : roll_chance_i(50);
+                me->CastSpell(victim,magic ? b->AttackSpell : b->AlternateSpell,TRIGGERED_FULL_MASK);
+                if (b->CycleThree) attackCycle=Warscape::AdvanceAttackCycle(attackCycle);
                 me->resetAttackTimer();
             }
             return;

@@ -1143,4 +1143,24 @@ class StalkerGargoyleTests(unittest.TestCase):
         self.assertIn('!target->isTappedBy(player)',hammer)
         self.assertIn('player->DestroyItemCount(entry,1,true)',code)
 
+class GryphonHydraTests(unittest.TestCase):
+    def test_profiles_guarantees_and_hydra_cycle(self):
+        pack=json.loads((Path(__file__).parent/'gryphons_hydras.json').read_text())
+        self.assertEqual([e['combat_level'] for e in pack['enemies']],[95,46,194,66,106])
+        for e in pack['enemies']:
+            self.assertEqual(sum(o['weight'] for o in e['outcomes']),e['denominator'])
+        hydra=pack['enemies'][2]
+        self.assertEqual(hydra['source_slayer_xp_tenths'],3225)
+        self.assertEqual(hydra['guaranteed'],[dict(item='Hydra bones',quantity=1)])
+        self.assertEqual(hydra['behaviour']['cycle_three'],1)
+        self.assertFalse(any(o['item'].startswith("Hydra'") for o in hydra['outcomes']))
+        for o in pack['enemies'][0]['outcomes']:
+            parts=[o]+o.get('additional',[])
+            self.assertTrue(any(x['item']=='Gryphon feather' and x['quantity']>=1 for x in parts))
+    def test_cycle_flag_requires_hybrid(self):
+        import family_catalogue
+        pack=json.loads((Path(__file__).parent/'gryphons_hydras.json').read_text())
+        pack['enemies'][2]['behaviour'].pop('magic_ranged')
+        with self.assertRaises(ValueError):family_catalogue.validate(pack,prior_to('gryphons_hydras.json'))
+
 if __name__=='__main__':unittest.main()

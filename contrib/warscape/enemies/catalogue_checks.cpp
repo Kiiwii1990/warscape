@@ -7,6 +7,14 @@
 #include <map>
 #include <string_view>
 int main() {
+    for (unsigned start : {0u,3u}) {
+        auto p=start;
+        for(unsigned i=0;i<18;++i) {
+            assert(Warscape::CycleUsesMagic(p)==((start+i)%6<3));
+            p=Warscape::AdvanceAttackCycle(p);
+        }
+    }
+    assert(Warscape::FindEnemyBehaviour(902302)->CycleThree==1);
     assert(!Warscape::CanSmashGargoyle(0));
     assert(Warscape::CanSmashGargoyle(1) && Warscape::CanSmashGargoyle(80));
     assert(!Warscape::CanSmashGargoyle(81));
@@ -64,7 +72,7 @@ int main() {
         assert(found);
     }
     for (auto const& pool:Warscape::EnemyBonusPools) {
-        assert((pool.Entry>=901903 && pool.Entry<=901904) || (pool.Entry>=902000 && pool.Entry<=902009) || (pool.Entry>=902100 && pool.Entry<=902106) || (pool.Entry>=902200 && pool.Entry<=902208));
+        assert((pool.Entry>=901903 && pool.Entry<=901904) || (pool.Entry>=902000 && pool.Entry<=902009) || (pool.Entry>=902100 && pool.Entry<=902106) || (pool.Entry>=902200 && pool.Entry<=902208) || (pool.Entry>=902300 && pool.Entry<=902304));
         std::uint64_t cursor=0;
         for (unsigned i=pool.First;i<pool.First+pool.Count;++i) {
             auto const& o=Warscape::EnemyBonusDrops[i];
@@ -193,7 +201,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==327);
+    assert(Warscape::EnemyVariants.size()==332);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);

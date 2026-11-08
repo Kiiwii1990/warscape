@@ -906,3 +906,5 @@ this new batch remains pending.
 8 November 2026 enemy checkpoint: user confirmed prior six families working with drops. Added Catablepon, Cave Crawler, Cave Horror, Cave Slime and Cockatrice; seven representative entries, source-backed stats/loot, existing poison prototype. Temporary drains, gaze and Cave Horror scream remain future work. See WarscapeCaveFamilies.md; new in-game acceptance pending.
 
 8 November 2026: user confirmed cave batch working. Stalker/Dark beast/Dust devil/Ent/Gargoyle checkpoint adds nine entries and reusable Gargoyle finishing hammer. Ent harvesting, Stalker bleed and Dust devil facemask/stat effects remain pending. See WarscapeStalkersGargoyles.md.
+
+8 November 2026: user confirmed preceding five-family checkpoint working. Gryphon/Harpie/Hydra/Infernal Mage/Kurask checkpoint adds five regular profiles; Hydra three-attack style cycle supported. Weight/lantern/leaf-weapon requirements, Hydra poison pools and ordered ring pieces remain pending. See WarscapeGryphonsHydras.md.

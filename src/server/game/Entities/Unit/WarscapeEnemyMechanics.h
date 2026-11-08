@@ -9,6 +9,8 @@ inline std::uint32_t NonFinishingDamage(std::uint32_t health, std::uint32_t dama
 }
 inline bool CanSmashGargoyle(std::uint32_t health) { return health > 0 && health <= 80; }
 inline bool CanCoolLizard(std::uint32_t health) { return health > 0 && health < 50; }
+inline bool CycleUsesMagic(std::uint32_t position) { return position % 6 < 3; }
+inline std::uint32_t AdvanceAttackCycle(std::uint32_t position) { return (position+1)%6; }
 constexpr std::uint32_t PoisonPeriod = 18000;
 inline std::uint32_t PoisonDuration(std::uint32_t initial) { return initial*5*PoisonPeriod; }
 inline std::uint32_t PoisonHit(std::uint32_t initial, std::uint32_t elapsed) {

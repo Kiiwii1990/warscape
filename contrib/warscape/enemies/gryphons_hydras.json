@@ -1,0 +1,3471 @@
+{
+  "release": "2026_11_08_03_world",
+  "loot_policy": "Members/no wealth/pre-Legends, off-task uniques, conditional main after pre-roll. Explicit residual empty probability; quest/Slayer tertiary excluded.",
+  "sources": {
+    "Gryphon": {
+      "url": "https://oldschool.runescape.wiki/w/Gryphon",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "87392b50e93878909846aa7dfff7fb9c098352404e0dc72d8917eced65aedb89"
+    },
+    "Harpie_Bug_Swarm": {
+      "url": "https://oldschool.runescape.wiki/w/Harpie_Bug_Swarm",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "acacc93d8f5baafb2eb03ff22d1765e7e18ee523a6feaa0ef2cc84d90fd09790"
+    },
+    "Hydra": {
+      "url": "https://oldschool.runescape.wiki/w/Hydra",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "670745d5e081213674095a53c0d14c6786a6eedeb1d5725ac6e59be42da8bc20"
+    },
+    "Infernal_Mage": {
+      "url": "https://oldschool.runescape.wiki/w/Infernal_Mage",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "c88215e20f10319b29ce0f0d32ddd6aa81f02a471591e7bea4e8a864cc6cf40f"
+    },
+    "Kurask": {
+      "url": "https://oldschool.runescape.wiki/w/Kurask",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "9835f02bbfff889e97bf5d94047f3d4602bc02076cff23f78f7af468b4ab17b7"
+    }
+  },
+  "families": [
+    {
+      "id": 83,
+      "key": "gryphons",
+      "name": "Gryphons",
+      "model_note": "Native gryphon."
+    },
+    {
+      "id": 84,
+      "key": "harpie_bug_swarms",
+      "name": "Harpie Bug Swarms",
+      "model_note": "Native silithid swarm stand-in."
+    },
+    {
+      "id": 85,
+      "key": "hydras",
+      "name": "Hydras",
+      "model_note": "Native hydra."
+    },
+    {
+      "id": 86,
+      "key": "infernal_mages",
+      "name": "Infernal Mages",
+      "model_note": "Native robed caster stand-in."
+    },
+    {
+      "id": 87,
+      "key": "kurasks",
+      "name": "Kurasks",
+      "model_note": "Native horned beast stand-in."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Raw lobster",
+      "entry": 902293
+    },
+    {
+      "name": "Raw shark",
+      "entry": 902400
+    },
+    {
+      "name": "Cabbage",
+      "entry": 902120
+    },
+    {
+      "name": "Elkhorn frag",
+      "entry": 902499
+    },
+    {
+      "name": "Pillar frag",
+      "entry": 902500
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Potato seed",
+      "entry": 902126
+    },
+    {
+      "name": "Onion seed",
+      "entry": 902127
+    },
+    {
+      "name": "Cabbage seed",
+      "entry": 902128
+    },
+    {
+      "name": "Tomato seed",
+      "entry": 902129
+    },
+    {
+      "name": "Sweetcorn seed",
+      "entry": 902130
+    },
+    {
+      "name": "Strawberry seed",
+      "entry": 902131
+    },
+    {
+      "name": "Watermelon seed",
+      "entry": 902132
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Steel axe",
+      "entry": 902174
+    },
+    {
+      "name": "Steel full helm",
+      "entry": 902214
+    },
+    {
+      "name": "Staff of fire",
+      "entry": 902325
+    },
+    {
+      "name": "Mithril chainbody",
+      "entry": 902216
+    },
+    {
+      "name": "Adamant med helm",
+      "entry": 902245
+    },
+    {
+      "name": "Steel boots",
+      "entry": 902326
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Gold ore",
+      "entry": 902218
+    },
+    {
+      "name": "Jug of wine",
+      "entry": 902180
+    },
+    {
+      "name": "Battlestaff",
+      "entry": 902418
+    },
+    {
+      "name": "Fire battlestaff",
+      "entry": 902197
+    },
+    {
+      "name": "Water battlestaff",
+      "entry": 902308
+    },
+    {
+      "name": "Rune kiteshield",
+      "entry": 902209
+    },
+    {
+      "name": "Rune platebody",
+      "entry": 902451
+    },
+    {
+      "name": "Dragon longsword",
+      "entry": 902453
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Water rune",
+      "entry": 902002
+    },
+    {
+      "name": "Grimy snapdragon",
+      "entry": 902404
+    },
+    {
+      "name": "Grimy torstol",
+      "entry": 902405
+    },
+    {
+      "name": "Dragonstone bolt tips",
+      "entry": 902454
+    },
+    {
+      "name": "Onyx bolt tips",
+      "entry": 902455
+    },
+    {
+      "name": "Monkfish",
+      "entry": 902519
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Dragon thrownaxe",
+      "entry": 902394
+    },
+    {
+      "name": "Dragon knife",
+      "entry": 902395
+    },
+    {
+      "name": "Lava battlestaff",
+      "entry": 902493
+    },
+    {
+      "name": "Staff",
+      "entry": 902115
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Mind rune",
+      "entry": 902100
+    },
+    {
+      "name": "Body rune",
+      "entry": 902003
+    },
+    {
+      "name": "Mithril kiteshield",
+      "entry": 902224
+    },
+    {
+      "name": "Adamant platebody",
+      "entry": 902221
+    },
+    {
+      "name": "Rune axe",
+      "entry": 902419
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Limpwurt seed",
+      "entry": 902146
+    },
+    {
+      "name": "White berries",
+      "entry": 902511
+    },
+    {
+      "name": "Big bones",
+      "entry": 902172
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    }
+  ],
+  "items": [
+    {
+      "name": "Gryphon feather",
+      "entry": 902535,
+      "display_source": 7098
+    },
+    {
+      "name": "Onion",
+      "entry": 902536,
+      "display_source": 4540
+    },
+    {
+      "name": "Strawberry",
+      "entry": 902537,
+      "display_source": 4536
+    },
+    {
+      "name": "Watermelon",
+      "entry": 902538,
+      "display_source": 4536
+    },
+    {
+      "name": "Raw swordfish",
+      "entry": 902539,
+      "display_source": 2131
+    },
+    {
+      "name": "Potato",
+      "entry": 902540,
+      "display_source": 4540
+    },
+    {
+      "name": "Tomato",
+      "entry": 902541,
+      "display_source": 4536
+    },
+    {
+      "name": "Sweetcorn",
+      "entry": 902542,
+      "display_source": 4540
+    },
+    {
+      "name": "Mithril cannonball",
+      "entry": 902543,
+      "display_source": 2512
+    },
+    {
+      "name": "Basket",
+      "entry": 902544,
+      "display_source": 4632
+    },
+    {
+      "name": "Empty sack",
+      "entry": 902545,
+      "display_source": 4632
+    },
+    {
+      "name": "Adamant cannonball",
+      "entry": 902546,
+      "display_source": 2512
+    },
+    {
+      "name": "Horn of Plenty (empty)",
+      "entry": 902547,
+      "display_source": 2318
+    },
+    {
+      "name": "Hydra bones",
+      "entry": 902548,
+      "display_source": 2843
+    },
+    {
+      "name": "Black d'hide chaps",
+      "entry": 902549,
+      "display_source": 2318
+    },
+    {
+      "name": "Mystic robe bottom",
+      "entry": 902550,
+      "display_source": 9748
+    },
+    {
+      "name": "Diamond bolt tips",
+      "entry": 902551,
+      "display_source": 2512
+    },
+    {
+      "name": "Ruby bolt tips",
+      "entry": 902552,
+      "display_source": 2512
+    },
+    {
+      "name": "Emerald bolt tips",
+      "entry": 902553,
+      "display_source": 2512
+    },
+    {
+      "name": "Sapphire bolt tips",
+      "entry": 902554,
+      "display_source": 2512
+    },
+    {
+      "name": "Super combat potion(1)",
+      "entry": 902555,
+      "display_source": 2459
+    },
+    {
+      "name": "Dragon bones",
+      "entry": 902556,
+      "display_source": 2843
+    },
+    {
+      "name": "Super restore(1)",
+      "entry": 902557,
+      "display_source": 2772
+    },
+    {
+      "name": "Hydra tail",
+      "entry": 902558,
+      "display_source": 2318
+    },
+    {
+      "name": "Mystic boots (dark)",
+      "entry": 902559,
+      "display_source": 2967
+    },
+    {
+      "name": "Mystic hat (dark)",
+      "entry": 902560,
+      "display_source": 4077
+    },
+    {
+      "name": "Fire ruby",
+      "entry": 902561,
+      "display_source": 818
+    },
+    {
+      "name": "Rune longsword",
+      "entry": 902562,
+      "display_source": 2131
+    },
+    {
+      "name": "Flax",
+      "entry": 902563,
+      "display_source": 2318
+    },
+    {
+      "name": "Papaya fruit",
+      "entry": 902564,
+      "display_source": 4536
+    },
+    {
+      "name": "Coconut",
+      "entry": 902565,
+      "display_source": 4536
+    },
+    {
+      "name": "Leaf-bladed sword",
+      "entry": 902566,
+      "display_source": 2131
+    },
+    {
+      "name": "Mystic robe top (light)",
+      "entry": 902567,
+      "display_source": 9748
+    },
+    {
+      "name": "Leaf-bladed battleaxe",
+      "entry": 902568,
+      "display_source": 1416
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902300,
+      "profile_id": 2300,
+      "family_id": 83,
+      "subcategory": "regular_95",
+      "name": "Gryphon (OSRS regular_95)",
+      "source": "Gryphon",
+      "source_npc_ids": "14857,14858,15009",
+      "combat_level": 95,
+      "stats": [
+        65,
+        75,
+        50,
+        0,
+        50,
+        110
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 20,
+        "crush": 40
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 5,
+      "attack_style": "crush",
+      "slayer_xp": 110,
+      "source_slayer_xp_tenths": 1100,
+      "source_slayer_level": 51,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 935,
+      "model_path": "Creature\\Gryphon\\Gryphon.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1480000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Onion",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Onion",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Onion",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Strawberry",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Strawberry",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Strawberry",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Watermelon",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Watermelon",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Watermelon",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Raw lobster",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Raw lobster",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Raw lobster",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Raw swordfish",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Raw swordfish",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Raw swordfish",
+          "quantity": 1,
+          "weight": 1280,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Raw shark",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Raw shark",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Raw shark",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Potato",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Potato",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Potato",
+          "quantity": 1,
+          "weight": 1024,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Cabbage",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Cabbage",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Cabbage",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Tomato",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Tomato",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Tomato",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Elkhorn frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Elkhorn frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Elkhorn frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Pillar frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Pillar frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Pillar frag",
+          "quantity": 1,
+          "weight": 128,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Gryphon feather",
+          "quantity": 11,
+          "quantity_max": 26,
+          "weight": 2176
+        },
+        {
+          "item": "Gryphon feather",
+          "quantity": 12,
+          "quantity_max": 27,
+          "weight": 2176
+        },
+        {
+          "item": "Gryphon feather",
+          "quantity": 13,
+          "quantity_max": 28,
+          "weight": 2176
+        },
+        {
+          "item": "Mithril cannonball",
+          "quantity": 8,
+          "quantity_max": 12,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Mithril cannonball",
+          "quantity": 8,
+          "quantity_max": 12,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Mithril cannonball",
+          "quantity": 8,
+          "quantity_max": 12,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Basket",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Basket",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Basket",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Empty sack",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Empty sack",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Empty sack",
+          "quantity": 1,
+          "weight": 512,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Adamant cannonball",
+          "quantity": 5,
+          "quantity_max": 9,
+          "weight": 256,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Adamant cannonball",
+          "quantity": 5,
+          "quantity_max": 9,
+          "weight": 256,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Adamant cannonball",
+          "quantity": 5,
+          "quantity_max": 9,
+          "weight": 256,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 352,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 352,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 352,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 264,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 264,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 264,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 198,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 198,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 198,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 154,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 154,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 154,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 121,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 121,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 121,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 88,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 88,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 88,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 66,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 66,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 66,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 55,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 55,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 55,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 44,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 44,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 44,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 33,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 768,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 384,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 384,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 384,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 192,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 192,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 192,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 96,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 96,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 96,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 48,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 48,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 48,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 24,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 24,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 24,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 2
+            }
+          ]
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 12,
+          "additional": [
+            {
+              "item": "Gryphon feather",
+              "quantity": 3
+            }
+          ]
+        }
+      ],
+      "denominator": 49152,
+      "bonus_pools": [
+        {
+          "key": "Horn of Plenty (empty)",
+          "outcomes": [
+            {
+              "item": "Horn of Plenty (empty)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 2499
+            }
+          ],
+          "denominator": 2500
+        }
+      ]
+    },
+    {
+      "entry": 902301,
+      "profile_id": 2301,
+      "family_id": 84,
+      "subcategory": "regular_46",
+      "name": "Harpie Bug Swarm (OSRS regular_46)",
+      "source": "Harpie_Bug_Swarm",
+      "source_npc_ids": "464",
+      "combat_level": 46,
+      "stats": [
+        54,
+        46,
+        32,
+        1,
+        1,
+        25
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 5,
+        "crush": 10
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 25,
+      "source_slayer_xp_tenths": 250,
+      "source_slayer_level": 33,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 482,
+      "model_path": "Creature\\Silithidwasp\\SilithidWasp.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1490000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Steel axe",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Steel full helm",
+          "quantity": 1,
+          "weight": 512
+        },
+        {
+          "item": "Staff of fire",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Mithril chainbody",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Adamant med helm",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Steel boots",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 30,
+          "weight": 2560
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 60,
+          "weight": 1024
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 15,
+          "weight": 640
+        },
+        {
+          "item": "Death rune",
+          "quantity": 3,
+          "weight": 384
+        },
+        {
+          "item": "Coins",
+          "quantity": 40,
+          "weight": 3200
+        },
+        {
+          "item": "Coins",
+          "quantity": 160,
+          "weight": 2560
+        },
+        {
+          "item": "Coins",
+          "quantity": 230,
+          "weight": 1280
+        },
+        {
+          "item": "Coins",
+          "quantity": 30,
+          "weight": 896
+        },
+        {
+          "item": "Coins",
+          "quantity": 490,
+          "weight": 256
+        },
+        {
+          "item": "Gold ore",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Jug of wine",
+          "quantity": 1,
+          "weight": 256
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 189
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 48
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 24
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 12
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 6
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 3
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 3
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 3
+        }
+      ],
+      "denominator": 16384
+    },
+    {
+      "entry": 902302,
+      "profile_id": 2302,
+      "family_id": 85,
+      "subcategory": "regular_194",
+      "name": "Hydra (OSRS regular_194)",
+      "source": "Hydra",
+      "source_npc_ids": "8609",
+      "combat_level": 194,
+      "stats": [
+        1,
+        1,
+        100,
+        210,
+        210,
+        300
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 160,
+      "defence_bonuses": {
+        "stab": 160,
+        "slash": 160,
+        "crush": 160
+      },
+      "source_max_hit": 22,
+      "attack_ticks": 6,
+      "attack_style": "magic",
+      "slayer_xp": 322,
+      "source_slayer_xp_tenths": 3225,
+      "source_slayer_level": 95,
+      "respawn_ticks": 25,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 62,
+      "model_path": "Creature\\Hydra\\Hydra.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Hydra bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1500000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Black d'hide chaps",
+          "quantity": 1,
+          "weight": 627840
+        },
+        {
+          "item": "Battlestaff",
+          "quantity": 2,
+          "quantity_max": 3,
+          "weight": 418560
+        },
+        {
+          "item": "Fire battlestaff",
+          "quantity": 1,
+          "weight": 1046400
+        },
+        {
+          "item": "Water battlestaff",
+          "quantity": 1,
+          "weight": 1046400
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 627840
+        },
+        {
+          "item": "Rune platebody",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Mystic robe bottom",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Dragon longsword",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 15,
+          "quantity_max": 45,
+          "weight": 1883520
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 20,
+          "quantity_max": 50,
+          "weight": 1883520
+        },
+        {
+          "item": "Death rune",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 1883520
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 1883520
+        },
+        {
+          "item": "Law rune",
+          "quantity": 30,
+          "quantity_max": 60,
+          "weight": 1883520
+        },
+        {
+          "item": "Water rune",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 1883520
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 139520
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 111616
+        },
+        {
+          "item": "Grimy snapdragon",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 83712
+        },
+        {
+          "item": "Grimy torstol",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 83712
+        },
+        {
+          "item": "Diamond bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 104640
+        },
+        {
+          "item": "Ruby bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 94176
+        },
+        {
+          "item": "Emerald bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 94176
+        },
+        {
+          "item": "Dragonstone bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 73248
+        },
+        {
+          "item": "Onyx bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 31392
+        },
+        {
+          "item": "Sapphire bolt tips",
+          "quantity": 70,
+          "quantity_max": 90,
+          "weight": 20928
+        },
+        {
+          "item": "Coins",
+          "quantity": 500,
+          "quantity_max": 3500,
+          "weight": 3348480
+        },
+        {
+          "item": "Monkfish",
+          "quantity": 1,
+          "weight": 2302080
+        },
+        {
+          "item": "Super combat potion(1)",
+          "quantity": 1,
+          "weight": 837120
+        },
+        {
+          "item": "Dragon bones",
+          "quantity": 3,
+          "quantity_max": 5,
+          "weight": 627840
+        },
+        {
+          "item": "Super restore(1)",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 1255680
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 69760
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 69760
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 52320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 52320
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 52320
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 39240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 39240
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 39240
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 30520
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 30520
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 30520
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 23980
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 23980
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 23980
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 17440
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 17440
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 17440
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 13080
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 13080
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 13080
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 10900
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 10900
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 10900
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 8720
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 8720
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 8720
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 6540
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 6540
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 6540
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 6540
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 6540
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 6540
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 165888
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 113664
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 109824
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 79104
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 77568
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 73728
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 53760
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 52992
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 35328
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 24576
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 17664
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 15360
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 10752
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 6912
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 103005
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 52320
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 26160
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 13080
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 6540
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 3270
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1635
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1635
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1635
+        }
+      ],
+      "denominator": 26787840,
+      "behaviour": {
+        "magic_ranged": 1,
+        "magic_max_hit": 22,
+        "ranged_max_hit": 22,
+        "attack_spell": 900760,
+        "alternate_spell": 900761,
+        "cycle_three": 1
+      },
+      "non_melee": true,
+      "bonus_pools": [
+        {
+          "key": "Hydra tail",
+          "outcomes": [
+            {
+              "item": "Hydra tail",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 5000
+            }
+          ],
+          "denominator": 5001
+        },
+        {
+          "key": "Dragon thrownaxe",
+          "outcomes": [
+            {
+              "item": "Dragon thrownaxe",
+              "quantity": 200,
+              "quantity_max": 400,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 9999
+            }
+          ],
+          "denominator": 10000
+        },
+        {
+          "key": "Dragon knife",
+          "outcomes": [
+            {
+              "item": "Dragon knife",
+              "quantity": 200,
+              "quantity_max": 400,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 10000
+            }
+          ],
+          "denominator": 10001
+        }
+      ]
+    },
+    {
+      "entry": 902303,
+      "profile_id": 2303,
+      "family_id": 86,
+      "subcategory": "regular_66",
+      "name": "Infernal Mage (OSRS regular_66)",
+      "source": "Infernal_Mage",
+      "source_npc_ids": "443,444,445,446,447",
+      "combat_level": 66,
+      "stats": [
+        1,
+        1,
+        60,
+        1,
+        75,
+        60
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 60,
+      "source_slayer_xp_tenths": 600,
+      "source_slayer_level": 45,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 2338,
+      "model_path": "Character\\Human\\Male\\HumanMale.m2",
+      "scale": 1,
+      "creature_type": 7,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1510000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Lava battlestaff",
+          "quantity": 1,
+          "weight": 4096
+        },
+        {
+          "item": "Mystic boots (dark)",
+          "quantity": 1,
+          "weight": 8000
+        },
+        {
+          "item": "Mystic hat (dark)",
+          "quantity": 1,
+          "weight": 8000
+        },
+        {
+          "item": "Staff",
+          "quantity": 1,
+          "weight": 254744
+        },
+        {
+          "item": "Staff of fire",
+          "quantity": 1,
+          "weight": 31843
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 10,
+          "weight": 191058
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 10,
+          "weight": 191058
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 36,
+          "weight": 127372
+        },
+        {
+          "item": "Air rune",
+          "quantity": 10,
+          "weight": 95529
+        },
+        {
+          "item": "Water rune",
+          "quantity": 10,
+          "weight": 95529
+        },
+        {
+          "item": "Air rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Water rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Body rune",
+          "quantity": 18,
+          "weight": 63686
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 4,
+          "weight": 63686
+        },
+        {
+          "item": "Death rune",
+          "quantity": 7,
+          "weight": 573174
+        },
+        {
+          "item": "Coins",
+          "quantity": 1,
+          "weight": 668703
+        },
+        {
+          "item": "Coins",
+          "quantity": 2,
+          "weight": 509488
+        },
+        {
+          "item": "Coins",
+          "quantity": 4,
+          "weight": 286587
+        },
+        {
+          "item": "Coins",
+          "quantity": 29,
+          "weight": 95529
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 509488
+        }
+      ],
+      "denominator": 4096000,
+      "behaviour": {
+        "magic_max_hit": 8,
+        "cast_only": 1,
+        "attack_spell": 900762
+      },
+      "bonus_pools": [
+        {
+          "key": "Fire ruby",
+          "outcomes": [
+            {
+              "item": "Fire ruby",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 63
+            }
+          ],
+          "denominator": 64
+        }
+      ]
+    },
+    {
+      "entry": 902304,
+      "profile_id": 2304,
+      "family_id": 87,
+      "subcategory": "normal_106",
+      "name": "Kurask (OSRS normal_106)",
+      "source": "Kurask",
+      "source_npc_ids": "410",
+      "combat_level": 106,
+      "stats": [
+        67,
+        105,
+        105,
+        1,
+        1,
+        97
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 97,
+      "source_slayer_xp_tenths": 970,
+      "source_slayer_level": 70,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 10193,
+      "model_path": "Creature\\FelBeast\\FelBeast.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1520000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 20928
+        },
+        {
+          "item": "Rune longsword",
+          "quantity": 1,
+          "weight": 20928
+        },
+        {
+          "item": "Adamant platebody",
+          "quantity": 1,
+          "weight": 20928
+        },
+        {
+          "item": "Rune axe",
+          "quantity": 1,
+          "weight": 20928
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 10,
+          "weight": 69760
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 48832
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 30,
+          "weight": 27904
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 1,
+          "weight": 41856
+        },
+        {
+          "item": "Coins",
+          "quantity": 2000,
+          "quantity_max": 3000,
+          "weight": 111616
+        },
+        {
+          "item": "Coins",
+          "quantity": 10000,
+          "weight": 34880
+        },
+        {
+          "item": "Flax",
+          "quantity": 100,
+          "weight": 41856
+        },
+        {
+          "item": "White berries",
+          "quantity": 12,
+          "weight": 41856
+        },
+        {
+          "item": "Papaya fruit",
+          "quantity": 10,
+          "weight": 27904
+        },
+        {
+          "item": "Coconut",
+          "quantity": 10,
+          "weight": 27904
+        },
+        {
+          "item": "Big bones",
+          "quantity": 20,
+          "weight": 34880
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 31392
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 23544
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 17658
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 13734
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 10791
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 7848
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 5886
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 4905
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 3924
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 2943
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 2943
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 20736
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 14208
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 13728
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 9888
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 9696
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 9216
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 6720
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 6624
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 4416
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 3072
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 2208
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 1920
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 1344
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 864
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 20601
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 10464
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 5232
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 2616
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 1308
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 654
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 327
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 327
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 327
+        }
+      ],
+      "denominator": 865024,
+      "behaviour": {
+        "poison_immune": 1
+      },
+      "bonus_pools": [
+        {
+          "key": "Leaf-bladed sword",
+          "outcomes": [
+            {
+              "item": "Leaf-bladed sword",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 383
+            }
+          ],
+          "denominator": 384
+        },
+        {
+          "key": "Mystic robe top (light)",
+          "outcomes": [
+            {
+              "item": "Mystic robe top (light)",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 511
+            }
+          ],
+          "denominator": 512
+        },
+        {
+          "key": "Leaf-bladed battleaxe",
+          "outcomes": [
+            {
+              "item": "Leaf-bladed battleaxe",
+              "quantity": 1,
+              "weight": 1
+            },
+            {
+              "item": "Nothing",
+              "quantity": 1,
+              "weight": 1025
+            }
+          ],
+          "denominator": 1026
+        }
+      ]
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900760,
+      "source": 686,
+      "name": "Hydra magic",
+      "description": "Hydra magic",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid",
+      "range_source": 30455
+    },
+    {
+      "entry": 900761,
+      "source": 6660,
+      "name": "Hydra ranged",
+      "description": "Hydra ranged",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid",
+      "range_source": 30455
+    },
+    {
+      "entry": 900762,
+      "source": 133,
+      "name": "Infernal fire bolt",
+      "description": "Infernal fire bolt",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid",
+      "range_source": 30455
+    }
+  ],
+  "source_assumptions": [
+    "Regular representative enemies; no boss/superiors/quests/task gates/Slayer training. Members/no wealth/pre-Legends loot. Missing mass stays Nothing.",
+    "Gryphon knockback/weight/counterattack and Harpie equipped bug-lantern requirement deferred; no Firemaking system invented.",
+    "Hydra randomly opens Magic/Ranged, switches after three emitted attacks regardless of hit. Poison pools and ordered eye/fang/heart collection deferred: ring pieces are excluded rather than dropped in random order. Off-task tail/thrownaxe/knife use independent bonus pools; source correlation unspecified.",
+    "Hydra herb quantities1-3 uniformly selected as prototype; Kurask triple herbs use same selected herb type rather than independent identities.",
+    "Kurask leaf-bladed/broad/Magic Dart restrictions, rapid regeneration, cannon/thrall immunity and burn handling deferred. No existing equipment item is silently made unstackable.",
+    "Kurask three weapon/robe rares are independent bonus pools in this checkpoint; source pre-roll/correlation not established. Kurask head tertiary deferred due three-pool capacity; no invented rate. Infernal equipment prereolls are mutually exclusive before main; Fire ruby independent1/64.",
+    "Native model/sound/animation stand-ins; prior XP/items/loot immutable. No character migration."
+  ]
+}
