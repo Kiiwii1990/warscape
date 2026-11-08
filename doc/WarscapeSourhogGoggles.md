@@ -1,0 +1,21 @@
+# Sourhog reinforced-goggles protection
+
+Next equipment backlog milestone: new Reinforced goggles902588 protect against Sourhog902403 saliva900771. Sources: [Sourhog](https://oldschool.runescape.wiki/w/Sourhog), [Reinforced goggles](https://oldschool.runescape.wiki/w/Reinforced_goggles), reviewed8 November2026. Goggles must be worn on head; bag-only/wrong helmet does not protect. Quest/vendor acquisition, Slayer helmet alternatives and temporary90-percent Attack/Defence drains remain pending. Permanent character XP is never drained to simulate temporary stats.
+
+EnemyProjectileProtections in WarscapeEnemyRequirements.h contains source entry, spell, required head item and unprotected minimum/maximum. Generic ranged/hybrid carrier reads current head equipment on hit. Only matching Sourhog saliva uses the rule. Without goggles it bypasses custom accuracy and deals a uniform inclusive20-30 source damage, retaining native spell damage immunity. With goggles it follows the unchanged source Ranged35/bonus20 attack roll and max6. Existing tenfold display means200-300 unprotected versus at most60 protected. Source melee remains Crush/max6, and existing prototype mixed melee/ranged cadence is retained. No new damage gate prevents killing Sourhogs without protection; they remain dangerous. Removing/swapping goggles mid-combat or in projectile flight changes protection at hit time.
+
+Unprotected surviving targets receive a system warning on saliva hits. Native combat/death/immunity rules retained. No DOT, health maximum, skill level or XP data changes. Other creatures/spells and existing facemask/lantern checks are untouched. New goggles are native cloth/head/stack1 using Green Tinted Goggles4385 display only, with no inherited native item stats and zero invented RS bonuses. Appearance remains native stand-in/manual acceptance. No client executable or memory-layout-sensitive code changes.
+
+## Manual acceptance
+
+Restart verified Wrath client. `.gm off`; `.additem 902588 1`; equip on head. `.npc add temp loot 902403` on open ground. Sourhog saliva should roll at most60 displayed damage and can miss. At range it should use the existing saliva carrier, making protection easier to compare; source melee is unchanged. Check ordinary loot/XP after kill.
+
+Using a character with enough HP, remove goggles: saliva should hit200-300 displayed damage, with warning. Bag-only, Facemask902587 or Nose peg must not protect. Reequip goggles: normal roll/max60 returns. Relog with goggles equipped; protection should remain. If practical swap during projectile travel to check hit-time equipment. Confirm goggles do not satisfy Smoke Devil facemask or Harpie lantern gates, and those previous interactions still work.
+
+## Checks and operations
+
+139 Python catalogue tests and focused Debug C++ checks passed. C++ matrix covers unprotected20/30 bounds, wrong helmet, correct goggles, wrong spell and wrong creature; existing head/off-hand requirements retained. RelWithDebInfo worldserver build passed. Spell carrier source reviewed for native-immunity guard before penalty and protected fallthrough. Gameplay accuracy/distribution, flight timing and visual acceptance remain manual.
+
+Single additive migration2026_11_08_09_world.sql adds only902588. Existing Sourhog profile/AI/loot/spell and historical migrations unchanged. db.py permissions/status, zero characters, stopped writers, fresh verified backup and reviewed pre/postconditions required. Preserve all existing world rows and character XP/inventory/wallets. Back up EXE/PDB, Item.dbc/client patch; append one item row only, no new Spell.dbc rows. Rollback uses stopped services and coordinated previous binary/DBC/patch, keeping additive item definition dormant while characters hold goggles. No character restore. Full world restore needs separate review; backup restore not tested.
+
+Deployment8 November2026: fresh verified backup C:\WarscapeBackups\world_20261108T121816_804391Z_f9ee3e6d.sql; restore not tested. Previous runtime files C:\WarscapeBackups\SourhogGoggles-20261108-deploy. Deployed EXE/PDB match build; one head-slot Item.dbc row added, old DBC/MPQ content preserved. Both services ready/listening, no new goggles/Sourhog errors; existing unrelated native warnings remain. World/character preservation hashes passed. Gameplay/visual acceptance remains pending.

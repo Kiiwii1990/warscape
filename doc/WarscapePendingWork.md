@@ -12,7 +12,9 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
-- Smoke Devil equipped facemask: implemented, see WarscapeSmokeFacemask.md; manual acceptance pending. Dust Devil mitigation, dungeon smoke and temporary drains remain queued.
+- Sourhog reinforced goggles saliva mitigation: implemented; manual acceptance pending. See WarscapeSourhogGoggles.md. Temporary drains and Slayer helmet alternatives remain pending.
+
+- Smoke Devil equipped facemask: user confirmed working, see WarscapeSmokeFacemask.md; manual acceptance pending. Dust Devil mitigation, dungeon smoke and temporary drains remain queued.
 
 - Harpie equipped lit lantern: user confirmed working; deployment/acceptance recorded in WarscapeHarpieLantern.md. Lighting/Firemaking remains future work.
 - Nechryael owned Death spawns: implemented/deployed; manual acceptance pending. See WarscapeDeathSpawns.md. Two active GUIDs at most,60-second native lifetime, target binding and cleanup. Native WoW auto-retaliate/logout/prayer exceptions remain unlike exact OSRS behaviour.
@@ -21,7 +23,7 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 | Area | Remaining work | Reference |
 |---|---|---|
-| Protection gear | Dust Devil facemask mitigation; Smoke Devil dungeon smoke/stat-drain effects; Sourhog goggles; Turoth/Kurask leaf/broad/Magic Dart gates; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
+| Protection gear | Dust Devil facemask mitigation; Smoke Devil dungeon smoke/stat-drain effects; Sourhog temporary drains/Slayer helmet alternatives; Turoth/Kurask leaf/broad/Magic Dart gates; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
 | Temporary stats/gaze | Basilisk/Cockatrice mirror protection and gaze; Spectre/other temporary drains; implement temporary combat stats without changing stored XP | SlayerElementals, CaveFamilies |
 | Wall Beast | Wall-hole placement/trigger, grab/Spiny helmet, linked respawn; free-standing model currently a stand-in | NechryaelsZygomites |
 | Ent | Defeated trunk/chopping, Woodcutting-dependent logs and nests; no kill loot substitute | StalkersGargoyles |

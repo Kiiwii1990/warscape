@@ -1,0 +1,5 @@
+{
+  "sha1": "82FB51B2441E558B1F97625A185D763770EF3C92",
+  "precondition_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902588)=0 AND (SELECT COUNT(*) FROM item_template WHERE entry=4385 AND InventoryType=1)=1 AND (SELECT COUNT(*) FROM creature_template WHERE entry=902403 AND AIName='' AND ScriptName='npc_warscape_enemy')=1 AND (SELECT COUNT(*) FROM spell_script_names WHERE spell_id=900771 AND ScriptName='spell_warscape_enemy_ranged_hybrid')=1,1,0)",
+  "verify_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902588 AND name='Reinforced goggles' AND class=4 AND subclass=1 AND InventoryType=1 AND stackable=1 AND AllowableClass=-1 AND AllowableRace=-1 AND displayid=(SELECT displayid FROM item_template WHERE entry=4385))=1 AND (SELECT COUNT(*) FROM creature_template WHERE entry=902403 AND ScriptName='npc_warscape_enemy')=1,1,0)"
+}

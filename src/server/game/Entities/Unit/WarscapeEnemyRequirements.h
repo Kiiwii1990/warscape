@@ -17,5 +17,12 @@ inline bool MeetsEnemyEquipmentRequirement(std::uint32_t entry, std::uint32_t he
     auto const* rule=FindEnemyEquipmentRequirement(entry);
     return !rule || (rule->Slot==EnemyEquipmentSlot::Head ? head : offhand)==rule->Item;
 }
+struct EnemyProjectileProtection { std::uint32_t Entry, Spell, HeadItem, Minimum, Maximum; };
+inline constexpr std::array<EnemyProjectileProtection,1> EnemyProjectileProtections = {{{902403,900771,902588,20,30}}};
+inline EnemyProjectileProtection const* FindUnprotectedProjectile(std::uint32_t entry, std::uint32_t spell, std::uint32_t head) {
+    for (auto const& rule : EnemyProjectileProtections)
+        if (rule.Entry==entry && rule.Spell==spell && head!=rule.HeadItem) return &rule;
+    return nullptr;
+}
 }
 #endif

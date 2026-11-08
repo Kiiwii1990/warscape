@@ -397,6 +397,14 @@ class spell_warscape_enemy_ranged_hybrid : public SpellScript
         auto const* b=Warscape::FindEnemyBehaviour(GetCaster()->GetEntry());
         if (!target || !b || target->IsImmunedToDamage(GetSpellInfo())) return;
         if (b->MagicMeleeOnly && !GetCaster()->IsWithinMeleeRange(target)) return;
+        Item* head=target->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_HEAD);
+        if (auto const* rule=Warscape::FindUnprotectedProjectile(GetCaster()->GetEntry(),GetSpellInfo()->Id,head ? head->GetEntry() : 0)) {
+            // Unprotected saliva bypasses the custom accuracy roll, retaining native damage immunity above.
+            DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,urand(rule->Minimum,rule->Maximum));
+            if (target->IsAlive())
+                ChatHandler(target->GetSession()).SendSysMessage("The Sourhog's acid burns your eyes! Wear reinforced goggles.");
+            return;
+        }
         auto const stats=sObjectMgr->GetWarscapeMonsterStats(GetCaster()->GetEntry());
         auto const& profile=sObjectMgr->GetWarscapeMonsterProfile(GetCaster()->GetEntry());
         auto const equipment=target->GetWarscapeEquipmentBonuses();

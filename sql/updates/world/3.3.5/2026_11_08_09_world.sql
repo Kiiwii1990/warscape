@@ -1,0 +1,2 @@
+-- New head-slot protection for existing Sourhog saliva; no profile/loot/spell changes.
+INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,InventoryType,description,Material) SELECT 902588,4,1,'Reinforced goggles',displayid,1,1,1,-1,-1,1,'Wear on your head to protect against Sourhog saliva.',Material FROM item_template WHERE entry=4385;

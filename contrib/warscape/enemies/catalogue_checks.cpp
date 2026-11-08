@@ -8,6 +8,12 @@
 #include <map>
 #include <string_view>
 int main() {
+    auto const* acid=Warscape::FindUnprotectedProjectile(902403,900771,0);
+    assert(acid && acid->Minimum==20 && acid->Maximum==30);
+    assert(Warscape::FindUnprotectedProjectile(902403,900771,902587));
+    assert(!Warscape::FindUnprotectedProjectile(902403,900771,902588));
+    assert(!Warscape::FindUnprotectedProjectile(902403,900770,0));
+    assert(!Warscape::FindUnprotectedProjectile(902402,900771,0));
     assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,0,0));
     assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,902475,0));
     assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,0,902587));
