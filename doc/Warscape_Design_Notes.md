@@ -938,3 +938,8 @@ User confirmed the preceding sword checkpoint working. Added usable two-handed s
 ### 8 November 2026 - Crawling Hand custom creature
 
 User paused pending work and requested Crawling Hand using three friend-supplied assets. Added seven live source variants (levels7/8/12), custom display40000/model4000 and exact current main loot plus independent1/500 trophy through existing enemy systems. Original assets/XP/items preserved. Built/deployed and automated checks passed; visual/combat/loot acceptance pending. Source Slayer/task/quest/superior/taxidermy systems remain future. See WarscapeCrawlingHands.md.
+
+
+### 8 November 2026 - Pending queue resumed; leaf-bladed battleaxe
+
+User resumed pending work after Crawling Hand. Added usable main-hand Leaf-bladed battleaxe902607: source65 Attack, five ticks, explicit Wiki bonuses, existing leafy gate and47/40 maximum-hit passive before roll. Old collectible902568/loot and all player data preserved. Current new axe uses Slash; dedicated Crush Smash UI, Slayer55 and acquisition remain pending. Built/deployed; manual acceptance pending. See WarscapeLeafBattleaxe.md.

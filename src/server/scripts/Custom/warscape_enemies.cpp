@@ -151,7 +151,7 @@ struct npc_warscape_enemy : ScriptedAI
             if (!allowed) {
                 damage=0;
                 if (!meleeWarningDelay) {
-                    ChatHandler(owner->GetSession()).SendSysMessage("Its thick hide resists that attack. Use a leaf-bladed sword or spear; remove any ordinary off-hand weapon.");
+                    ChatHandler(owner->GetSession()).SendSysMessage("Its thick hide resists that attack. Use a leaf-bladed sword, spear or battleaxe; remove any ordinary off-hand weapon.");
                     meleeWarningDelay=3000;
                 }
                 return;

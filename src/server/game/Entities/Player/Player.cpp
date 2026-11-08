@@ -5809,6 +5809,10 @@ Warscape::EquipmentBonuses Player::GetWarscapeEquipmentBonuses() const
 
 Warscape::MeleeDamageType Player::GetWarscapeMeleeDamageType(WeaponAttackType attackType) const
 {
+    // Supported battleaxe actions use Slash; the generic Defensive fallback
+    // would select an unsupported Stab attack. Separate Smash selection is future UI work.
+    if (Item* weapon=GetWeaponForAttack(attackType,true); weapon && weapon->GetEntry()==Warscape::LeafBladedBattleaxe)
+        return Warscape::MeleeDamageType::Slash;
     return Warscape::SelectMeleeDamageType(GetWarscapeWeaponArchetype(attackType), GetWarscapeAttackStyle());
 }
 

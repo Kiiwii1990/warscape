@@ -1,0 +1,3 @@
+-- Usable leaf-bladed battleaxe; preserve old collectible 902568 and all loot.
+INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,InventoryType,RequiredLevel,description,Material,delay,dmg_min1,dmg_max1,Sheath) SELECT 902607,2,0,'Leaf-bladed battleaxe',displayid,1,1,1,-1,-1,21,1,'Requires 65 OSRS Attack. 17.5% damage bonus against Turoth and Kurask.',Material,3000,1,2,Sheath FROM item_template WHERE entry=1416;
+INSERT INTO warscape_item_bonus (item_id,archetype,tier,attack_stab,attack_slash,attack_crush,defence_ranged,melee_strength,attack_speed_ticks) VALUES (902607,6,0,-2,72,72,-1,92,5);

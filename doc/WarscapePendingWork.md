@@ -12,9 +12,9 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
-- Pending-work queue paused at user request. Crawling Hand custom-model family implemented/deployed as a separate requested checkpoint; manual acceptance pending. See WarscapeCrawlingHands.md.
+- Pending-work queue resumed at user request after Crawling Hand implementation. Crawling Hand visual/combat/loot acceptance remains unverified here; see WarscapeCrawlingHands.md.
 
-- Turoth/Kurask sword gate: user confirmed working. Leaf-bladed spear now implemented/deployed as the next melee option; manual acceptance pending. See WarscapeLeafWeaponGate.md and WarscapeLeafSpear.md. Battleaxe/broad ammo/Magic Dart and collectible conversion remain queued.
+- Turoth/Kurask sword gate: user confirmed working. Leaf-bladed spear now implemented/deployed as the next melee option; manual acceptance pending. See WarscapeLeafWeaponGate.md and WarscapeLeafSpear.md. Leaf-bladed battleaxe now implemented/deployed with65 Attack and17.5% leafy maximum-hit passive; manual acceptance pending (WarscapeLeafBattleaxe.md). Broad ammo/Magic Dart and collectible conversion remain queued.
 
 - Brine sabre equip/profile/Rockslug salt bypass: implemented; manual acceptance pending. See WarscapeBrineSabre.md. Special attack/acquisition remain queued.
 
@@ -35,7 +35,7 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 | Area | Remaining work | Reference |
 |---|---|---|
-| Protection gear | Dust Devil temporary drains/dungeon smoke; Smoke Devil dungeon smoke/stat-drain effects; Sourhog temporary drains/Slayer helmet alternatives; Turoth/Kurask leaf-bladed battleaxe, broad ammo/Magic Dart routes and usable-gear acquisition; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
+| Protection gear | Dust Devil temporary drains/dungeon smoke; Smoke Devil dungeon smoke/stat-drain effects; Sourhog temporary drains/Slayer helmet alternatives; Turoth/Kurask broad ammo/Magic Dart routes and usable-gear acquisition; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
 | Temporary stats/gaze | Basilisk/Cockatrice mirror protection and gaze; Spectre/other temporary drains; implement temporary combat stats without changing stored XP | SlayerElementals, CaveFamilies |
 | Wall Beast | Wall-hole placement/trigger, grab/Spiny helmet, linked respawn; free-standing model currently a stand-in | NechryaelsZygomites |
 | Ent | Defeated trunk/chopping, Woodcutting-dependent logs and nests; no kill loot substitute | StalkersGargoyles |

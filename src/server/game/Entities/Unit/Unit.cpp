@@ -18,6 +18,7 @@
 #include "Unit.h"
 #include "WarscapeEnemyCatalogue.h"
 #include "WarscapeEnemyMechanics.h"
+#include "WarscapeSpecialWeapons.h"
 #include "AbstractFollower.h"
 #include "Battlefield.h"
 #include "BattlefieldMgr.h"
@@ -1278,7 +1279,13 @@ void Unit::CalculateMeleeDamage(Unit* victim, CalcDamageInfo* damageInfo, Weapon
             Player const* player = ToPlayer();
             uint32 const styleBonus = player->GetWarscapeAttackStyle() == 1 ? 3 : 0;
             Warscape::EquipmentBonuses const equipment = player->GetWarscapeEquipmentBonuses();
-            warscapeOSRSDamage = urand(0, Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), equipment.MeleeStrength, styleBonus));
+            Item* mainhand=player->GetWeaponForAttack(BASE_ATTACK,true);
+            Item* offhand=player->GetWeaponForAttack(OFF_ATTACK,true);
+            uint32 const maximum=Warscape::LeafWeaponMaximumHit(victim->GetEntry(),mainhand ? mainhand->GetEntry() : 0,
+                offhand ? offhand->GetEntry() : 0,player->GetRSSkillLevel(Player::RS_Skill::Attack),
+                attackType==BASE_ATTACK,mainhand && !mainhand->IsBroken(),
+                Warscape::MaxHit(player->GetRSSkillLevel(Player::RS_Skill::Strength), equipment.MeleeStrength, styleBonus));
+            warscapeOSRSDamage = urand(0, maximum);
             // Gate before the combat packet so unreachable targets never display false melee damage.
             if (auto const* behaviour = Warscape::FindEnemyBehaviour(victim->GetEntry()); behaviour && behaviour->Airborne)
                 warscapeOSRSDamage = 0;

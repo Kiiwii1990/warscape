@@ -9,6 +9,27 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::CanUseSpecialWeapon(Warscape::LeafBladedBattleaxe,64));
+    assert(Warscape::CanUseSpecialWeapon(Warscape::LeafBladedBattleaxe,65));
+    for (unsigned entry : {902304u,902404u,902405u,902406u,902407u}) {
+        assert(Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,0,65,true,true));
+        assert(Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,Warscape::LeafBladedSword,65,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,2131,65,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,0,64,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,0,65,false,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedBattleaxe,0,65,true,false));
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,true,40)==47);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,true,5)==5);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,true,6)==7);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,true,0)==0);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,true,0xFFFFFFFF)==0xFFFFFFFF);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedSword,0,65,true,true,40)==40);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,2131,65,true,true,40)==40);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,64,true,true,40)==40);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,false,true,40)==40);
+        assert(Warscape::LeafWeaponMaximumHit(entry,Warscape::LeafBladedBattleaxe,0,65,true,false,40)==40);
+    }
+    assert(Warscape::LeafWeaponMaximumHit(902600,Warscape::LeafBladedBattleaxe,0,65,true,true,40)==40);
     for (unsigned entry=902600; entry<=902606; ++entry) {
         auto const* variant=Warscape::FindEnemyVariant(entry);
         assert(variant && variant->FamilyId==95 && variant->SourceCombat);

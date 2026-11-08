@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "entry": 902607,
+      "name": "Leaf-bladed battleaxe",
+      "display_source": 1416,
+      "class": 2,
+      "subclass": 0,
+      "inventory_type": 21,
+      "sheath": 3
+    }
+  ],
+  "client_spells": []
+}
