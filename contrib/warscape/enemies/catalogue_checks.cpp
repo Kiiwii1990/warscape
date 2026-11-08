@@ -8,6 +8,13 @@
 #include <map>
 #include <string_view>
 int main() {
+    auto const* dust=Warscape::FindEnemyRangedMeleeProtection(902204);
+    assert(dust && dust->ProtectedMaximum==8 && dust->UnprotectedHit==16);
+    assert(!Warscape::HasRangedMeleeProtection(*dust,0));
+    assert(!Warscape::HasRangedMeleeProtection(*dust,902588));
+    assert(Warscape::HasRangedMeleeProtection(*dust,902587));
+    assert(Warscape::FindEnemyRangedMeleeProtection(902205)->ProtectedMaximum==10);
+    assert(!Warscape::FindEnemyRangedMeleeProtection(902402));
     auto const* acid=Warscape::FindUnprotectedProjectile(902403,900771,0);
     assert(acid && acid->Minimum==20 && acid->Maximum==30);
     assert(Warscape::FindUnprotectedProjectile(902403,900771,902587));

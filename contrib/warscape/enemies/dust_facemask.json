@@ -1,0 +1,13 @@
+{
+  "items": [],
+  "client_spells": [
+    {
+      "entry": 900790,
+      "source": 900771,
+      "name": "Dust Devil ranged melee",
+      "description": "Melee reach attack using ranged defence. Wear a facemask.",
+      "ignore_native_hit": true,
+      "script": "spell_warscape_ranged_melee"
+    }
+  ]
+}

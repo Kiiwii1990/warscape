@@ -783,9 +783,59 @@ struct npc_warscape_death_spawn : ScriptedAI
     }
 };
 
+struct npc_warscape_dust_devil : npc_warscape_enemy
+{
+    explicit npc_warscape_dust_devil(Creature* creature) : npc_warscape_enemy(creature) { }
+    void UpdateAI(uint32) override
+    {
+        if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_CASTING)) return;
+        Unit* target=me->GetVictim();
+        auto const* rule=Warscape::FindEnemyRangedMeleeProtection(me->GetEntry());
+        if (!rule || !target || target->GetTypeId()!=TYPEID_PLAYER || !target->IsAlive()) return;
+        if (me->isAttackReady() && me->IsWithinMeleeRange(target) && me->IsWithinLOSInMap(target)) {
+            me->CastSpell(target,rule->Spell,TRIGGERED_FULL_MASK);
+            me->resetAttackTimer();
+        }
+    }
+};
+
+class spell_warscape_ranged_melee : public SpellScript
+{
+    PrepareSpellScript(spell_warscape_ranged_melee);
+    bool Load() override {
+        auto const* rule=Warscape::FindEnemyRangedMeleeProtection(GetCaster()->GetEntry());
+        return GetCaster()->GetTypeId()==TYPEID_UNIT && rule && rule->Spell==GetSpellInfo()->Id;
+    }
+    void Hit(SpellEffIndex index)
+    {
+        PreventHitDefaultEffect(index);
+        Player* target=GetHitPlayer();
+        auto const* rule=Warscape::FindEnemyRangedMeleeProtection(GetCaster()->GetEntry());
+        if (!target || !rule || !target->IsAlive() || !GetCaster()->IsWithinMeleeRange(target)
+            || !GetCaster()->IsWithinLOSInMap(target) || target->IsImmunedToDamage(GetSpellInfo())) return;
+        Item* head=target->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_HEAD);
+        if (!Warscape::HasRangedMeleeProtection(*rule,head ? head->GetEntry() : 0)) {
+            ChatHandler(target->GetSession()).SendSysMessage("The dust burns! Wear a facemask.");
+            DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,rule->UnprotectedHit);
+            return;
+        }
+        auto const stats=sObjectMgr->GetWarscapeMonsterStats(GetCaster()->GetEntry());
+        auto const& profile=sObjectMgr->GetWarscapeMonsterProfile(GetCaster()->GetEntry());
+        auto const equipment=target->GetWarscapeEquipmentBonuses();
+        uint64 const attack=Warscape::CombatRoll(stats[Warscape::Attack]+9,profile.AttackBonus);
+        uint64 const defence=Warscape::CombatRoll(Warscape::PlayerRangedDefenceLevel(
+            target->GetRSSkillLevel(Player::RS_Skill::Defence),target->GetWarscapeAttackStyle()),equipment.DefenceRanged);
+        bool const accurate=double(urand(0,999999))<Warscape::HitChance(attack,defence)*1000000.0;
+        DealSourceSpellDamage(GetCaster(),target,GetSpellInfo()->Id,accurate ? urand(0,rule->ProtectedMaximum) : 0);
+    }
+    void Register() override { OnEffectHitTarget += SpellEffectFn(spell_warscape_ranged_melee::Hit,EFFECT_0,SPELL_EFFECT_SCHOOL_DAMAGE); }
+};
+
 void AddSC_warscape_enemies()
 {
     RegisterCreatureAI(npc_warscape_enemy);
+    RegisterCreatureAI(npc_warscape_dust_devil);
+    RegisterSpellScript(spell_warscape_ranged_melee);
     RegisterCreatureAI(npc_warscape_nechryael);
     RegisterCreatureAI(npc_warscape_death_spawn);
     RegisterSpellScript(spell_warscape_enemy_magic);

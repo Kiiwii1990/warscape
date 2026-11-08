@@ -918,3 +918,5 @@ this new batch remains pending.
 8 November2026: Harpie lantern checkpoint confirmed working. Smoke Devil902402 Facemask902587 head-slot requirement implemented via generalized equipment registry; existing source stats/loot unchanged. Smoke hazards/stat drains/Dust Devil mitigation remain pending. See WarscapeSmokeFacemask.md; manual acceptance pending.
 
 8 November2026: Smoke Devil facemask checkpoint confirmed working. Sourhog saliva equipment milestone uses Reinforced goggles902588 on head; unprotected20-30 source damage, protected existing roll/max6. Temporary skill drains remain pending. See WarscapeSourhogGoggles.md; manual acceptance pending.
+
+8 November2026 pending equipment milestone: Dust Devil902204/902205 Facemask902587 head protection now restores source max8/10 with ranged-defence accuracy and melee reach; unprotected fixed16. No XP/stat drains, environmental smoke or prayer system invented. See WarscapeDustProtection.md; manual acceptance pending.

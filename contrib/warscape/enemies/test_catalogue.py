@@ -1192,4 +1192,14 @@ class OwnedSummonTests(unittest.TestCase):
         replaced=spec['supersedes'][0]['verify_sql']
         self.assertEqual(replaced.replace("AIName='' AND ScriptName='npc_warscape_nechryael'","AIName='AggressorAI'"),original)
 
+class DustProtectionTests(unittest.TestCase):
+    def test_only_two_historical_ai_assertions_replaced(self):
+        base=Path(__file__).parent.parent/'verifications'
+        old=json.loads((base/'2026_11_08_02_world.json').read_text())
+        current=json.loads((base/'2026_11_08_10_world.json').read_text())
+        replacement=current['supersedes'][0]
+        self.assertEqual(replacement['migration_sha1'],old['sha1'])
+        self.assertEqual(replacement['verify_sql'].count("AIName='' AND ScriptName='npc_warscape_dust_devil'"),2)
+        self.assertEqual(replacement['verify_sql'].replace("AIName='' AND ScriptName='npc_warscape_dust_devil'","AIName='AggressorAI'"),old['verify_sql'])
+
 if __name__=='__main__':unittest.main()

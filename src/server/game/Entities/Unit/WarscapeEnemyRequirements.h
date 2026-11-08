@@ -24,5 +24,14 @@ inline EnemyProjectileProtection const* FindUnprotectedProjectile(std::uint32_t 
         if (rule.Entry==entry && rule.Spell==spell && head!=rule.HeadItem) return &rule;
     return nullptr;
 }
+struct EnemyRangedMeleeProtection { std::uint32_t Entry, Spell, HeadItem, ProtectedMaximum, UnprotectedHit; };
+inline constexpr std::array<EnemyRangedMeleeProtection,2> EnemyRangedMeleeProtections = {{
+    {902204,900790,902587,8,16}, {902205,900790,902587,10,16}
+}};
+inline EnemyRangedMeleeProtection const* FindEnemyRangedMeleeProtection(std::uint32_t entry) {
+    for (auto const& rule : EnemyRangedMeleeProtections) if (rule.Entry==entry) return &rule;
+    return nullptr;
+}
+inline bool HasRangedMeleeProtection(EnemyRangedMeleeProtection const& rule, std::uint32_t head) { return head==rule.HeadItem; }
 }
 #endif
