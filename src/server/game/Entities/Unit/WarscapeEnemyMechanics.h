@@ -8,6 +8,7 @@ inline std::uint32_t NonFinishingDamage(std::uint32_t health, std::uint32_t dama
     return std::min(damage,health > 10 ? health-10 : 0);
 }
 inline bool CanSmashGargoyle(std::uint32_t health) { return health > 0 && health <= 80; }
+inline bool CanUseConsumableFinisher(std::uint32_t health, std::uint32_t maximum) { return health > 0 && health <= maximum; }
 inline bool CanCoolLizard(std::uint32_t health) { return health > 0 && health < 50; }
 inline bool CycleUsesMagic(std::uint32_t position) { return position % 6 < 3; }
 inline std::uint32_t AdvanceAttackCycle(std::uint32_t position) { return (position+1)%6; }

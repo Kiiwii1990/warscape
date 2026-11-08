@@ -89,7 +89,7 @@ def validate(pack, old):
         if behaviour.get('double_first'):
             require(behaviour.get('double_second',0)>0 and behaviour.get('attack_spell',0)>0 and behaviour['double_first']+behaviour['double_second']==enemy['source_max_hit'], 'Invalid double hit')
         if behaviour.get('cast_only'):
-            require(behaviour.get('attack_spell',0)>0 and (behaviour.get('magic_max_hit',0)>0 or behaviour.get('double_magic')), 'Invalid caster')
+            require(behaviour.get('attack_spell',0)>0 and (behaviour.get('magic_max_hit',0)>0 or behaviour.get('ranged_max_hit',0)>0 or behaviour.get('double_magic')), 'Invalid caster')
         if 'finisher_item' in behaviour:
             require(behaviour['finisher_item'] in {i['entry'] for i in items}, 'Unknown finisher item')
         precise=enemy.get('source_slayer_xp_tenths',0)

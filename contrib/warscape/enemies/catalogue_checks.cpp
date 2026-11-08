@@ -7,6 +7,11 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::CanUseConsumableFinisher(0,40));
+    assert(Warscape::CanUseConsumableFinisher(40,40));
+    assert(!Warscape::CanUseConsumableFinisher(41,40));
+    assert(Warscape::CanUseConsumableFinisher(79,79));
+    assert(!Warscape::CanUseConsumableFinisher(80,79));
     for (unsigned start : {0u,3u}) {
         auto p=start;
         for(unsigned i=0;i<18;++i) {
@@ -201,7 +206,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==332);
+    assert(Warscape::EnemyVariants.size()==343);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);

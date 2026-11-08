@@ -1137,7 +1137,7 @@ class StalkerGargoyleTests(unittest.TestCase):
         self.assertEqual(pack['enemies'][8]['defence_bonuses'],dict(stab=50,slash=60,crush=-20))
     def test_reusable_hammer_keeps_existing_cooler(self):
         code=(Path(__file__).resolve().parents[3]/'src/server/scripts/Custom/warscape_enemies.cpp').read_text()
-        hammer=code.split('class item_warscape_rock_hammer',1)[1].split('void AddSC_',1)[0]
+        hammer=code.split('class item_warscape_rock_hammer',1)[1].split('class item_warscape_consumable_finisher',1)[0].split('void AddSC_',1)[0]
         self.assertNotIn('DestroyItemCount',hammer)
         self.assertIn('CanSmashGargoyle',hammer)
         self.assertIn('!target->isTappedBy(player)',hammer)
@@ -1162,5 +1162,21 @@ class GryphonHydraTests(unittest.TestCase):
         pack=json.loads((Path(__file__).parent/'gryphons_hydras.json').read_text())
         pack['enemies'][2]['behaviour'].pop('magic_ranged')
         with self.assertRaises(ValueError):family_catalogue.validate(pack,prior_to('gryphons_hydras.json'))
+
+class NechryaelZygomiteTests(unittest.TestCase):
+    def test_tiers_finisher_and_loot(self):
+        p=json.loads((Path(__file__).parent/'nechryaels_zygomites.json').read_text())
+        self.assertEqual([e['combat_level'] for e in p['enemies']],[115,29,160,37,83,85,87,89,49,74,86])
+        self.assertEqual(len(p['families']),7)
+        self.assertEqual(p['enemies'][1]['behaviour']['finisher_item'],902569)
+        self.assertEqual(p['enemies'][9]['behaviour']['finisher_item'],902570)
+        self.assertEqual(p['enemies'][10]['behaviour']['finisher_item'],902570)
+        self.assertEqual(p['enemies'][2]['behaviour']['ranged_magic_defence'],1)
+        for e in p['enemies']:self.assertEqual(sum(o['weight'] for o in e['outcomes']),e['denominator'])
+    def test_consumable_finisher_checks_before_consumption(self):
+        s=(Path(__file__).resolve().parents[3]/'src/server/scripts/Custom/warscape_enemies.cpp').read_text().split('class item_warscape_consumable_finisher',1)[1]
+        self.assertLess(s.index('!target->isTappedBy(player)'),s.index('DestroyItemCount'))
+        self.assertLess(s.index('DestroyItemCount'),s.index('if (!ready)'))
+        self.assertIn('SendEquipError(EQUIP_ERR_OK',s)
 
 if __name__=='__main__':unittest.main()

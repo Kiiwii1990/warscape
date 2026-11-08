@@ -128,6 +128,7 @@ def main():
     from spirit_release import spirit_artifacts
     from elemental_release import elemental_artifacts
     from stalker_release import stalker_artifacts
+    from nech_release import nech_artifacts
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--write', action='store_true', help='Create new release artifacts and update generated runtime header')
@@ -157,6 +158,8 @@ def main():
             artifacts.update(elemental_artifacts(pack,prior))
         if release.get('adds_stalker_encounters',False):
             artifacts.update(stalker_artifacts(pack,prior))
+        if release.get('adds_nech_encounters',False):
+            artifacts.update(nech_artifacts(pack,prior))
         for key in ('families', 'enemies'):
             if key == 'families':
                 combined[key].extend(f for f in pack[key] if f['id'] not in {old['id'] for old in combined[key]})

@@ -908,3 +908,5 @@ this new batch remains pending.
 8 November 2026: user confirmed cave batch working. Stalker/Dark beast/Dust devil/Ent/Gargoyle checkpoint adds nine entries and reusable Gargoyle finishing hammer. Ent harvesting, Stalker bleed and Dust devil facemask/stat effects remain pending. See WarscapeStalkersGargoyles.md.
 
 8 November 2026: user confirmed preceding five-family checkpoint working. Gryphon/Harpie/Hydra/Infernal Mage/Kurask checkpoint adds five regular profiles; Hydra three-attack style cycle supported. Weight/lantern/leaf-weapon requirements, Hydra poison pools and ordered ring pieces remain pending. See WarscapeGryphonsHydras.md.
+
+8 November 2026: prior five-family checkpoint confirmed working. Nechryael/Rockslug/Smoke Devil/Sourhog/Turoth/Wall Beast/Zygomite checkpoint adds eleven regular variants. Salt finisher and single-dose fungicide prototype implemented; refills, summons, environmental interactions and equipment restrictions remain pending. See WarscapeNechryaelsZygomites.md.

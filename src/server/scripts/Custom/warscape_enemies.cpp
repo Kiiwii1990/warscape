@@ -621,6 +621,40 @@ public:
     }
 };
 
+class item_warscape_consumable_finisher : public ItemScript
+{
+public:
+    item_warscape_consumable_finisher(char const* name, uint32 maximum) : ItemScript(name), maximumHealth(maximum) { }
+    uint32 maximumHealth;
+    bool OnUse(Player* player,Item* item,SpellCastTargets const& targets) override
+    {
+        // Complete every scripted item-use path so the stock client releases its item cursor.
+        player->SendEquipError(EQUIP_ERR_OK,item,nullptr);
+        Unit* unit=targets.GetUnitTarget();
+        Creature* target=unit ? unit->ToCreature() : nullptr;
+        auto const* b=target ? Warscape::FindEnemyBehaviour(target->GetEntry()) : nullptr;
+        if (!player->IsAlive() || !target || !b || b->FinisherItem!=item->GetEntry() || !target->IsAlive() || target->IsInEvadeMode()
+            || !player->IsValidAttackTarget(target) || !player->IsWithinDistInMap(target,5.f) || !player->IsWithinLOSInMap(target)
+            || (target->GetLootRecipient() && !target->isTappedBy(player)))
+        {
+            ChatHandler(player->GetSession()).SendSysMessage("Select the matching living obstacle creature within 5 yards that you may loot.");
+            return true;
+        }
+        bool const ready=Warscape::CanUseConsumableFinisher(target->GetHealth(),maximumHealth);
+        player->DestroyItemCount(item->GetEntry(),1,true);
+        if (!ready)
+        {
+            ChatHandler(player->GetSession()).SendSysMessage("The creature is not weak enough. One dose was consumed.");
+            return true;
+        }
+        if (!target->GetLootRecipient()) target->SetLootRecipient(player);
+        target->LowerPlayerDamageReq(target->GetHealth());
+        Unit::Kill(player,target);
+        ChatHandler(player->GetSession()).SendSysMessage("The finishing dose kills the creature.");
+        return true;
+    }
+};
+
 void AddSC_warscape_enemies()
 {
     RegisterCreatureAI(npc_warscape_enemy);
@@ -633,4 +667,6 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_venom);
     new item_warscape_ice_cooler();
     new item_warscape_rock_hammer();
+    new item_warscape_consumable_finisher("item_warscape_salt",40);
+    new item_warscape_consumable_finisher("item_warscape_fungicide_dose",79);
 }

@@ -1,0 +1,4505 @@
+{
+  "release": "2026_11_08_04_world",
+  "loot_policy": "Members/no wealth/pre-Legends, off-task uniques, conditional main after pre-roll. Explicit residual empty probability; quest/Slayer tertiary excluded.",
+  "sources": {
+    "Nechryael": {
+      "url": "https://oldschool.runescape.wiki/w/Nechryael",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "4b6b69932ca9b60c9078eef3308086c7cdd080109454d9b6b2e60a04d09490d4"
+    },
+    "Rockslug": {
+      "url": "https://oldschool.runescape.wiki/w/Rockslug",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "79be933900ad7c8ba6b72b0150c85eb3db29215b6ac923f637887189d2ed840a"
+    },
+    "Smoke_devil": {
+      "url": "https://oldschool.runescape.wiki/w/Smoke_devil",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "24907b05dff7a6b6672dc8f075e714f0d109b14aaa29af0d9c31b0ea30c53893"
+    },
+    "Sourhog": {
+      "url": "https://oldschool.runescape.wiki/w/Sourhog",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "d4e405017cc9b468cd7d264640277d24693bf78e0ecedc3a88103a7ae9dfcc58"
+    },
+    "Turoth": {
+      "url": "https://oldschool.runescape.wiki/w/Turoth",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "a983d85e20c12bf7196278b92104f9ef9ee518c65843320b4b96935b66fbec26"
+    },
+    "Wall_beast": {
+      "url": "https://oldschool.runescape.wiki/w/Wall_beast",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "d86569b8c6d26aa1eae515c3a4db4a52257ad9132fa38fa74afdfc3b710c72b4"
+    },
+    "Zygomite": {
+      "url": "https://oldschool.runescape.wiki/w/Zygomite",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "cf8ccf512e7742814003b42871b9a45409c4cfa0f8972040626073ec3d3fe173"
+    }
+  },
+  "families": [
+    {
+      "id": 88,
+      "key": "nechryaels",
+      "name": "Nechryaels",
+      "model_note": "Native demon stand-in."
+    },
+    {
+      "id": 89,
+      "key": "rockslugs",
+      "name": "Rockslugs",
+      "model_note": "Native worm stand-in."
+    },
+    {
+      "id": 90,
+      "key": "smoke_devils",
+      "name": "Smoke Devils",
+      "model_note": "Native smoky air elemental stand-in."
+    },
+    {
+      "id": 91,
+      "key": "sourhogs",
+      "name": "Sourhogs",
+      "model_note": "Native boar."
+    },
+    {
+      "id": 92,
+      "key": "turoths",
+      "name": "Turoths",
+      "model_note": "Native silithid stand-in at four scales."
+    },
+    {
+      "id": 93,
+      "key": "wall_beasts",
+      "name": "Wall Beasts",
+      "model_note": "Native BogBeast168 humanoid stand-in; no stock wall-hand mesh or wall trigger."
+    },
+    {
+      "id": 94,
+      "key": "zygomites",
+      "name": "Zygomites",
+      "model_note": "Native fungal giant stand-in."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Malicious ashes",
+      "entry": 902238
+    },
+    {
+      "name": "Adamant platelegs",
+      "entry": 902225
+    },
+    {
+      "name": "Rune 2h sword",
+      "entry": 902203
+    },
+    {
+      "name": "Rune full helm",
+      "entry": 902226
+    },
+    {
+      "name": "Adamant kiteshield",
+      "entry": 902189
+    },
+    {
+      "name": "Chaos rune",
+      "entry": 902078
+    },
+    {
+      "name": "Death rune",
+      "entry": 902106
+    },
+    {
+      "name": "Law rune",
+      "entry": 902089
+    },
+    {
+      "name": "Blood rune",
+      "entry": 902138
+    },
+    {
+      "name": "Limpwurt seed",
+      "entry": 902146
+    },
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Soft clay",
+      "entry": 902485
+    },
+    {
+      "name": "Tuna",
+      "entry": 902227
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Runite bar",
+      "entry": 902202
+    },
+    {
+      "name": "Nature rune",
+      "entry": 902079
+    },
+    {
+      "name": "Rune battleaxe",
+      "entry": 902204
+    },
+    {
+      "name": "Steel arrow",
+      "entry": 902092
+    },
+    {
+      "name": "Rune arrow",
+      "entry": 902199
+    },
+    {
+      "name": "Adamant javelin",
+      "entry": 902205
+    },
+    {
+      "name": "Rune sq shield",
+      "entry": 902206
+    },
+    {
+      "name": "Dragonstone",
+      "entry": 902207
+    },
+    {
+      "name": "Silver ore",
+      "entry": 902208
+    },
+    {
+      "name": "Rune kiteshield",
+      "entry": 902209
+    },
+    {
+      "name": "Dragon med helm",
+      "entry": 902210
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Rune spear",
+      "entry": 902211
+    },
+    {
+      "name": "Shield left half",
+      "entry": 902212
+    },
+    {
+      "name": "Dragon spear",
+      "entry": 902213
+    },
+    {
+      "name": "Toadflax seed",
+      "entry": 902155
+    },
+    {
+      "name": "Irit seed",
+      "entry": 902157
+    },
+    {
+      "name": "Belladonna seed",
+      "entry": 902156
+    },
+    {
+      "name": "Poison ivy seed",
+      "entry": 902158
+    },
+    {
+      "name": "Avantoe seed",
+      "entry": 902159
+    },
+    {
+      "name": "Cactus seed",
+      "entry": 902160
+    },
+    {
+      "name": "Potato cactus seed",
+      "entry": 902162
+    },
+    {
+      "name": "Kwuarm seed",
+      "entry": 902161
+    },
+    {
+      "name": "Snapdragon seed",
+      "entry": 902163
+    },
+    {
+      "name": "Cadantine seed",
+      "entry": 902164
+    },
+    {
+      "name": "Lantadyme seed",
+      "entry": 902165
+    },
+    {
+      "name": "Snape grass seed",
+      "entry": 902133
+    },
+    {
+      "name": "Dwarf weed seed",
+      "entry": 902166
+    },
+    {
+      "name": "Torstol seed",
+      "entry": 902167
+    },
+    {
+      "name": "Mystic gloves (light)",
+      "entry": 902362
+    },
+    {
+      "name": "Earth rune",
+      "entry": 902004
+    },
+    {
+      "name": "Coal",
+      "entry": 902030
+    },
+    {
+      "name": "Iron ore",
+      "entry": 902029
+    },
+    {
+      "name": "Bronze bar",
+      "entry": 902080
+    },
+    {
+      "name": "Iron bar",
+      "entry": 902081
+    },
+    {
+      "name": "Copper ore",
+      "entry": 902031
+    },
+    {
+      "name": "Tin ore",
+      "entry": 902028
+    },
+    {
+      "name": "Mithril ore",
+      "entry": 902181
+    },
+    {
+      "name": "Hammer",
+      "entry": 902007
+    },
+    {
+      "name": "Chaos talisman",
+      "entry": 902191
+    },
+    {
+      "name": "Potato seed",
+      "entry": 902126
+    },
+    {
+      "name": "Onion seed",
+      "entry": 902127
+    },
+    {
+      "name": "Cabbage seed",
+      "entry": 902128
+    },
+    {
+      "name": "Tomato seed",
+      "entry": 902129
+    },
+    {
+      "name": "Sweetcorn seed",
+      "entry": 902130
+    },
+    {
+      "name": "Strawberry seed",
+      "entry": 902131
+    },
+    {
+      "name": "Watermelon seed",
+      "entry": 902132
+    },
+    {
+      "name": "Ashes",
+      "entry": 902170
+    },
+    {
+      "name": "Adamant battleaxe",
+      "entry": 902232
+    },
+    {
+      "name": "Rune dagger",
+      "entry": 902190
+    },
+    {
+      "name": "Air battlestaff",
+      "entry": 902440
+    },
+    {
+      "name": "Black d'hide vambraces",
+      "entry": 902397
+    },
+    {
+      "name": "Fire battlestaff",
+      "entry": 902197
+    },
+    {
+      "name": "Rune chainbody",
+      "entry": 902235
+    },
+    {
+      "name": "Red d'hide body",
+      "entry": 902396
+    },
+    {
+      "name": "Dragon chainbody",
+      "entry": 902528
+    },
+    {
+      "name": "Runite bolts",
+      "entry": 902422
+    },
+    {
+      "name": "Fire rune",
+      "entry": 902088
+    },
+    {
+      "name": "Air rune",
+      "entry": 902087
+    },
+    {
+      "name": "Soul rune",
+      "entry": 902320
+    },
+    {
+      "name": "Shark",
+      "entry": 902373
+    },
+    {
+      "name": "Steel bar",
+      "entry": 902123
+    },
+    {
+      "name": "Magic logs",
+      "entry": 902423
+    },
+    {
+      "name": "Adamantite bar",
+      "entry": 902236
+    },
+    {
+      "name": "Ugthanki kebab",
+      "entry": 902529
+    },
+    {
+      "name": "Grimy guam leaf",
+      "entry": 902063
+    },
+    {
+      "name": "Grimy marrentill",
+      "entry": 902064
+    },
+    {
+      "name": "Grimy tarromin",
+      "entry": 902065
+    },
+    {
+      "name": "Grimy harralander",
+      "entry": 902066
+    },
+    {
+      "name": "Grimy ranarr weed",
+      "entry": 902067
+    },
+    {
+      "name": "Grimy irit leaf",
+      "entry": 902068
+    },
+    {
+      "name": "Grimy avantoe",
+      "entry": 902069
+    },
+    {
+      "name": "Grimy kwuarm",
+      "entry": 902070
+    },
+    {
+      "name": "Grimy cadantine",
+      "entry": 902071
+    },
+    {
+      "name": "Grimy lantadyme",
+      "entry": 902072
+    },
+    {
+      "name": "Grimy dwarf weed",
+      "entry": 902073
+    },
+    {
+      "name": "Big bones",
+      "entry": 902172
+    },
+    {
+      "name": "Adamant scimitar",
+      "entry": 902317
+    },
+    {
+      "name": "Mind rune",
+      "entry": 902100
+    },
+    {
+      "name": "Limpwurt root",
+      "entry": 902144
+    },
+    {
+      "name": "Cabbage",
+      "entry": 902120
+    },
+    {
+      "name": "Potato",
+      "entry": 902540
+    },
+    {
+      "name": "Marrentill seed",
+      "entry": 902147
+    },
+    {
+      "name": "Jangerberry seed",
+      "entry": 902148
+    },
+    {
+      "name": "Tarromin seed",
+      "entry": 902149
+    },
+    {
+      "name": "Wildblood seed",
+      "entry": 902150
+    },
+    {
+      "name": "Harralander seed",
+      "entry": 902151
+    },
+    {
+      "name": "Ranarr seed",
+      "entry": 902152
+    },
+    {
+      "name": "Whiteberry seed",
+      "entry": 902153
+    },
+    {
+      "name": "Mushroom spore",
+      "entry": 902154
+    },
+    {
+      "name": "Bones",
+      "entry": 902000
+    },
+    {
+      "name": "Leaf-bladed sword",
+      "entry": 902566
+    },
+    {
+      "name": "Steel platelegs",
+      "entry": 902300
+    },
+    {
+      "name": "Mithril axe",
+      "entry": 902183
+    },
+    {
+      "name": "Mithril kiteshield",
+      "entry": 902224
+    },
+    {
+      "name": "Adamant full helm",
+      "entry": 902301
+    },
+    {
+      "name": "Cosmic rune",
+      "entry": 902098
+    },
+    {
+      "name": "Bronze med helm",
+      "entry": 902075
+    },
+    {
+      "name": "Bronze full helm",
+      "entry": 902110
+    },
+    {
+      "name": "Iron med helm",
+      "entry": 902095
+    },
+    {
+      "name": "Steel med helm",
+      "entry": 902136
+    },
+    {
+      "name": "Steel full helm",
+      "entry": 902214
+    },
+    {
+      "name": "Mithril full helm",
+      "entry": 902314
+    },
+    {
+      "name": "Adamant med helm",
+      "entry": 902245
+    },
+    {
+      "name": "Mystic hat (light)",
+      "entry": 902505
+    },
+    {
+      "name": "Tinderbox",
+      "entry": 902104
+    },
+    {
+      "name": "Unlit torch",
+      "entry": 902508
+    },
+    {
+      "name": "Eye of newt",
+      "entry": 902105
+    },
+    {
+      "name": "Steel axe",
+      "entry": 902174
+    },
+    {
+      "name": "Steel 2h sword",
+      "entry": 902222
+    },
+    {
+      "name": "Mort myre fungus",
+      "entry": 902053
+    },
+    {
+      "name": "Clay",
+      "entry": 902354
+    },
+    {
+      "name": "Grimy snapdragon",
+      "entry": 902404
+    }
+  ],
+  "items": [
+    {
+      "name": "Bag of salt",
+      "entry": 902569,
+      "display_source": 159,
+      "class": 0
+    },
+    {
+      "name": "Fungicide spray dose",
+      "entry": 902570,
+      "display_source": 2459,
+      "class": 0
+    },
+    {
+      "name": "Rune boots",
+      "entry": 902571,
+      "display_source": 2967
+    },
+    {
+      "name": "Dwarven stout",
+      "entry": 902572,
+      "display_source": 159
+    },
+    {
+      "name": "Mithril plateskirt",
+      "entry": 902573,
+      "display_source": 847
+    },
+    {
+      "name": "Occult necklace",
+      "entry": 902574,
+      "display_source": 1714
+    },
+    {
+      "name": "Smoke rune",
+      "entry": 902575,
+      "display_source": 6948
+    },
+    {
+      "name": "Crossbow string",
+      "entry": 902576,
+      "display_source": 1714
+    },
+    {
+      "name": "Cooking apple",
+      "entry": 902577,
+      "display_source": 4536
+    },
+    {
+      "name": "Mystic robe bottom (light)",
+      "entry": 902578,
+      "display_source": 9748
+    },
+    {
+      "name": "Necklace of Fangs",
+      "entry": 902579,
+      "display_source": 1714
+    },
+    {
+      "name": "Mithril med helm",
+      "entry": 902580,
+      "display_source": 4077
+    },
+    {
+      "name": "Lantern lens",
+      "entry": 902581,
+      "display_source": 1705
+    },
+    {
+      "name": "Bullseye lantern (unf)",
+      "entry": 902582,
+      "display_source": 4470
+    },
+    {
+      "name": "Supercompost",
+      "entry": 902583,
+      "display_source": 2835
+    },
+    {
+      "name": "Fungicide",
+      "entry": 902584,
+      "display_source": 2459
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902400,
+      "profile_id": 2400,
+      "family_id": 88,
+      "subcategory": "regular_115",
+      "name": "Nechryael (OSRS regular_115)",
+      "source": "Nechryael",
+      "source_npc_ids": "8",
+      "combat_level": 115,
+      "stats": [
+        97,
+        97,
+        105,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 20,
+      "defence_bonuses": {
+        "stab": 20,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 11,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 105,
+      "source_slayer_xp_tenths": 1050,
+      "source_slayer_level": 80,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 5047,
+      "model_path": "Creature\\FelGuard\\FelGuard.m2",
+      "scale": 1,
+      "creature_type": 3,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Malicious ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1530000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 1464960
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1395200
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1395200
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 348800
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 209280
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 209280
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 139520
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 139520
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 139520
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 139520
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 139520
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 139520
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 139520
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 139520
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 69760
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 22661100
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 11510400
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 5755200
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 2877600
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1438800
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 719400
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 359700
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 359700
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 359700
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 923775
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 65400
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 32700
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 24525
+        },
+        {
+          "item": "Adamant platelegs",
+          "quantity": 1,
+          "weight": 35717120
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 35717120
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 26787840
+        },
+        {
+          "item": "Adamant kiteshield",
+          "quantity": 1,
+          "weight": 17858560
+        },
+        {
+          "item": "Rune boots",
+          "quantity": 1,
+          "weight": 8929280
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 37,
+          "weight": 71434240
+        },
+        {
+          "item": "Death rune",
+          "quantity": 5,
+          "weight": 53575680
+        },
+        {
+          "item": "Death rune",
+          "quantity": 10,
+          "weight": 53575680
+        },
+        {
+          "item": "Law rune",
+          "quantity": 25,
+          "quantity_max": 35,
+          "weight": 44646400
+        },
+        {
+          "item": "Blood rune",
+          "quantity": 15,
+          "quantity_max": 20,
+          "weight": 35717120
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 1,
+          "weight": 53575680
+        },
+        {
+          "item": "Coins",
+          "quantity": 1000,
+          "quantity_max": 1499,
+          "weight": 116080640
+        },
+        {
+          "item": "Coins",
+          "quantity": 1500,
+          "quantity_max": 2000,
+          "weight": 93757440
+        },
+        {
+          "item": "Coins",
+          "quantity": 2500,
+          "quantity_max": 2999,
+          "weight": 53575680
+        },
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "quantity_max": 3500,
+          "weight": 26787840
+        },
+        {
+          "item": "Coins",
+          "quantity": 500,
+          "quantity_max": 999,
+          "weight": 22323200
+        },
+        {
+          "item": "Coins",
+          "quantity": 5000,
+          "weight": 8929280
+        },
+        {
+          "item": "Soft clay",
+          "quantity": 25,
+          "weight": 35717120
+        },
+        {
+          "item": "Tuna",
+          "quantity": 1,
+          "weight": 26787840
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 2,
+          "weight": 31850496
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 2,
+          "weight": 21823488
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 2,
+          "weight": 21086208
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 2,
+          "weight": 15187968
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 2,
+          "weight": 14893056
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 2,
+          "weight": 14155776
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 2,
+          "weight": 10321920
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 2,
+          "weight": 10174464
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 2,
+          "weight": 6782976
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 2,
+          "weight": 4718592
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 2,
+          "weight": 3391488
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 6,
+          "weight": 2949120
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 2,
+          "weight": 2064384
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 2,
+          "weight": 1327104
+        }
+      ],
+      "denominator": 1035796480
+    },
+    {
+      "entry": 902401,
+      "profile_id": 2401,
+      "family_id": 89,
+      "subcategory": "adult_29",
+      "name": "Rockslug (OSRS adult_29)",
+      "source": "Rockslug",
+      "source_npc_ids": "421,14423",
+      "combat_level": 29,
+      "stats": [
+        22,
+        27,
+        27,
+        1,
+        1,
+        27
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 27,
+      "source_slayer_xp_tenths": 270,
+      "source_slayer_level": 20,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 7549,
+      "model_path": "Creature\\Worm\\Worm.m2",
+      "scale": 0.5,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1540000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic gloves (light)",
+          "quantity": 1,
+          "weight": 8192
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 5,
+          "weight": 981120
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 42,
+          "weight": 130816
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 2,
+          "weight": 130816
+        },
+        {
+          "item": "Coal",
+          "quantity": 1,
+          "weight": 425152
+        },
+        {
+          "item": "Iron ore",
+          "quantity": 1,
+          "weight": 719488
+        },
+        {
+          "item": "Bronze bar",
+          "quantity": 1,
+          "weight": 65408
+        },
+        {
+          "item": "Iron bar",
+          "quantity": 1,
+          "weight": 98112
+        },
+        {
+          "item": "Copper ore",
+          "quantity": 1,
+          "weight": 98112
+        },
+        {
+          "item": "Tin ore",
+          "quantity": 1,
+          "weight": 261632
+        },
+        {
+          "item": "Mithril ore",
+          "quantity": 1,
+          "weight": 32704
+        },
+        {
+          "item": "Dwarven stout",
+          "quantity": 1,
+          "weight": 425152
+        },
+        {
+          "item": "Hammer",
+          "quantity": 1,
+          "weight": 327040
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 96579
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 49056
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 24528
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 12264
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 6132
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 3066
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1533
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1533
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1533
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 4,
+          "weight": 107456
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 4,
+          "weight": 80592
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 4,
+          "weight": 53728
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 3,
+          "weight": 26864
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 3,
+          "weight": 13432
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 2,
+          "weight": 6716
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 2,
+          "weight": 3212
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 2,
+          "weight": 2336
+        }
+      ],
+      "denominator": 4194304,
+      "behaviour": {
+        "finisher_item": 902569
+      }
+    },
+    {
+      "entry": 902402,
+      "profile_id": 2402,
+      "family_id": 90,
+      "subcategory": "regular_160",
+      "name": "Smoke devil (OSRS regular_160)",
+      "source": "Smoke_devil",
+      "source_npc_ids": "498",
+      "combat_level": 160,
+      "stats": [
+        140,
+        130,
+        275,
+        195,
+        1,
+        185
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 20,
+      "attack_ticks": 4,
+      "attack_style": "ranged",
+      "slayer_xp": 185,
+      "source_slayer_xp_tenths": 1850,
+      "source_slayer_level": 93,
+      "respawn_ticks": 7,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 10315,
+      "model_path": "Creature\\AirElemental\\AirElemental.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1550000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Occult necklace",
+          "quantity": 1,
+          "weight": 33554432
+        },
+        {
+          "item": "Dragon chainbody",
+          "quantity": 1,
+          "weight": 524288
+        },
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 87905664
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 83719680
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 83719680
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 20929920
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 12557952
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 12557952
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 12557952
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 8371968
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 8371968
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 8371968
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 8371968
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 8371968
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 8371968
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 8371968
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 8371968
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 4185984
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 4185984
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 304922772
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 154881408
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 77440704
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 38720352
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 19360176
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 9680088
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 4840044
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 4840044
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 4840044
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 55431585
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 3924360
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 1962180
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 1471635
+        },
+        {
+          "item": "Adamant battleaxe",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Air battlestaff",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Black d'hide vambraces",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Fire battlestaff",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Mithril plateskirt",
+          "quantity": 1,
+          "weight": 267902976
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 267902976
+        },
+        {
+          "item": "Rune chainbody",
+          "quantity": 1,
+          "weight": 267902976
+        },
+        {
+          "item": "Red d'hide body",
+          "quantity": 1,
+          "weight": 133951488
+        },
+        {
+          "item": "Smoke rune",
+          "quantity": 15,
+          "weight": 1473466368
+        },
+        {
+          "item": "Smoke rune",
+          "quantity": 40,
+          "weight": 669757440
+        },
+        {
+          "item": "Runite bolts",
+          "quantity": 15,
+          "weight": 669757440
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 37,
+          "weight": 535805952
+        },
+        {
+          "item": "Air rune",
+          "quantity": 37,
+          "weight": 535805952
+        },
+        {
+          "item": "Soul rune",
+          "quantity": 10,
+          "weight": 535805952
+        },
+        {
+          "item": "Fire rune",
+          "quantity": 150,
+          "weight": 267902976
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 24,
+          "weight": 267902976
+        },
+        {
+          "item": "Coins",
+          "quantity": 750,
+          "weight": 1607417856
+        },
+        {
+          "item": "Coins",
+          "quantity": 80,
+          "weight": 937660416
+        },
+        {
+          "item": "Coins",
+          "quantity": 300,
+          "weight": 401854464
+        },
+        {
+          "item": "Shark",
+          "quantity": 1,
+          "weight": 803708928
+        },
+        {
+          "item": "Steel bar",
+          "quantity": 2,
+          "weight": 401854464
+        },
+        {
+          "item": "Magic logs",
+          "quantity": 5,
+          "weight": 401854464
+        },
+        {
+          "item": "Coal",
+          "quantity": 15,
+          "weight": 401854464
+        },
+        {
+          "item": "Adamantite bar",
+          "quantity": 1,
+          "weight": 267902976
+        },
+        {
+          "item": "Crossbow string",
+          "quantity": 1,
+          "weight": 267902976
+        },
+        {
+          "item": "Ugthanki kebab",
+          "quantity": 3,
+          "weight": 267902976
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 401854464
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 200927232
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 301390848
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 150695424
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 226043136
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 113021568
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 175811328
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 87905664
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 138137472
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 69068736
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 100463616
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 50231808
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 75347712
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 37673856
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 62789760
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 31394880
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 50231808
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 25115904
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 37673856
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 18836928
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 37673856
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 18836928
+        }
+      ],
+      "denominator": 17179869184,
+      "behaviour": {
+        "ranged_max_hit": 20,
+        "ranged_magic_defence": 1,
+        "cast_only": 1,
+        "poison_immune": 1,
+        "attack_spell": 900770
+      }
+    },
+    {
+      "entry": 902403,
+      "profile_id": 2403,
+      "family_id": 91,
+      "subcategory": "regular_37",
+      "name": "Sourhog (OSRS regular_37)",
+      "source": "Sourhog",
+      "source_npc_ids": "10435",
+      "combat_level": 37,
+      "stats": [
+        35,
+        30,
+        25,
+        35,
+        25,
+        40
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 30,
+        "crush": 10
+      },
+      "source_max_hit": 6,
+      "attack_ticks": 5,
+      "attack_style": "crush",
+      "slayer_xp": 40,
+      "source_slayer_xp_tenths": 400,
+      "source_slayer_level": 1,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 193,
+      "model_path": "Creature\\Boar\\Boar.m2",
+      "scale": 1,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Big bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1560000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Coins",
+          "quantity": 3000,
+          "weight": 352128
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 335360
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 335360
+        },
+        {
+          "item": "Runite bar",
+          "quantity": 1,
+          "weight": 83840
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 67,
+          "weight": 50304
+        },
+        {
+          "item": "Rune 2h sword",
+          "quantity": 1,
+          "weight": 50304
+        },
+        {
+          "item": "Rune battleaxe",
+          "quantity": 1,
+          "weight": 50304
+        },
+        {
+          "item": "Law rune",
+          "quantity": 45,
+          "weight": 33536
+        },
+        {
+          "item": "Death rune",
+          "quantity": 45,
+          "weight": 33536
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 150,
+          "weight": 33536
+        },
+        {
+          "item": "Rune arrow",
+          "quantity": 42,
+          "weight": 33536
+        },
+        {
+          "item": "Adamant javelin",
+          "quantity": 20,
+          "weight": 33536
+        },
+        {
+          "item": "Rune sq shield",
+          "quantity": 1,
+          "weight": 33536
+        },
+        {
+          "item": "Dragonstone",
+          "quantity": 1,
+          "weight": 33536
+        },
+        {
+          "item": "Silver ore",
+          "quantity": 100,
+          "weight": 33536
+        },
+        {
+          "item": "Rune kiteshield",
+          "quantity": 1,
+          "weight": 16768
+        },
+        {
+          "item": "Dragon med helm",
+          "quantity": 1,
+          "weight": 16768
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 5446980
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 2766720
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 1383360
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 691680
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 345840
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 172920
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 86460
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 86460
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 86460
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 222045
+        },
+        {
+          "item": "Rune spear",
+          "quantity": 1,
+          "weight": 15720
+        },
+        {
+          "item": "Shield left half",
+          "quantity": 1,
+          "weight": 7860
+        },
+        {
+          "item": "Dragon spear",
+          "quantity": 1,
+          "weight": 5895
+        },
+        {
+          "item": "Adamant scimitar",
+          "quantity": 1,
+          "weight": 4292608
+        },
+        {
+          "item": "Adamant kiteshield",
+          "quantity": 1,
+          "weight": 2146304
+        },
+        {
+          "item": "Mind rune",
+          "quantity": 3,
+          "quantity_max": 10,
+          "weight": 12877824
+        },
+        {
+          "item": "Air rune",
+          "quantity": 5,
+          "quantity_max": 15,
+          "weight": 12877824
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 5,
+          "quantity_max": 15,
+          "weight": 12877824
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 1,
+          "quantity_max": 5,
+          "weight": 8585216
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 1,
+          "quantity_max": 5,
+          "weight": 10731520
+        },
+        {
+          "item": "Steel arrow",
+          "quantity": 3,
+          "quantity_max": 7,
+          "weight": 10731520
+        },
+        {
+          "item": "Coins",
+          "quantity": 5,
+          "quantity_max": 30,
+          "weight": 32194560
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 10731520
+        },
+        {
+          "item": "Cabbage",
+          "quantity": 1,
+          "weight": 10731520
+        },
+        {
+          "item": "Potato",
+          "quantity": 1,
+          "weight": 10731520
+        },
+        {
+          "item": "Cooking apple",
+          "quantity": 1,
+          "weight": 10731520
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 5365760
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 4024320
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 3018240
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 2347520
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 1844480
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 1341440
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 1006080
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 838400
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 670720
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 503040
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 503040
+        },
+        {
+          "item": "Limpwurt seed",
+          "quantity": 1,
+          "weight": 2525184
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 2414592
+        },
+        {
+          "item": "Marrentill seed",
+          "quantity": 1,
+          "weight": 2304000
+        },
+        {
+          "item": "Jangerberry seed",
+          "quantity": 1,
+          "weight": 1695744
+        },
+        {
+          "item": "Tarromin seed",
+          "quantity": 1,
+          "weight": 1566720
+        },
+        {
+          "item": "Wildblood seed",
+          "quantity": 1,
+          "weight": 1529856
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 1161216
+        },
+        {
+          "item": "Harralander seed",
+          "quantity": 1,
+          "weight": 1032192
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 737280
+        },
+        {
+          "item": "Ranarr seed",
+          "quantity": 1,
+          "weight": 718848
+        },
+        {
+          "item": "Whiteberry seed",
+          "quantity": 1,
+          "weight": 626688
+        },
+        {
+          "item": "Mushroom spore",
+          "quantity": 1,
+          "weight": 534528
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 497664
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 331776
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 331776
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 239616
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 221184
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 221184
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 165888
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 147456
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 92160
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 73728
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 55296
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 36864
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 18432
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 36864
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 1,
+          "quantity_max": 4,
+          "weight": 16097280
+        },
+        {
+          "item": "Onion seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 8048640
+        },
+        {
+          "item": "Cabbage seed",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 4024320
+        },
+        {
+          "item": "Tomato seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 2012160
+        },
+        {
+          "item": "Sweetcorn seed",
+          "quantity": 1,
+          "quantity_max": 2,
+          "weight": 1006080
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 1,
+          "weight": 503040
+        },
+        {
+          "item": "Watermelon seed",
+          "quantity": 1,
+          "weight": 251520
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 1,
+          "weight": 251520
+        }
+      ],
+      "denominator": 236093440,
+      "behaviour": {
+        "ranged_max_hit": 6,
+        "ranged_bonus": 20,
+        "mixed_ranged": 1,
+        "attack_spell": 900771
+      }
+    },
+    {
+      "entry": 902404,
+      "profile_id": 2404,
+      "family_id": 92,
+      "subcategory": "baby_83",
+      "name": "Turoth (OSRS baby_83)",
+      "source": "Turoth",
+      "source_npc_ids": "430",
+      "combat_level": 83,
+      "stats": [
+        53,
+        83,
+        83,
+        1,
+        1,
+        76
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 9,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 76,
+      "source_slayer_xp_tenths": 760,
+      "source_slayer_level": 55,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 157,
+      "model_path": "Creature\\SILITHID\\Silithid.m2",
+      "scale": 0.75,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1570000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leaf-bladed sword",
+          "quantity": 1,
+          "weight": 383959040
+        },
+        {
+          "item": "Mystic robe bottom (light)",
+          "quantity": 1,
+          "weight": 374960000
+        },
+        {
+          "item": "Steel platelegs",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 4446990720
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Necklace of Fangs",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Law rune",
+          "quantity": 3,
+          "weight": 8893981440
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 7411651200
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 1482330240
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 42987576960
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 17787962880
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 1482330240
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 5558738400
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 3705825600
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 2223495360
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 4169053800
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 2779369200
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 1667621520
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 3126790350
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 2084526900
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 1250716140
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 2431948050
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 1621298700
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 972779220
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 1910816325
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 1273877550
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 764326530
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 1389684600
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 926456400
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 555873840
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 1042263450
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 416905380
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 868552875
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 579035250
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 463228200
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 277936920
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 5287431168
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 3622869504
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 3500475264
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 2521321344
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 2472363648
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 2349969408
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 1713519360
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 1689040512
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 1126027008
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 783323136
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 563013504
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 489576960
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 342703872
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 220309632
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 3647922075
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 1852912800
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 926456400
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 463228200
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 231614100
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 115807050
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 57903525
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 57903525
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 57903525
+        }
+      ],
+      "denominator": 191979520000,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902405,
+      "profile_id": 2405,
+      "family_id": 92,
+      "subcategory": "child_85",
+      "name": "Turoth (OSRS child_85)",
+      "source": "Turoth",
+      "source_npc_ids": "429",
+      "combat_level": 85,
+      "stats": [
+        54,
+        84,
+        84,
+        1,
+        1,
+        77
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 9,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 77,
+      "source_slayer_xp_tenths": 770,
+      "source_slayer_level": 55,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 157,
+      "model_path": "Creature\\SILITHID\\Silithid.m2",
+      "scale": 0.8999999999999999,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1580000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leaf-bladed sword",
+          "quantity": 1,
+          "weight": 383959040
+        },
+        {
+          "item": "Mystic robe bottom (light)",
+          "quantity": 1,
+          "weight": 374960000
+        },
+        {
+          "item": "Steel platelegs",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 4446990720
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Necklace of Fangs",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Law rune",
+          "quantity": 3,
+          "weight": 8893981440
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 7411651200
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 1482330240
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 42987576960
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 17787962880
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 1482330240
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 5558738400
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 3705825600
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 2223495360
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 4169053800
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 2779369200
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 1667621520
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 3126790350
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 2084526900
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 1250716140
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 2431948050
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 1621298700
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 972779220
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 1910816325
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 1273877550
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 764326530
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 1389684600
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 926456400
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 555873840
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 1042263450
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 416905380
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 868552875
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 579035250
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 463228200
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 277936920
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 5287431168
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 3622869504
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 3500475264
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 2521321344
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 2472363648
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 2349969408
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 1713519360
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 1689040512
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 1126027008
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 783323136
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 563013504
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 489576960
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 342703872
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 220309632
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 3647922075
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 1852912800
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 926456400
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 463228200
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 231614100
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 115807050
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 57903525
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 57903525
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 57903525
+        }
+      ],
+      "denominator": 191979520000,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902406,
+      "profile_id": 2406,
+      "family_id": 92,
+      "subcategory": "mum_87",
+      "name": "Turoth (OSRS mum_87)",
+      "source": "Turoth",
+      "source_npc_ids": "428",
+      "combat_level": 87,
+      "stats": [
+        56,
+        86,
+        86,
+        1,
+        1,
+        79
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 79,
+      "source_slayer_xp_tenths": 790,
+      "source_slayer_level": 55,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 157,
+      "model_path": "Creature\\SILITHID\\Silithid.m2",
+      "scale": 1.0499999999999998,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1590000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leaf-bladed sword",
+          "quantity": 1,
+          "weight": 383959040
+        },
+        {
+          "item": "Mystic robe bottom (light)",
+          "quantity": 1,
+          "weight": 374960000
+        },
+        {
+          "item": "Steel platelegs",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 4446990720
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Necklace of Fangs",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Law rune",
+          "quantity": 3,
+          "weight": 8893981440
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 7411651200
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 1482330240
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 42987576960
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 17787962880
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 1482330240
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 5558738400
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 3705825600
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 2223495360
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 4169053800
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 2779369200
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 1667621520
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 3126790350
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 2084526900
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 1250716140
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 2431948050
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 1621298700
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 972779220
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 1910816325
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 1273877550
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 764326530
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 1389684600
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 926456400
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 555873840
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 1042263450
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 416905380
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 868552875
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 579035250
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 463228200
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 277936920
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 5287431168
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 3622869504
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 3500475264
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 2521321344
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 2472363648
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 2349969408
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 1713519360
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 1689040512
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 1126027008
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 783323136
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 563013504
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 489576960
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 342703872
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 220309632
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 3647922075
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 1852912800
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 926456400
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 463228200
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 231614100
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 115807050
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 57903525
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 57903525
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 57903525
+        }
+      ],
+      "denominator": 191979520000,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902407,
+      "profile_id": 2407,
+      "family_id": 92,
+      "subcategory": "dad_89",
+      "name": "Turoth (OSRS dad_89)",
+      "source": "Turoth",
+      "source_npc_ids": "427",
+      "combat_level": 89,
+      "stats": [
+        58,
+        88,
+        88,
+        1,
+        1,
+        81
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 10,
+      "attack_ticks": 4,
+      "attack_style": "stab",
+      "slayer_xp": 81,
+      "source_slayer_xp_tenths": 810,
+      "source_slayer_level": 55,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 157,
+      "model_path": "Creature\\SILITHID\\Silithid.m2",
+      "scale": 1.2,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1600000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leaf-bladed sword",
+          "quantity": 1,
+          "weight": 383959040
+        },
+        {
+          "item": "Mystic robe bottom (light)",
+          "quantity": 1,
+          "weight": 374960000
+        },
+        {
+          "item": "Steel platelegs",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Mithril axe",
+          "quantity": 1,
+          "weight": 4446990720
+        },
+        {
+          "item": "Mithril kiteshield",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Adamant full helm",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Rune dagger",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Necklace of Fangs",
+          "quantity": 1,
+          "weight": 1482330240
+        },
+        {
+          "item": "Law rune",
+          "quantity": 3,
+          "weight": 8893981440
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 15,
+          "weight": 7411651200
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 37,
+          "weight": 1482330240
+        },
+        {
+          "item": "Limpwurt root",
+          "quantity": 1,
+          "weight": 10376311680
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 42987576960
+        },
+        {
+          "item": "Coins",
+          "quantity": 132,
+          "weight": 17787962880
+        },
+        {
+          "item": "Coins",
+          "quantity": 440,
+          "weight": 1482330240
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 5558738400
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 2,
+          "weight": 3705825600
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 3,
+          "weight": 2223495360
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 1,
+          "weight": 4169053800
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 2,
+          "weight": 2779369200
+        },
+        {
+          "item": "Grimy marrentill",
+          "quantity": 3,
+          "weight": 1667621520
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 3126790350
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 2,
+          "weight": 2084526900
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 3,
+          "weight": 1250716140
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 2431948050
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 2,
+          "weight": 1621298700
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 3,
+          "weight": 972779220
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 1,
+          "weight": 1910816325
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 1273877550
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 3,
+          "weight": 764326530
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 1,
+          "weight": 1389684600
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 2,
+          "weight": 926456400
+        },
+        {
+          "item": "Grimy irit leaf",
+          "quantity": 3,
+          "weight": 555873840
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 1,
+          "weight": 1042263450
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 2,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy avantoe",
+          "quantity": 3,
+          "weight": 416905380
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 1,
+          "weight": 868552875
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 2,
+          "weight": 579035250
+        },
+        {
+          "item": "Grimy kwuarm",
+          "quantity": 3,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 1,
+          "weight": 694842300
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 2,
+          "weight": 463228200
+        },
+        {
+          "item": "Grimy cadantine",
+          "quantity": 3,
+          "weight": 277936920
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy lantadyme",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 1,
+          "weight": 521131725
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 2,
+          "weight": 347421150
+        },
+        {
+          "item": "Grimy dwarf weed",
+          "quantity": 3,
+          "weight": 208452690
+        },
+        {
+          "item": "Toadflax seed",
+          "quantity": 1,
+          "weight": 5287431168
+        },
+        {
+          "item": "Irit seed",
+          "quantity": 1,
+          "weight": 3622869504
+        },
+        {
+          "item": "Belladonna seed",
+          "quantity": 1,
+          "weight": 3500475264
+        },
+        {
+          "item": "Poison ivy seed",
+          "quantity": 1,
+          "weight": 2521321344
+        },
+        {
+          "item": "Avantoe seed",
+          "quantity": 1,
+          "weight": 2472363648
+        },
+        {
+          "item": "Cactus seed",
+          "quantity": 1,
+          "weight": 2349969408
+        },
+        {
+          "item": "Potato cactus seed",
+          "quantity": 1,
+          "weight": 1713519360
+        },
+        {
+          "item": "Kwuarm seed",
+          "quantity": 1,
+          "weight": 1689040512
+        },
+        {
+          "item": "Snapdragon seed",
+          "quantity": 1,
+          "weight": 1126027008
+        },
+        {
+          "item": "Cadantine seed",
+          "quantity": 1,
+          "weight": 783323136
+        },
+        {
+          "item": "Lantadyme seed",
+          "quantity": 1,
+          "weight": 563013504
+        },
+        {
+          "item": "Snape grass seed",
+          "quantity": 3,
+          "weight": 489576960
+        },
+        {
+          "item": "Dwarf weed seed",
+          "quantity": 1,
+          "weight": 342703872
+        },
+        {
+          "item": "Torstol seed",
+          "quantity": 1,
+          "weight": 220309632
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 3647922075
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 1852912800
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 926456400
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 463228200
+        },
+        {
+          "item": "Chaos talisman",
+          "quantity": 1,
+          "weight": 231614100
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 115807050
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 57903525
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 57903525
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 57903525
+        }
+      ],
+      "denominator": 191979520000,
+      "behaviour": {
+        "poison_immune": 1
+      }
+    },
+    {
+      "entry": 902408,
+      "profile_id": 2408,
+      "family_id": 93,
+      "subcategory": "beast_49",
+      "name": "Wall beast (OSRS beast_49)",
+      "source": "Wall_beast",
+      "source_npc_ids": "476",
+      "combat_level": 49,
+      "stats": [
+        30,
+        30,
+        16,
+        1,
+        1,
+        105
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 4,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 105,
+      "source_slayer_xp_tenths": 1050,
+      "source_slayer_level": 35,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 100,
+      "flat_armour": 0,
+      "aggressive": true,
+      "model": 168,
+      "model_path": "Creature\\BogBeast\\BogBeast.m2",
+      "scale": 0.7,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [],
+      "loot_base": 1610000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Mystic hat (light)",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Air rune",
+          "quantity": 3,
+          "weight": 1533
+        },
+        {
+          "item": "Cosmic rune",
+          "quantity": 2,
+          "weight": 1533
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 3,
+          "weight": 1022
+        },
+        {
+          "item": "Chaos rune",
+          "quantity": 7,
+          "weight": 511
+        },
+        {
+          "item": "Bronze med helm",
+          "quantity": 1,
+          "weight": 1022
+        },
+        {
+          "item": "Bronze full helm",
+          "quantity": 1,
+          "weight": 1022
+        },
+        {
+          "item": "Iron med helm",
+          "quantity": 1,
+          "weight": 4088
+        },
+        {
+          "item": "Steel med helm",
+          "quantity": 1,
+          "weight": 3577
+        },
+        {
+          "item": "Steel full helm",
+          "quantity": 1,
+          "weight": 2044
+        },
+        {
+          "item": "Mithril med helm",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Mithril full helm",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Adamant med helm",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Grimy guam leaf",
+          "quantity": 1,
+          "weight": 16352
+        },
+        {
+          "item": "Coins",
+          "quantity": 15,
+          "weight": 5110
+        },
+        {
+          "item": "Tinderbox",
+          "quantity": 1,
+          "weight": 10731
+        },
+        {
+          "item": "Lantern lens",
+          "quantity": 1,
+          "weight": 6132
+        },
+        {
+          "item": "Unlit torch",
+          "quantity": 1,
+          "weight": 4599
+        },
+        {
+          "item": "Eye of newt",
+          "quantity": 1,
+          "weight": 511
+        },
+        {
+          "item": "Bullseye lantern (unf)",
+          "quantity": 1,
+          "weight": 2555
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1533
+        }
+      ],
+      "denominator": 65536
+    },
+    {
+      "entry": 902409,
+      "profile_id": 2409,
+      "family_id": 94,
+      "subcategory": "regular_74",
+      "name": "Zygomite (OSRS regular_74)",
+      "source": "Zygomite",
+      "source_npc_ids": "537",
+      "combat_level": 74,
+      "stats": [
+        65,
+        65,
+        65,
+        65,
+        65,
+        65
+      ],
+      "attack_bonus": 30,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 10
+      },
+      "source_max_hit": 7,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 65,
+      "source_slayer_xp_tenths": 650,
+      "source_slayer_level": 57,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 16109,
+      "model_path": "Creature\\FungalMonster\\FungalMonster.m2",
+      "scale": 0.65,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1620000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Steel axe",
+          "quantity": 1,
+          "weight": 1152
+        },
+        {
+          "item": "Steel 2h sword",
+          "quantity": 1,
+          "weight": 1152
+        },
+        {
+          "item": "Mithril full helm",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 11520
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 15,
+          "weight": 1920
+        },
+        {
+          "item": "Grimy ranarr weed",
+          "quantity": 2,
+          "weight": 2304
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 768
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 384
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 4,
+          "weight": 4224
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 4,
+          "weight": 384
+        },
+        {
+          "item": "Mushroom spore",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Coins",
+          "quantity": 24,
+          "weight": 1152
+        },
+        {
+          "item": "Coins",
+          "quantity": 64,
+          "weight": 14976
+        },
+        {
+          "item": "Coins",
+          "quantity": 120,
+          "weight": 3840
+        },
+        {
+          "item": "Coins",
+          "quantity": 250,
+          "weight": 768
+        },
+        {
+          "item": "Supercompost",
+          "quantity": 1,
+          "weight": 2304
+        },
+        {
+          "item": "Mort myre fungus",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Clay",
+          "quantity": 1,
+          "weight": 2688
+        },
+        {
+          "item": "Fungicide",
+          "quantity": 1,
+          "weight": 1024
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 945
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 480
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 240
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 120
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 60
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 30
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 15
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 15
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 15
+        }
+      ],
+      "denominator": 54912,
+      "behaviour": {
+        "finisher_item": 902570,
+        "ranged_max_hit": 6,
+        "ranged_magic_defence": 1,
+        "mixed_ranged": 1,
+        "attack_spell": 900772
+      }
+    },
+    {
+      "entry": 902410,
+      "profile_id": 2410,
+      "family_id": 94,
+      "subcategory": "regular_86",
+      "name": "Zygomite (OSRS regular_86)",
+      "source": "Zygomite",
+      "source_npc_ids": "1024",
+      "combat_level": 86,
+      "stats": [
+        75,
+        75,
+        75,
+        75,
+        75,
+        75
+      ],
+      "attack_bonus": 30,
+      "strength_bonus": 0,
+      "defence_bonus": 10,
+      "defence_bonuses": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 10
+      },
+      "source_max_hit": 8,
+      "attack_ticks": 4,
+      "attack_style": "magic",
+      "slayer_xp": 75,
+      "source_slayer_xp_tenths": 750,
+      "source_slayer_level": 57,
+      "respawn_ticks": 30,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 16109,
+      "model_path": "Creature\\FungalMonster\\FungalMonster.m2",
+      "scale": 0.8500000000000001,
+      "creature_type": 1,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1630000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Steel axe",
+          "quantity": 1,
+          "weight": 96
+        },
+        {
+          "item": "Steel 2h sword",
+          "quantity": 1,
+          "weight": 192
+        },
+        {
+          "item": "Rune full helm",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Nature rune",
+          "quantity": 2,
+          "weight": 96
+        },
+        {
+          "item": "Earth rune",
+          "quantity": 15,
+          "weight": 160
+        },
+        {
+          "item": "Grimy snapdragon",
+          "quantity": 1,
+          "weight": 192
+        },
+        {
+          "item": "Grimy tarromin",
+          "quantity": 1,
+          "weight": 64
+        },
+        {
+          "item": "Grimy harralander",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Strawberry seed",
+          "quantity": 4,
+          "weight": 352
+        },
+        {
+          "item": "Potato seed",
+          "quantity": 4,
+          "weight": 32
+        },
+        {
+          "item": "Mushroom spore",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Coins",
+          "quantity": 44,
+          "weight": 960
+        },
+        {
+          "item": "Coins",
+          "quantity": 102,
+          "weight": 1248
+        },
+        {
+          "item": "Coins",
+          "quantity": 220,
+          "weight": 224
+        },
+        {
+          "item": "Coins",
+          "quantity": 460,
+          "weight": 64
+        },
+        {
+          "item": "Supercompost",
+          "quantity": 1,
+          "quantity_max": 3,
+          "weight": 192
+        },
+        {
+          "item": "Mort myre fungus",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Clay",
+          "quantity": 1,
+          "weight": 224
+        },
+        {
+          "item": "Fungicide",
+          "quantity": 1,
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 4672,
+      "behaviour": {
+        "finisher_item": 902570,
+        "ranged_max_hit": 10,
+        "ranged_magic_defence": 1,
+        "mixed_ranged": 1,
+        "attack_spell": 900772
+      }
+    }
+  ],
+  "client_spells": [
+    {
+      "entry": 900770,
+      "source": 686,
+      "name": "Smoke devil projectile",
+      "description": "Smoke devil projectile",
+      "range_source": 30455,
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900771,
+      "source": 6660,
+      "name": "Sourhog saliva",
+      "description": "Sourhog saliva",
+      "range_source": 30455,
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900772,
+      "source": 6660,
+      "name": "Zygomite spores",
+      "description": "Zygomite spores",
+      "range_source": 30455,
+      "ignore_native_hit": true,
+      "script": "spell_warscape_enemy_ranged_hybrid"
+    },
+    {
+      "entry": 900773,
+      "source": 30455,
+      "name": "Bag of salt",
+      "description": "Use on a Rockslug at4 Hitpoints or lower."
+    },
+    {
+      "entry": 900774,
+      "source": 30455,
+      "name": "Fungicide spray dose",
+      "description": "Use on a Zygomite below8 Hitpoints. Single dose prototype."
+    }
+  ],
+  "source_assumptions": [
+    "Representative regular monsters only; four Turoth tiers and two normal Zygomites. No boss/superior/task/quest gates/Slayer training.",
+    "Nechryael death-spawn summons deferred. Double rare-seed roll chooses same seed at doubled quantity, rather than independent seed identities; source Snape quantity3-6 simplified to6.",
+    "Smoke Devil facemask/task requirements deferred. Sourhog goggles/unprotected20-30 and temporary stat drain deferred. Zygomite magical melee uses existing magic lane prototype; exact hybrid melee accuracy deferred.",
+    "Turoth leaf-bladed/broad/Magic Dart restrictions and rapid regen deferred consistently with Kurask. Wall Beast free-standing combat only: wall-hole trigger, grab/spiny helmet/location respawn are deferred.",
+    "Rockslug salt uses source4HP-or-less threshold; early accepted use consumes salt. Stop-retaliation at1HP, autosalt perk and brine sabre bypass deferred.",
+    "Zygomite dose is an explicit single-consumable prototype: finish below8 source HP, consume on accepted use; native ten-charge spray/refill inventory and pick-fungi transformation deferred. Fungicide loot remains a refill collectible.",
+    "Smoke Devil and Turoth multirun herbs keep source quantity mixture but same selected herb identity. Uniques treated mutually exclusive prereolls; task/quest/clue/area tertiary excluded. Members/no wealth/pre-Legends and explicit Nothing residual."
+  ]
+}
