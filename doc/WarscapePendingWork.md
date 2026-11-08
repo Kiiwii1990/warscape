@@ -12,6 +12,8 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
+- Pending-work queue paused at user request. Crawling Hand custom-model family implemented/deployed as a separate requested checkpoint; manual acceptance pending. See WarscapeCrawlingHands.md.
+
 - Turoth/Kurask sword gate: user confirmed working. Leaf-bladed spear now implemented/deployed as the next melee option; manual acceptance pending. See WarscapeLeafWeaponGate.md and WarscapeLeafSpear.md. Battleaxe/broad ammo/Magic Dart and collectible conversion remain queued.
 
 - Brine sabre equip/profile/Rockslug salt bypass: implemented; manual acceptance pending. See WarscapeBrineSabre.md. Special attack/acquisition remain queued.

@@ -1,0 +1,28 @@
+{
+  "model_id": 4000,
+  "display_id": 40000,
+  "model_source": 45,
+  "display_source": 137,
+  "model_path": "Creature\\CrawlingHand\\CrawlingHand.mdx",
+  "bounding_radius": 0.7,
+  "combat_reach": 1.0,
+  "collision_width": 1.88,
+  "collision_height": 1.61,
+  "files": [
+    {
+      "file": "CrawlingHand.m2",
+      "path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "sha256": "c14a78a7914451e1b4307f5ed22a956e36257620d35073cca0a68d78d2f268fc"
+    },
+    {
+      "file": "CrawlingHand00.skin",
+      "path": "Creature\\CrawlingHand\\CrawlingHand00.skin",
+      "sha256": "8084e9e0e7f4fb5a85374d09ad72e24611bde2cc2f229d854dc1436dcf1813c8"
+    },
+    {
+      "file": "GhoulSkinWhite.blp",
+      "path": "Creature\\CrawlingHand\\GhoulSkinWhite.blp",
+      "sha256": "e7ee305a1b44b31ed495ebc09b55b884dfa3cae90f9a735c6fd13e561435ad24"
+    }
+  ]
+}

@@ -1,0 +1,2734 @@
+{
+  "release": "2026_11_08_14_world",
+  "loot_policy": "Current members table, no wealth, surface Nature talisman/pre-Legends. Independent trophy 1/500.",
+  "sources": {
+    "Crawling_Hand": {
+      "url": "https://oldschool.runescape.wiki/w/Crawling_Hand",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "1f8974a5c228062ea61efda49f5ad3f4664257de0f8ca98715b5c4028602e8a2"
+    }
+  },
+  "families": [
+    {
+      "id": 95,
+      "key": "crawling_hands",
+      "name": "Crawling Hands",
+      "model_note": "Friend-supplied custom severed hand; one mesh/texture shared by seven live variants."
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Coins",
+      "entry": 902006
+    },
+    {
+      "name": "Energy potion(4)",
+      "entry": 902011
+    },
+    {
+      "name": "Uncut sapphire",
+      "entry": 902039
+    },
+    {
+      "name": "Uncut emerald",
+      "entry": 902040
+    },
+    {
+      "name": "Uncut ruby",
+      "entry": 902041
+    },
+    {
+      "name": "Nature talisman",
+      "entry": 902042
+    },
+    {
+      "name": "Uncut diamond",
+      "entry": 902043
+    },
+    {
+      "name": "Rune javelin",
+      "entry": 902044
+    },
+    {
+      "name": "Loop half of key",
+      "entry": 902045
+    },
+    {
+      "name": "Tooth half of key",
+      "entry": 902046
+    },
+    {
+      "name": "Bones",
+      "entry": 902000
+    }
+  ],
+  "items": [
+    {
+      "name": "Leather gloves",
+      "entry": 902592,
+      "display_source": 2961
+    },
+    {
+      "name": "Purple gloves",
+      "entry": 902593,
+      "display_source": 2961
+    },
+    {
+      "name": "Yellow gloves",
+      "entry": 902594,
+      "display_source": 2961
+    },
+    {
+      "name": "Red gloves",
+      "entry": 902595,
+      "display_source": 2961
+    },
+    {
+      "name": "Teal gloves",
+      "entry": 902596,
+      "display_source": 2961
+    },
+    {
+      "name": "Gold ring",
+      "entry": 902597,
+      "display_source": 2843
+    },
+    {
+      "name": "Sapphire ring",
+      "entry": 902598,
+      "display_source": 2843
+    },
+    {
+      "name": "Emerald ring",
+      "entry": 902599,
+      "display_source": 2843
+    },
+    {
+      "name": "Crawling hand (item)",
+      "entry": 902600,
+      "display_source": 2843
+    }
+  ],
+  "enemies": [
+    {
+      "entry": 902600,
+      "profile_id": 2600,
+      "family_id": 95,
+      "subcategory": "regular_7_npc_450",
+      "name": "Crawling Hand (OSRS 7 variant 450)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "450",
+      "combat_level": 7,
+      "stats": [
+        7,
+        3,
+        3,
+        1,
+        1,
+        15
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 12,
+      "source_slayer_xp_tenths": 120,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.0,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1650000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902601,
+      "profile_id": 2601,
+      "family_id": 95,
+      "subcategory": "regular_8_npc_448",
+      "name": "Crawling Hand (OSRS 8 variant 448)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "448",
+      "combat_level": 8,
+      "stats": [
+        8,
+        4,
+        4,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 16,
+      "source_slayer_xp_tenths": 160,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.0,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1660000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902602,
+      "profile_id": 2602,
+      "family_id": 95,
+      "subcategory": "regular_8_npc_449",
+      "name": "Crawling Hand (OSRS 8 variant 449)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "449",
+      "combat_level": 8,
+      "stats": [
+        8,
+        4,
+        4,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 16,
+      "source_slayer_xp_tenths": 160,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.0,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1670000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902603,
+      "profile_id": 2603,
+      "family_id": 95,
+      "subcategory": "regular_8_npc_451",
+      "name": "Crawling Hand (OSRS 8 variant 451)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "451",
+      "combat_level": 8,
+      "stats": [
+        8,
+        4,
+        4,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 16,
+      "source_slayer_xp_tenths": 160,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.0,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1680000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902604,
+      "profile_id": 2604,
+      "family_id": 95,
+      "subcategory": "regular_8_npc_452",
+      "name": "Crawling Hand (OSRS 8 variant 452)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "452",
+      "combat_level": 8,
+      "stats": [
+        8,
+        4,
+        4,
+        1,
+        1,
+        16
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 1,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 16,
+      "source_slayer_xp_tenths": 160,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.0,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1690000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902605,
+      "profile_id": 2605,
+      "family_id": 95,
+      "subcategory": "regular_12_npc_453",
+      "name": "Crawling Hand (OSRS 12 variant 453)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "453",
+      "combat_level": 12,
+      "stats": [
+        11,
+        7,
+        7,
+        1,
+        1,
+        19
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 19,
+      "source_slayer_xp_tenths": 190,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.35,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1700000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    },
+    {
+      "entry": 902606,
+      "profile_id": 2606,
+      "family_id": 95,
+      "subcategory": "regular_12_npc_454",
+      "name": "Crawling Hand (OSRS 12 variant 454)",
+      "source": "Crawling_Hand",
+      "source_npc_ids": "454",
+      "combat_level": 12,
+      "stats": [
+        11,
+        7,
+        7,
+        1,
+        1,
+        19
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 0,
+      "defence_bonuses": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "crush",
+      "slayer_xp": 19,
+      "source_slayer_xp_tenths": 190,
+      "source_slayer_level": 5,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 40000,
+      "model_path": "Creature\\CrawlingHand\\CrawlingHand.m2",
+      "scale": 1.35,
+      "creature_type": 6,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Bones",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1710000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "weight": 670656
+        },
+        {
+          "item": "Leather gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1344
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Purple gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Yellow gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Red gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Teal gloves",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "weight": 95808
+        },
+        {
+          "item": "Gold ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 192
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Sapphire ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "weight": 63872
+        },
+        {
+          "item": "Emerald ring",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 128
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1692608
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 3392
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "weight": 766464
+        },
+        {
+          "item": "Coins",
+          "quantity": 8,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1536
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "weight": 415168
+        },
+        {
+          "item": "Energy potion(4)",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 832
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 31437
+        },
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 63
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "weight": 15968
+        },
+        {
+          "item": "Uncut sapphire",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 32
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "weight": 7984
+        },
+        {
+          "item": "Uncut emerald",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 16
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "weight": 3992
+        },
+        {
+          "item": "Uncut ruby",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 8
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "weight": 1996
+        },
+        {
+          "item": "Nature talisman",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 4
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "weight": 998
+        },
+        {
+          "item": "Uncut diamond",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "weight": 499
+        },
+        {
+          "item": "Rune javelin",
+          "quantity": 5,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Loop half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "weight": 499
+        },
+        {
+          "item": "Tooth half of key",
+          "quantity": 1,
+          "additional": [
+            {
+              "item": "Crawling hand (item)",
+              "quantity": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "denominator": 4096000
+    }
+  ],
+  "client_spells": [],
+  "source_assumptions": [
+    "All seven live source NPC IDs represented; unused 455/456/457 and superior Crushing hand excluded.",
+    "One user-supplied white hand model for all variants; level12 scale1.35 is an artistic prototype, not source geometry. Native Ghoul sound set45 retained as an appropriate undead stand-in.",
+    "Slayer5/Slayer XP are metadata only; task, quest, superior, salve/Crumble Undead and collection-log/Taxidermy systems are not implemented.",
+    "Gloves/rings/potion/trophy remain existing catalogue collectibles; no consumable/equipment gameplay conversion.",
+    "Current 2026 Wiki coins8 at24/128 and Energy potion(4) at13/128. Gem table2/128 uses existing surface/pre-Legends Nature policy; underground location/ring-of-wealth variants deferred. Independent trophy1/500 composed with main roll."
+  ],
+  "custom_model_manifest": "assets/crawling_hand/manifest.json"
+}

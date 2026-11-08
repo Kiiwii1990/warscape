@@ -1202,4 +1202,55 @@ class DustProtectionTests(unittest.TestCase):
         self.assertEqual(replacement['verify_sql'].count("AIName='' AND ScriptName='npc_warscape_dust_devil'"),2)
         self.assertEqual(replacement['verify_sql'].replace("AIName='' AND ScriptName='npc_warscape_dust_devil'","AIName='AggressorAI'"),old['verify_sql'])
 
+class CrawlingHandTests(unittest.TestCase):
+    def setUp(self):
+        self.base=Path(__file__).parent
+        self.pack=json.loads((self.base/'crawling_hands.json').read_text())
+    def test_live_variants_stats_and_source_contract(self):
+        from family_catalogue import validate
+        validate(self.pack,prior_to('crawling_hands.json'))
+        enemies=self.pack['enemies']
+        self.assertEqual([e['source_npc_ids'] for e in enemies],['450','448','449','451','452','453','454'])
+        self.assertEqual([e['combat_level'] for e in enemies],[7,8,8,8,8,12,12])
+        self.assertEqual([e['stats'] for e in enemies],[[7,3,3,1,1,15]]+[[8,4,4,1,1,16]]*4+[[11,7,7,1,1,19]]*2)
+        self.assertEqual([e['slayer_xp'] for e in enemies],[12,16,16,16,16,19,19])
+        self.assertTrue(all(e['model']==40000 and e['creature_type']==6 and e['attack_ticks']==4 and not e['aggressive'] and e['source_slayer_level']==5 for e in enemies))
+    def test_exact_main_and_independent_trophy_marginals(self):
+        from fractions import Fraction as F
+        from collections import defaultdict
+        e=self.pack['enemies'][0];rates=defaultdict(F)
+        for o in e['outcomes']:
+            self.assertEqual(e['guaranteed'],[dict(item='Bones',quantity=1)])
+            for d in [o]+o.get('additional',[]):rates[(d['item'],d['quantity'])]+=F(o['weight'],e['denominator'])
+        for name,q,p in [('Coins',8,F(24,128)),('Energy potion(4)',1,F(13,128)),('Leather gloves',1,F(21,128)),('Crawling hand (item)',1,F(1,500)),('Uncut sapphire',1,F(1,256)),('Nature talisman',1,F(1,2048))]:
+            self.assertEqual(rates[(name,q)],p)
+        trophy=[o for o in e['outcomes'] if o.get('additional')]
+        self.assertEqual(sum(o['weight'] for o in trophy)*500,e['denominator'])
+        self.assertTrue(any(o['item']=='Coins' for o in trophy))
+        self.assertTrue(any(o['item']=='Nothing' for o in trophy))
+    def test_additive_metadata_and_immutable_prior_releases(self):
+        from custom_release import custom_artifacts
+        out=custom_artifacts(self.pack,prior_to('crawling_hands.json'))
+        sql=next(v for k,v in out.items() if k.suffix=='.sql')
+        self.assertIn('INSERT INTO creature_model_info',sql)
+        self.assertNotIn('DELETE ',sql)
+        self.assertNotIn('ALTER TABLE',sql)
+        self.assertEqual(sql.count('INSERT INTO creature_template ('),7)
+    def test_model_dependencies_hashes_and_embedded_clips(self):
+        from custom_creatures import validate_files
+        directory=self.base/'assets/crawling_hand';manifest=json.loads((directory/'manifest.json').read_text())
+        self.assertEqual(len(validate_files(directory,manifest)),3)
+        manifest['files'][0]['sha256']='0'*64
+        with self.assertRaises(ValueError):validate_files(directory,manifest)
+    def test_dbc_append_preserves_rows_strings_and_rejects_collision(self):
+        import struct
+        from custom_creatures import append_row
+        from dbc_records import dbc
+        data=struct.pack('<4s4I2I',b'WDBC',1,2,8,2,1,0)+b'x\0'
+        result=append_row(data,2,[2,2],b'new\0')
+        rows,strings=dbc(result,2)
+        self.assertEqual(rows,{1:[1,0],2:[2,2]})
+        self.assertEqual(strings,b'x\0new\0')
+        with self.assertRaises(ValueError):append_row(data,2,[1,2])
+
 if __name__=='__main__':unittest.main()

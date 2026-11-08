@@ -425,9 +425,9 @@
     },
     {
       "family": "Crawling Hand",
-      "model_direction": "No close stock model identified",
-      "assessment": "Custom. Needs a severed hand that walks on its fingers.",
-      "status": "planned"
+      "model_direction": "Friend-supplied CrawlingHand.m2 custom creature",
+      "assessment": "Custom. Installed white severed hand for seven live source variants; manual visual acceptance pending.",
+      "status": "prototype"
     },
     {
       "family": "Custodian Stalker",

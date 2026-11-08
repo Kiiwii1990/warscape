@@ -130,6 +130,7 @@ def main():
     from stalker_release import stalker_artifacts
     from nech_release import nech_artifacts
     from summon_release import summon_artifacts
+    from custom_release import custom_artifacts
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--write', action='store_true', help='Create new release artifacts and update generated runtime header')
@@ -163,6 +164,8 @@ def main():
             artifacts.update(nech_artifacts(pack,prior))
         if release.get('adds_summons',False):
             artifacts.update(summon_artifacts(pack,prior))
+        if release.get('adds_custom_creatures',False):
+            artifacts.update(custom_artifacts(pack,prior))
         for key in ('families', 'enemies'):
             if key == 'families':
                 combined[key].extend(f for f in pack[key] if f['id'] not in {old['id'] for old in combined[key]})
