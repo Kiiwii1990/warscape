@@ -910,3 +910,5 @@ this new batch remains pending.
 8 November 2026: user confirmed preceding five-family checkpoint working. Gryphon/Harpie/Hydra/Infernal Mage/Kurask checkpoint adds five regular profiles; Hydra three-attack style cycle supported. Weight/lantern/leaf-weapon requirements, Hydra poison pools and ordered ring pieces remain pending. See WarscapeGryphonsHydras.md.
 
 8 November 2026: prior five-family checkpoint confirmed working. Nechryael/Rockslug/Smoke Devil/Sourhog/Turoth/Wall Beast/Zygomite checkpoint adds eleven regular variants. Salt finisher and single-dose fungicide prototype implemented; refills, summons, environmental interactions and equipment restrictions remain pending. See WarscapeNechryaelsZygomites.md.
+
+8 November2026: user confirmed refillable spray and requested review of unfinished conversation work. Central backlog: WarscapePendingWork.md. First reviewed milestone adds owned Nechryael Death spawns with cap/timer/cleanup; native WoW retaliation/logout exceptions remain explicit. See WarscapeDeathSpawns.md; gameplay acceptance pending.

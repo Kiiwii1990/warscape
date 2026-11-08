@@ -705,9 +705,67 @@ public:
     }
 };
 
+// Only this parent owns its list; callbacks remove GUIDs through the native lifecycle.
+struct npc_warscape_nechryael : npc_warscape_enemy
+{
+    explicit npc_warscape_nechryael(Creature* creature) : npc_warscape_enemy(creature), summons(creature) { }
+    SummonList summons;
+    uint32 summonDelay = 12000;
+    void Reset() override { summons.DespawnAll(); summonDelay=12000; npc_warscape_enemy::Reset(); }
+    void JustSummoned(Creature* summon) override { summons.Summon(summon); }
+    void SummonedCreatureDespawn(Creature* summon) override { summons.Despawn(summon); }
+    void JustDied(Unit* killer) override { summons.DespawnAll(); npc_warscape_enemy::JustDied(killer); }
+    void UpdateAI(uint32 diff) override
+    {
+        npc_warscape_enemy::UpdateAI(diff);
+        Unit* target=me->GetVictim();
+        bool const reachable=me->IsAlive() && target && target->IsAlive() && target->GetTypeId()==TYPEID_PLAYER
+            && me->IsWithinMeleeRange(target) && me->IsWithinLOSInMap(target);
+        if (!Warscape::CanSummonDeathSpawn(summons.size(),reachable)) return;
+        if (diff < summonDelay) { summonDelay-=diff; return; }
+        summonDelay=12000;
+        me->SummonCreature(Warscape::DeathSpawnEntry,me->GetPosition(),TEMPSUMMON_TIMED_DESPAWN,60s);
+    }
+};
+
+struct npc_warscape_death_spawn : ScriptedAI
+{
+    explicit npc_warscape_death_spawn(Creature* creature) : ScriptedAI(creature) { }
+    ObjectGuid parentGuid, targetGuid;
+    void MoveInLineOfSight(Unit*) override { }
+    void IsSummonedBy(WorldObject* summoner) override
+    {
+        Creature* parent=summoner ? summoner->ToCreature() : nullptr;
+        Unit* target=parent ? parent->GetVictim() : nullptr;
+        if (!parent || parent->GetEntry()!=902400 || !target || target->GetTypeId()!=TYPEID_PLAYER) {
+            me->DespawnOrUnsummon(); return;
+        }
+        parentGuid=parent->GetGUID();targetGuid=target->GetGUID();
+        AttackStart(target);
+    }
+    void AttackStart(Unit* target) override
+    {
+        if (target && target->GetGUID()==targetGuid) ScriptedAI::AttackStart(target);
+    }
+    void UpdateAI(uint32) override
+    {
+        Creature* parent=ObjectAccessor::GetCreature(*me,parentGuid);
+        Player* target=ObjectAccessor::GetPlayer(*me,targetGuid);
+        bool const valid=target && target->IsAlive() && target->IsInMap(me) && me->IsValidAttackTarget(target);
+        if (!Warscape::DeathSpawnCanRemain(parent && parent->IsAlive() && !parent->IsInEvadeMode(),valid,
+                target ? me->GetExactDist2d(target) : 1000.f)) {
+            me->DespawnOrUnsummon(); return;
+        }
+        if (me->GetVictim()!=target) AttackStart(target);
+        if (me->IsWithinLOSInMap(target)) DoMeleeAttackIfReady();
+    }
+};
+
 void AddSC_warscape_enemies()
 {
     RegisterCreatureAI(npc_warscape_enemy);
+    RegisterCreatureAI(npc_warscape_nechryael);
+    RegisterCreatureAI(npc_warscape_death_spawn);
     RegisterSpellScript(spell_warscape_enemy_magic);
     RegisterSpellScript(spell_warscape_enemy_ranged_hybrid);
     RegisterSpellScript(spell_warscape_enemy_poison);

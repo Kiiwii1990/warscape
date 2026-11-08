@@ -7,7 +7,7 @@ namespace Warscape {
 struct EnemyLootOutcome { std::uint64_t Weight; std::uint32_t Loot; std::uint32_t ExtraItem = 0, ExtraMin = 0, ExtraMax = 0; };
 struct EnemyLootPool { std::uint32_t Entry, First, Count; std::uint64_t Total; };
 struct EnemyVariant { std::uint32_t Entry, FamilyId; char const* Family; char const* Subcategory; char const* AttackStyle; std::uint32_t SlayerXP, RespawnTicks; bool NativeAttackAnimation; std::uint32_t MaximumHit; std::int32_t DefenceStab, DefenceSlash, DefenceCrush; std::uint8_t MeleeLane; bool SourceCombat; std::uint8_t RequiredSlayerLevel; std::int32_t FlatArmour; std::uint32_t SourceSlayerXPTenths; };
-inline constexpr std::array<EnemyLootOutcome, 11784> EnemyLootOutcomes = {{
+inline constexpr std::array<EnemyLootOutcome, 11785> EnemyLootOutcomes = {{
     {3, 901000},
     {6, 901001},
     {5, 901002},
@@ -11791,9 +11791,10 @@ inline constexpr std::array<EnemyLootOutcome, 11784> EnemyLootOutcomes = {{
     {2, 1630024},
     {1, 1630025},
     {1, 1630026},
-    {1, 1630027}
+    {1, 1630027},
+    {1, 1640000}
 }};
-inline constexpr std::array<EnemyLootPool, 343> EnemyLootPools = {{
+inline constexpr std::array<EnemyLootPool, 344> EnemyLootPools = {{
     {901000, 0, 17, 128},
     {901010, 17, 1, 1},
     {901020, 18, 1, 1},
@@ -12136,9 +12137,10 @@ inline constexpr std::array<EnemyLootPool, 343> EnemyLootPools = {{
     {902407, 11636, 71, 191979520000},
     {902408, 11707, 21, 65536},
     {902409, 11728, 28, 54912},
-    {902410, 11756, 28, 4672}
+    {902410, 11756, 28, 4672},
+    {902500, 11784, 1, 1}
 }};
-inline constexpr std::array<EnemyVariant, 343> EnemyVariants = {{
+inline constexpr std::array<EnemyVariant, 344> EnemyVariants = {{
     {901000, 1, "Goblins", "regular_2", "crush", 5, 35, true, 1, -15, -15, -15, 2, false, 0, 0, 0},
     {901010, 2, "Cows", "regular", "crush", 8, 45, false, 1, -21, -21, -21, 2, false, 0, 0, 0},
     {901020, 3, "Rats", "regular", "crush", 2, 2, true, 0, -42, -42, -42, 2, false, 0, 0, 0},
@@ -12481,7 +12483,8 @@ inline constexpr std::array<EnemyVariant, 343> EnemyVariants = {{
     {902407, 92, "Turoths", "dad_89", "stab", 81, 15, true, 10, 0, 20, 20, 0, true, 55, 0, 810},
     {902408, 93, "Wall Beasts", "beast_49", "crush", 105, 15, true, 4, 0, 0, 0, 2, true, 35, 0, 1050},
     {902409, 94, "Zygomites", "regular_74", "magic", 65, 30, true, 7, 10, 10, 10, 5, true, 57, 0, 650},
-    {902410, 94, "Zygomites", "regular_86", "magic", 75, 30, true, 8, 10, 10, 10, 5, true, 57, 0, 750}
+    {902410, 94, "Zygomites", "regular_86", "magic", 75, 30, true, 8, 10, 10, 10, 5, true, 57, 0, 750},
+    {902500, 88, "Nechryaels", "death_spawn_46", "slash", 0, 15, true, 2, 20, 20, 20, 1, true, 0, 0, 0}
 }};
 struct EnemyBehaviour { std::uint32_t Entry, FinisherItem, MagicMaxHit, PoisonMaxHit, RangedMaxHit, Airborne, AttackSpell, AlternateSpell, MagicMeleeOnly, MixedRanged, RangedToMelee, RangedBonus, PoisonSpell, PoisonImmune, DrakeBreath, WyvernBreath, MagicRanged, TriStyle, MagicBonus, ScreamHit, HearingItem, RootSpell, HealVisual, Killerwatt, RangedMagicDefence, SeparateBonuses, ProtectionItem, ProtectionSlot, UnprotectedHit, DoubleFirst, DoubleSecond, DoubleMagic, CastOnly, EarthenArmour, CutLure, VenomSpell, CycleThree; };
 inline constexpr std::array<EnemyBehaviour, 49> EnemyBehaviours = {{

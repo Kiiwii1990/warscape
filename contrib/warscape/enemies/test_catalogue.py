@@ -1179,4 +1179,17 @@ class NechryaelZygomiteTests(unittest.TestCase):
         self.assertLess(s.index('DestroyItemCount'),s.index('if (!ready)'))
         self.assertIn('SendEquipError(EQUIP_ERR_OK',s)
 
+class OwnedSummonTests(unittest.TestCase):
+    def test_shared_only_release_and_scoped_parent_contract(self):
+        import summon_release
+        p=json.loads((Path(__file__).parent/'death_spawns.json').read_text())
+        out=summon_release.summon_artifacts(p,prior_to('death_spawns.json'))
+        spec=json.loads(next(v for k,v in out.items() if k.suffix=='.json'))
+        self.assertNotIn('IN ()',spec['precondition_sql'])
+        self.assertEqual(p['enemies'][0]['stats'],[67,7,30,1,1,60])
+        self.assertEqual(p['enemies'][0]['guaranteed'],[dict(item='Fiendish ashes',quantity=1)])
+        original=json.loads((Path(__file__).parent.parent/'verifications/2026_11_08_04_world.json').read_text())['verify_sql']
+        replaced=spec['supersedes'][0]['verify_sql']
+        self.assertEqual(replaced.replace("AIName='' AND ScriptName='npc_warscape_nechryael'","AIName='AggressorAI'"),original)
+
 if __name__=='__main__':unittest.main()

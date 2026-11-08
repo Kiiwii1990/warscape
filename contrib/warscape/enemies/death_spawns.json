@@ -1,0 +1,92 @@
+{
+  "release": "2026_11_08_06_world",
+  "loot_policy": "Death spawn guaranteed Fiendish ashes only.",
+  "sources": {
+    "Death_spawn": {
+      "url": "https://oldschool.runescape.wiki/w/Death_spawn",
+      "retrieved": "2026-11-08",
+      "raw_sha256": "b52de258d0d72d201262962a10e4c2fd16a721a30b8a5e4ed08f412c282fbc98"
+    }
+  },
+  "families": [
+    {
+      "id": 88,
+      "key": "nechryaels",
+      "name": "Nechryaels",
+      "model_note": "Native demon stand-in.",
+      "existing": true
+    }
+  ],
+  "shared_items": [
+    {
+      "name": "Fiendish ashes",
+      "entry": 902327
+    }
+  ],
+  "items": [],
+  "enemies": [
+    {
+      "entry": 902500,
+      "profile_id": 2500,
+      "family_id": 88,
+      "subcategory": "death_spawn_46",
+      "name": "Death spawn (OSRS regular_46)",
+      "source": "Death_spawn",
+      "source_npc_ids": "10",
+      "combat_level": 46,
+      "stats": [
+        67,
+        7,
+        30,
+        1,
+        1,
+        60
+      ],
+      "attack_bonus": 0,
+      "strength_bonus": 0,
+      "defence_bonus": 20,
+      "defence_bonuses": {
+        "stab": 20,
+        "slash": 20,
+        "crush": 20
+      },
+      "source_max_hit": 2,
+      "attack_ticks": 4,
+      "attack_style": "slash",
+      "slayer_xp": 0,
+      "source_slayer_xp_tenths": 0,
+      "source_slayer_level": 0,
+      "respawn_ticks": 15,
+      "source_poison_resistance": 0,
+      "flat_armour": 0,
+      "aggressive": false,
+      "model": 4449,
+      "model_path": "Creature\\Imp\\Imp.m2",
+      "scale": 0.7,
+      "creature_type": 3,
+      "native_attack_animation": true,
+      "source_combat_overrides": true,
+      "guaranteed": [
+        {
+          "item": "Fiendish ashes",
+          "quantity": 1
+        }
+      ],
+      "loot_base": 1640000,
+      "wide_loot": true,
+      "outcomes": [
+        {
+          "item": "Nothing",
+          "quantity": 1,
+          "weight": 1
+        }
+      ],
+      "denominator": 1
+    }
+  ],
+  "client_spells": [],
+  "source_assumptions": [
+    "60-second temporary summon; at most two per owner. Spawn cadence prototype12 seconds only when parent has melee reach and LOS.",
+    "Seven OSRS tiles represented by21 yards. Native WoW retaliation/logout/combat rules retained; exact OSRS exceptions deferred."
+  ]
+}

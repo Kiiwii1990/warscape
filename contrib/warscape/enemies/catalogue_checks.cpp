@@ -7,6 +7,12 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(Warscape::CanSummonDeathSpawn(0,true) && Warscape::CanSummonDeathSpawn(1,true));
+    assert(!Warscape::CanSummonDeathSpawn(2,true) && !Warscape::CanSummonDeathSpawn(0,false));
+    assert(Warscape::DeathSpawnCanRemain(true,true,21.f));
+    assert(!Warscape::DeathSpawnCanRemain(false,true,0.f));
+    assert(!Warscape::DeathSpawnCanRemain(true,false,0.f));
+    assert(!Warscape::DeathSpawnCanRemain(true,true,21.1f));
     assert(Warscape::FungicideAfterUse(10)==9 && Warscape::FungicideAfterUse(1)==0);
     assert(Warscape::FungicideAfterUse(0)==0);
     assert(Warscape::CanRefillFungicide(0,true));
@@ -210,7 +216,7 @@ int main() {
         assert(v && v->SourceCombat && v->NativeAttackAnimation && v->MeleeLane<=2);
         if(v->FamilyId==7 || v->FamilyId==8) assert(Warscape::SelectEnemyLoot(id,0)==0);
     }
-    assert(Warscape::EnemyVariants.size()==343);
+    assert(Warscape::EnemyVariants.size()==344);
     // New batch: all 128 chicken slots and every training-crab roll stay in their own pool.
     for (std::uint32_t entry : {901062u, 901063u, 901064u, 901065u}) {
         auto const* pool = Warscape::FindEnemyLootPool(entry);

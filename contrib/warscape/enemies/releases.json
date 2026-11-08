@@ -62,5 +62,9 @@
   {
     "data": "nechryaels_zygomites.json",
     "adds_nech_encounters": true
+  },
+  {
+    "data": "death_spawns.json",
+    "adds_summons": true
   }
 ]
