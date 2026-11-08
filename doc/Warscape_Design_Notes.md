@@ -926,3 +926,5 @@ this new batch remains pending.
 8 November2026 finisher backlog milestone: Rockslug902401 at1 source HP stops retaliation/chase and uses native local random movement while remaining saltable. Loot ownership retained, native regen paused for finish window and restored on reset; owner abandonment triggers normal evade. Autosalt/brine sabre remain pending. See WarscapeRockslugWander.md; manual acceptance pending.
 
 8 November2026 weapon/finisher backlog milestone: new Brine sabre902589 uses existing source item bonus/speed profile and permanent40 Attack equip guard; main-hand usable player melee auto hits bypass Rockslug salt floor. Other finishers unchanged. Liquify/acquisition remain pending. See WarscapeBrineSabre.md; manual acceptance pending.
+
+8 November2026 leafy-weapon checkpoint: new usable Leaf-bladed sword902590 uses existing bonus/speed profile and50 Attack equip helper. Four Turoths/Kurask now reject unsupported player-owned damage, permit eligible main-hand auto melee. Old collectible stacks/loot preserved. Broad ammo/Magic Dart/other leaf weapons/conversion remain pending. See WarscapeLeafWeaponGate.md; manual acceptance pending.

@@ -1,0 +1,25 @@
+# Turoth / Kurask leaf-bladed melee checkpoint
+
+Adds usable Leaf-bladed sword902590 and player damage restrictions for Kurask902304 and all four Turoths902404-902407. Sources: [Turoth](https://oldschool.runescape.wiki/w/Turoth), [attribute affinities](https://oldschool.runescape.wiki/w/Attribute_affinities), [Attack](https://oldschool.runescape.wiki/w/Attack), reviewed8 November2026. Source leaf-bladed sword bonuses: Stab67,Slash62,Crush0,Melee Strength50,4ticks; all remaining bonuses zero. These values are explicit in the existing warscape_item_bonus architecture, archetype ShortSword3/tier0, not a new damage formula.
+
+New item is native sword/one-hand/stack1, using Shortsword2131 display/material/sheath. Native RequiredLevel1 is separate from permanent50 OSRS Attack enforced in the existing special-weapon equip helper. RS skills load before inventory at login. Native sword proficiency still applies. Source Slayer55 requirement is metadata only because Slayer training/gates are not yet implemented. No automatic XP/level modification. Generic native level error may appear for failed equip; description states50 OSRS Attack.
+
+Shared DamageTaken resolves player or player owner, then requires a usable unbroken main-hand902590,50 Attack and direct player auto-attack damage without a spell. Main-hand missing/wrong/bag-only, pet/summon, DOT, unsupported spells and non-melee player damage are rejected to0, with a throttled message. Another ordinary off-hand weapon blocks auto damage entirely to prevent off-hand hit bypass; shield/lantern are allowed. Two leaf swords in native dual-wield are permitted. Independent NPC/environment damage is outside this player equipment gate. Other enemies and Brine sabre/min40/finisher behaviour remain unchanged.
+
+This is the first supported melee route. Leaf spear/battleaxe, broad ammo, Magic Dart, burn/venom exceptions, special-effect healing and complete cannon/thrall handling remain queued. Unsupported player attack routes are blocked rather than pretending to implement them. Source multiweapon range of options is not complete.
+
+Original collectible sword902566 and all old item stacks/loot remain unchanged. New902590 is a separate usable test item; old collectible swords do not silently become unstackable equipment. Conversion/acquisition and changing future loot to usable gear require a separate inventory-preserving checkpoint. No new NPC profiles, loot changes, character schema or client memory-layout code.
+
+## Manual acceptance
+
+Restart verified Wrath client; `.gm off`; use a character with50+ OSRS Attack/native sword proficiency. `.additem 902590 1`; equip main hand, remove any ordinary off-hand weapon. `.npc add temp loot 902404` through902407 individually, then902304. Ordinary Shortsword/Brine sabre/bag-only leaf sword should deal0 to these enemies. Usable leaf sword should damage/kill normally and keep ordinary loot/XP. Shield or lantern off-hand should work; ordinary second weapon should block. Remove/change weapon mid-fight to verify immediate gate.
+
+If practical test pet, spell and DOT before/after swapping: these routes must stay blocked in this checkpoint. Confirm another enemy still takes ordinary damage, Brine sabre still equips at40 and finishes Rockslug, native mask/lantern/goggles remain correct. Relog with leaf sword equipped; check source bonus totals/UI and4-tick cadence. Below50 test character should fail equip. Do not alter original XP merely to automate these checks; no GM skill commands were executed.
+
+## Automated checks and operations
+
+140 Python tests plus focused Debug C++ matrices and RelWithDebInfo build passed. Matrix covers all five entries, wrong item, ordinary off-hand,49/50 Attack, non-melee/pet classification, unusable weapon and unrelated enemy. Native GetWeaponForAttack returns null for shield/lantern and unusable/broken weapon. Native skill-before-inventory ordering reviewed; runtime gameplay/equip/relog remains manual acceptance.
+
+Migration2026_11_08_12_world.sql adds only one item and one item bonus profile. Source/ID preconditions and exact bonus/zero-stat postconditions reviewed through db.py after permissions/status, stopped writers, zero players and fresh backup. Preserve world/profile/XP/inventory/wallet hashes. Back up EXE/PDB, Item.dbc and client patch; append one native item row. No spell changes. Rollback requires stopped services/coordinated old binary/DBC/patch; leave additive definitions dormant while items exist. Do not restore character data. Full world restore needs separate review; backup restore untested.
+
+Deployment8 November2026: fresh verified backup C:\WarscapeBackups\world_20261108T125710_902720Z_148dad73.sql; restore untested. Previous runtime files C:\WarscapeBackups\LeafWeapon-20261108-deploy. Existing item/world/profile/character preservation hashes match. EXE/PDB match build; correct new one-hand/sheathed Item.dbc row appended and old DBC/MPQ content preserved. Both services listening/ready without new weapon/profile errors; existing unrelated native warnings remain. Gameplay/equip/relog acceptance remains pending.

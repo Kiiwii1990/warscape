@@ -1,0 +1,3 @@
+-- New usable leaf-bladed sword; original collectible swords/stacks/loot stay intact.
+INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,InventoryType,RequiredLevel,description,Material,delay,dmg_min1,dmg_max1,Sheath) SELECT 902590,2,7,'Leaf-bladed sword',displayid,1,1,1,-1,-1,13,1,'Requires 50 OSRS Attack. Can harm Turoth and Kurask.',Material,2400,1,2,Sheath FROM item_template WHERE entry=2131;
+INSERT INTO warscape_item_bonus (item_id,archetype,tier,attack_stab,attack_slash,attack_crush,melee_strength,attack_speed_ticks) VALUES (902590,3,0,67,62,0,50,4);

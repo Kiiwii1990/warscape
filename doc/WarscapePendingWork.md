@@ -12,6 +12,8 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
+- Turoth/Kurask leaf-bladed sword melee gate: implemented for five entries; manual acceptance pending. See WarscapeLeafWeaponGate.md. Other leaf weapons/broad ammo/Magic Dart and collectible conversion remain queued.
+
 - Brine sabre equip/profile/Rockslug salt bypass: implemented; manual acceptance pending. See WarscapeBrineSabre.md. Special attack/acquisition remain queued.
 
 - Rockslug1HP stop-retaliation/local wander: implemented; manual acceptance pending. See WarscapeRockslugWander.md. Autosalt/brine sabre remain queued.
@@ -31,7 +33,7 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 | Area | Remaining work | Reference |
 |---|---|---|
-| Protection gear | Dust Devil temporary drains/dungeon smoke; Smoke Devil dungeon smoke/stat-drain effects; Sourhog temporary drains/Slayer helmet alternatives; Turoth/Kurask leaf/broad/Magic Dart gates; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
+| Protection gear | Dust Devil temporary drains/dungeon smoke; Smoke Devil dungeon smoke/stat-drain effects; Sourhog temporary drains/Slayer helmet alternatives; Turoth/Kurask other leaf weapons, broad ammo/Magic Dart routes and usable-gear acquisition; Harpie lantern lighting/Firemaking | NechryaelsZygomites, StalkersGargoyles, GryphonsHydras |
 | Temporary stats/gaze | Basilisk/Cockatrice mirror protection and gaze; Spectre/other temporary drains; implement temporary combat stats without changing stored XP | SlayerElementals, CaveFamilies |
 | Wall Beast | Wall-hole placement/trigger, grab/Spiny helmet, linked respawn; free-standing model currently a stand-in | NechryaelsZygomites |
 | Ent | Defeated trunk/chopping, Woodcutting-dependent logs and nests; no kill loot substitute | StalkersGargoyles |

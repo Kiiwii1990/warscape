@@ -9,6 +9,17 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::CanUseSpecialWeapon(Warscape::LeafBladedSword,49));
+    assert(Warscape::CanUseSpecialWeapon(Warscape::LeafBladedSword,50));
+    for (unsigned entry : {902304u,902404u,902405u,902406u,902407u}) {
+        assert(Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedSword,0,50,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,2131,0,50,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedSword,2131,50,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedSword,0,49,true,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedSword,0,50,false,true));
+        assert(!Warscape::CanDamageLeafyCreature(entry,Warscape::LeafBladedSword,0,50,true,false));
+    }
+    assert(Warscape::CanDamageLeafyCreature(902400,0,0,1,false,false));
     assert(!Warscape::CanUseSpecialWeapon(Warscape::BrineSabre,39));
     assert(Warscape::CanUseSpecialWeapon(Warscape::BrineSabre,40));
     assert(Warscape::CanUseSpecialWeapon(2131,1));

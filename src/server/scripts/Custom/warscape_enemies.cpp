@@ -141,6 +141,22 @@ struct npc_warscape_enemy : ScriptedAI
     {
         auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
         Player* owner=attacker ? attacker->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr;
+        if (owner && Warscape::IsLeafyCreature(me->GetEntry())) {
+            Player* player=attacker->ToPlayer();
+            Item* mainhand=player ? player->GetWeaponForAttack(BASE_ATTACK,true) : nullptr;
+            Item* offhand=player ? player->GetWeaponForAttack(OFF_ATTACK,true) : nullptr;
+            bool const allowed=Warscape::CanDamageLeafyCreature(me->GetEntry(),mainhand ? mainhand->GetEntry() : 0,
+                offhand ? offhand->GetEntry() : 0,owner->GetRSSkillLevel(Player::RS_Skill::Attack),
+                player && type==DIRECT_DAMAGE && !spell,mainhand && !mainhand->IsBroken());
+            if (!allowed) {
+                damage=0;
+                if (!meleeWarningDelay) {
+                    ChatHandler(owner->GetSession()).SendSysMessage("Its thick hide resists that attack. Use a leaf-bladed sword; remove any ordinary off-hand weapon.");
+                    meleeWarningDelay=3000;
+                }
+                return;
+            }
+        }
         if (auto const* rule=Warscape::FindEnemyEquipmentRequirement(me->GetEntry()); rule && owner) {
             Item* head=owner->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_HEAD);
             Item* offhand=owner->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_OFFHAND);
