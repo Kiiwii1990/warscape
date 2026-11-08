@@ -8,6 +8,14 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(!Warscape::RockslugShouldWander(902401,0));
+    assert(Warscape::RockslugShouldWander(902401,1));
+    assert(Warscape::RockslugShouldWander(902401,10));
+    assert(!Warscape::RockslugShouldWander(902401,11));
+    assert(!Warscape::RockslugShouldWander(902409,10));
+    assert(Warscape::RockslugWanderCanRemain(true,30.f));
+    assert(!Warscape::RockslugWanderCanRemain(true,30.1f));
+    assert(!Warscape::RockslugWanderCanRemain(false,0.f));
     assert(Warscape::HasFastNaturalRegeneration(902103));
     assert(Warscape::HasFastNaturalRegeneration(902304));
     assert(!Warscape::HasFastNaturalRegeneration(902404));

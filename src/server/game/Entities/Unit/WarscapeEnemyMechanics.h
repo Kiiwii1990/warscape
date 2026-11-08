@@ -9,6 +9,8 @@ inline std::uint32_t NonFinishingDamage(std::uint32_t health, std::uint32_t dama
 }
 inline bool CanSmashGargoyle(std::uint32_t health) { return health > 0 && health <= 80; }
 inline bool CanUseConsumableFinisher(std::uint32_t health, std::uint32_t maximum) { return health > 0 && health <= maximum; }
+inline bool RockslugShouldWander(std::uint32_t entry, std::uint32_t health) { return entry==902401 && health>0 && health<=10; }
+inline bool RockslugWanderCanRemain(bool ownerValid, float distance) { return ownerValid && distance<=30.f; }
 inline bool HasFastNaturalRegeneration(std::uint32_t entry) { return entry==902103 || entry==902304; }
 struct FastNaturalRegeneration {
     std::uint32_t Elapsed = 0;

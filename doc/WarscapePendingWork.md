@@ -12,6 +12,8 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
+- Rockslug1HP stop-retaliation/local wander: implemented; manual acceptance pending. See WarscapeRockslugWander.md. Autosalt/brine sabre remain queued.
+
 - Cave Crawler/Kurask rapid regeneration: implemented; manual acceptance pending. See WarscapeNaturalRegeneration.md. Turoth rate requires source confirmation.
 
 - Dust Devil facemask damage mitigation/ranged-defence accuracy: implemented; see WarscapeDustProtection.md. Temporary drains/dungeon smoke/prayers remain queued.
@@ -36,7 +38,7 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 | Stalker | Bleed special; Wiki damage explicitly uncertain and needs careful prototype choice | StalkersGargoyles |
 | Nagua | Frost ground/prayer special; Earthen crush-special weakening/burn clearing; some encounter-specific restores | SlayerElementals |
 | Killerwatt | Orb-to-limbs click transformation, exact mode/reach behaviour | SlayerElementals |
-| Finishers | Rockslug1HP wander/autosalt/brine sabre; Zygomite pick-fungi/autospray; Gargoyle alternate hammers/autosmash perks | NechryaelsZygomites, StalkersGargoyles |
+| Finishers | Rockslug autosalt/brine sabre; Zygomite pick-fungi/autospray; Gargoyle alternate hammers/autosmash perks | NechryaelsZygomites, StalkersGargoyles |
 | Regeneration | Turoth: confirm reliable source rate before changing behaviour; Crawler/Kurask implemented | CaveFamilies, GryphonsHydras, NechryaelsZygomites |
 | Cave Horror | Scream/AoE, witchwood icon/protection and exact magic-melee rules | CaveFamilies |
 | Venom/poison | OSRS cure conversion/consumables; Slime adjacency/zero-damage application; source-specific application rates | SlayerElementals, CaveFamilies |

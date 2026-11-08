@@ -922,3 +922,5 @@ this new batch remains pending.
 8 November2026 pending equipment milestone: Dust Devil902204/902205 Facemask902587 head protection now restores source max8/10 with ranged-defence accuracy and melee reach; unprotected fixed16. No XP/stat drains, environmental smoke or prayer system invented. See WarscapeDustProtection.md; manual acceptance pending.
 
 8 November2026 backlog milestone: Cave Crawler902103 and Kurask902304 replace native regeneration with one source HP each3seconds, including combat. Native percentage regen disabled for only those entries. Turoth source rate not verified, unchanged. See WarscapeNaturalRegeneration.md; runtime timing acceptance pending.
+
+8 November2026 finisher backlog milestone: Rockslug902401 at1 source HP stops retaliation/chase and uses native local random movement while remaining saltable. Loot ownership retained, native regen paused for finish window and restored on reset; owner abandonment triggers normal evade. Autosalt/brine sabre remain pending. See WarscapeRockslugWander.md; manual acceptance pending.

@@ -85,11 +85,20 @@ struct npc_warscape_enemy : ScriptedAI
     uint32 encounterState = 0;
     uint32 attackCycle = 0;
     Warscape::FastNaturalRegeneration naturalRegeneration;
+    bool rockslugWandering = false;
+    bool rockslugCouldRegenerate = true;
+    ReactStates rockslugPreviousReact = REACT_DEFENSIVE;
     uint32 GetData(uint32 key) const override { return key==Warscape::EncounterStateData ? encounterState : 0; }
     void SetData(uint32 key,uint32 value) override { if (key==Warscape::EncounterStateData) encounterState|=value; }
 
     void Reset() override
     {
+        if (rockslugWandering) {
+            me->SetReactState(rockslugPreviousReact);
+            me->SetRegenerateHealth(rockslugCouldRegenerate);
+            me->GetMotionMaster()->InitializeDefault();
+        }
+        rockslugWandering=false;
         meleeWarningDelay = 0;
         naturalRegeneration = {};
         if (Warscape::HasFastNaturalRegeneration(me->GetEntry()))
@@ -121,6 +130,7 @@ struct npc_warscape_enemy : ScriptedAI
     }
     void AttackStart(Unit* who) override
     {
+        if (rockslugWandering || Warscape::RockslugShouldWander(me->GetEntry(),me->GetHealth())) return;
         if (auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry()); b && (b->CastOnly || (b->RangedMaxHit && !b->Killerwatt)))
             AttackStartCaster(who,20.f);
         else
@@ -183,6 +193,24 @@ struct npc_warscape_enemy : ScriptedAI
 
     void UpdateAI(uint32 diff) override
     {
+        if (!rockslugWandering && Warscape::RockslugShouldWander(me->GetEntry(),me->GetHealth()) && !me->IsInEvadeMode()) {
+            rockslugWandering=true;
+            rockslugPreviousReact=me->GetReactState();
+            rockslugCouldRegenerate=me->CanRegenerateHealth();
+            me->SetReactState(REACT_PASSIVE);
+            me->SetRegenerateHealth(false); // Preserve the finishing window instead of native out-of-combat healing.
+            me->AttackStop();
+            me->GetMotionMaster()->Remove(CHASE_MOTION_TYPE);
+            me->GetMotionMaster()->MoveRandom(3.f);
+        }
+        if (rockslugWandering) {
+            if (!me->IsAlive() || me->IsInEvadeMode()) return;
+            Player* owner=me->GetLootRecipient(); // Resolve native tap ownership each update; never retain a player pointer.
+            bool const valid=owner && owner->IsAlive() && owner->IsInMap(me);
+            if (!Warscape::RockslugWanderCanRemain(valid,owner ? me->GetExactDist2d(owner) : 1000.f))
+                EnterEvadeMode(EVADE_REASON_NO_HOSTILES);
+            return;
+        }
         if (Warscape::HasFastNaturalRegeneration(me->GetEntry())) {
             uint32 const pulses=naturalRegeneration.Advance(diff);
             if (me->IsAlive() && !me->IsInEvadeMode()) {
