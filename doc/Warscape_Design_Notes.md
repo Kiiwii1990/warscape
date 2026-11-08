@@ -928,3 +928,8 @@ this new batch remains pending.
 8 November2026 weapon/finisher backlog milestone: new Brine sabre902589 uses existing source item bonus/speed profile and permanent40 Attack equip guard; main-hand usable player melee auto hits bypass Rockslug salt floor. Other finishers unchanged. Liquify/acquisition remain pending. See WarscapeBrineSabre.md; manual acceptance pending.
 
 8 November2026 leafy-weapon checkpoint: new usable Leaf-bladed sword902590 uses existing bonus/speed profile and50 Attack equip helper. Four Turoths/Kurask now reject unsupported player-owned damage, permit eligible main-hand auto melee. Old collectible stacks/loot preserved. Broad ammo/Magic Dart/other leaf weapons/conversion remain pending. See WarscapeLeafWeaponGate.md; manual acceptance pending.
+
+
+### 8 November 2026 - Leaf-bladed spear checkpoint
+
+User confirmed the preceding sword checkpoint working. Added usable two-handed spear 902591 through existing item profiles/equip guard and Turoth/Kurask damage gate: 50 Attack, 5 ticks, Wiki bonuses. Existing XP/items preserved. Built/deployed; spear gameplay acceptance pending. Slayer 55, acquisition, full source Controlled style selection, battleaxe and broad/Magic Dart remain future. See WarscapeLeafSpear.md.

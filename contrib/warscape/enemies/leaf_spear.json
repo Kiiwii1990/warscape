@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "entry": 902591,
+      "name": "Leaf-bladed spear",
+      "display_source": 1406,
+      "class": 2,
+      "subclass": 6,
+      "inventory_type": 17,
+      "sheath": 2
+    }
+  ],
+  "client_spells": []
+}

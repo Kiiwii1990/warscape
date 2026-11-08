@@ -1,0 +1,3 @@
+-- New usable two-handed leaf-bladed spear via existing item profile architecture.
+INSERT INTO item_template (entry,class,subclass,name,displayid,Quality,BuyCount,stackable,AllowableClass,AllowableRace,InventoryType,RequiredLevel,description,Material,delay,dmg_min1,dmg_max1,Sheath) SELECT 902591,2,6,'Leaf-bladed spear',displayid,1,1,1,-1,-1,17,1,'Requires 50 OSRS Attack. Two-handed leaf weapon for Turoth and Kurask.',Material,3000,1,2,Sheath FROM item_template WHERE entry=1406;
+INSERT INTO warscape_item_bonus (item_id,archetype,tier,attack_stab,attack_slash,attack_crush,defence_stab,defence_slash,melee_strength,attack_speed_ticks) VALUES (902591,9,0,47,42,36,1,1,50,5);
