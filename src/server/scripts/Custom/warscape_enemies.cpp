@@ -655,6 +655,56 @@ public:
     }
 };
 
+class item_warscape_fungicide_spray : public ItemScript
+{
+public:
+    item_warscape_fungicide_spray() : ItemScript("item_warscape_fungicide_spray") { }
+    bool OnUse(Player* player,Item* item,SpellCastTargets const& targets) override
+    {
+        player->SendEquipError(EQUIP_ERR_OK,item,nullptr);
+        if (!player->IsAlive()) return true;
+        int32 const charges=item->GetSpellCharges(Warscape::FungicideChargeSlot);
+        if (charges<0 || charges>10) {
+            ChatHandler(player->GetSession()).SendSysMessage("This spray has invalid charges; please report it.");
+            return true;
+        }
+        if (!charges) {
+            if (!Warscape::CanRefillFungicide(charges,player->HasItemCount(Warscape::FungicideRefill,1))) {
+                ChatHandler(player->GetSession()).SendSysMessage("The spray is empty. Carry one Fungicide and use it again to refill.");
+                return true;
+            }
+            player->DestroyItemCount(Warscape::FungicideRefill,1,true);
+            item->SetSpellCharges(Warscape::FungicideChargeSlot,10);
+            item->SetState(ITEM_CHANGED,player);
+            ChatHandler(player->GetSession()).SendSysMessage("Fungicide spray refilled: 10 charges.");
+            return true;
+        }
+        Unit* unit=targets.GetUnitTarget();
+        Creature* target=unit ? unit->ToCreature() : nullptr;
+        auto const* b=target ? Warscape::FindEnemyBehaviour(target->GetEntry()) : nullptr;
+        if (!target || !b || b->FinisherItem!=Warscape::FungicideDose || !target->IsAlive() || target->IsInEvadeMode()
+            || !player->IsValidAttackTarget(target) || !player->IsWithinDistInMap(target,5.f) || !player->IsWithinLOSInMap(target)
+            || (target->GetLootRecipient() && !target->isTappedBy(player))) {
+            ChatHandler(player->GetSession()).SendSysMessage("Select a living Zygomite within 5 yards that you may loot.");
+            return true;
+        }
+        // Check readiness before changing item state; normal kill runs only once.
+        bool const ready=Warscape::CanUseConsumableFinisher(target->GetHealth(),79);
+        int32 const remaining=Warscape::FungicideAfterUse(charges);
+        item->SetSpellCharges(Warscape::FungicideChargeSlot,remaining);
+        item->SetState(ITEM_CHANGED,player);
+        ChatHandler(player->GetSession()).PSendSysMessage("Fungicide spray: {} charges remaining.",remaining);
+        if (!ready) {
+            ChatHandler(player->GetSession()).SendSysMessage("The Zygomite must be below 8 Hitpoints. One charge was used.");
+            return true;
+        }
+        if (!target->GetLootRecipient()) target->SetLootRecipient(player);
+        target->LowerPlayerDamageReq(target->GetHealth());
+        Unit::Kill(player,target);
+        return true;
+    }
+};
+
 void AddSC_warscape_enemies()
 {
     RegisterCreatureAI(npc_warscape_enemy);
@@ -667,6 +717,7 @@ void AddSC_warscape_enemies()
     RegisterSpellScript(spell_warscape_enemy_venom);
     new item_warscape_ice_cooler();
     new item_warscape_rock_hammer();
+    new item_warscape_fungicide_spray();
     new item_warscape_consumable_finisher("item_warscape_salt",40);
     new item_warscape_consumable_finisher("item_warscape_fungicide_dose",79);
 }

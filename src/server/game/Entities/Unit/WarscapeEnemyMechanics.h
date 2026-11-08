@@ -9,6 +9,11 @@ inline std::uint32_t NonFinishingDamage(std::uint32_t health, std::uint32_t dama
 }
 inline bool CanSmashGargoyle(std::uint32_t health) { return health > 0 && health <= 80; }
 inline bool CanUseConsumableFinisher(std::uint32_t health, std::uint32_t maximum) { return health > 0 && health <= maximum; }
+constexpr std::uint32_t FungicideRefill = 902584;
+constexpr std::uint32_t FungicideDose = 902570;
+constexpr unsigned FungicideChargeSlot = 1;
+inline int FungicideAfterUse(int charges) { return std::max(0,std::min(charges,10)-1); }
+inline bool CanRefillFungicide(int charges, bool hasRefill) { return charges==0 && hasRefill; }
 inline bool CanCoolLizard(std::uint32_t health) { return health > 0 && health < 50; }
 inline bool CycleUsesMagic(std::uint32_t position) { return position % 6 < 3; }
 inline std::uint32_t AdvanceAttackCycle(std::uint32_t position) { return (position+1)%6; }

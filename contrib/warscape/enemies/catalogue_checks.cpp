@@ -7,6 +7,10 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(Warscape::FungicideAfterUse(10)==9 && Warscape::FungicideAfterUse(1)==0);
+    assert(Warscape::FungicideAfterUse(0)==0);
+    assert(Warscape::CanRefillFungicide(0,true));
+    assert(!Warscape::CanRefillFungicide(1,true) && !Warscape::CanRefillFungicide(0,false));
     assert(!Warscape::CanUseConsumableFinisher(0,40));
     assert(Warscape::CanUseConsumableFinisher(40,40));
     assert(!Warscape::CanUseConsumableFinisher(41,40));

@@ -1,0 +1,5 @@
+{
+  "sha1": "41DFCDA81BABF26D7D689C14B7B6053959D0403F",
+  "precondition_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902585)=0 AND (SELECT COUNT(*) FROM item_template WHERE entry IN (2459,902584))=2,1,0)",
+  "verify_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902585 AND class=0 AND name='Fungicide spray' AND stackable=1 AND ScriptName='item_warscape_fungicide_spray' AND spellid_1=900780 AND spelltrigger_1=0 AND spellcharges_1=0 AND spellcharges_2=10 AND displayid=(SELECT displayid FROM item_template WHERE entry=2459))=1,1,0)"
+}
