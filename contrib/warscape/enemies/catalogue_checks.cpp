@@ -8,10 +8,16 @@
 #include <map>
 #include <string_view>
 int main() {
-    assert(!Warscape::MeetsEnemyOffhandRequirement(902301,0));
-    assert(!Warscape::MeetsEnemyOffhandRequirement(902301,902476));
-    assert(Warscape::MeetsEnemyOffhandRequirement(902301,902586));
-    assert(Warscape::MeetsEnemyOffhandRequirement(902300,0));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,0,0));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,902475,0));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902402,0,902587));
+    assert(Warscape::MeetsEnemyEquipmentRequirement(902402,902587,0));
+    assert(Warscape::MeetsEnemyEquipmentRequirement(902402,902587,902586));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902301,902586,0));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902301,0,0));
+    assert(!Warscape::MeetsEnemyEquipmentRequirement(902301,0,902476));
+    assert(Warscape::MeetsEnemyEquipmentRequirement(902301,0,902586));
+    assert(Warscape::MeetsEnemyEquipmentRequirement(902300,0,0));
     assert(Warscape::CanSummonDeathSpawn(0,true) && Warscape::CanSummonDeathSpawn(1,true));
     assert(!Warscape::CanSummonDeathSpawn(2,true) && !Warscape::CanSummonDeathSpawn(0,false));
     assert(Warscape::DeathSpawnCanRemain(true,true,21.f));

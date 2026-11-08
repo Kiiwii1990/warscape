@@ -126,9 +126,10 @@ struct npc_warscape_enemy : ScriptedAI
     {
         auto const* b=Warscape::FindEnemyBehaviour(me->GetEntry());
         Player* owner=attacker ? attacker->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr;
-        if (auto const* rule=Warscape::FindEnemyOffhandRequirement(me->GetEntry()); rule && owner) {
+        if (auto const* rule=Warscape::FindEnemyEquipmentRequirement(me->GetEntry()); rule && owner) {
+            Item* head=owner->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_HEAD);
             Item* offhand=owner->GetItemByPos(INVENTORY_SLOT_BAG_0,EQUIPMENT_SLOT_OFFHAND);
-            if (!Warscape::MeetsEnemyOffhandRequirement(me->GetEntry(),offhand ? offhand->GetEntry() : 0)) {
+            if (!Warscape::MeetsEnemyEquipmentRequirement(me->GetEntry(),head ? head->GetEntry() : 0,offhand ? offhand->GetEntry() : 0)) {
                 damage=0;
                 if (!meleeWarningDelay) {
                     ChatHandler(owner->GetSession()).SendSysMessage(rule->Message);

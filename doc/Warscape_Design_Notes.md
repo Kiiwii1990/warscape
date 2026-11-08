@@ -914,3 +914,5 @@ this new batch remains pending.
 8 November2026: user confirmed refillable spray and requested review of unfinished conversation work. Central backlog: WarscapePendingWork.md. First reviewed milestone adds owned Nechryael Death spawns with cap/timer/cleanup; native WoW retaliation/logout exceptions remain explicit. See WarscapeDeathSpawns.md; gameplay acceptance pending.
 
 8 November2026 backlog milestone: Harpie902301 equipped Lit bug lantern902586 requirement uses generic off-hand rule and current player/owner equipment at damage time. Stats/loot unchanged. Lighting/Firemaking remains future work; manual gameplay acceptance pending. See WarscapeHarpieLantern.md.
+
+8 November2026: Harpie lantern checkpoint confirmed working. Smoke Devil902402 Facemask902587 head-slot requirement implemented via generalized equipment registry; existing source stats/loot unchanged. Smoke hazards/stat drains/Dust Devil mitigation remain pending. See WarscapeSmokeFacemask.md; manual acceptance pending.

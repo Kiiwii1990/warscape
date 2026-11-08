@@ -1,0 +1,5 @@
+{
+  "sha1": "C3FB0857943879176D6DED6A3343E5E8BDCAB7CE",
+  "precondition_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902587)=0 AND (SELECT COUNT(*) FROM item_template WHERE entry=10504 AND InventoryType=1)=1 AND (SELECT COUNT(*) FROM creature_template WHERE entry=902402 AND AIName='' AND ScriptName='npc_warscape_enemy')=1,1,0)",
+  "verify_sql": "SELECT IF((SELECT COUNT(*) FROM item_template WHERE entry=902587 AND name='Facemask' AND class=4 AND subclass=1 AND InventoryType=1 AND stackable=1 AND AllowableClass=-1 AND AllowableRace=-1 AND displayid=(SELECT displayid FROM item_template WHERE entry=10504))=1 AND (SELECT COUNT(*) FROM creature_template WHERE entry=902402 AND AIName='' AND ScriptName='npc_warscape_enemy')=1,1,0)"
+}
