@@ -8,6 +8,25 @@
 #include <map>
 #include <string_view>
 int main() {
+    assert(Warscape::HasFastNaturalRegeneration(902103));
+    assert(Warscape::HasFastNaturalRegeneration(902304));
+    assert(!Warscape::HasFastNaturalRegeneration(902404));
+    assert(!Warscape::HasFastNaturalRegeneration(902401));
+    Warscape::FastNaturalRegeneration regeneration;
+    assert(regeneration.Advance(2999)==0);
+    assert(regeneration.Advance(1)==1 && regeneration.Elapsed==0);
+    assert(regeneration.Advance(6500)==2 && regeneration.Elapsed==500);
+    assert(regeneration.Advance(2500)==1 && regeneration.Elapsed==0);
+    assert(Warscape::FastNaturalHealing(0,100,1)==0);
+    assert(Warscape::FastNaturalHealing(100,100,1)==0);
+    assert(Warscape::FastNaturalHealing(110,100,1)==0);
+    assert(Warscape::FastNaturalHealing(50,100,1)==10);
+    assert(Warscape::FastNaturalHealing(99,100,1)==1);
+    assert(Warscape::FastNaturalHealing(50,100,1000000)==50);
+    assert(Warscape::FastNaturalHealing(1,0xFFFFFFFFu,0xFFFFFFFFu)==0xFFFFFFFEu);
+    assert(regeneration.Advance(0xFFFFFFFFu)==1431655u && regeneration.Elapsed==2295);
+    regeneration={}; assert(regeneration.Elapsed==0);
+
     auto const* dust=Warscape::FindEnemyRangedMeleeProtection(902204);
     assert(dust && dust->ProtectedMaximum==8 && dust->UnprotectedHit==16);
     assert(!Warscape::HasRangedMeleeProtection(*dust,0));

@@ -920,3 +920,5 @@ this new batch remains pending.
 8 November2026: Smoke Devil facemask checkpoint confirmed working. Sourhog saliva equipment milestone uses Reinforced goggles902588 on head; unprotected20-30 source damage, protected existing roll/max6. Temporary skill drains remain pending. See WarscapeSourhogGoggles.md; manual acceptance pending.
 
 8 November2026 pending equipment milestone: Dust Devil902204/902205 Facemask902587 head protection now restores source max8/10 with ranged-defence accuracy and melee reach; unprotected fixed16. No XP/stat drains, environmental smoke or prayer system invented. See WarscapeDustProtection.md; manual acceptance pending.
+
+8 November2026 backlog milestone: Cave Crawler902103 and Kurask902304 replace native regeneration with one source HP each3seconds, including combat. Native percentage regen disabled for only those entries. Turoth source rate not verified, unchanged. See WarscapeNaturalRegeneration.md; runtime timing acceptance pending.

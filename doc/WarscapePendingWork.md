@@ -12,6 +12,8 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 
 ## Current milestones
 
+- Cave Crawler/Kurask rapid regeneration: implemented; manual acceptance pending. See WarscapeNaturalRegeneration.md. Turoth rate requires source confirmation.
+
 - Dust Devil facemask damage mitigation/ranged-defence accuracy: implemented; see WarscapeDustProtection.md. Temporary drains/dungeon smoke/prayers remain queued.
 
 - Sourhog reinforced goggles saliva mitigation: implemented; manual acceptance pending. See WarscapeSourhogGoggles.md. Temporary drains and Slayer helmet alternatives remain pending.
@@ -35,7 +37,7 @@ Reviewed supplied conversation history and current enemy checkpoint documentatio
 | Nagua | Frost ground/prayer special; Earthen crush-special weakening/burn clearing; some encounter-specific restores | SlayerElementals |
 | Killerwatt | Orb-to-limbs click transformation, exact mode/reach behaviour | SlayerElementals |
 | Finishers | Rockslug1HP wander/autosalt/brine sabre; Zygomite pick-fungi/autospray; Gargoyle alternate hammers/autosmash perks | NechryaelsZygomites, StalkersGargoyles |
-| Regeneration | Cave Crawler/Turoth/Kurask rapid source regeneration | CaveFamilies, GryphonsHydras, NechryaelsZygomites |
+| Regeneration | Turoth: confirm reliable source rate before changing behaviour; Crawler/Kurask implemented | CaveFamilies, GryphonsHydras, NechryaelsZygomites |
 | Cave Horror | Scream/AoE, witchwood icon/protection and exact magic-melee rules | CaveFamilies |
 | Venom/poison | OSRS cure conversion/consumables; Slime adjacency/zero-damage application; source-specific application rates | SlayerElementals, CaveFamilies |
 | Loot accuracy | Independently chosen multi-herb/multi-seed identities; reviewed unique/preroll correlations; source distribution assumptions | Each release source_assumptions |

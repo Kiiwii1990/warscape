@@ -84,12 +84,16 @@ struct npc_warscape_enemy : ScriptedAI
     bool revenantOpened = false;
     uint32 encounterState = 0;
     uint32 attackCycle = 0;
+    Warscape::FastNaturalRegeneration naturalRegeneration;
     uint32 GetData(uint32 key) const override { return key==Warscape::EncounterStateData ? encounterState : 0; }
     void SetData(uint32 key,uint32 value) override { if (key==Warscape::EncounterStateData) encounterState|=value; }
 
     void Reset() override
     {
         meleeWarningDelay = 0;
+        naturalRegeneration = {};
+        if (Warscape::HasFastNaturalRegeneration(me->GetEntry()))
+            me->SetRegenerateHealth(false); // Replace, never stack with, native percentage regeneration.
         switchedToMelee = false;
         encounterState = 0;
         attackCycle = urand(0,1)*3;
@@ -179,6 +183,13 @@ struct npc_warscape_enemy : ScriptedAI
 
     void UpdateAI(uint32 diff) override
     {
+        if (Warscape::HasFastNaturalRegeneration(me->GetEntry())) {
+            uint32 const pulses=naturalRegeneration.Advance(diff);
+            if (me->IsAlive() && !me->IsInEvadeMode()) {
+                uint32 const healing=Warscape::FastNaturalHealing(me->GetHealth(),me->GetMaxHealth(),pulses);
+                if (healing) me->SetHealth(me->GetHealth()+healing);
+            }
+        }
         meleeWarningDelay=diff>=meleeWarningDelay ? 0 : meleeWarningDelay-diff;
         recovery.Advance(diff);
         if (!UpdateVictim())
